@@ -26,9 +26,6 @@ import javax.validation.constraints.NotNull;
 
 public class DeployAdapter {
 
-    @NotBlank
-    private String nodeName;
-
     @ObjName
     private String objName;
 
@@ -61,14 +58,6 @@ public class DeployAdapter {
     @NotNull
     @Min(0)
     private Integer queuetimeout;
-
-    public String getNodeName() {
-        return nodeName;
-    }
-
-    public void setNodeName(String nodeName) {
-        this.nodeName = nodeName;
-    }
 
     public String getObjName() {
         return objName;
