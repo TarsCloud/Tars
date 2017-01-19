@@ -531,7 +531,14 @@ cp ./target/tars.war /usr/local/resin/webapps/
 mkdir -p /data/log/tars
 ```
 
-修改resin.xml配置
+修改Resin安装目录下的conf/resin.xml配置文件
+将默认的配置
+```xml
+<host id="" root-directory=".">
+    <web-app id="/" root-directory="webapps/ROOT"/>
+</host>
+```
+修改为
 ```xml
 <host id="" root-directory=".">
     <web-app id="/" document-directory="webapps/tars"/>
