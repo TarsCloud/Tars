@@ -33,6 +33,6 @@
         SELECT *
         FROM db_tars.t_server_patchs
         WHERE
-            server = concat(#{application}, ".", #{moduleName})
+            server = concat(#{application}, '.', #{moduleName})
     </select>
 </mapper>

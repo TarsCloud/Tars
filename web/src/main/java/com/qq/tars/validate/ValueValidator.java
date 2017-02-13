@@ -26,6 +26,7 @@ public class ValueValidator implements ConstraintValidator<Value, Object> {
 
     public void initialize(Value constraintAnnotation) {
         this.values = constraintAnnotation.values();
+        Arrays.sort(this.values);
     }
 
     public boolean isValid(Object value, ConstraintValidatorContext context) {
