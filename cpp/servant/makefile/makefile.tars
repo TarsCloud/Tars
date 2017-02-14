@@ -27,7 +27,7 @@ DEP_FILE    := $(foreach obj, $(LOCAL_OBJ), $(dir $(obj)).$(basename $(notdir $(
 #-------------------------------------------------------------------------------
 
 MYSQL_INC       += -I/usr/local/mysql/include/mysql -I/usr/local/mysql/include -I/usr/include/mysql
-MYSQL_LIB_DIR   += -L/usr/local/mysql/lib -L/usr/lib/mysql
+MYSQL_LIB_DIR   += -L/usr/local/mysql/lib/mysql -L/usr/local/mysql/lib -L/usr/lib/mysql
 LIB_DIR         += ${MYSQL_LIB_DIR}
 
 INCLUDE         += -I${TARS_PATH}/include -I./ ${MYSQL_INC}

@@ -128,8 +128,8 @@ class  TC_ConsistentHash
                 return -1;
             }
 
-            int low = 0;
-            int high = vHashList.size();
+            unsigned low = 0;
+            unsigned high = vHashList.size();
 
             if(iCode <= vHashList[0].iHashCode || iCode > vHashList[high-1].iHashCode)
             {
@@ -139,7 +139,7 @@ class  TC_ConsistentHash
 
             while (low < high - 1)
             {
-                int mid = (low + high) / 2;
+                unsigned mid = (low + high) / 2;
                 if (vHashList[mid].iHashCode > iCode)
                 {
                     high = mid;
