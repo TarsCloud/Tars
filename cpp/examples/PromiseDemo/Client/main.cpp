@@ -125,7 +125,7 @@ int main(int argc,char ** argv)
             tp.exec(fw);
             cout << "********************" <<endl;
         }
-        tp.wait(); 
+        tp.waitForAllDone(); 
     }catch(exception &e)
     {
         cout<<e.what()<<endl;
