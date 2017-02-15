@@ -28,11 +28,11 @@ module tars
         5 require string servant;
         6 require int queuecap;
         7 require int queuetimeout;
-        8 require int grid;   //该字段在1.1.4版本开始弃用，为平滑升级而保留定义
+        8 require int grid;   //该字段已弃用，为平滑升级而保留定义
         9 optional string protocol;
         10 optional string handlegroup;
-        11 optional int shmkey  = 0;     //该字段在1.5.6版本中启用，用作共享内存key
-        12 optional int shmcap  = 0;    //该字段在1.5.6版本中启用，用作共享内存大小
+        11 optional int shmkey  = 0;     //该字段用作共享内存key
+        12 optional int shmcap  = 0;    //该字段用作共享内存大小
     };
 
     struct ServerDescriptor
