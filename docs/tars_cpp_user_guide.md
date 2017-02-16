@@ -8,6 +8,7 @@
 > * 业务配置
 > * 日志
 > * 服务管理
+> * 统计上报
 > * 异常上报
 > * 属性统计
 
@@ -1250,9 +1251,28 @@ TARS服务框架目前内置了八种命令：
 > * tars.viewstatus     //查看服务状态
 > * tars.connection     //查看当前链接情况
 > * tars.loadproperty	//使配置文件的property信息生效
-> * tars.setdyeing      //设置染色信息 tars.setdyeing key servant [interface]
+> * tars.setdyeing      //设置染色信息 tars.setdyeing key servant [interface]
 
-# 10. 异常上报
+# 10. 统计上报
+所谓的上报统计信息是TAF框架内部，向tafstat上报调用耗时等信息的逻辑。不需用户开发，在程序初始化时正确设置相关信息后，框架内部（包括客户端和服务端）即可自动上报。
+
+客户端调用上报接口后，实际先暂存在内存中，当到达某个时间点后才正式上报到tafstat服务。我们称两个上报时间点之间的时间为一个统计区间，在一个统计区间相同key进行累加、对比等操作。
+示例代码如下
+```cpp
+//初始化通信器
+CommunicatorPtr pcomm = new Communicator();
+//初始化stat服务地址
+pcomm->setProperty("stat", "taf.tafstat.StatObj");
+//设置上报间隔
+pcomm->setProperty("report-interval", "1000");
+pcomm->setProperty("modulename", "Test.TestServer_Client");
+taf::StatReport * stat = pcomm->getStatReport();
+stat->report("Test.TestServer_Client", "10.120.129.226", "Test.TestServer", "10.120.129.226", 28000, "test", taf::StatReport::STAT_SUCC, 1000, 0);
+```
+说明：
+> * 上报数据是定时上报的，可以在通信器的配置中设置;
+> * 框架内stat服务已经初始化，若客户端需要使用stat上报，需要先初始化statobj
+# 11. 异常上报
 为了更好监控，TARS框架支持在程序中将异常直接上报到tarsnotify，并可以在WEB管理页面上查看到。
 
 框架提供的三种宏用户上报不同种类的异常：
@@ -1266,7 +1286,7 @@ TARS_NOTIFY_ERROR(info)
 ```
 Info为字符串, 可以直接上报字符串到tarsnotify，页面可以看到上报的字符串，后续可以根据上报的信息进行报警。
 
-# 11. 属性统计
+# 12. 属性统计
 为了方便业务做统计，TARS框架中也支持能够在web管理平台看上报的信息展示。
 
 目前支持的统计类型包括以下几种：
