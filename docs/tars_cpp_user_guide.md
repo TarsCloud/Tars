@@ -1272,6 +1272,7 @@ stat->report("Test.TestServer_Client", "10.120.129.226", "Test.TestServer", "10.
 说明：
 > * 上报数据是定时上报的，可以在通信器的配置中设置;
 > * 框架内stat服务已经初始化，若客户端需要使用stat上报，需要先初始化statobj
+
 # 11. 异常上报
 为了更好监控，TARS框架支持在程序中将异常直接上报到tarsnotify，并可以在WEB管理页面上查看到。
 
