@@ -15,7 +15,7 @@
  */
 
 #ifndef __TC_RBTREE_H
-#define __TC_RDTREE_H
+#define __TC_RBTREE_H
 
 #include <iostream>
 #include <string>
