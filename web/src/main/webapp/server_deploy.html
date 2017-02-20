@@ -75,9 +75,9 @@
         <div class="col-sm-2"><label class="control-label wp100">Set分组</label></div>
         <div class="col-sm-10">
             <div class="col-sm-3"><label class="checkbox-inline"> <input type="checkbox" id="enable-set" name="enable_set"> 启用Set</label></div>
-            <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set名" name="set_name" id="set-name" disabled></div>
-            <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set地区" name="set_area" id="set-area" disabled></div>
-            <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set组名" name="set_group" id="set-group" disabled></div>
+            <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set名,全英文小写" title="Set名,全英文小写" name="set_name" id="set-name" disabled></div>
+            <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set地区,全英文小写" title="Set地区,全英文小写" name="set_area" id="set-area" disabled></div>
+            <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set组名,数字或*号" title="Set组名,数字或*号" name="set_group" id="set-group" disabled></div>
         </div>
     </div>
 </form>
@@ -233,7 +233,7 @@
                 showErrorMsg($('#main_title'),'Set名不能为空');
                 return;
             }
-            if(!/^[a-zA-Z]+$/.test(paramObj.set_name)){
+            if(!/^[a-z]+$/.test(paramObj.set_name)){
                 showErrorMsg($('#main_title'),'Set名只能为英文字母，且必须小写');
                 return;
             }
@@ -241,7 +241,7 @@
                 showErrorMsg($('#main_title'),'Set区域不能为空');
                 return;
             }
-            if(!/^[a-zA-Z]+$/.test(paramObj.set_area)){
+            if(!/^[a-z]+$/.test(paramObj.set_area)){
                 showErrorMsg($('#main_title'),'Set区域只能为英文字母，且必须小写');
                 return;
             }

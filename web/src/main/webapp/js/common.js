@@ -220,7 +220,7 @@ function showDialog(tar,title,btns,width,height) {
     }else{
         $modal.find('.modal-footer').html('');
     }
-    $modal.modal();
+    $modal.modal({backdrop: 'static'});
 }
 
 // 获取查询字符串
@@ -247,7 +247,7 @@ function showErrorMsg(tar,msg) {
     if($('.err_msg_box').length){
         closeErrorMsg();
     }
-    var msgStr = '<div class="alert alert-danger err_msg_box" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><h5><strong>错误提示!!!</strong></h5><p style="font-size:13px">'+msg+'</p></div>';
+    var msgStr = '<div class="alert alert-danger err_msg_box" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button><h5><strong>错误提示!!!</strong></h5><p>'+msg+'</p></div>';
     tar.prepend(msgStr);
 }
 
@@ -291,16 +291,30 @@ function getTaskStatus(taskId,tar) {
     var f = function () {
         var htmlStr = '<img src="/img/loading.gif">';
         $.getJSON('/pages/server/api/task?task_no='+taskId,function (data) {
+            var tableStr = '<table  class="table"><caption>任务ID：'+taskId+'</caption><thead><tr><th>节点</th><th>状态</th></tr></thead><tbody>';
             if(data.ret_code==200){
                 try{
-                    htmlStr ='<span class="ml10"><img src="/img/loading.gif"></span>' + statusMap[status[data.data.status]];
+                    $.each(data.data.items,function (index,n) {
+                        var statusStr = '<span class="ml10"><img src="/img/loading.gif"></span>' + statusMap[status[data.data.status]];
+                        if(n.status==2){
+                            statusStr = '<span class="text-success">'+statusMap[status[data.data.status]]+'</span>';
+                            clearTimeout(t);
+                        }else if(n.status==3){
+                            statusStr = '<span class="text-danger">'+statusMap[status[data.data.status]]+'</span>';
+                            clearTimeout(t);
+                        }
+                        tableStr += '<tr><td>'+n.node_name+'</td><td class="curr-status">'+statusStr+'</td></tr>';
+                    });
+                    /*htmlStr ='<span class="ml10"><img src="/img/loading.gif"></span>' + statusMap[status[data.data.status]];
                     if(data.data.status==2){
                         htmlStr = '<span class="text-success">'+statusMap[status[data.data.status]]+'</span>';
                         clearTimeout(t);
                     }else if(data.data.status==3){
                         htmlStr = '<span class="text-danger">'+statusMap[status[data.data.status]]+'</span>';
                         clearTimeout(t);
-                    }
+                    }*/
+                    tableStr += '</tbody></table>';
+                    htmlStr = tableStr;
                 }catch(err){
                     htmlStr = '<span class="text-danger">返回的状态码错误，状态码：'+data.data.status+'</span>';
                     clearTimeout(t);

@@ -226,13 +226,8 @@ function undeployServer(serviceId,settingState) {
                                 if(data.ret_code==200){
                                     self.modal('hide');
                                     var $box = $('#dlg-undeploy');
-                                    var tableStr = '<table class="table"><caption>任务ID：'+data.data.task_no+'</caption><thead><tr><th>节点</th><th>状态</th></tr></thead><tbody>';
-                                    $.each(data.data.items,function (index,n) {
-                                        tableStr += '<tr><td>'+n.node_name+'</td><td class="curr-status">'+n.status_info+'</td></tr>';
-                                    });
-                                    tableStr += '</tobdy></table>';
-                                    $box.html(tableStr);
-                                    getTaskStatus(data.data.task_no,$('.curr-status'));
+
+                                    getTaskStatus(data.data.task_no,$box);
                                     showDialog($box,'任务状态',{
                                         '确定':function () {
                                             getServiceList(parent.tarsTree.treeId);
@@ -276,15 +271,7 @@ function restartServer(serviceId) {
     $.post('/pages/server/api/add_task',$.stringify(paramObj),function (data) {
         removeLoading();
         if(data.ret_code==200){
-            var tableStr = '<table class="table"><caption>任务ID：'+data.data.task_no+'</caption><thead><tr><th>节点</th><th>状态</th></tr></thead><tbody>';
-            $.each(data.data.items,function (index,n) {
-                tableStr += '<tr><td>'+n.node_name+'</td><td class="curr-status">'+statusMap[n.status_info]+'</td></tr>';
-            });
-            tableStr += '</tobdy></table>';
-            $box.html(tableStr);
-            $box.find('.curr-status').each(function () {
-                getTaskStatus(data.data.task_no,$(this));
-            });
+            getTaskStatus(data.data.task_no,$box);
         }else{
             $box.html('');
             closeErrorMsg();
@@ -321,15 +308,7 @@ function stopServer(serviceId) {
             $.post('/pages/server/api/add_task',$.stringify(paramObj),function (data) {
                 removeLoading();
                 if(data.ret_code==200){
-                    var tableStr = '<table class="table"><caption>任务ID：'+data.data.task_no+'</caption><thead><tr><th>节点</th><th>状态</th></tr></thead><tbody>';
-                    $.each(data.data.items,function (index,n) {
-                        tableStr += '<tr><td>'+n.node_name+'</td><td class="curr-status">'+n.status_info+'</td></tr>';
-                    });
-                    tableStr += '</tobdy></table>';
-                    $box.html(tableStr);
-                    $('.curr-status').each(function () {
-                        getTaskStatus(data.data.task_no,$(this));
-                    });
+                    getTaskStatus(data.data.task_no,$box);
                     showDialog($box,'停止服务结果',{
                         '确定':function () {
                             this.modal('hide');
