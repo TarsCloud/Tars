@@ -87,7 +87,12 @@ public:
     void wait(const Mutex& mutex) const
     {
         int c = mutex.count();
+        int rc = pthread_cond_wait(&_cond, &mutex._mutex);
         mutex.count(c);
+        if(rc != 0)
+        {
+            throw TC_ThreadCond_Exception("[TC_ThreadCond::wait] pthread_cond_wait error", errno);
+        }
     }
 
     /**
