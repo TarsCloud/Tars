@@ -2018,7 +2018,7 @@ size_t TC_HttpRequest::parseRequestHeader(const char* szBuffer)
 
     if(sVersion != "HTTP/1.1" || sVersion != "HTTP/1.0")
     {
-        sVersion == "HTTP/1.1";
+        sVersion = "HTTP/1.1";
     }
 
     size_t n = parseHeader(*ppChar, _headers) - szBuffer_copy;
