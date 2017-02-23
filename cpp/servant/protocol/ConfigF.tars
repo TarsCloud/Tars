@@ -113,6 +113,14 @@ module tars
          * @return int 0: 合法, -1:非法
          **/
         int checkConfigByInfo(ConfigInfo configInfo, out string result);
+        
+        /**
+         * 获取服务的所有配置文件列表，
+         * @param configInfo 支持拉取应用配置列表，服务配置列表，机器配置列表
+         * @param[out] vf  获取到的文件名称列表
+         * @return int 0: 成功, -1:失败
+         **/
+        int ListAllConfigByInfo(GetConfigListInfo configInfo, out vector<string> vf);
 
     };
 };

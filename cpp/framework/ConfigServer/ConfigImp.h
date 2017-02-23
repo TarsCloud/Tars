@@ -141,6 +141,14 @@ public:
      */
     virtual int checkConfigByInfo(const ConfigInfo & configInfo, string &result,tars::TarsCurrentPtr current);
 
+    /**
+	  * 获取服务的所有配置文件列表，
+	  * @param configInfo 支持拉取应用配置列表，服务配置列表，机器配置列表
+	  * @param[out] vf  获取到的文件名称列表
+	  * @return int 0: 成功, -1:失败
+	 **/
+    virtual int ListAllConfigByInfo(const tars::GetConfigListInfo & configInfo, vector<std::string> &vf, tars::TarsCurrentPtr current);
+
 protected:
     
     /**

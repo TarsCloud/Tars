@@ -879,3 +879,92 @@ bool ConfigImp::IsLimited(const std::string & app, const std::string & server, c
     return bLimited;
 }
 
+int ConfigImp::ListAllConfigByInfo(const tars::GetConfigListInfo & configInfo, vector<std::string> &vf, tars::TarsCurrentPtr current)
+{
+	CHECKLIMIT(configInfo.appname,configInfo.servername,current->getIp(),"");
+
+	try
+	{
+		if(configInfo.bAppOnly)
+		{
+			//查ip对应配置
+			string sSql = "select distinct filename from t_config_files "
+				"where server_name = '" + _mysqlConfig.escapeString(configInfo.appname) + "' "
+				"and level=" + TC_Common::tostr<int>(eLevelApp);
+
+            TLOGDEBUG("ConfigImp::ListAllConfigByInfo sql:" << sSql << endl);
+
+			TC_Mysql::MysqlData res = _mysqlConfig.queryRecord(sSql);
+
+            TLOGDEBUG("ConfigImp::ListAllConfigByInfo sql:" << sSql << "|res:" << res.size() << endl);
+
+			for(unsigned i=0; i<res.size();i++)
+			{
+				vf.push_back(res[i]["filename"]);
+			}
+
+			return 0;
+		}
+		else
+		{
+			string sHost = configInfo.host;
+			string sContainer = configInfo.containername;
+			string sSql = "select distinct filename from t_config_files where server_name = '" + _mysqlConfig.escapeString(configInfo.appname+"."+configInfo.servername) + "' ";
+			
+			string sCondition("");
+			if(!sHost.empty())
+			{
+				sCondition += " and host='"+_mysqlConfig.escapeString(sHost)+"' ";
+				sCondition += " and level=" + TC_Common::tostr<int>(eLevelIpServer);
+			}
+			
+			if(!configInfo.setdivision.empty())
+			{
+				string sSetName,sSetArea,sSetGroup;
+				if(getSetInfo(sSetName,sSetArea,sSetGroup,configInfo.setdivision))
+				{
+					sCondition += " and set_name='" +_mysqlConfig.escapeString(sSetName)+"' ";
+					sCondition += " and set_area='" +_mysqlConfig.escapeString(sSetArea)+"' ";
+					sCondition += " and set_group='" +_mysqlConfig.escapeString(sSetGroup)+"' ";
+				}
+				else
+				{
+					TLOGERROR("ConfigImp::ListAllConfigByInfo setdivision is invalid:" << configInfo.setdivision << endl);
+					return -1;
+				}
+			}
+			else//兼容没有set信息的业务
+			{
+				string sNULL;
+				sCondition += " and set_name='" + _mysqlConfig.escapeString(sNULL) +"' ";
+				sCondition += " and set_area='" + _mysqlConfig.escapeString(sNULL) +"' ";
+				sCondition += " and set_group='" + _mysqlConfig.escapeString(sNULL) +"' ";
+			}
+
+			sSql += sCondition;
+
+            TLOGDEBUG("ConfigImp::ListAllConfigByInfo sql:" << sSql << endl);
+
+			TC_Mysql::MysqlData res = _mysqlConfig.queryRecord(sSql);
+
+            TLOGDEBUG("ConfigImp::ListAllConfigByInfo sql:" << sSql << "|res:" << res.size() << endl);
+
+			for(unsigned i=0; i<res.size();i++)
+			{
+				vf.push_back(res[i]["filename"]);
+			}
+		}
+	}
+	catch(TC_Mysql_Exception & ex)
+	{
+		TLOGERROR("ConfigImp::ListAllConfigByInfo mysql exception:" << ex.what() << endl);
+		return -1;
+	}
+    catch(exception& ex)
+	{
+		TLOGERROR("ConfigImp::ListAllConfigByInfo exception:" << ex.what() << endl);
+		return -1;
+	}
+
+	return 0;
+}
