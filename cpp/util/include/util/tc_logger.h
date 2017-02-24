@@ -411,8 +411,9 @@ namespace tars
          * @param stream
          * @param mutex
          */
-        LoggerStream(ostream *stream, ostream *estream, TC_ThreadMutex &mutex) : _stream(stream), _estream(estream), _mutex(mutex)
+		LoggerStream(const char *header, ostream *stream, ostream *estream, TC_ThreadRecMutex &mutex) : _stream(stream), _estream(estream), _mutex(mutex)
         {
+            _buffer << header;
         }
 
         /**
@@ -422,8 +423,11 @@ namespace tars
         {
             if (_stream)
             {
+				TC_LockT<TC_ThreadRecMutex> lock(_mutex);
+                _stream->clear();
+                (*_stream) << _buffer.str();
+
                 _stream->flush();
-                _mutex.unlock();
             }
         }
 
@@ -431,19 +435,19 @@ namespace tars
         * @brief 重载<<
         */
         template <typename P>
-        LoggerStream& operator << (const P &t)  { if (_stream) *_stream << t;return *this;}
+        LoggerStream& operator << (const P &t)  { if (_stream) _buffer << t;return *this;}
 
         /**
          * @brief endl,flush等函数
          */
         typedef ostream& (*F)(ostream& os);
-        LoggerStream& operator << (F f)         { if (_stream) (f)(*_stream);return *this;}
+        LoggerStream& operator << (F f)         { if (_stream) (f)(_buffer);return *this;}
 
         /**
          * @brief  hex等系列函数
          */
         typedef ios_base& (*I)(ios_base& os);
-        LoggerStream& operator << (I f)         { if (_stream) (f)(*_stream);return *this;}
+        LoggerStream& operator << (I f)         { if (_stream) (f)(_buffer);return *this;}
 
         /**
          * @brief 字段转换成ostream类型.
@@ -454,7 +458,7 @@ namespace tars
         {
             if (_stream)
             {
-                return *_stream;
+                return _buffer;
             }
 
             return *_estream;
@@ -465,6 +469,11 @@ namespace tars
         LoggerStream& operator=(const LoggerStream& lt);
 
     protected:
+
+        /**
+	     * 缓冲区
+	     */
+        std::stringstream _buffer;
 
         /**
          * 输出流
@@ -479,7 +488,7 @@ namespace tars
         /**
          * 锁
          */
-        TC_ThreadMutex  &_mutex;
+		TC_ThreadRecMutex  &_mutex;
     };
 
 /**
@@ -756,13 +765,12 @@ namespace tars
                 char c[128] = "\0";
                 head(c, sizeof(c) - 1, level);
 
-                _mutex.lock();
                 ost = &_stream;
-                _stream.clear();
-                _stream << c;
+
+                return LoggerStream(c, ost, &_estream, _mutex);
             }
 
-            return LoggerStream(ost, &_estream, _mutex);
+            return LoggerStream(NULL, ost, &_estream, _mutex);
         }
 
         /**
@@ -821,7 +829,7 @@ namespace tars
         /**
          * 锁
          */
-        TC_ThreadMutex  _mutex;
+		TC_ThreadRecMutex  _mutex;
         /**
          * 分隔符
          */
