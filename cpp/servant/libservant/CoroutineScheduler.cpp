@@ -469,6 +469,8 @@ void CoroutineScheduler::tars_run()
 {
     if(!_terminal)
     {
+        wakeupbytimeout();
+
         wakeupbyself();
 
         wakeup();
