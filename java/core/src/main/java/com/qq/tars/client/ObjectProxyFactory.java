@@ -49,6 +49,7 @@ class ObjectProxyFactory {
             servantProxyConfig.setCommunicatorId(communicator.getId());
             servantProxyConfig.setLocator(communicator.getCommunicatorConfig().getLocator());
         }
+        updateServantEndpoints(servantProxyConfig);
 
         if (loadBalance == null) {
             loadBalance = createLoadBalance(servantProxyConfig);
@@ -108,17 +109,23 @@ class ObjectProxyFactory {
         cfg.setModuleName(communicatorConfig.getModuleName());
         cfg.setStat(communicatorConfig.getStat());
         cfg.setCharsetName(communicatorConfig.getCharsetName());
+        return cfg;
+    }
+
+    private void updateServantEndpoints(ServantProxyConfig cfg) {
+        CommunicatorConfig communicatorConfig = communicator.getCommunicatorConfig();
 
         String endpoints = null;
         if (StringUtils.isNotEmpty(communicatorConfig.getLocator()) && !cfg.isDirectConnection() && !communicatorConfig.getLocator().startsWith(cfg.getSimpleObjectName())) {
             try {
+                /** 从主控拉取server node */
                 endpoints = communicator.getQueryHelper().getServerNodes(cfg);
                 if (StringUtils.isEmpty(endpoints)) {
                     throw new CommunicatorConfigException(cfg.getSimpleObjectName(), "servant node is empty on get by registry! communicator id=" + communicator.getId());
                 }
                 ServantCacheManager.getInstance().save(communicator.getId(), cfg.getSimpleObjectName(), endpoints, communicatorConfig.getDataPath());
             } catch (CommunicatorConfigException e) {
-
+                /** 如果失败，从本地绶存文件中拉取 */
                 endpoints = ServantCacheManager.getInstance().get(communicator.getId(), cfg.getSimpleObjectName(), communicatorConfig.getDataPath());
                 ClientLogger.getLogger().error(cfg.getSimpleObjectName() + " error occurred on get by registry, use by local cache=" + endpoints + "|" + e.getLocalizedMessage(), e);
             }
@@ -128,9 +135,9 @@ class ObjectProxyFactory {
             }
             cfg.setObjectName(endpoints);
         }
+
         if (StringUtils.isEmpty(cfg.getObjectName())) {
             throw new CommunicatorConfigException(cfg.getSimpleObjectName(), "error occurred on create proxy, servant endpoint is empty!");
         }
-        return cfg;
     }
 }

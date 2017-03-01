@@ -347,7 +347,7 @@ public class TarsCodecHelper {
     }
 
     public static IoBuffer encodeResponse(TarsServantResponse response, String charsetName) throws ProtocolException {
-        if (response.getMessageType() == TarsHelper.ONEWAY) {
+        if (response.getPacketType() == TarsHelper.ONEWAY) {
             return null;
         }
 
