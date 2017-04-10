@@ -18,7 +18,6 @@
 #include "servant/Global.h"
 #include "util/tc_epoller.h"
 
-#include <sys/epoll.h>
 #include <sstream>
 #include <assert.h>
 
@@ -116,7 +115,7 @@ void NetworkUtil::setKeepAlive(int fd)
 
 void NetworkUtil::doBind(int fd, struct sockaddr_in& addr)
 {
-    if(bind(fd, reinterpret_cast<struct sockaddr*>(&addr), int(sizeof(addr))) == SOCKET_ERROR)
+    if(::bind(fd, reinterpret_cast<struct sockaddr*>(&addr), int(sizeof(addr))) == SOCKET_ERROR)
     {
         closeSocketNoThrow(fd);
         ostringstream os;

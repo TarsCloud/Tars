@@ -6,7 +6,10 @@ include_directories(${tools_SOURCE_DIR})
 include_directories(${servant_SOURCE_DIR})
 include_directories(${framework_SOURCE_DIR}/protocol)
 
-link_libraries(tarsservant tarsparse tarsutil pthread z rt)
+link_libraries(tarsservant tarsparse tarsutil pthread z)
+if(NOT APPLE)
+	link_libraries(rt)
+endif()
 
 aux_source_directory(. DIR_SRCS)
 add_executable(${TARGETNAME} ${DIR_SRCS})

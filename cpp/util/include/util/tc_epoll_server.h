@@ -90,7 +90,7 @@ public:
     class Handle;
     typedef TC_AutoPtr<Handle> HandlePtr;
 
-    class HandleGroup;
+    struct HandleGroup;
     typedef TC_AutoPtr<HandleGroup> HandleGroupPtr;
 
 
@@ -103,6 +103,7 @@ public:
         string          ip;             /**远程连接的ip*/
         uint16_t        port;           /**远程连接的端口*/
         int64_t         recvTimeStamp;  /**接收到数据的时间*/
+        bool            isOpened;       /**是否新创建 */
         bool            isOverload;     /**是否已过载 */
         bool            isClosed;       /**是否已关闭*/
         int                fd;                /*保存产生该消息的fd，用于回包时选择网络线程*/
@@ -240,6 +241,12 @@ public:
          */
         virtual void handle(const tagRecvData &stRecvData) = 0;
 
+        /**
+         * open 事件处理
+         * @param stRecvData
+         */
+        virtual void handleOpen(const tagRecvData &stRecvData);
+        
         /**
          * 处理超时数据, 即数据在队列中的时间已经超过
          * 默认直接关闭连接
@@ -910,6 +917,12 @@ public:
 
         protected:
             /**
+			 * 打开连接
+			 * @param fd
+			 */
+			void open();
+
+            /**
              * 关闭连接
              * @param fd
              */
@@ -1366,7 +1379,7 @@ public:
         /**
          * 处理网络请求
          */
-        void processNet(const epoll_event &ev);
+        void processNet(const EPOLL_EVENT &ev);
 
         /**
          * 停止线程
@@ -1458,10 +1471,10 @@ public:
         /**
          * 管道(用于关闭服务)
          */
-        TC_Socket                   _shutdown;
+        TC_Epoller::Notify                   _shutdown;
 
         //管道(用于通知有数据需要发送就)
-        TC_Socket                   _notify;
+        TC_Epoller::Notify                   _notify;
 
         /**
          * 管理的连接链表

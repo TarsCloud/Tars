@@ -19,6 +19,10 @@
 #include "servant/Application.h"
 #include "servant/TarsLogger.h"
 
+#ifndef SOL_IP
+#define SOL_IP IPPROTO_IP
+#endif
+
 namespace tars
 {
 ///////////////////////////////////////////////////////////////////////

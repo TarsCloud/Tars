@@ -217,8 +217,12 @@ void parseConfig(int argc, char *argv[])
 int main( int argc, char* argv[] )
 {
     try
-    {   
+    {
+#ifdef DEBUG
+        signal(SIGCHLD, SIG_IGN); //不添加的话会产生僵尸进程，影响kill命令的结果
+#else
         TC_Common::daemon();
+#endif
 
         parseConfig(argc,argv);
 

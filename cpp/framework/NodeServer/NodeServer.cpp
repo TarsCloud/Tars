@@ -280,7 +280,7 @@ bool NodeServer::isValid(const string& ip)
     if (tNow - g_tTime > 60)
     {
         string objs = g_pconf->get("/tars/node<cmd_white_list>", "tars.tarsregistry.AdminRegObj:tars.tarsAdminRegistry.AdminRegObj");
-        string ips  = g_pconf->get("/tars/node<cmd_white_list_ip>", "172.25.38.208:172.25.38.208");
+        string ips  = g_pconf->get("/tars/node<cmd_white_list_ip>", "127.0.0.1"); //多个ip以":"分隔
 
         TLOGDEBUG("NodeServer::isValid objs:" << objs << "|ips:" << ips << endl);
 

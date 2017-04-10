@@ -1757,9 +1757,9 @@ protected:
 
     friend class Block;
     friend class BlockAllocator;
-    friend class HashMapIterator;
+    friend struct HashMapIterator;
     friend class HashMapItem;
-    friend class HashMapLockIterator;
+    friend struct HashMapLockIterator;
     friend class HashMapLockItem;
 
     /**

@@ -27,6 +27,7 @@ namespace tars
 CommunicatorEpoll::CommunicatorEpoll(Communicator * pCommunicator,size_t netThreadSeq)
 : _communicator(pCommunicator)
 , _terminate(false)
+, _ep(true)
 , _nextTime(0)
 , _nextStatTime(0)
 , _objectProxyFactory(NULL)
@@ -40,8 +41,9 @@ CommunicatorEpoll::CommunicatorEpoll(Communicator * pCommunicator,size_t netThre
 {
     _ep.create(1024);
 
-    _shutdown.createSocket();
-    _ep.add(_shutdown.getfd(), 0, EPOLLIN);
+//    _shutdown.createSocket();
+//    _ep.add(_shutdown.getfd(), 0, EPOLLIN);
+    _shutdown.bind(_ep, 0);
 
     //ObjectProxyFactory 对象
     _objectProxyFactory = new ObjectProxyFactory(this);
@@ -137,7 +139,8 @@ void CommunicatorEpoll::terminate()
 {
     _terminate = true;
     //通知epoll响应
-    _ep.mod(_shutdown.getfd(), 0, EPOLLOUT);
+//    _ep.mod(_shutdown.getfd(), 0, EPOLLOUT);
+    _shutdown.signal();
 }
 
 ObjectProxy * CommunicatorEpoll::getObjectProxy(const string & sObjectProxyName,const string& setName)
@@ -161,7 +164,8 @@ void CommunicatorEpoll::notify(size_t iSeq,ReqInfoQueue * msgQueue)
 
     if(_notify[iSeq].bValid)
     {
-        _ep.mod(_notify[iSeq].notify.getfd(),(long long)&_notify[iSeq].stFDInfo, EPOLLIN);
+//        _ep.mod(_notify[iSeq].notify.inFD(),(long long)&_notify[iSeq].stFDInfo, EPOLLIN);
+    	_notify[iSeq].notify.signal();
         assert(_notify[iSeq].stFDInfo.p == (void*)msgQueue);
     }
     else
@@ -170,10 +174,11 @@ void CommunicatorEpoll::notify(size_t iSeq,ReqInfoQueue * msgQueue)
         _notify[iSeq].stFDInfo.p       = (void*)msgQueue;
         _notify[iSeq].stFDInfo.fd      = _notify[iSeq].eventFd;
         _notify[iSeq].stFDInfo.iSeq    = iSeq;
-        _notify[iSeq].notify.createSocket();
         _notify[iSeq].bValid           = true;
 
-        _ep.add(_notify[iSeq].notify.getfd(),(long long)&_notify[iSeq].stFDInfo, EPOLLIN);
+//        _ep.add(_notify[iSeq].notify.inFD(), (long long)&_notify[iSeq].stFDInfo, EPOLLIN);
+        _notify[iSeq].notify.bind(_ep, (long long)&_notify[iSeq].stFDInfo);
+        _notify[iSeq].notify.signal();
     }
 }
 
@@ -182,7 +187,8 @@ void CommunicatorEpoll::notifyDel(size_t iSeq)
     assert(iSeq < MAX_CLIENT_NOTIFYEVENT_NUM);
     if(_notify[iSeq].bValid && NULL != _notify[iSeq].stFDInfo.p)
     {
-        _ep.mod(_notify[iSeq].notify.getfd(),(long long)&_notify[iSeq].stFDInfo, EPOLLIN);
+//        _ep.mod(_notify[iSeq].notify.inFD(),(long long)&_notify[iSeq].stFDInfo, EPOLLIN);
+    	_notify[iSeq].notify.signal();
     }
 }
 
@@ -255,13 +261,14 @@ void CommunicatorEpoll::handle(FDInfo * pFDInfo, uint32_t events)
                         delete msg;
                         msg = NULL;
 
-                        _ep.del(_notify[pFDInfo->iSeq].notify.getfd(),(long long)&_notify[pFDInfo->iSeq].stFDInfo, EPOLLIN);
+//                        _ep.del(_notify[pFDInfo->iSeq].notify.inFD(),(long long)&_notify[pFDInfo->iSeq].stFDInfo, EPOLLIN);
+                        _notify[pFDInfo->iSeq].notify.unbind();
 
                         delete pInfoQueue;
                         pInfoQueue = NULL;
 
                         _notify[pFDInfo->iSeq].stFDInfo.p = NULL;
-                        _notify[pFDInfo->iSeq].notify.close();
+//                        _notify[pFDInfo->iSeq].notify.close();
                         _notify[pFDInfo->iSeq].bValid = false;
 
                         return;
@@ -432,7 +439,7 @@ void CommunicatorEpoll::pushAsyncThreadQueue(ReqMessage * msg)
 
 void CommunicatorEpoll::run()
 {
-    TLOGDEBUG("CommunicatorEpoll::run id:"<<syscall(SYS_gettid)<<endl);
+    TLOGDEBUG("CommunicatorEpoll::run id:"<<TC_Common::gettid()<<endl);
 
     ServantProxyThreadData * pSptd = ServantProxyThreadData::getData();
     assert(pSptd != NULL);
@@ -454,15 +461,15 @@ void CommunicatorEpoll::run()
             //先处理epoll的网络事件
             for (int i = 0; i < num; ++i)
             {
-                const epoll_event& ev = _ep.get(i);
-                uint64_t data = ev.data.u64;
+                const EPOLL_EVENT& ev = _ep.get(i);
+                uint64_t data = EPOLL_EVENT_DATA_U64(ev);
 
                 if(data == 0)
                 {
                     continue; //data非指针, 退出循环
                 }
 
-                handle((FDInfo*)data, ev.events);
+                handle((FDInfo*)data, EPOLL_EVENT_GET(ev));
             }
 
             //处理超时请求

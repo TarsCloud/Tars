@@ -19,6 +19,8 @@
 #include "util/tc_http.h"
 #include <string.h>
 
+extern char **environ;
+
 namespace tars
 {
 

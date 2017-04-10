@@ -1743,7 +1743,7 @@ protected:
 
     friend class Block;
     friend class BlockAllocator;
-    friend class RBTreeLockIterator;
+    friend struct RBTreeLockIterator;
     friend class RBTreeLockItem;
 
     //禁止copy构造

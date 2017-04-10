@@ -100,7 +100,7 @@ public:
         
         FDInfo    stFDInfo;   //通知FD信息
         
-        TC_Socket notify;     //通知fd
+        TC_Epoller::Notify notify;     //通知fd
 
         int       eventFd;    //eventfd,目前未使用
         
@@ -255,7 +255,7 @@ protected:
     /*
      * 关闭线程请求的事件通知
      */
-    TC_Socket              _shutdown;
+    TC_Epoller::Notify              _shutdown;
 
     /*
      * 线程是否终止

@@ -134,6 +134,9 @@ void Application::waitForQuit()
                 _epollServer->_pReportRspQueue->report(n);
             }
         }
+
+// only for auto exit debug.
+//        this->terminate();
     }
 
     if(_epollServer->isTerminate())
@@ -155,6 +158,11 @@ void Application::waitForShutdown()
     destroyApp();
 
     TarsRemoteNotify::getInstance()->report("stop", true);
+
+    if (_communicator)
+	{
+		_communicator->terminate();
+	}
 }
 
 void Application::terminate()

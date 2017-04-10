@@ -98,9 +98,9 @@ namespace tars
     class TC_DefaultWriteT
     {
     public:
-        void operator()(ostream &of, const deque<pair<int, string> > &ds)
+        void operator()(ostream &of, const deque<pair<long, string> > &ds)
         {
-            deque<pair<int, string> >::const_iterator it = ds.begin();
+            deque<pair<long, string> >::const_iterator it = ds.begin();
             while (it != ds.end())
             {
                 of << it->second;
@@ -132,7 +132,7 @@ namespace tars
          * 不同的策略日志类,实现不同的逻辑
          * @param buffer
          */
-        virtual void roll(const deque<pair<int, string> > &ds) = 0;
+        virtual void roll(const deque<pair<long, string> > &ds) = 0;
 
         /**
          * @brief 安装线程.
@@ -152,7 +152,7 @@ namespace tars
          *
          * @param 日志内容
          */
-        void write(const pair<int, string> &buffer);
+        void write(const pair<long, string> &buffer);
 
         /**
          * @brief 刷新缓存到文件
@@ -170,12 +170,12 @@ namespace tars
 
             if (bEnable)
             {
-                _mapThreadID.insert(std::make_pair(pthread_self(), sKey));
+                _mapThreadID.insert(std::make_pair((long)pthread_self(), sKey));
                 //_setThreadID.insert(pthread_self());
             }
             else
             {
-                _mapThreadID.erase(pthread_self());
+                _mapThreadID.erase((long)pthread_self());
                 //_setThreadID.erase(pthread_self());
             }
 
@@ -188,7 +188,7 @@ namespace tars
         /**
          * buffer
          */
-        TC_ThreadQueue<pair<int, string> >  _buffer;
+        TC_ThreadQueue<pair<long, string> >  _buffer;
 
         /**
          * 锁
@@ -215,7 +215,7 @@ namespace tars
          * 染色的线程ID集合
          *
          */
-        static hash_map<pthread_t, string> _mapThreadID;
+        static hash_map<long, string> _mapThreadID;
     };
 
     typedef TC_AutoPtr<TC_LoggerRoll> TC_LoggerRollPtr;
@@ -741,7 +741,7 @@ namespace tars
 
             if (hasFlag(TC_Logger::HAS_PID))
             {
-                n += snprintf(c + n, len - n, "%ld%s", syscall(SYS_gettid), _sSepar.c_str());
+                n += snprintf(c + n, len - n, "%ld%s", TC_Common::gettid(), _sSepar.c_str());
             }
 
             if (hasFlag(TC_Logger::HAS_LEVEL))
@@ -770,7 +770,7 @@ namespace tars
                 return LoggerStream(c, ost, &_estream, _mutex);
             }
 
-            return LoggerStream(NULL, ost, &_estream, _mutex);
+            return LoggerStream("", ost, &_estream, _mutex);
         }
 
         /**
@@ -927,7 +927,7 @@ namespace tars
          *
          * @param buffer
          */
-        void roll(const pair<int, string> &buffer)  { _roll->write(buffer);}
+        void roll(const pair<long, string> &buffer)  { _roll->write(buffer);}
 
         /**
         * @brief 获取roll实例.
@@ -1078,7 +1078,7 @@ namespace tars
          * @param maxSize
          * @return void
          */
-        void setMaxSize(int maxSize)        { TC_LockT<TC_ThreadMutex> lock(*this); return _maxSize = maxSize;}
+        void setMaxSize(int maxSize)        { TC_LockT<TC_ThreadMutex> lock(*this); _maxSize = maxSize;}
 
         /**
          * @brief 获取最大个数.
@@ -1092,7 +1092,7 @@ namespace tars
          *
          * @param maxNum
          */
-        void setMaxNum(int maxNum)          { TC_LockT<TC_ThreadMutex> lock(*this); return _maxNum = maxNum;}
+        void setMaxNum(int maxNum)          { TC_LockT<TC_ThreadMutex> lock(*this); _maxNum = maxNum;}
 
         /**
          * @brief 获取写示例.
@@ -1106,7 +1106,7 @@ namespace tars
          *
          * @param string
          */
-        void roll(const deque<pair<int, string> > &buffer)
+        void roll(const deque<pair<long, string> > &buffer)
         {
             TC_LockT<TC_ThreadMutex> lock(*this);
 
@@ -1512,7 +1512,7 @@ namespace tars
          * @param of
          * @return string
          */
-        void roll(const deque<pair<int, string> > &buffer)
+        void roll(const deque<pair<long, string> > &buffer)
         {
             TC_LockT<TC_ThreadMutex> lock(*this);
 
@@ -1643,4 +1643,3 @@ namespace tars
 }
 
 #endif
-

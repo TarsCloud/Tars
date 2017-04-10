@@ -30,7 +30,11 @@ using namespace tars;
 
 typedef TarsHashMap<StatMicMsgHead, StatMicMsgBody, ThreadLockPolicy,ShmStorePolicy> HashMap;//FileStorePolicy
 
+#ifdef __APPLE__
+typedef std::map<tars::StatMicMsgHead, tars::StatMicMsgBody, std::less<tars::StatMicMsgHead> > StatMsg;
+#else
 typedef std::map<tars::StatMicMsgHead, tars::StatMicMsgBody, std::less<tars::StatMicMsgHead>, __gnu_cxx::__pool_alloc<std::pair<tars::StatMicMsgHead const, tars::StatMicMsgBody> > > StatMsg;
+#endif
 
 class StatHashMap : public HashMap
 {

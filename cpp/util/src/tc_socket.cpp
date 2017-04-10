@@ -174,13 +174,17 @@ void TC_Socket::parseAddr(const string &sAddr, struct in_addr &stSinAddr)
     }
     else if(iRet == 0)
     {
+#if defined(__APPLE__)
+        struct hostent *pstHostent = gethostbyname(sAddr.c_str());
+        int iError = errno;
+#else
         struct hostent stHostent;
         struct hostent *pstHostent;
         char buf[2048] = "\0";
         int iError;
 
         gethostbyname_r(sAddr.c_str(), &stHostent, buf, sizeof(buf), &pstHostent, &iError);
-
+#endif
         if (pstHostent == NULL)
         {
             throw TC_Socket_Exception("[TC_Socket::parseAddr] gethostbyname_r error! :" + string(hstrerror(iError)));
@@ -565,6 +569,37 @@ void TC_Socket::createPipe(int fds[2], bool bBlock)
     }
 }
 
+#ifdef __APPLE__
+vector<string> TC_Socket::getLocalHosts()
+{
+    vector<string> result;
+    
+    struct ifaddrs *ifa, *origifa;
+    
+    if (getifaddrs(&origifa) == 0) {
+        for (ifa = origifa; ifa != NULL; ifa = ifa->ifa_next) {
+			/*
+			 * Skip non-AF_INET entries.
+			 */
+			if (ifa->ifa_addr == NULL || ifa->ifa_addr->sa_family != AF_INET)
+				continue;
+
+			/*
+			 * Add to the list.
+			 */
+			result.push_back(inet_ntoa(((struct sockaddr_in*) ifa->ifa_addr)->sin_addr));
+		}
+
+		/*
+		 * Free socket and buffer
+		 */
+		freeifaddrs(origifa);
+    }
+    return result;
+}
+    
+#else //linux
+    
 vector<string> TC_Socket::getLocalHosts()
 {
     vector<string> result;
@@ -625,6 +660,6 @@ vector<string> TC_Socket::getLocalHosts()
 
     return result;
 }
-
+#endif //!__APPLE__
 
 }

@@ -2,6 +2,7 @@
 #define _TC_CONTEXT_FCONTEXT_X86_64_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 namespace tars
 {
@@ -12,7 +13,7 @@ extern "C"
 struct stack_t
 {
     void    *   sp;
-    std::size_t size;
+    size_t size;
 
     stack_t()
     : sp(0)

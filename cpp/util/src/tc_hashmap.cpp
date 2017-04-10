@@ -117,7 +117,9 @@ int TC_HashMap::Block::get(void *pData, size_t &iDataLen)
                 size_t iCopyLen = min(iUseSize, iLeftLen);
                 //copy当前的chunk
                 memcpy((char*)pData + iHasLen, pChunk->_cData, iCopyLen);
-                if (iLeftLen <= iUseSize)
+                //这里有bug，= 的时候正好可以，不能返回出错！
+                //if (iLeftLen <= iUseSize)
+                if (iLeftLen < iUseSize)
                 {
                     iDataLen = iHasLen + iCopyLen;
                     return TC_HashMap::RT_NOTALL_ERR;   //copy不完全

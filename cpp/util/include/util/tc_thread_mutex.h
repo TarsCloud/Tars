@@ -18,6 +18,7 @@
 #define __TC_THREAD_MUTEX_H
 
 #include "util/tc_lock.h"
+#include <pthread.h>
 
 namespace tars
 {

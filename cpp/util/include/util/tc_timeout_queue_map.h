@@ -205,14 +205,15 @@ public:
      *
      * @return size_t
      */
-    size_t size() const { return _data.size(); }
+//    size_t size() const { return _data.size(); }
+     
 private:
     void delFromTimeout(uint16_t id);
     void delFromData(uint16_t id);
     void delFromNoSend(uint16_t id);
 
 protected:
-    uint32_t                        _uniqId;
+    uint32_t    _uniqId;
 
     uint16_t    _dataSize;
 

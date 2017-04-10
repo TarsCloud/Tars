@@ -1959,7 +1959,7 @@ namespace tars
         };
 
         template <typename FunctorType, typename RunType, typename BoundArgsType>
-        struct TC_BindState;
+        class TC_BindState;
         
         template <typename FunctorType, typename RunType>
         class TC_BindState<FunctorType, RunType, void()> : public TC_BindStateBase {

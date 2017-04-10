@@ -33,7 +33,7 @@ extern long timezone;
 
 struct CmpCase
 {
-    bool operator()(const string &s1, const string &s2)
+    bool operator()(const string &s1, const string &s2) const
     {
         return TC_Common::upper(s1) < TC_Common::upper(s2);
     }

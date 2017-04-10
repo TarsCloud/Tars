@@ -605,7 +605,7 @@ void ServantProxy::invoke(ReqMessage * msg, bool bCoroAsync)
     {
         if(!msg->bCoroFlag)
         {
-            if(!msg->bMonitorFin)
+            while(!msg->bMonitorFin)
             {
                 TC_ThreadLock::Lock lock(*(msg->pMonitor));
 

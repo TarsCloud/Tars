@@ -18,6 +18,7 @@
 #define __TC_EX_H
 
 #include <stdexcept>
+#include <string>
 using namespace std;
 
 namespace tars

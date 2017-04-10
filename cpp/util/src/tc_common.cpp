@@ -19,6 +19,7 @@
 #include <sys/time.h>
 #include <string.h>
 #include <cmath>
+#include <sys/syscall.h>
 
 namespace tars
 {
@@ -734,4 +735,16 @@ size_t TC_Common::toSize(const string &s, size_t iDefaultSize)
 
     return iDefaultSize;
 }
+
+#ifdef __APPLE__
+pid_t TC_Common::gettid()
+{
+	return (pid_t) syscall(SYS_thread_selfid);
+}
+#else
+pid_t TC_Common::gettid()
+{
+	return (pid_t) syscall(SYS_gettid);
+}
+#endif
 }

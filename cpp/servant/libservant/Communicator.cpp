@@ -59,7 +59,7 @@ Communicator::Communicator(TC_Config& conf, const string& domain/* = CONFIG_ROOT
 
 Communicator::~Communicator()
 {
-    terminate();
+//    terminate();
 }
 
 bool Communicator::isTerminating()

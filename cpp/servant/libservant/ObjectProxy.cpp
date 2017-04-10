@@ -302,7 +302,7 @@ void ObjectProxy::doInvokeException(ReqMessage * msg)
 
 void ObjectProxy::doTimeout()
 {
-    TLOGINFO("[TARS][ObjectProxy::doInvokeException, objname:" << _name << "]" << endl);
+    TLOGINFO("[TARS][ObjectProxy::doTimeout, objname:" << _name << "]" << endl);
 
     ReqMessage * reqINfo = NULL;
     while(_reqTimeoutQueue.timeout(reqINfo))

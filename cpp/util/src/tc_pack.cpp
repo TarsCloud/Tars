@@ -18,6 +18,13 @@
 #include <iostream>
 #include <string.h>
 
+#if defined(__APPLE__)
+    #include <libkern/OSByteOrder.h>
+    #define __bswap_16 OSSwapInt16
+    #define __bswap_32 OSSwapInt32
+    #define __bswap_64 OSSwapInt64
+#endif
+
 namespace tars
 {
 

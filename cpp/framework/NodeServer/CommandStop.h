@@ -117,8 +117,12 @@ inline int CommandStop::execute(string& sResult)
         NODE_LOG("stopServer")->debug() << FILE_FUN << "pid:" << pid << endl;
         if (pid != 0)
         {
+#ifdef __linux__
             string f = "/proc/" + TC_Common::tostr(pid) + "/status";
             NODE_LOG("stopServer")->debug() << FILE_FUN << "print the server status :" << f << "|" << TC_File::load2str(f) << endl;
+#else
+            NODE_LOG("stopServer")->debug() << FILE_FUN << "print the server status :" << "???" << "|" << endl;
+#endif
         }
 
         string sStopScript   = _serverObjectPtr->getStopScript();

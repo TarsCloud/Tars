@@ -38,11 +38,11 @@ RollWriteT::~RollWriteT()
     }
 }
 
-void RollWriteT::operator()(ostream &of, const deque<pair<int, string> > &ds)
+void RollWriteT::operator()(ostream &of, const deque<pair<long, string> > &ds)
 {
     vector<string> vRemoteDyeing;
 
-    deque<pair<int, string> >::const_iterator it = ds.begin();
+    deque<pair<long, string> >::const_iterator it = ds.begin();
     while(it != ds.end())
     {
         of << it->second;
@@ -196,7 +196,7 @@ void RemoteTimeWriteT::setTimeWriteT(TimeWriteT *pTimeWrite)
     _timeWrite = pTimeWrite;
 }
 
-void RemoteTimeWriteT::operator()(ostream &of, const deque<pair<int, string> > &buffer)
+void RemoteTimeWriteT::operator()(ostream &of, const deque<pair<long, string> > &buffer)
 {
     const static uint32_t len = 2000;
 
@@ -213,7 +213,7 @@ void RemoteTimeWriteT::operator()(ostream &of, const deque<pair<int, string> > &
         vector<string> v;
         v.reserve(len);
 
-        deque<pair<int, string> >::const_iterator it = buffer.begin();
+        deque<pair<long, string> >::const_iterator it = buffer.begin();
         while(it != buffer.end())
         {
             v.push_back(it->second);
@@ -374,7 +374,7 @@ void TimeWriteT::enableLocal(bool bEnable)
     }
 }
 
-void TimeWriteT::operator()(ostream &of, const deque<pair<int, string> > &buffer)
+void TimeWriteT::operator()(ostream &of, const deque<pair<long, string> > &buffer)
 {
 
     if(_local && of && !buffer.empty())
@@ -390,7 +390,7 @@ void TimeWriteT::operator()(ostream &of, const deque<pair<int, string> > &buffer
 
     if(_remote && _remoteTimeLogger && !buffer.empty())
     {
-        deque<pair<int, string> >::const_iterator it = buffer.begin();
+        deque<pair<long, string> >::const_iterator it = buffer.begin();
         while(it != buffer.end())
         {
             _remoteTimeLogger->any() << it->second;
@@ -399,7 +399,7 @@ void TimeWriteT::operator()(ostream &of, const deque<pair<int, string> > &buffer
     }
 
     vector<string> vDyeingLog;
-    deque<pair<int, string> >::const_iterator it = buffer.begin();
+    deque<pair<long, string> >::const_iterator it = buffer.begin();
     while(it != buffer.end())
     {
         if(it->first != 0)
@@ -444,11 +444,11 @@ void TimeWriteT::writeError(const vector<string> &buffer)
     //TARS_NOTIFY_ERROR(sInfo);
 }
 
-void TimeWriteT::writeError(const deque<pair<int, string> > &buffer)
+void TimeWriteT::writeError(const deque<pair<long, string> > &buffer)
 {
     if(!_local)
     {
-        deque<pair<int, string> >::const_iterator it = buffer.begin();
+        deque<pair<long, string> >::const_iterator it = buffer.begin();
         while(it != buffer.end())
         {
             _logger.any() << it->second;

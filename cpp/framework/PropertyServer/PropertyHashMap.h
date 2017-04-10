@@ -28,7 +28,11 @@ typedef StatPropMsgBody PropBody;
 typedef StatPropMsgHead PropHead;
 typedef TarsHashMap<PropHead,PropBody, ThreadLockPolicy, FileStorePolicy> PropHashMap;
 
+#ifdef __APPLE__
+typedef std::map<PropHead, PropBody, std::less<PropHead> > PropertyMsg;
+#else
 typedef std::map<PropHead, PropBody, std::less<PropHead>, __gnu_cxx::__pool_alloc<std::pair<PropHead const, PropBody> > > PropertyMsg;
+#endif
 
 class PropertyHashMap : public PropHashMap
 {

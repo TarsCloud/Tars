@@ -166,7 +166,7 @@ public:
     * @param sFileData     文件内容
     * @return 
     */
-    static void save2file(const string &sFullFileName, const string &sFileData);
+    static void save2file(const string &sFullFileName, const string &sFileData, bool append=false);
 
     /**
      * @brief 写文件. 
@@ -176,7 +176,7 @@ public:
      * @param length      写入长度 
      * @return               0-成功,-1-失败
      */
-    static int save2file(const string &sFullFileName, const char *sFileData, size_t length);
+    static int save2file(const string &sFullFileName, const char *sFileData, size_t length, bool append);
 
     /**
      * @brief 获取前当可执行文件路径.

@@ -23,7 +23,7 @@ namespace tars
 {
 
 extern "C" intptr_t jump_fcontext( fcontext_t * ofc, fcontext_t const* nfc, intptr_t vp, bool preserve_fpu = true);
-extern "C" fcontext_t * make_fcontext( void * sp, std::size_t size, void (* fn)( intptr_t) );
+extern "C" fcontext_t * make_fcontext( void * sp, size_t size, void (* fn)( intptr_t) );
 
 }
 

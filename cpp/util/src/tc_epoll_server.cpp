@@ -45,6 +45,10 @@ TC_EpollServer::Handle::~Handle()
 {
 }
 
+void TC_EpollServer::Handle::handleOpen(const tagRecvData &stRecvData)
+{
+}
+    
 void TC_EpollServer::Handle::handleClose(const tagRecvData &stRecvData)
 {
 }
@@ -192,8 +196,14 @@ void TC_EpollServer::Handle::handleImp()
 
                     stRecvData.adapter = adapter;
 
+                    //cxxjava@163.com
+                    //打开连接的通知消息
+					if (stRecvData.isOpened)
+					{
+						handleOpen(stRecvData);
+					}
                     //数据已超载 overload
-                    if (stRecvData.isOverload)
+                    else if (stRecvData.isOverload)
                     {
                         handleOverload(stRecvData);
                     }
@@ -674,6 +684,31 @@ TC_EpollServer::NetThread::Connection::~Connection()
     }
 }
 
+//cxxjava@163.com
+void TC_EpollServer::NetThread::Connection::open()
+{
+    if(_lfd != -1)
+    {
+    	//构造一个tagRecvData，通知业务该连接的创建事件
+
+		tagRecvData* recv = new tagRecvData();
+		recv->adapter    = getBindAdapter();
+		recv->uid        = getId();
+		recv->ip         = getIp();
+		recv->port       = getPort();
+		recv->isOpened   = true;
+		recv->isClosed   = false;
+		recv->isOverload = false;
+		recv->recvTimeStamp = TNOWMS;
+		recv->fd         = getfd();
+
+    	recv_queue::queue_type vRecvData;
+        vRecvData.push_back(recv);
+
+    	_pBindAdapter->insertRecvQueue(vRecvData,false);
+    }
+}
+
 void TC_EpollServer::NetThread::Connection::close()
 {
     if(_lfd != -1)
@@ -767,6 +802,7 @@ int TC_EpollServer::NetThread::Connection::parseProtocol(recv_queue::queue_type 
                 recv->port             = _port;
                 recv->recvTimeStamp    = TNOWMS;
                 recv->uid              = getId();
+                recv->isOpened         = false;
                 recv->isOverload       = false;
                 recv->isClosed         = false;
                 recv->fd               = getfd();
@@ -1264,6 +1300,7 @@ size_t TC_EpollServer::NetThread::ConnectionList::size()
 TC_EpollServer::NetThread::NetThread(TC_EpollServer *epollServer)
 : _epollServer(epollServer)
 , _listSize(0)
+, _epoller(true)
 , _bTerminate(false)
 , _createEpoll(false)
 , _handleStarted(false)
@@ -1273,9 +1310,9 @@ TC_EpollServer::NetThread::NetThread(TC_EpollServer *epollServer)
 , _iEmptyCheckTimeout(MIN_EMPTY_CONN_TIMEOUT)
 , _nUdpRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
 {
-    _shutdown.createSocket();
-
-    _notify.createSocket();
+//    _shutdown.createSocket();
+//
+//    _notify.createSocket();
 }
 
 TC_EpollServer::NetThread::~NetThread()
@@ -1418,8 +1455,10 @@ void TC_EpollServer::NetThread::createEpoll(uint32_t iIndex)
         //创建epoll
         _epoller.create(10240);
 
-        _epoller.add(_shutdown.getfd(), H64(ET_CLOSE), EPOLLIN);
-        _epoller.add(_notify.getfd(), H64(ET_NOTIFY), EPOLLIN);
+//        _epoller.add(_shutdown.getfd(), H64(ET_CLOSE), EPOLLIN);
+//        _epoller.add(_notify.getfd(), H64(ET_NOTIFY), EPOLLIN);
+        _shutdown.bind(_epoller, H64(ET_CLOSE));
+        _notify.bind(_epoller, H64(ET_NOTIFY));
 
         size_t maxAllConn   = 0;
 
@@ -1493,7 +1532,8 @@ void TC_EpollServer::NetThread::terminate()
     _sbuffer.notifyT();
 
     //通知epoll响应, 关闭连接
-    _epoller.mod(_shutdown.getfd(), H64(ET_CLOSE), EPOLLOUT);
+//    _epoller.mod(_shutdown.getfd(), H64(ET_CLOSE), EPOLLOUT);
+    _shutdown.signal();
 }
 
 bool TC_EpollServer::NetThread::accept(int fd)
@@ -1563,6 +1603,10 @@ bool TC_EpollServer::NetThread::accept(int fd)
         //addTcpConnection(cPtr);
         _epollServer->addConnection(cPtr, cs.getfd(), TCP_CONNECTION);
 
+        //cxxjava@163.com
+        //处理连接打开事件
+        cPtr->open();
+
         return true;
     }
     else
@@ -1628,6 +1672,7 @@ void TC_EpollServer::NetThread::delConnection(TC_EpollServer::NetThread::Connect
         recv->uid        =  uid;
         recv->ip         = cPtr->getIp();
         recv->port       = cPtr->getPort();
+        recv->isOpened   = false;
         recv->isClosed   = true;
         recv->isOverload = false;
         recv->recvTimeStamp = TNOWMS;
@@ -1681,7 +1726,8 @@ void TC_EpollServer::NetThread::close(uint32_t uid)
     _sbuffer.push_back(send);
 
     //通知epoll响应, 关闭连接
-    _epoller.mod(_notify.getfd(), H64(ET_NOTIFY), EPOLLOUT);
+//    _epoller.mod(_notify.getfd(), H64(ET_NOTIFY), EPOLLOUT);
+    _notify.signal();
 }
 
 void TC_EpollServer::NetThread::send(uint32_t uid, const string &s, const string &ip, uint16_t port)
@@ -1706,7 +1752,8 @@ void TC_EpollServer::NetThread::send(uint32_t uid, const string &s, const string
     _sbuffer.push_back(send);
 
     //通知epoll响应, 有数据要发送
-    _epoller.mod(_notify.getfd(), H64(ET_NOTIFY), EPOLLOUT);
+//    _epoller.mod(_notify.getfd(), H64(ET_NOTIFY), EPOLLOUT);
+    _notify.signal();
 }
 
 void TC_EpollServer::NetThread::processPipe()
@@ -1759,9 +1806,9 @@ void TC_EpollServer::NetThread::processPipe()
     }
 }
 
-void TC_EpollServer::NetThread::processNet(const epoll_event &ev)
+void TC_EpollServer::NetThread::processNet(const EPOLL_EVENT &ev)
 {
-    uint32_t uid = ev.data.u32;
+    uint32_t uid = EPOLL_EVENT_DATA_U32(ev);
 
     Connection *cPtr = getConnectionPtr(uid);
 
@@ -1771,14 +1818,14 @@ void TC_EpollServer::NetThread::processNet(const epoll_event &ev)
         return;
     }
 
-    if (ev.events & EPOLLERR || ev.events & EPOLLHUP)
+    if (EPOLL_EVENT_GET(ev) & EPOLLERR || EPOLL_EVENT_GET(ev) & EPOLLHUP)
     {
         delConnection(cPtr,true,EM_SERVER_CLOSE);
 
         return;
     }
 
-    if(ev.events & EPOLLIN)               //有数据需要读取
+    if(EPOLL_EVENT_GET(ev) & EPOLLIN)               //有数据需要读取
     {
         recv_queue::queue_type vRecvData;
 
@@ -1797,7 +1844,7 @@ void TC_EpollServer::NetThread::processNet(const epoll_event &ev)
         }
     }
 
-    if (ev.events & EPOLLOUT)              //有数据需要发送
+    if (EPOLL_EVENT_GET(ev) & EPOLLOUT)              //有数据需要发送
     {
         int ret = sendBuffer(cPtr);
 
@@ -1825,33 +1872,37 @@ void TC_EpollServer::NetThread::run()
         {
             try
             {
-                const epoll_event &ev = _epoller.get(i);
+                const EPOLL_EVENT &ev = _epoller.get(i);
 
-                uint32_t h = ev.data.u64 >> 32;
+                uint32_t h = EPOLL_EVENT_DATA_U64(ev) >> 32;
 
                 switch(h)
                 {
                 case ET_LISTEN:
                     {
                         //监听端口有请求
-                        map<int, BindAdapterPtr>::const_iterator it = _listeners.find(ev.data.u32);
+                        map<int, BindAdapterPtr>::const_iterator it = _listeners.find(EPOLL_EVENT_DATA_U32(ev));
                         if( it != _listeners.end())
                         {
-                            if(ev.events & EPOLLIN)
+                            if(EPOLL_EVENT_GET(ev) & EPOLLIN)
                             {
                                 bool ret;
                                 do
                                 {
-                                    ret = accept(ev.data.u32);
+                                    ret = accept(EPOLL_EVENT_DATA_U32(ev));
                                 }while(ret);
                             }
                         }
                     }
                     break;
                 case ET_CLOSE:
+                	_shutdown.wait();
+
                     //关闭请求
                     break;
                 case ET_NOTIFY:
+                	_notify.wait();
+
                     //发送通知
                     processPipe();
                     break;

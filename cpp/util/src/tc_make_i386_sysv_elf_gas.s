@@ -1,3 +1,9 @@
+#ifdef __APPLE__
+
+//TODO...
+
+#else
+
 /********************************************************************
  *                                                                  *
  *  --------------------------------------------------------------  *
@@ -68,3 +74,5 @@ finish:
     call   _exit@PLT                    /* exit application */
     hlt
 .size make_fcontext,.-make_fcontext
+
+#endif

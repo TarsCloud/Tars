@@ -18,6 +18,12 @@
 #include "Activator.h"
 #include "NodeServer.h"
 
+#ifdef __APPLE__
+#define FREOPEN freopen
+#else
+#define FREOPEN freopen64
+#endif
+
 static pid_t *childpid = NULL; /* ptr to array allocated at run-time */
 #define SHELL   "/bin/sh"
 
@@ -77,7 +83,7 @@ pid_t Activator::activate(const string& strExePath, const string& strPwdPath, co
         if (_redirectPath != "")
         {
             TC_File::makeDirRecursive(TC_File::extractFilePath(_redirectPath));
-            if ((freopen64(_redirectPath.c_str(), "ab", stdout)) != NULL && (freopen64(_redirectPath.c_str(), "ab", stderr)) != NULL)
+            if ((FREOPEN(_redirectPath.c_str(), "ab", stdout)) != NULL && (FREOPEN(_redirectPath.c_str(), "ab", stderr)) != NULL)
             {
                 cout << argv[0] << " redirect stdout and stderr  to " << _redirectPath << endl;
             }
@@ -92,7 +98,7 @@ pid_t Activator::activate(const string& strExePath, const string& strPwdPath, co
         else if (!strRollLogPath.empty())
         {
             TC_File::makeDirRecursive(TC_File::extractFilePath(strRollLogPath));
-            if ((freopen64(strRollLogPath.c_str(), "ab", stdout)) != NULL && (freopen64(strRollLogPath.c_str(), "ab", stderr)) != NULL)
+            if ((FREOPEN(strRollLogPath.c_str(), "ab", stdout)) != NULL && (FREOPEN(strRollLogPath.c_str(), "ab", stderr)) != NULL)
             {
                 cout << argv[0] << " redirect stdout and stderr  to " << strRollLogPath << endl;
             }

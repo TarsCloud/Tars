@@ -426,6 +426,12 @@ public:
      * @return             字节数
      */
     static size_t toSize(const string &s, size_t iDefaultSize);
+
+    /**
+     * @brief  获取线程ID.
+     * @return 线程ID
+     */
+    static pid_t gettid();
 };
 
 namespace p

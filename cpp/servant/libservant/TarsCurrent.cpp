@@ -187,7 +187,7 @@ void TarsCurrent::initialize(const TC_EpollServer::tagRecvData &stRecvData, int6
     }
 }
 
-void TarsCurrent::initializeClose(const TC_EpollServer::tagRecvData &stRecvData)
+void TarsCurrent::initializeOpenClose(const TC_EpollServer::tagRecvData &stRecvData)
 {
     _ip   = stRecvData.ip;
 

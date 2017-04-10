@@ -62,7 +62,7 @@ public:
     RollWriteT();
     ~RollWriteT();
 
-    void operator()(ostream &of, const deque<pair<int, string> > &ds);
+    void operator()(ostream &of, const deque<pair<long, string> > &ds);
 
     void setDyeingLogInfo(const string &sApp, const string &sServer, const string & sLogPath,
             int iMaxSize, int iMaxNum, const CommunicatorPtr &comm, const string & sLogObj);
@@ -233,7 +233,7 @@ public:
      * @param of
      * @param buffer
      */
-    void operator()(ostream &of, const deque<pair<int, string> > &buffer);
+    void operator()(ostream &of, const deque<pair<long, string> > &buffer);
 
 protected:
     /**
@@ -351,7 +351,7 @@ public:
      * @param of
      * @param buffer
      */
-    void operator()(ostream &of, const deque<pair<int, string> > &buffer);
+    void operator()(ostream &of, const deque<pair<long, string> > &buffer);
 
 protected:
 
@@ -370,7 +370,7 @@ protected:
      * 记录错误文件
      * @param buffer
      */
-    void writeError(const deque<pair<int, string> > &buffer);
+    void writeError(const deque<pair<long, string> > &buffer);
 
     /**
      * 初始化logger

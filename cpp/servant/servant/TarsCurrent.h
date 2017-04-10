@@ -224,7 +224,7 @@ protected:
      * 初始化
      * @param stRecvData
      */
-    void initializeClose(const TC_EpollServer::tagRecvData &stRecvData);
+    void initializeOpenClose(const TC_EpollServer::tagRecvData &stRecvData);
 
     /**
      * 初始化

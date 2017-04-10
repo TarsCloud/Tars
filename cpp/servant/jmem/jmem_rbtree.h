@@ -1113,7 +1113,7 @@ public:
     void clear()
     {
         TC_LockT<typename LockPolicy::Mutex> lock(LockPolicy::mutex());
-        return this->_t.clear();
+        this->_t.clear();
     }
 
     /**

@@ -277,7 +277,7 @@ void TC_HttpAsync::AsyncRequest::doReceive()
 
 ///////////////////////////////////////////////////////////////////////////
 
-TC_HttpAsync::TC_HttpAsync() : _terminate(false)
+TC_HttpAsync::TC_HttpAsync() : _epoller(true), _terminate(false)
 {
     memset(&_proxyAddr,0,sizeof(struct sockaddr));
     memset(&_bindAddr,0,sizeof(struct sockaddr));
@@ -519,9 +519,9 @@ void TC_HttpAsync::run()
 
             for (int i = 0; i < num; ++i)
             {
-                epoll_event ev = _epoller.get(i);
+                EPOLL_EVENT ev = _epoller.get(i);
 
-                uint32_t uniqId = (uint32_t)ev.data.u64;
+                uint32_t uniqId = (uint32_t)EPOLL_EVENT_DATA_U64(ev);
 
                 AsyncRequestPtr p = _data->get(uniqId, false);
 
@@ -530,7 +530,7 @@ void TC_HttpAsync::run()
 //                async_process_type::wrapper_type w(apt, p, ev.events);
 
 //                _npool[uniqId%_npool.size()]->exec(w);
-                process(p, ev.events);
+                process(p, EPOLL_EVENT_GET(ev));
             }
         }
         catch(exception &ex)

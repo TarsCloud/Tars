@@ -376,7 +376,7 @@ string StatReport::sampleUnid()
     char s[14]              = {0};
     time_t t                = TNOW;
     int ip                  = inet_addr(_ip.c_str());
-    int thread              = syscall(SYS_gettid);
+    int thread              = TC_Common::gettid();
     static unsigned short n = 0;
     ++n;
     memcpy( s, &ip, 4 );

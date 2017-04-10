@@ -1,3 +1,9 @@
+#ifdef __APPLE__
+
+//TODO...
+
+#else
+
 /********************************************************************
  *                                                                  *
  *  --------------------------------------------------------------  *
@@ -63,3 +69,5 @@ jump_fcontext:
 
     jmp     *%edx                   /* indirect jump to context */
 .size jump_fcontext,.-jump_fcontext
+
+#endif

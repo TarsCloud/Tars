@@ -26,6 +26,10 @@
 #include "CommandAddFile.h"
 #include "NodeRollLogger.h"
 
+#ifdef __APPLE__
+#include <sys/resource.h>
+#endif
+
 ServerObject::ServerObject( const ServerDescriptor& tDesc)
 : _tarsServer(true)
 , _loaded(false)
@@ -667,6 +671,15 @@ void ServerObject::checkServer(int iTimeout)//checkServer时对服务所占用�
  */
 void ServerObject::reportMemProperty()
 {
+#ifdef __APPLE__
+	//@see: http://stackoverflow.com/questions/1543157/how-can-i-find-out-how-much-memory-my-c-app-is-using-on-the-mac
+	struct rusage usage;
+	if(0 == getrusage(RUSAGE_SELF, &usage)) {
+		REPORT_MAX(_serverId, _serverId+".memsize", (int)usage.ru_maxrss);
+		NODE_LOG("ReportMemThread")->debug()<<FILE_FUN<<"report_max("<<_serverId<<".memsize,"<<usage.ru_maxrss<<")OK."<<endl;
+		return;
+	}
+#else
     try
     {
         char sTmp[64] ={0};
@@ -716,6 +729,7 @@ void ServerObject::reportMemProperty()
         NODE_LOG("ReportMemThread")->error() << FILE_FUN << " unknown error" << endl;
         TLOGERROR(FILE_FUN << "unknown ex." << endl);
     }
+#endif
 }
 
 void ServerObject::checkCoredumpLimit()

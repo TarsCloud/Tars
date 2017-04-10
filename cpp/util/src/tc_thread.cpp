@@ -75,7 +75,7 @@ void TC_ThreadControl::yield()
     sched_yield();
 }
 
-TC_Thread::TC_Thread() : _running(false),_tid(-1)
+TC_Thread::TC_Thread() : _running(false),_tid((pthread_t)(-1))
 {
 }
 

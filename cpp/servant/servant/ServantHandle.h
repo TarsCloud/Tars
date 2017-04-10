@@ -17,6 +17,12 @@
 #ifndef __TARS_SERVANT_HANDLE_H
 #define __TARS_SERVANT_HANDLE_H
 
+#ifdef __APPLE__
+//@see: "error ucontext routines are deprecated, and require _XOPEN_SOURCE to be defined"
+//@see: http://boost-users.boost.narkive.com/oBZ9TxFN/coroutine-bus-error-on-mac-os-x-10-5
+#define _XOPEN_SOURCE
+#endif
+
 #include <map>
 #include <string>
 #include <memory>
@@ -84,6 +90,12 @@ protected:
     void initialize();
 
     /**
+     * open 事件处理
+     * @param stRecvData
+     */
+    virtual void handleOpen(const TC_EpollServer::tagRecvData &stRecvData);
+    
+    /**
      * 逻辑处理
      * @param stRecvData
      */
@@ -137,7 +149,14 @@ protected:
     TarsCurrentPtr createCurrent(const TC_EpollServer::tagRecvData &stRecvData);
 
     /**
-     * 创建闭连接时的关上下文
+	 * 创建打开连接时的上下文
+	 * @param stRecvData
+	 * @return TarsCurrent*
+	 */
+	TarsCurrentPtr createOpenCurrent(const TC_EpollServer::tagRecvData &stRecvData);
+
+    /**
+     * 创建关闭连接时的上下文
      * @param stRecvData
      * @return TarsCurrent*
      */

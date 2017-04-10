@@ -512,14 +512,59 @@ TarsCurrentPtr ServantHandle::createCurrent(const TC_EpollServer::tagRecvData &s
     return current;
 }
 
+//cxxjava@163.com
+TarsCurrentPtr ServantHandle::createOpenCurrent(const TC_EpollServer::tagRecvData &stRecvData)
+{
+    TarsCurrentPtr current = new TarsCurrent(this);
+    current->initializeOpenClose(stRecvData);
+    return current;
+}
+
 TarsCurrentPtr ServantHandle::createCloseCurrent(const TC_EpollServer::tagRecvData &stRecvData)
 {
     TarsCurrentPtr current = new TarsCurrent(this);
 
-    current->initializeClose(stRecvData);
+    current->initializeOpenClose(stRecvData);
     current->setReportStat(false);
     current->setCloseType(stRecvData.closeType);
     return current;
+}
+
+//cxxjava@163.com
+void ServantHandle::handleOpen(const TC_EpollServer::tagRecvData &stRecvData)
+{
+    TLOGINFO("[TARS]ServantHandle::handleOpen,adapter:" << stRecvData.adapter->getName()
+                << ",peer:" << stRecvData.ip << ":" << stRecvData.port << endl);
+
+    TarsCurrentPtr current = createOpenCurrent(stRecvData);
+
+    map<string, ServantPtr>::iterator sit = _servants.find(current->getServantName());
+    
+    if (sit == _servants.end())
+    {
+        TLOGERROR("[TARS]ServantHandle::handleOpen,adapter:" << stRecvData.adapter->getName()
+                  << ",peer:" << stRecvData.ip << ":" << stRecvData.port <<", " << current->getServantName() << " not found" << endl);
+        
+        return;
+    }
+    
+    try
+    {
+        //业务逻辑处理
+        sit->second->doOpen(current);
+    }
+    catch(exception &ex)
+    {
+        TLOGERROR("[TARS]ServantHandle::handleOpen " << ex.what() << endl);
+        
+        return;
+    }
+    catch(...)
+    {
+        TLOGERROR("[TARS]ServantHandle::handleOpen unknown error" << endl);
+        
+        return;
+    }
 }
 
 void ServantHandle::handleClose(const TC_EpollServer::tagRecvData &stRecvData)

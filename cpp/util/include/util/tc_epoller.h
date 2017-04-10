@@ -17,8 +17,40 @@
 #ifndef __TC_EPOLLER_H_
 #define __TC_EPOLLER_H_
 
+#include <stdio.h>
+#include "util/tc_clientsocket.h"
+
+#ifdef __APPLE__
+
+#include <sys/event.h>
+#include <cassert>
+
+#define EPOLLIN  abs(EVFILT_READ)  //1
+#define EPOLLOUT abs(EVFILT_WRITE) //2
+#define EPOLLERR 4
+#define EPOLLHUP 0  //?
+
+#define EPOLL_CTL_ADD EV_ADD
+#define EPOLL_CTL_MOD (EV_DELETE | EV_ADD)
+#define EPOLL_CTL_DEL EV_DELETE
+
+#define EPOLL_EVENT struct kevent
+#define EPOLL_EVENT_GET(ev) ((ev.flags & EV_ERROR) ? EPOLLERR : abs(ev.filter))
+
+#define EPOLL_EVENT_DATA_U32(ev) (static_cast<uint32_t>((uint64_t)ev.udata))
+#define EPOLL_EVENT_DATA_U64(ev) ((uint64_t)(ev.udata))
+
+#else //__linux__
+
 #include <sys/epoll.h>
 #include <cassert>
+
+#define EPOLL_EVENT struct epoll_event
+#define EPOLL_EVENT_GET(ev) ev.events
+#define EPOLL_EVENT_DATA_U32(ev) ev.data.u32
+#define EPOLL_EVENT_DATA_U64(ev) ev.data.u64
+
+#endif
 
 namespace tars
 {
@@ -34,6 +66,31 @@ namespace tars
  */
 class TC_Epoller
 {
+public:
+	class Notify {
+	public:
+		Notify();
+		~Notify();
+
+		void bind(TC_Epoller& ep, long long data);
+		void unbind();
+		void signal();
+		void wait();
+
+	private:
+#ifdef __linux__
+		TC_Socket _soc;
+#else
+		FILE *_in;  //in for write.
+		FILE *_out; //out for read.
+#endif //!
+		TC_Epoller* _ep;
+		long long _data;
+
+		void init();
+		void uninit();
+	};
+
 public:
 
     /**
@@ -96,7 +153,7 @@ public:
      *
      * @return struct epoll_event&被触发的事件
      */
-    struct epoll_event& get(int i) { assert(_pevs != 0); return _pevs[i]; }
+    EPOLL_EVENT& get(int i) { assert(_pevs != 0); return _pevs[i]; }
 
 protected:
 
@@ -113,6 +170,24 @@ protected:
     void ctrl(int fd, long long data, __uint32_t events, int op);
 
 protected:
+
+#ifdef __APPLE__
+    /**
+	 *     epoll
+	 */
+	int _iKqueuefd;
+
+	/**
+	 * 最大连接数
+	 */
+	int    _max_connections;
+
+	/**
+	 * 事件集
+	 */
+	struct kevent *_pevs;
+
+#else
 
     /**
      *     epoll
@@ -133,8 +208,9 @@ protected:
      * 是否是ET模式
      */
     bool _et;
+#endif
 };
 
 }
-#endif
 
+#endif

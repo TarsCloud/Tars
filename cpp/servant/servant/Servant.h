@@ -100,6 +100,13 @@ public:
 
 public:
     /**
+     * 客户端建立连接时的处理
+     * @param current
+     * @return int
+     */
+    virtual int doOpen(TarsCurrentPtr current) { return -1; }
+    
+    /**
      * 普通协议的请求，没有方法名，不需要Dispatch
      * @param current 
      * @param buffer 

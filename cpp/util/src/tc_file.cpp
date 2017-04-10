@@ -17,6 +17,10 @@
 #include "util/tc_file.h"
 #include <string.h>
 
+#ifdef __APPLE__
+#include <mach-o/dyld.h>
+#endif
+
 namespace tars
 {
 
@@ -245,16 +249,20 @@ void TC_File::load2str(const string &sFullFileName, vector<char> &buffer)
     buffer.insert(buffer.end(), istreambuf_iterator<char>(ifs), istreambuf_iterator<char>());
 }
 
-void TC_File::save2file(const string &sFullFileName, const string &sFileData)
+void TC_File::save2file(const string &sFullFileName, const string &sFileData, bool append)
 {
-    ofstream ofs((sFullFileName).c_str());
-    ofs << sFileData;
-    ofs.close();
+	if (append) {
+		save2file(sFullFileName, sFileData.c_str(), sFileData.length(), append);
+	} else {
+		ofstream ofs((sFullFileName).c_str());
+    	ofs << sFileData;
+    	ofs.close();
+	}
 }
 
-int TC_File::save2file(const string &sFullFileName, const char *sFileData, size_t length)
+int TC_File::save2file(const string &sFullFileName, const char *sFileData, size_t length, bool append)
 {
-    FILE *fp = fopen(sFullFileName.c_str(), "wb");
+    FILE *fp = fopen(sFullFileName.c_str(), append ? "ab" : "wb");
     if(fp == NULL)
     {
         return -1;
@@ -272,6 +280,17 @@ int TC_File::save2file(const string &sFullFileName, const char *sFileData, size_
 
 string TC_File::getExePath()
 {
+#ifdef __APPLE__
+	char path[1024];
+	uint32_t bufsize, size;
+	bufsize = size = sizeof(path);
+	if (_NSGetExecutablePath(path, &size) != 0) {
+		throw TC_File_Exception("[TC_File::getExePath] could not get exe path error", errno);
+	}
+	size = (size>=bufsize)?(bufsize-1):size;
+	path[size] = '\0';
+    return path;
+#else
     string proc = "/proc/self/exe";
     char buf[2048] = "\0";
 
@@ -288,6 +307,7 @@ string TC_File::getExePath()
 
     buf[count] = '\0';
     return buf;
+#endif
 }
 
 string TC_File::extractFileName(const string &sFullFileName)

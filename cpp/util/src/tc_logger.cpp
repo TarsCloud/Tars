@@ -24,7 +24,7 @@ namespace tars
     bool TC_LoggerRoll::_bDyeingFlag = false;
     TC_ThreadMutex  TC_LoggerRoll::_mutexDyeing;
     //set<pthread_t>  TC_LoggerRoll::_setThreadID;
-    hash_map<pthread_t, string>  TC_LoggerRoll::_mapThreadID;
+    hash_map<long, string>  TC_LoggerRoll::_mapThreadID;
     const string TarsLogByDay::FORMAT = "%Y%m%d";
     const string TarsLogByHour::FORMAT = "%Y%m%d%H";
     const string TarsLogByMinute::FORMAT = "%Y%m%d%H%M";
@@ -62,7 +62,7 @@ namespace tars
         flush();
     }
 
-    void TC_LoggerRoll::write(const pair<int, string> &buffer)
+    void TC_LoggerRoll::write(const pair<long, string> &buffer)
     {
         pthread_t ThreadID = 0;
         if (_bDyeingFlag)
@@ -71,28 +71,30 @@ namespace tars
 
             pthread_t tmp = pthread_self();
             //if (_setThreadID.count(tmp) == 1)
-            if (_mapThreadID.count(tmp) == 1)
+            
+            if (_mapThreadID.count((long)tmp) == 1)
             {
                 ThreadID = tmp;
             }
+            
         }
 
         if (_pThreadGroup)
         {
-            _buffer.push_back(make_pair(ThreadID, buffer.second));
+            _buffer.push_back(make_pair((long)ThreadID, buffer.second));
         }
         else
         {
             //同步记录日志
-            deque<pair<int, string> > ds;
-            ds.push_back(make_pair(ThreadID, buffer.second));
+            deque<pair<long, string> > ds;
+            ds.push_back(make_pair((long)ThreadID, buffer.second));
             roll(ds);
         }
     }
 
     void TC_LoggerRoll::flush()
     {
-        TC_ThreadQueue<pair<int, string> >::queue_type qt;
+        TC_ThreadQueue<pair<long, string> >::queue_type qt;
         _buffer.swap(qt);
 
         if (!qt.empty())
