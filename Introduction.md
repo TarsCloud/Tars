@@ -1,8 +1,8 @@
 # 目录
-> * [1.介绍] (#main-chapter-1)
-> * [2.设计思路]  (#main-chapter-2)
-> * [3.整体架构] (#main-chapter-3)
-> * [4.平台特性] (#main-chapter-4)
+> * [1.介绍](#main-chapter-1)
+> * [2.设计思路](#main-chapter-2)
+> * [3.整体架构](#main-chapter-3)
+> * [4.平台特性](#main-chapter-4)
 
 # 1. 介绍 <a id="main-chapter-1"></a>
 
