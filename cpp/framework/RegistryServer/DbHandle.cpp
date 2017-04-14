@@ -1364,7 +1364,7 @@ vector<EndpointF> CDbHandle::findObjectById(const string& id)
 int CDbHandle::findObjectById4All(const string& id, vector<EndpointF>& activeEp, vector<EndpointF>& inactiveEp)
 {
 
-    TLOGERROR(__FUNCTION__ << " id: " << id << endl);
+    TLOGDEBUG(__FUNCTION__ << " id: " << id << endl);
 
     ObjectsCache::iterator it;
     ObjectsCache& usingCache = _objectsCache.getReaderData();
