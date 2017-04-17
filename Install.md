@@ -316,7 +316,7 @@ sql脚本在cpp/framework/sql目录下，修改部署的ip信息
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`
 ```
-**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可**
+**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可,不要是127.0.0.1**
 
 **注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
 
@@ -398,7 +398,7 @@ sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`
 ```
-**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可**
+**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可，不要是127.0.0.1**
 
 **注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
 
@@ -454,7 +454,7 @@ sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`
 ```
-**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可**
+**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可，不要是127.0.0.1**
 
 **注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
 
