@@ -64,8 +64,6 @@ make framework-tar这个命令打包的是tars核心基础服务，核心基础�
 
 ![tars](docs/question_images/stat.png)
 
-https://my.oschina.net/u/1429136/blog/879710
-
 ## 15.resin 显示乱码问题
 
 ![tars](docs/question_images/encoding_error.png)
