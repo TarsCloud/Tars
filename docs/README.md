@@ -2,7 +2,9 @@
 
 名称 |功能
 ------------------|----------------
-tars_tup.md                 |[Tars框架的统一通信协议说明文档](tars_tup.md)
+Introduction.md             |[项目介绍](Introduction.md)
+Install.md                  |[安装和部署指引](Install.md)
+tars_tup.md                 |[Tars框架的统一通信协议说明文档](tars_tup.md)
 tars_performce.md           |[Tars框架性能测试说明文档](tars_performce.md)
 tars_template.md            |[Tars框架模版配置文件说明文档](tars_template.md)
 tars_config.md              |[Tars框架业务配置文件说明文档](tars_config.md)
