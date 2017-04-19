@@ -18,7 +18,7 @@ Tars是将腾讯内部使用的微服务架构TAF（Total Application Framework�
 
 Tars的设计思路是采用微服务的思想对服务进行治理，同时对整个系统的各个模块进行抽象分层，将各个层次之间相互解耦或者松耦合，如下图：
 
-![tars](docs/images/tars.png)
+![tars](images/tars.png)
 
 最底的协议层，设计思路是将业务网络通信的协议进行统一，以IDL(接口定义语言)的方式，开发支持多平台、可扩展、协议代码自动生成的统一协议。在开发过程中，开发人员只需要关注通讯的协议字段的内容，不需要关注其实现的细节，大大减轻了开发服务时需要考虑的协议是否能跨平台使用、是否可能需要兼容、扩展等问题。
 
@@ -29,7 +29,7 @@ Tars的设计思路是采用微服务的思想对服务进行治理，同时对�
 # 3. 整体架构 <a id="main-chapter-3"></a>
 ## 3.1. 架构拓扑图
 
-![tars](docs/images/tars_tuopu.png)
+![tars](images/tars_tuopu.png)
 
 整体架构的拓扑图主要分为2个部分：服务节点与公共框架节点。
 
@@ -66,7 +66,7 @@ Notify（异常信息）：统计业务上报的各种异常信息，比如服�
 
 ## 3.2. 服务交互流程图
 
-![tars](docs/images/tars_jiaohu.png)
+![tars](images/tars_jiaohu.png)
 
 框架服务在整个系统中运行时，服务之间的交互分：业务服务之间的交互、业务服务与框架基础服务之间的交互。
 
@@ -83,7 +83,7 @@ Client访问Server流程：client可以通过server的对象名Obj间接访问se
 
 ## 3.3. web管理系统
 
-![tars](docs/images/tars_web_system.png)
+![tars](images/tars_web_system.png)
 
 web管理系统主要包含以下功能：
 
@@ -95,7 +95,7 @@ web管理系统主要包含以下功能：
 
 框架核心的服务端与客户端实现结构图如下:
 
-![tars](docs/images/tars_server_client.png)
+![tars](images/tars_server_client.png)
 
 服务端：
 
@@ -136,7 +136,7 @@ tars协议采用接口描述语言（Interface description language，缩写IDL�
 
 例如:
 
-![tarsproto](docs/images/tars_tarsproto.png)
+![tarsproto](images/tars_tarsproto.png)
 
 
 ## 4.2. 调用方式
@@ -153,13 +153,13 @@ tars协议采用接口描述语言（Interface description language，缩写IDL�
 
 负载均衡支持轮询、hash、权重等多种方式。
 
-![tars](docs/images/tars_junheng.png)
+![tars](images/tars_junheng.png)
 
 
 ## 4.4. 容错保护
 容错保护通过两种方式实现：名字服务排除和Client主动屏蔽。
 
-![tars](docs/images/tars_rongcuo.png)
+![tars](images/tars_rongcuo.png)
 
 名字服务排除的策略：
 
@@ -172,26 +172,26 @@ Client主动屏蔽：
 ## 4.5. 过载保护
 为了防止业务因为访问量突增或服务器故障造成系统整体的繁忙，进而导致全部服务的不可用，框架内部做相应设计来应对。实现请求队列，服务调用通过非阻塞方式实现异步系统，从而达到提升系统处理能力的目的。并且对队列的长度进行监控，当超过某个阀值，则拒绝新的请求。对请求设置超时时间，当请求包从队列里读取出来是判断请求是否超时，如果超时则不做处理。
 
-![tars](docs/images/tars_overload.png)
+![tars](images/tars_overload.png)
 
 ## 4.6. 消息染色
 框架提供了对某服务某接口的特定请求进行染色的能力，染色的消息可以透传到后面需要访问的所有服务上，对染色的请求，服务自动把日志上报到特定的染色日志服务器上，使用者只需在染色服务器上即可分析请求访问的路径，方便跟踪定位问题。
 如下：
 
-![tars](docs/images/tars_dye.png)
+![tars](images/tars_dye.png)
 
 
 ## 4.7. IDC分组
 为了加快服务间的访问速度，建设跨地区、跨机房调用带来的网络资源消耗，减少网络故障带来的影响，框架提供了跨地区、跨机房，就近接入的功能。
 
-![tars](docs/images/tars_idc.png)
+![tars](images/tars_idc.png)
 
 详细介绍参见docs目录下的tars_idc_set.md
 
 ## 4.8. SET分组
 为了方便对业务服务部署管理进行标准化和容量化，框架提供了Set部署能力，set之间没有调用关系，互不干扰，故障隔离，提高运维效率和服务可用性。
 
-![tars](docs/images/tars_set.png)
+![tars](images/tars_set.png)
 
 详细介绍参见docs目录下的tars_idc_set.md
 
@@ -200,15 +200,15 @@ Client主动屏蔽：
 
 1.提供了服务模块间调用信息统计上报的功能，方便用户查看服务的流量、延时、超时、异常等情况；
 
-![tars](docs/images/tars_stat.png)
+![tars](images/tars_stat.png)
 
 2.提供了用户自定义属性数据上报的功能，方便用户查看服务的某些纬度或者指标，比如内存使用情况、队列大小、cache命中率等；
 
-![tars](docs/images/tars_property.png)
+![tars](images/tars_property.png)
 
 3.提供了服务状态变更和异常信息上报的功能，方便用户查看服务的何时发布过、重启过、宕过以及遇到的异常致命错误等；
 
-![tars](docs/images/tars_notify.png)
+![tars](images/tars_notify.png)
 
 ## 4.10. 集中配置
 对业务配置进行集中管理并且操作web化，使配置修改更容易，通知更及时，配置变更也更安全；对配置变更进行历史记录，让配置可以轻松回退到前一版本。配置拉取服务化，服务只需调用配置服务的接口即可获取到配置文件。
