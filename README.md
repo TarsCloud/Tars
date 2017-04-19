@@ -7,7 +7,7 @@ Tars是腾讯从2008年到今天一直在使用的后台逻辑层的统一应用
 
 目前该框架在腾讯内部，各大核心业务都在使用，颇受欢迎，基于该框架部署运行的服务节点规模达到上万个。
 
-Tars详细介绍参见[Introduction.md](Introduction.md)。
+Tars详细介绍参见[Introduction.md](docs/Introduction.md)。
 
 ## 支持平台
 
@@ -24,7 +24,7 @@ Tars详细介绍参见[Introduction.md](Introduction.md)。
 
 ## 安装说明
 
-初次安装时，请参考安装说明文档[Install.md](Install.md)。
+初次安装时，请参考[安装说明文档](docs/Install.md)。
 
 对安装比较熟后，可以参考[build](build)目录下的脚本进行安装（必要时需要修改）。
 
