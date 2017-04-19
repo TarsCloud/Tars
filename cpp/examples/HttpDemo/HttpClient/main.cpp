@@ -111,7 +111,7 @@ void th_dohandle(int excut_num, int iSplit)
 
                 if (excut_num == count)
                 {
-                    cout << "pthread id: " << pthread_self() << " | " << TC_TimeProvider::getInstance()->getNowMs() - _iTime <<"(ms)"<< end
+                    cout << "pthread id: " << pthread_self() << " | " << TC_TimeProvider::getInstance()->getNowMs() - _iTime <<"(ms)"<< endl;
                     _iTime=TC_TimeProvider::getInstance()->getNowMs();
                     count = 0;
                 }
