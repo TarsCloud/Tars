@@ -404,11 +404,11 @@ function updateServer(serviceId,serverNmae,nodeName,isBak,templateName,serverTyp
                     showErrorMsg($box,'所有打星的为必填项');
                     return;
                 }
-                if(!/^[a-zA-Z]+$/.test(paramObj.set_name)){
+                if(!/^[a-z]+$/.test(paramObj.set_name)){
                     showErrorMsg($box,'Set名只能为英文字母，且必须小写');
                     return;
                 }
-                if(!/^[a-zA-Z]+$/.test(paramObj.set_area)){
+                if(!/^[a-z]+$/.test(paramObj.set_area)){
                     showErrorMsg($box,'Set区域只能为英文字母，且必须小写');
                     return;
                 }
