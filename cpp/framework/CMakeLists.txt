@@ -92,7 +92,7 @@ set(FRAMEWORK-TGZ "${CMAKE_BINARY_DIR}/framework.tgz")
 
 #需要压缩的文件
 set(MODULES "tars_install.sh")
-list(APPEND MODULES "tarsnode_install.sh")
+set(MODULES "${MODULES} tarsnode_install.sh")
 
 foreach (MODULE ${DEPENDS_LIST})
     set(MODULES "${MODULES} ${MODULE}")
@@ -104,6 +104,7 @@ FILE(WRITE ${RUN_DEPLOY_COMMAND_FILE} "#deploy framework-tar\n")
 FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "EXECUTE_PROCESS(\n")
 FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/deploy/\n")
 FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "COMMAND cp -rf ${PROJECT_SOURCE_DIR}/deploy/tars_install.sh .\n")
+FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "COMMAND cp -rf ${PROJECT_SOURCE_DIR}/deploy/tarsnode_install.sh .\n")
 foreach (MODULE ${DEPENDS_LIST})
     FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "COMMAND cp -rf ${PROJECT_SOURCE_DIR}/deploy/${MODULE} .\n")
 endforeach ()

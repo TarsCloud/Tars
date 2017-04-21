@@ -1,4 +1,4 @@
-﻿#!/bin/sh
+#!/bin/sh
 
 ARGS=$1
 
