@@ -397,12 +397,15 @@ cd /usr/local/app/tars
 sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`
+sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
 ```
 **注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可，不要是127.0.0.1**
 
 **注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
 
 **注意，registry.tars.com是tars框架主控tarsregistry服务部署的地址信息，替换成自己主控tarsregistry符的部署地址即可**
+
+**注意，web.tars.com是rsync使用的地址信息，替换成自己的部署机器地址即可**
 
 然后在/usr/local/app/tars/目录下，执行脚本，启动tars框架服务
 ```
@@ -415,6 +418,7 @@ tars_install.sh
 ```
 tarspatch/util/init.sh
 ```
+**注意，上面脚本执行后，看看rsync进程是否起来了，若没有看看rsync使用的配置中的ip是否正确（即把web.tars.com替换成本机ip）
 
 在管理平台上面配置tarspatch，注意需要配置服务的可执行目录(/usr/local/app/tars/tarspatch/bin/tarspatch)
 
@@ -453,12 +457,15 @@ cd /usr/local/app/tars
 sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`
+sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
 ```
 **注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可，不要是127.0.0.1**
 
 **注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
 
 **注意，registry.tars.com是tars框架主控tarsregistry服务部署的地址信息，替换成自己主控tarsregistry符的部署地址即可**
+
+**注意，web.tars.com是rsync使用的地址信息，替换成自己的部署机器地址即可**
 
 然后在/usr/local/app/tars/目录下，执行脚本，启动tars框架服务
 ```
