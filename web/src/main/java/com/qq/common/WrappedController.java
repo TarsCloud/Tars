@@ -16,8 +16,6 @@
 
 package com.qq.common;
 
-import com.qq.tars.service.server.DeployServer;
-import com.qq.tars.validate.EnableSet;
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
