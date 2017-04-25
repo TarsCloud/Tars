@@ -8,7 +8,7 @@
 
 如要用于线上环境，部署安装的原理是一样，不过需要更多考虑分布式系统下服务的部署需要有容错、容灾等的能力。若有需要，可以加入tars的qq技术交流群：579079160。
 
-# 1.依赖环境 <a id="chapter-1"></a>
+# 1. <a id="chapter-1"></a>依赖环境
 
 软件 |软件要求
 ------|--------
@@ -184,7 +184,7 @@ show slave status\G;
 ```
 **注意${备机Ip}需要修改成备机数据库的Ip**
 
-# 2. Tars开发环境安装介绍 <a id="chapter-2"></a>
+# 2. <a id="chapter-2"></a>Tars开发环境安装介绍
 ## 2.1. web管理系统开发环境安装
 以linux环境为例：
 
@@ -300,7 +300,7 @@ cd {$source_folder}/cpp/build
 **需要修改servant/script/create_tars_server.sh文件中的DEMO_PATH的路径**
 ```
 
-# 3. Tars数据库环境初始化 <a id="chapter-3"></a>
+# 3. <a id="chapter-3"></a>Tars数据库环境初始化
 ## 3.1. 添加用户
 ```sql
 grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;
@@ -337,7 +337,7 @@ tars_stat是服务监控数据存储的数据库；
 
 tars_property是服务属性监控数据存储的数据库；
 
-# 4. Tars框架运行环境搭建 <a id="chapter-4"></a>
+# 4. <a id="chapter-4"></a>Tars框架运行环境搭建
 
 ## 4.1. 框架基础服务打包
 
