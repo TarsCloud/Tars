@@ -16,6 +16,6 @@ cd /usr/local/app/tars/
 
 chmod +x tarsnode/util/*.sh
 
-tarsnode/util/start.sh ;
+./tarsnode/util/start.sh
 
 
