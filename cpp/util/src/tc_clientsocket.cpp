@@ -286,6 +286,28 @@ int TC_TCPClient::checkSocket()
                 _socket.close();
                 return EM_TIMEOUT;
             }
+            else
+            {
+                for(int i = 0; i < iRetCode; ++i)
+                {
+                    const epoll_event& ev = epoller.get(i);
+                    if (ev.events & EPOLLERR || ev.events & EPOLLHUP)
+                    {
+                        _socket.close();
+                        return EM_CONNECT;
+                    }
+                    else
+                    {
+                        int iVal = 0;
+                        socklen_t iLen = static_cast<socklen_t>(sizeof(int));
+                        if (::getsockopt(_socket.getfd(), SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&iVal), &iLen) == -1 || iVal)
+                        {
+                            _socket.close();
+                            return EM_CONNECT;
+                        }
+                    }
+                }
+            }
 
             //设置为阻塞模式
             _socket.setblock(true);
