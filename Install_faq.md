@@ -90,6 +90,18 @@ make framework-tar这个命令打包的是tars核心基础服务，核心基础�
 
 最后，查看tarsnode的日志，看看有什么错误日志。
 
+![tars](docs/question_images/registry_not_invoker.png)
+
+看看Install.md的第4.3节中的安装web管理系统部分，是否正确配置，如下：
+
+![tars](docs/question_images/registry_web_endpoint.png)
+
+错误的示例如下：
+
+![tars](docs/question_images/registry_web_empty.png)
+
+
+
 
 
 
