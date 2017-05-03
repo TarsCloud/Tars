@@ -32,13 +32,13 @@
 
 
 //支持iphone
-#ifdef __APPLE__
-    #include "TarsType.h"
-#elif defined ANDROID  // android
-    #include "TarsType.h"
-#else
+//#ifdef __APPLE__
+//    #include "TarsType.h"
+//#elif defined ANDROID  // android
+//    #include "TarsType.h"
+//#else
     #include "tup/TarsType.h"
-#endif
+//#endif
 
 
 #ifndef tars_likely
@@ -1885,10 +1885,10 @@ namespace tars
 }
 
 //支持iphone
-#ifdef __APPLE__
-    #include "TarsDisplayer.h"
-#else
+//#ifdef __APPLE__
+//    #include "TarsDisplayer.h"
+//#else
     #include "tup/TarsDisplayer.h"
-#endif
+//#endif
 
 #endif

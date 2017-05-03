@@ -29,11 +29,11 @@
 #include <limits.h>
 
 //支持iphone
-#ifdef __APPLE__
-#include "TarsType.h"
-#else
+//#ifdef __APPLE__
+//#include "TarsType.h"
+//#else
 #include "tup/TarsType.h"
-#endif
+//#endif
 
 namespace tars
 {

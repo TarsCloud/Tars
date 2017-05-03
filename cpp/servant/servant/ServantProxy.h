@@ -109,7 +109,7 @@ public:
     bool           _queueInit;                       //是否初始化
     size_t         _reqQNo;                          //请求事件通知的seq
     size_t         _netSeq;                          //轮训选择网络线程的偏移量
-    size_t         _netThreadSeq;                     //网络线程发起的请求回到自己的网络线程来处理,其值为网络线程的id
+    int            _netThreadSeq;                     //网络线程发起的请求回到自己的网络线程来处理,其值为网络线程的id
 
     /**
      * hash属性,客户端每次调用都进行设置

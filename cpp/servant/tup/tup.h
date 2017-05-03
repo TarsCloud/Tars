@@ -22,18 +22,20 @@
 #include <sstream>
 
 //支持iphone
-#ifdef __APPLE__
-    #include "RequestF.h"
-#elif defined ANDROID  // android
-    #include "RequestF.h"
-#else
+//#ifdef __APPLE__
+//    #include "RequestF.h"
+//#elif defined ANDROID  // android
+//    #include "RequestF.h"
+//#else
     #include "tup/RequestF.h"
-#endif
 
+
+#ifdef __linux__
 #ifdef __GNUC__
 #   if __GNUC__ >3 || __GNUC_MINOR__ > 3
 #       include <ext/pool_allocator.h>
 #   endif
+#endif
 #endif
 
 using namespace std;
@@ -673,12 +675,14 @@ public:
 
 };
 
+#ifdef __linux__
 #ifdef __GNUC__
 #   if __GNUC__ >3 || __GNUC_MINOR__ > 3
         typedef UniAttribute<BufferWriter,BufferReader, __gnu_cxx::__pool_alloc> UniAttrPoolAlloc;
         typedef UniPacket<BufferWriter,BufferReader, __gnu_cxx::__pool_alloc> UniPacketPoolAlloc;
         typedef TarsUniPacket<BufferWriter,BufferReader, __gnu_cxx::__pool_alloc> TarsUniPacketPoolAlloc;        
 #   endif
+#endif
 #endif
 
 }
