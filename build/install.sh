@@ -1,27 +1,23 @@
-#!/bin/bash
+#!/bin/sh
 
 PWD_DIR=`pwd`
-MachineIp=
-MachineName=
+MachineIp=10.0.2.15
+MachineName=hui-VirtualBox
 
-##安装glibc-devel
+##瀹夎glibc-devel
 
-yum install -y glibc-devel
+apt install -y libc-dev-bin
 
-##安装flex、bison
+##瀹夎flex銆乥ison
 
-yum install -y flex bison
+apt install -y flex bison
 
-##安装cmake
+##瀹夎cmake
 
-tar zxvf cmake-2.8.8.tar.gz
-cd cmake-2.8.8
-./bootstrap
-make
-make install
-cd -
+apt install -y cmake
 
-##安装java jdk
+
+##瀹夎java jdk
 tar zxvf jdk-8u111-linux-x64.tar.gz
 echo "export JAVA_HOME=${PWD_DIR}/jdk1.8.0_111" >> /etc/profile
 echo "CLASSPATH=\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >> /etc/profile
@@ -32,7 +28,7 @@ source /etc/profile
 
 java -version
 
-##安装maven
+##瀹夎maven
 tar zxvf apache-maven-3.3.9-bin.tar.gz
 echo "export MAVEN_HOME=${PWD_DIR}/apache-maven-3.3.9/" >> /etc/profile
 echo "export PATH=\$PATH:\$MAVEN_HOME/bin" >> /etc/profile
@@ -41,7 +37,7 @@ source /etc/profile
 
 mvn -v
 
-##安装resin
+##瀹夎resin
 
 cp resin-4.0.49.tar.gz /usr/local/
 cd /usr/local/
@@ -53,17 +49,19 @@ make install
 cd ${PWD_DIR}
 ln -s /usr/local/resin-4.0.49 /usr/local/resin
 
-##安装rapidjson
-yum install -y git
+##瀹夎rapidjson
+apt install -y git
 
 git clone https://github.com/Tencent/rapidjson.git
 
 cp -r ./rapidjson ../cpp/thirdparty/
 
-##安装mysql
+##瀹夎mysql
 
-yum install -y ncurses-devel
-yum install -y zlib-devel
+rm -rf /etc/my.cnf
+
+apt install -y libncurses5-dev
+apt install -y zlib1g   zlib1g.dev
 tar zxvf mysql-5.6.26.tar.gz
 cd mysql-5.6.26
 cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.26 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DMYSQL_USER=mysql -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci
@@ -72,7 +70,7 @@ make install
 ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
 cd -
 
-yum install -y perl
+apt install -y perl
 cd /usr/local/mysql
 useradd mysql
 rm -rf /usr/local/mysql/data
@@ -81,48 +79,48 @@ ln -s /data/mysql-data /usr/local/mysql/data
 chown -R mysql:mysql /data/mysql-data /usr/local/mysql/data
 cp support-files/mysql.server /etc/init.d/mysql
 
-yum install -y perl-Module-Install.noarch
+##apt install -y perl-Module-Install.noarch
 perl scripts/mysql_install_db --user=mysql
 cd -
 
 sed -i "s/192.168.2.131/${MachineIp}/g" `grep 192.168.2.131 -rl ./conf/*`
 cp ./conf/my.cnf /usr/local/mysql/
 
-##启动mysql
+##鍚姩mysql
 service mysql start
 chkconfig mysql on
 
-##添加mysql的bin路径
+##娣诲姞mysql鐨刡in璺緞
 echo "PATH=\$PATH:/usr/local/mysql/bin" >> /etc/profile
 echo "export PATH" >> /etc/profile
 source /etc/profile
 
-##修改mysql root密码
+##淇敼mysql root瀵嗙爜
 cd /usr/local/mysql/
 ./bin/mysqladmin -u root password 'root@appinside'
 ./bin/mysqladmin -u root -h ${MachineName} password 'root@appinside'
 cd -
 
-##添加mysql的库路径
+##娣诲姞mysql鐨勫簱璺緞
 echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf
 ldconfig
 
 
-##安装java语言框架
+##瀹夎java璇█妗嗘灦
 cd ../java/
 mvn clean install 
 mvn clean install -f core/client.pom.xml 
 mvn clean install -f core/server.pom.xml
 cd -
 
-##安装c++语言框架
+##瀹夎c++璇█妗嗘灦
 cd ../cpp/build/
 chmod u+x build.sh
 ./build.sh all
 ./build.sh install
 cd -
 
-##Tars数据库环境初始化
+##Tars鏁版嵁搴撶幆澧冨垵濮嬪寲
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;"
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'localhost' identified by 'tars2015' with grant option;"
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'${MachineName}' identified by 'tars2015' with grant option;"
@@ -135,7 +133,7 @@ chmod u+x exec-sql.sh
 ./exec-sql.sh
 cd -
 
-##打包框架基础服务
+##鎵撳寘妗嗘灦鍩虹鏈嶅姟
 cd ../cpp/build/
 make framework-tar
 
@@ -147,24 +145,23 @@ make tarsquerystat-tar
 make tarsqueryproperty-tar
 cd -
 
-##安装核心基础服务
+##瀹夎鏍稿績鍩虹鏈嶅姟
 mkdir -p /usr/local/app/tars/
 cd ../cpp/build/
-cp framework.tgz /usr/local/app/tars/
+cp build/framework.tgz /usr/local/app/tars/
 cd /usr/local/app/tars
 tar xzfv framework.tgz
 
 sed -i "s/192.168.2.131/${MachineIp}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${MachineIp}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${MachineIp}/g" `grep registry.tars.com -rl ./*`
-sed -i "s/web.tars.com/${MachineIp}/g" `grep web.tars.com -rl ./*`
 
 chmod u+x tars_install.sh
-./tars_install.sh
+tars_install.sh
 
 ./tarspatch/util/init.sh
 
-##安装web管理系统
+##瀹夎web绠＄悊绯荤粺
 cd ${PWD_DIR}
 cd ../web/
 sed -i "s/db.tars.com/${MachineIp}/g" `grep db.tars.com -rl ./src/main/resources/*`
