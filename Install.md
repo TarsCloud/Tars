@@ -410,7 +410,7 @@ sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
 然后在/usr/local/app/tars/目录下，执行脚本，启动tars框架服务
 ```
 chmod u+x tars_install.sh
-tars_install.sh
+./tars_install.sh
 ```
 **注意如果几个服务不是部署在同一台服务器上，需要自己手工copy以及处理tars_install.sh脚本**
 
@@ -470,7 +470,7 @@ sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
 然后在/usr/local/app/tars/目录下，执行脚本，启动tars框架服务
 ```
 chmod u+x tarsnode_install.sh
-tarsnode_install.sh
+./tarsnode_install.sh
 ```
 
 配置监控，避免不小心挂了以后会启动，需要在crontab里面配置
