@@ -399,7 +399,7 @@ sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`
 sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
 ```
-**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可，不要是127.0.0.1**
+**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成本机的部署地址即可，不要是127.0.0.1**
 
 **注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
 
@@ -459,13 +459,13 @@ sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`
 sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
 ```
-**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可，不要是127.0.0.1**
+**注意，192.168.2.131这个ip是tars开发团队当时测试的ip信息，替换成自己扩容机器的ip地址即可，不要是127.0.0.1**
 
-**注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
+**注意，db.tars.com是tars框架数据库部署的地址信息，替换成数据库的部署ip地址即可**
 
-**注意，registry.tars.com是tars框架主控tarsregistry服务部署的地址信息，替换成自己主控tarsregistry符的部署地址即可**
+**注意，registry.tars.com是tars框架主控tarsregistry服务部署的地址信息，替换成自己主控tarsregistry的部署地址即可**
 
-**注意，web.tars.com是rsync使用的地址信息，替换成自己的部署机器地址即可**
+**注意，web.tars.com是rsync使用的地址信息，替换成web的部署机器地址即可**
 
 然后在/usr/local/app/tars/目录下，执行脚本，启动tars框架服务
 ```
