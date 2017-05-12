@@ -89,6 +89,12 @@ public class PatchService {
         script.append(String.format("rm -rf %s;", basePath));
         script.append(String.format("rm -rf %s;", packageWarPath));
         Pair<Integer, Pair<String, String>> result = SystemUtils.exec(script.toString());
+        
+        if (result.getLeft() != 0) {
+            log.error("fail to exec script {}, error message is {}", script.toString(), result.getRight().getRight());
+            throw new Exception(result.getRight().getRight());
+        }
+        
         log.info("script={}, code={}, stdout={}, stderr={}", script, result.getLeft(), result.getRight().getLeft(), result.getRight().getRight());
         return basePath + ".tgz";
     }
