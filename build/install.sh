@@ -1,8 +1,8 @@
 #!/bin/sh
 
 PWD_DIR=`pwd`
-MachineIp=10.0.2.15
-MachineName=hui-VirtualBox
+MachineIp=10.186.62.0
+MachineName=VM-62-0-ubuntu
 
 ##安装glibc-devel
 
