@@ -56,9 +56,9 @@ ln -s /usr/local/resin-4.0.49 /usr/local/resin
 ##安装rapidjson
 apt install -y git
 
-git clone https://github.com/Tencent/rapidjson.git
+##git clone https://github.com/Tencent/rapidjson.git
 
-cp -r ./rapidjson ../cpp/thirdparty/
+##cp -r ./rapidjson ../cpp/thirdparty/
 
 ##安装mysql
 
