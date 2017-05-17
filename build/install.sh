@@ -30,6 +30,10 @@ java -version
 
 ##安装maven
 tar zxvf apache-maven-3.3.9-bin.tar.gz
+##替换阿里云maven
+rm -rf ./apache-maven-3.3.9/conf/setting.xml
+mv setting.xml ./apache-maven-3.3.9/conf
+
 echo "export MAVEN_HOME=${PWD_DIR}/apache-maven-3.3.9/" >> /etc/profile
 echo "export PATH=\$PATH:\$MAVEN_HOME/bin" >> /etc/profile
 
