@@ -2016,7 +2016,7 @@ size_t TC_HttpRequest::parseRequestHeader(const char* szBuffer)
     //HTTP协议版本
     string sVersion = TC_Common::upper(TC_Common::trim(sLine.substr(pos1+1)));
 
-    if(sVersion != "HTTP/1.1" || sVersion != "HTTP/1.0")
+    if(sVersion != "HTTP/1.1" && sVersion != "HTTP/1.0")
     {
         sVersion = "HTTP/1.1";
     }
