@@ -2,7 +2,7 @@
 
 PWD_DIR=`pwd`
 MachineIp=10.186.62.0
-MachineName=VM-62-0-ubuntu
+MachineName='hostname'
 
 ##安装glibc-devel
 
