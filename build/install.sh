@@ -91,8 +91,9 @@ sed -i "s/192.168.2.131/${MachineIp}/g" `grep 192.168.2.131 -rl ./conf/*`
 cp ./conf/my.cnf /usr/local/mysql/
 
 ##启动mysql
-service mysql start
-chkconfig mysql on
+#service mysql start
+#chkconfig mysql on
+/etc/init.d/mysql start
 
 ##添加mysql的bin路径
 echo "PATH=\$PATH:/usr/local/mysql/bin" >> /etc/profile
