@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PWD_DIR=`pwd`
-MachineIp=10.186.62.0
+MachineIp='ip addr | grep inet | grep eth0 | awk '{print $2;}' | sed 's|/.*$||''
 MachineName='hostname'
 
 ##安装glibc-devel
