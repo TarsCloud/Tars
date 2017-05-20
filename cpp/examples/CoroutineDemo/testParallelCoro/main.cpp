@@ -30,23 +30,23 @@ public:
 
     virtual void callback_testCoroSerial(tars::Int32 ret, const std::string &sOut) // override
     {
-    _iRet = ret;
-    _sOut = sOut;
+    		_iRet = ret;
+    		_sOut = sOut;
     }
     virtual void callback_testCoroSerial_exception(tars::Int32 ret) // override
     {
-    _iException = ret;
+    		_iException = ret;
     }
 
   virtual void callback_testCoroParallel(tars::Int32 ret, const std::string &sOut) // override
     {
-    _iRet = ret;
-    _sOut = sOut;
+    		_iRet = ret;
+    		_sOut = sOut;
     }
 
   virtual void callback_testCoroParallel_exception(tars::Int32 ret) // override
   {
-    _iException = ret;
+    		_iException = ret;
   }
 
 public:
