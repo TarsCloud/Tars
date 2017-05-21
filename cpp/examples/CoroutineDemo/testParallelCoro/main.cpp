@@ -234,7 +234,7 @@ void TestCoroutine::handle()
 
 			cout << "ret1:" << cb1->_sOut << "|ret2:" << cb2->_sOut << endl;
 			;
-			if(cb1->_iRet == 0 && cb2->_iRet == 0)
+			if(cb1->_iRet == 0 && cb2->_iRet == 0 && cb1->_iException == 0 && cb2->_iException == 0)
 			{
 				++sum;
 			}
@@ -247,6 +247,7 @@ void TestCoroutine::handle()
 		{
 			cout << "i: " << i << "unknown exception." << endl;
 		}
+
 	}
 	cout << "succ:" << sum <<endl;
 }
