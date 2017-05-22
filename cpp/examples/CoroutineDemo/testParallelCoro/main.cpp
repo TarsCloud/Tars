@@ -28,25 +28,26 @@ class BServantCoroCallback : public BServantCoroPrxCallback
 public:
     virtual ~BServantCoroCallback(){}
 
-    virtual void callback_testInt(tars::Int32 ret, tars::Int32 iOut)
-    { 
-		_iRet = ret;
-		_iOut = iOut;
-	}
-    virtual void callback_testInt_exception(tars::Int32 ret)
-    { 
-		_iException = ret; 
-	}
+    virtual void callback_testCoroSerial(tars::Int32 ret, const std::string &sOut) // override
+    {
+    		_iRet = ret;
+    		_sOut = sOut;
+    }
+    virtual void callback_testCoroSerial_exception(tars::Int32 ret) // override
+    {
+    		_iException = ret;
+    }
 
-    virtual void callback_testStr(tars::Int32 ret,  const std::string& sOut)
-    { 
-		_iRet = ret;
-		_sOut = sOut; 
-	}
-    virtual void callback_testStr_exception(tars::Int32 ret)
-    { 
-		_iException = ret;  
-	}
+  virtual void callback_testCoroParallel(tars::Int32 ret, const std::string &sOut) // override
+    {
+    		_iRet = ret;
+    		_sOut = sOut;
+    }
+
+  virtual void callback_testCoroParallel_exception(tars::Int32 ret) // override
+  {
+    		_iException = ret;
+  }
 
 public:
 	int		_iException;
@@ -56,53 +57,53 @@ public:
 };
 typedef tars::TC_AutoPtr<BServantCoroCallback> BServantCoroCallbackPtr;
 
-//×Ô¶¨ÒåĞ­³ÌÀà
+//è‡ªå®šä¹‰åç¨‹ç±»
 class CoroutineClass : public TC_Thread
 {
 public:
 	/**
-     * ¹¹Ôìº¯Êı
+     * æ„é€ å‡½æ•°
      */
 	CoroutineClass();
 
 	/**
-     * Îö¹¹º¯Êı
+     * ææ„å‡½æ•°
      */
 	virtual ~CoroutineClass();
 
 	/**
-     * ·µ»Ø0£¬´ú±í³É¹¦£¬-1£¬±íÊ¾Ê§°Ü
+     * è¿”å›0ï¼Œä»£è¡¨æˆåŠŸï¼Œ-1ï¼Œè¡¨ç¤ºå¤±è´¥
      */
 	int registerFunc(const vector< tars::TC_Callback<void ()> > &vFunc);
 
 	/**
-     * Ïß³Ì³õÊ¼»¯
+     * çº¿ç¨‹åˆå§‹åŒ–
      */
 	virtual void initialize() {}
 
 	/**
-	 * Ïß³Ì´¦Àí·½·¨
+	 * çº¿ç¨‹å¤„ç†æ–¹æ³•
 	 */
 	virtual void run();
 
 	/**
-	 * Í£Ö¹Ïß³Ì
+	 * åœæ­¢çº¿ç¨‹
 	 */
 	void terminate();
 
 protected:
 	/**
-	 * Ïß³ÌÒÑ¾­Æô¶¯, ½øÈë¾ßÌåĞ­³Ì´¦ÀíÇ°µ÷ÓÃ
+	 * çº¿ç¨‹å·²ç»å¯åŠ¨, è¿›å…¥å…·ä½“åç¨‹å¤„ç†å‰è°ƒç”¨
 	 */
 	virtual void startCoro() {}
 
 	/**
-	 * Ïß³ÌÂíÉÏÒªÍË³öÊ±µ÷ÓÃ
+	 * çº¿ç¨‹é©¬ä¸Šè¦é€€å‡ºæ—¶è°ƒç”¨
 	 */
 	virtual void stopCoro() {}
 
 	/**
-	 * ¾ßÌåµÄ´¦ÀíÂß¼­
+	 * å…·ä½“çš„å¤„ç†é€»è¾‘
 	 */
 	virtual void handleCoro();
 
@@ -185,7 +186,7 @@ void CoroutineClass::handleCoro()
 }
 
 ////////////////////////////////////////////
-//¼Ì³Ğ¿ò¼ÜµÄĞ­³ÌÀà
+//ç»§æ‰¿æ¡†æ¶çš„åç¨‹ç±»
 class TestCoroutine : public Coroutine
 {
 public:
@@ -233,7 +234,7 @@ void TestCoroutine::handle()
 
 			cout << "ret1:" << cb1->_sOut << "|ret2:" << cb2->_sOut << endl;
 			;
-			if(cb1->_iRet == 0 && cb2->_iRet == 0)
+			if(cb1->_iRet == 0 && cb2->_iRet == 0 && cb1->_iException == 0 && cb2->_iException == 0)
 			{
 				++sum;
 			}
@@ -246,6 +247,7 @@ void TestCoroutine::handle()
 		{
 			cout << "i: " << i << "unknown exception." << endl;
 		}
+
 	}
 	cout << "succ:" << sum <<endl;
 }
