@@ -54,7 +54,7 @@ cd ${PWD_DIR}
 ln -s /usr/local/resin-4.0.49 /usr/local/resin
 
 ##安装rapidjson
-apt install -y git
+##apt install -y git
 
 ##git clone https://github.com/Tencent/rapidjson.git
 
@@ -93,7 +93,9 @@ cp ./conf/my.cnf /usr/local/mysql/
 ##启动mysql
 #service mysql start
 #chkconfig mysql on
-/etc/init.d/mysql start
+#/etc/init.d/mysql start
+systemctl enable mysql.service
+systemctl start mysql
 
 ##添加mysql的bin路径
 echo "PATH=\$PATH:/usr/local/mysql/bin" >> /etc/profile
