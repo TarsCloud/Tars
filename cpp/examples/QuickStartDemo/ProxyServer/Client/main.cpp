@@ -16,7 +16,7 @@
 
 #include <iostream>
 #include "servant/Communicator.h"
-#include "Proxy.h"
+#include "../Proxy.h"
 
 using namespace std;
 using namespace TestApp;

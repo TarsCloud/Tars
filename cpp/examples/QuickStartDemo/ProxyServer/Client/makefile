@@ -11,7 +11,6 @@ LIB       +=
 
 #-----------------------------------------------------------------------
 
-include /home/tarsproto/TestApp/ProxyServer/ProxyServer.mk
 include /usr/local/tars/cpp/makefile/makefile.tars
 
 #-----------------------------------------------------------------------

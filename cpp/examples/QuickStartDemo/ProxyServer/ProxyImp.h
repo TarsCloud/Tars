@@ -18,7 +18,7 @@
 #define __PROXY_IMP_H_
 
 #include "servant/Application.h"
-#include "Hello.h"
+#include "../HelloServer/Hello.h"
 #include "Proxy.h"
 
 using namespace TestApp;

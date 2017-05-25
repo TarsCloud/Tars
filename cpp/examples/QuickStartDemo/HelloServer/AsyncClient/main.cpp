@@ -16,7 +16,7 @@
 
 #include <iostream>
 #include "servant/Communicator.h"
-#include "Hello.h"
+#include "../Hello.h"
 
 using namespace std;
 using namespace TestApp;
