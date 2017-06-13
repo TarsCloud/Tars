@@ -83,7 +83,7 @@ cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.26 -DWITH_INNOBASE_STORAGE_E
 make
 make install
 ```
-** Attention: If you use C++ to develop Tars service, please compile mysql as static library.**
+**Attention: If you use C++ to develop Tars service, please compile mysql as static library.**
 
 Now you can compile Tars framework of C++ version.
 
