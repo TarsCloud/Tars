@@ -1,3 +1,5 @@
+[Click me switch to English version](Install.en.md)
+
 # 目录
 > * [依赖环境](#chapter-1)
 > * [Tars开发环境安装介绍](#chapter-2)
