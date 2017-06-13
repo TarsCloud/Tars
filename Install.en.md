@@ -299,7 +299,7 @@ grant all on *.* to 'tars'@'localhost' identified by 'tars2015' with grant optio
 grant all on *.* to 'tars'@'${hostname}' identified by 'tars2015' with grant option;
 flush privileges;
 ```
-**Attention: Modify ${'localhost'} to real hostname from /etc/hosts
+**Attention: Modify ${'localhost'} to real hostname from /etc/hosts.**
 
 ## 3.2. Create DB
 Search the ip in the script under `cpp/framework/sql`,and replace with the above ip.

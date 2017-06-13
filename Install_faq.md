@@ -1,3 +1,5 @@
+[Click me switch to English version](Install_faq.en.md)
+
 ## 1. 部署ip不能为127.0.0.1，原因如下：
 
 第一，每个服务一般都有一个或者多个对外服务的obj，obj要对外提供访问，不能用127.0.0.1;
