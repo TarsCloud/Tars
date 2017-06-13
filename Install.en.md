@@ -83,6 +83,7 @@ cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.26 -DWITH_INNOBASE_STORAGE_E
 make
 make install
 ```
+
 **Attention: If you use C++ to develop Tars service, please compile mysql as static library.**
 
 Now you can compile Tars framework of C++ version.
@@ -228,7 +229,7 @@ mvn -v
 
 Environment configuration for JDK and maven is similar to that of web management system.
 
-**Attention: Make sure that your machine can access to internet, then modify file setting.xml from conf directory in the installed path of maven.
+**Attention: Make sure that your machine can access to internet, then modify file setting.xml from conf directory in the installed path of maven.**
 
 Download tars code, change to java source directory, and install:
 ```
@@ -384,7 +385,7 @@ Execute tars_install.sh script in directory /usr/local/app/tars/ to start tars f
 chmod u+x tars_install.sh
 tars_install.sh
 ```
-** If services are deployed on different machines, you need to deal with tars_install.sh script things manually.**
+**If services are deployed on different machines, you need to deal with tars_install.sh script things manually.**
 
 Deploy management platform and launch web management platform to deploy tarspatch (the management platform and tarspatch must in the same machine), change to user root and execute:
 ```
