@@ -102,7 +102,9 @@ make framework-tar这个命令打包的是tars核心基础服务，核心基础�
 
 ![tars](docs/question_images/registry_web_empty.png)
 
+## 18 发布失败，发现上传tars java的war包大小有问题
 
+检查一下部署web的机器是否安装了unzip 
 
 
 
