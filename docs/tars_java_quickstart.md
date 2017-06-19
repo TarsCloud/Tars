@@ -5,16 +5,16 @@
 > * [服务命名] (#main-chapter-4)
 > * [服务部署] (#main-chapter-5)
 
-# 框架快速入门 #
+# 框架快速入门
 
-## 环境搭建 ## <a id="main-chapter-1"></a>
+## 环境搭建 <a id="main-chapter-1"></a>
 
-### 环境依赖 ###
+### 环境依赖 
 
 - JDK1.6或以上版本
 - Maven 2.2.1或以上版本
 
-### 构建工程 ###
+### 构建工程 
 
 通过IDE或者maven创建一个maven web项目，
 这里以eclipse为例，File -> New -> Project -> Maven Project -> maven-archetype-webapp，再输入groupId、artifactId，生成完成之后可以通过eclipse进行导入，目录结构如下
@@ -31,7 +31,7 @@
 	|___pom.xml
 
 
-### 依赖配置 ###
+### 依赖配置
 在构建项目中pom.xml中添加依赖jar包
 
 - 框架依赖配置
@@ -63,9 +63,9 @@
 			</configuration>
 		</plugin>
 
-## 服务开发 ## <a id="main-chapter-2"></a>
+## 服务开发 <a id="main-chapter-2"></a>
 
-### 接口文件定义 ###
+### 接口文件定义
 
 接口文件定义是通过Tars接口描述语言来定义，在src/main/resources目录下建立hello.tars文件，内容如下
     	
@@ -77,7 +77,7 @@
 		};
 	};
 
-### 接口文件编译 ###
+### 接口文件编译
 
 提供插件编译生成java代码，在tars-maven-plugin添加生成java文件配置
 
@@ -113,7 +113,7 @@
 		public String hello(int no, String name);
 	}	
 
-### 服务接口实现 ###
+### 服务接口实现
 
 新创建一个HelloServantImpl.java文件，实现HelloServant.java接口
 
@@ -125,7 +125,7 @@
 	}
 
 
-### 服务暴露配置 ###
+### 服务暴露配置
 
 在WEB-INF下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下
 			
@@ -137,11 +137,11 @@
 		</servant>
 	</servants>
 
-### 服务编译打包 ###
+### 服务编译打包
 
 在工程根目录下执行 mvn package生成war包，后续可以管理系统进行发布。
 
-### 客户端同步/异步调用服务 ###
+### 客户端同步/异步调用服务
 
 - 构建客户端工程项目
 - 添加依赖
@@ -231,7 +231,7 @@
     	}
 
 
-## 管理系统 ## <a id="main-chapter-3"></a>
+## 管理系统 <a id="main-chapter-3"></a>
 
 进入管理系统，如下图
 
@@ -244,7 +244,7 @@
 - 运维管理：包括服务部署、扩容、模版管理等；
 
 
-## 服务命名 ## <a id="main-chapter-4"></a>
+## 服务命名 <a id="main-chapter-4"></a>
 
 使用Tars框架的服务，其的服务名称有三个部分：
 
@@ -263,7 +263,7 @@
 例如：TestApp.HelloServer.HelloObj。
 
 
-## 服务部署 ## <a id="main-chapter-5"></a>
+## 服务部署 <a id="main-chapter-5"></a>
 
 ### 部署申请 ###
 
@@ -295,7 +295,7 @@
 
 在管理系统上的部署暂时先到这里，到此为止，只是使你的服务在管理系统上占了个位置，真实程序尚未发布。
 
-### 服务发布 ###
+### 服务发布
 
 在管理系统的菜单树下，找到你部署的服务，点击进入服务页面。 
 

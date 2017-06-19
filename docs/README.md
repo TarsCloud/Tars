@@ -1,19 +1,19 @@
-¸Ã¹¤³ÌÊÇTars¿ò¼ÜÎÄµµÏà¹Ø½éÉÜ
+è¯¥å·¥ç¨‹æ˜¯Tarsæ¡†æ¶æ–‡æ¡£ç›¸å…³ä»‹ç»
 
-Ãû³Æ |¹¦ÄÜ
+åç§° |åŠŸèƒ½
 ------------------|----------------
-tars_tup.md                 |Tars¿ò¼ÜµÄÍ³Ò»Í¨ĞÅĞ­ÒéËµÃ÷ÎÄµµ
-tars_performce.md           |Tars¿ò¼ÜĞÔÄÜ²âÊÔËµÃ÷ÎÄµµ
-tars_template.md            |Tars¿ò¼ÜÄ£°æÅäÖÃÎÄ¼şËµÃ÷ÎÄµµ
-tars_config.md              |Tars¿ò¼ÜÒµÎñÅäÖÃÎÄ¼şËµÃ÷ÎÄµµ
-tars_server_monitor         |Tars¿ò¼Ü·şÎñ¼à¿ØËµÃ÷ÎÄµµ
-tars_idc_set.md             |Tars¿ò¼ÜIDC·Ö×éºÍSet·Ö×éËµÃ÷ÎÄµµ
-tars_cpp_server_thread.md   |Tars C++¿ò¼ÜµÄ·şÎñÏß³ÌËµÃ÷ÎÄµµ
-tars_cpp_quickstart.md      |Tars C++¿ò¼Ü¿ìËÙÈëÃÅ
-tars_cpp_develop_specification.md      |Tars C++¿ª·¢¹æ·¶
-tars_cpp_user_guide.md      |Tars C++ÓÃ»§Ö¸ÄÏ
+tars_tup.md                 |Tarsæ¡†æ¶çš„ç»Ÿä¸€é€šä¿¡åè®®è¯´æ˜æ–‡æ¡£
+tars_performce.md           |Tarsæ¡†æ¶æ€§èƒ½æµ‹è¯•è¯´æ˜æ–‡æ¡£
+tars_template.md            |Tarsæ¡†æ¶æ¨¡ç‰ˆé…ç½®æ–‡ä»¶è¯´æ˜æ–‡æ¡£
+tars_config.md              |Tarsæ¡†æ¶ä¸šåŠ¡é…ç½®æ–‡ä»¶è¯´æ˜æ–‡æ¡£
+tars_server_monitor         |Tarsæ¡†æ¶æœåŠ¡ç›‘æ§è¯´æ˜æ–‡æ¡£
+tars_idc_set.md             |Tarsæ¡†æ¶IDCåˆ†ç»„å’ŒSetåˆ†ç»„è¯´æ˜æ–‡æ¡£
+tars_cpp_server_thread.md   |Tars C++æ¡†æ¶çš„æœåŠ¡çº¿ç¨‹è¯´æ˜æ–‡æ¡£
+tars_cpp_quickstart.md      |Tars C++æ¡†æ¶å¿«é€Ÿå…¥é—¨
+tars_cpp_develop_specification.md      |Tars C++å¼€å‘è§„èŒƒ
+tars_cpp_user_guide.md      |Tars C++ç”¨æˆ·æŒ‡å—
 tars_cpp_faq.md             |Tars C++ FAQ
-tars_cpp_http_demo.md       |Tars C++ Http·şÎñÊ¾Àı
-tars_java_quickstart.md     |Tars Java¿ìËÙÈëÃÅ
-tars_java_user_guide.md     |Tars JavaÓÃ»§Ö¸ÄÏ
+tars_cpp_http_demo.md       |Tars C++ HttpæœåŠ¡ç¤ºä¾‹
+tars_java_quickstart.md     |Tars Javaå¿«é€Ÿå…¥é—¨
+tars_java_user_guide.md     |Tars Javaç”¨æˆ·æŒ‡å—
 tars_java_faq.md            |Tars Java FAQ

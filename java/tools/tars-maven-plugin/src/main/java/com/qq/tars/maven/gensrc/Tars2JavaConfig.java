@@ -34,8 +34,8 @@ public class Tars2JavaConfig {
     @Parameter(defaultValue = "", required = true)
     public String packagePrefixName;
 
-    @Parameter
-    public boolean forceArray;
+//    @Parameter
+//    public boolean forceArray;
 
     @Parameter
     public boolean checkDefault;
@@ -83,13 +83,13 @@ public class Tars2JavaConfig {
         this.packagePrefixName = packagePrefixName;
     }
 
-    public boolean isForceArray() {
-        return forceArray;
-    }
-
-    public void setForceArray(boolean forceArray) {
-        this.forceArray = forceArray;
-    }
+//    public boolean isForceArray() {
+//        return forceArray;
+//    }
+//
+//    public void setForceArray(boolean forceArray) {
+//        this.forceArray = forceArray;
+//    }
 
     public boolean isCheckDefault() {
         return checkDefault;

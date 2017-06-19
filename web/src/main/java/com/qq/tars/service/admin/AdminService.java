@@ -146,7 +146,7 @@ public class AdminService {
         Holder<TaskRsp> holder = new Holder<>();
         int ret = getAdminRegPrx().getTaskRsp(taskNo, holder);
         if (ret == 0) {
-            return holder.value;
+            return holder.getValue();
         } else {
             throw new TARSRequestException(ret);
         }

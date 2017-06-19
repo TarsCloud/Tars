@@ -404,11 +404,11 @@ function updateServer(serviceId,serverNmae,nodeName,isBak,templateName,serverTyp
                     showErrorMsg($box,'所有打星的为必填项');
                     return;
                 }
-                if(!/^[a-zA-Z]+$/.test(paramObj.set_name)){
+                if(!/^[a-z]+$/.test(paramObj.set_name)){
                     showErrorMsg($box,'Set名只能为英文字母，且必须小写');
                     return;
                 }
-                if(!/^[a-zA-Z]+$/.test(paramObj.set_area)){
+                if(!/^[a-z]+$/.test(paramObj.set_area)){
                     showErrorMsg($box,'Set区域只能为英文字母，且必须小写');
                     return;
                 }
@@ -564,7 +564,7 @@ function addAdapter() {
                     handlegroup         :   $.trim($('#a-handlegroup').val())
                 },regIP = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
             if(!paramObj.servant || !paramObj.endpoint){
-                showErrorMsg($box,'Servant名和绑定地址为必填项!!!');
+                showErrorMsg($box,'OBJ名和绑定地址为必填项!!!');
                 return;
             }
             if(!/^[a-zA-Z]+$/.test($.trim($('#a-servant-name').val()))){

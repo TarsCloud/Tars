@@ -1,10 +1,12 @@
-# 目录
-> * [1.介绍] (#main-chapter-1)
-> * [2.设计思路]  (#main-chapter-2)
-> * [3.整体架构] (#main-chapter-3)
-> * [4.平台特性] (#main-chapter-4)
+[Click me switch to English version](Introduction.en.md)
 
-# 1. 介绍 <a id="main-chapter-1"></a>
+# 目录
+> * [1.介绍](#main-chapter-1)
+> * [2.设计思路](#main-chapter-2)
+> * [3.整体架构](#main-chapter-3)
+> * [4.平台特性](#main-chapter-4)
+
+# 1. <a id="main-chapter-1"></a>介绍
 
 Tars是基于名字服务使用Tars协议的高性能RPC开发框架，同时配套一体化的服务治理平台，帮助个人或者企业快速的以微服务的方式构建自己稳定可靠的分布式应用。
 
@@ -14,7 +16,7 @@ Tars是将腾讯内部使用的微服务架构TAF（Total Application Framework�
 
 目前该框架在腾讯内部，有100多个业务、1.6多万台服务器上运行使用。
 
-# 2. 设计思想 <a id="main-chapter-2"></a>
+# 2. <a id="main-chapter-2"></a>设计思想
 
 Tars的设计思路是采用微服务的思想对服务进行治理，同时对整个系统的各个模块进行抽象分层，将各个层次之间相互解耦或者松耦合，如下图：
 
@@ -26,7 +28,7 @@ Tars的设计思路是采用微服务的思想对服务进行治理，同时对�
 
 最上面的运营层，设计思路是让运维只需要关注日常的服务部署、发布、配置、监控、调度管理等操作。
 
-# 3. 整体架构 <a id="main-chapter-3"></a>
+# 3. <a id="main-chapter-3"></a>整体架构
 ## 3.1. 架构拓扑图
 
 ![tars](docs/images/tars_tuopu.png)
@@ -123,7 +125,7 @@ AsyncThread：  异步请求的回应包处理线程；
 
 Callback：     具体业务Callback的处理基类对象；
 
-# 4. 平台特性 <a id="main-chapter-4"></a>
+# 4. <a id="main-chapter-4"></a>平台特性
 ## 4.1. tars协议
 tars协议采用接口描述语言（Interface description language，缩写IDL）来实现，它是一种二进制、可扩展、代码自动生成、支持多平台的协议，使得在不同平台上运行的对象和用不同语言编写的程序可以用PRC远程调用的方式相互通信交流，
 主要应用在后台服务之间的网络传输协议，以及对象的序列化和反序列化等方面。

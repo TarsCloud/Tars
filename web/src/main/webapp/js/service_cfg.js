@@ -358,8 +358,8 @@ function addCfg() {
                 showErrorMsg($('#err-msg'),'文件名不能为空');
                 return;
             }
-            if(!/^[a-zA-Z]([a-zA-Z0-9])*$/g.test(paramObj.filename)){
-                showErrorMsg($('#err-msg'),'文件名只能包含英文字母或数字，且要以字母开头');
+            if(!/^([a-zA-Z0-9._-])+$/g.test(paramObj.filename)){
+                showErrorMsg($('#err-msg'),'文件名只能包含英文字母或数字、点、下划线、短横线');
                 return;
             }
             if(!paramObj.config){

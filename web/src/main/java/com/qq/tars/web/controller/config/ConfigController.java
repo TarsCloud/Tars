@@ -272,7 +272,7 @@ public class ConfigController extends WrappedController {
                     return new CommandTarget(tokens[0], tokens[1], configFile.getHost());
                 }).collect(Collectors.toList());
 
-        String command = String.format("tars.loadconfig %s", holder);
+        String command = String.format("tars.loadconfig %s", holder.getValue());
         return adminService.doCommand(targets, command);
     }
 
