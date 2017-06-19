@@ -26,7 +26,7 @@ void BServer::initialize()
 {
 	//initialize application here:
 	//...
-	addServant<BServantImp>(ServerConfig::Application + "." + ServerConfig::ServerName + ".BBServantObj");
+	addServant<BServantImp>(ServerConfig::Application + "." + ServerConfig::ServerName + ".BServantObj");
 }
 /////////////////////////////////////////////////////////////////
 void BServer::destroyApp()

@@ -1,0 +1,43 @@
+
+module MTT
+{
+	enum MYE1
+	{
+		EM_CAT,
+		EM_DOG,
+		EM_BIRD,
+		EM_MAX_PET
+	};
+	struct A
+	{
+		0 require int b;
+	};
+    struct HelloWorld
+    {
+        0 require int nId;
+        1 require string sMsg;
+        2 require vector<string> vNews;
+		///4 optional string sNew="client new";
+		5 require map<int,int> mAddr;
+		6 require A a;
+    };
+
+	struct HelloPerson
+	{
+		0 require int nId;
+		1 require string sName;
+		2 optional vector<string> vFavor;
+		3 optional MYE1 ePet;
+		///4 optional byte aPetAge[5];
+		5 optional map<int,string> mAddr;
+		6 optional string sPhone;
+		7 optional bool bMan;
+		9 optional HelloWorld shello;
+	};
+
+    interface Hello
+    {
+        int testHello(string s,vector<short> vsh,out string r);
+		int testPerson(HelloPerson stPersonIn,out HelloWorld stPersonOut);
+    };
+};

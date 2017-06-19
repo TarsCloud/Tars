@@ -150,16 +150,17 @@ cd -
 ##安装核心基础服务
 mkdir -p /usr/local/app/tars/
 cd ../cpp/build/
-cp build/framework.tgz /usr/local/app/tars/
+cp framework.tgz /usr/local/app/tars/
 cd /usr/local/app/tars
 tar xzfv framework.tgz
 
 sed -i "s/192.168.2.131/${MachineIp}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${MachineIp}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${MachineIp}/g" `grep registry.tars.com -rl ./*`
+sed -i "s/web.tars.com/${MachineIp}/g" `grep web.tars.com -rl ./*`
 
 chmod u+x tars_install.sh
-tars_install.sh
+./tars_install.sh
 
 ./tarspatch/util/init.sh
 

@@ -1,0 +1,46 @@
+module Test
+{
+    enum en
+    {
+        orange =1,
+        apple = 2
+    };
+    struct B
+    {
+        1 require int a;
+        2 require float f ;
+    };
+
+
+    struct A
+    {
+        1 require int a;
+        2 require B b ;
+    };
+
+    struct TestInfo
+    {
+        0  require int   ibegin;
+        1  require bool  b;
+        2  require short si;
+        3  require byte  by;
+        4  require int   ii;
+        5  require long  li;
+        6  require float f;
+        7  require double d;
+        8  require string s;
+        9  require vector<int> vi;
+        10 require map<int,string> mi;
+        11 require A aa;
+        12 require int   iend;
+        13 require vector<byte> vb;
+        //14 require byte vbc[12];
+
+        15  require vector<A> vi2;
+        16  require map<int,A> mi2;
+		17  require unsigned int uii;
+		18 require map<string, vector<A> > msv;
+		19 optional vector<float> vf;
+    };
+
+};

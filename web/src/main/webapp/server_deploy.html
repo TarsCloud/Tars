@@ -86,7 +86,7 @@
     <table class="table table-hover table-bordered" id="obj-table">
         <thead>
             <tr>
-                <th>OBJ名称<span class="text-danger">*</span> <span class="blue" data-toggle="tooltip" title="无需加应用和服务，如MTT.HttpProxyServer.HttpProxy2Obj，这里只填HttpProxy2Obj"><i class="glyphicon glyphicon-info-sign"></i></span></th>
+                <th>OBJ名称<span class="text-danger">*</span> <span class="blue" data-toggle="tooltip" title="无需加应用和服务，如MTT.HttpProxyServer.HttpProxyObj，这里只填HttpProxyObj"><i class="glyphicon glyphicon-info-sign"></i></span></th>
                 <th>OBJ绑定IP<span class="text-danger">*</span></th>
                 <th>端口<span class="text-danger">*</span></th>
                 <th>端口类型<span class="text-danger">*</span></th>
@@ -100,19 +100,19 @@
         </thead>
         <tbody>
             <tr>
-                <td><input type="text" class="form-control obj-name"></td>
+                <td><input type="text" class="form-control obj-name" placeholder="英文字母"></td>
                 <td><input type="text" class="form-control bind-ip"></td>
                 <td><input type="number" min="0" class="form-control num-control port" placeholder="0~65535"></td>
                 <td>
                     <div style="white-space: nowrap">
-                        <input type="radio" name="port-type" class="port-type" id="port-type-tcp" value="tcp" checked="true" /><label for="port-type-tcp">TCP</label>
-                        <input type="radio" name="port-type" class="port-type" id="port-type-udp" value="udp"/><label for="port-type-udp">UDP</label>
+                        <label><input type="radio" name="port-type" class="port-type" id="port-type-tcp" value="tcp" checked="true" />TCP</label>
+                        <label><input type="radio" name="port-type" class="port-type" id="port-type-udp" value="udp"/>UDP</label>
                     </div>
                 </td>
                 <td>
                     <div style="white-space: nowrap">
-                        <input type="radio" name="protocol" class="protocol" id="protocol-tars" value="tars" checked="true" /><label for="protocol-tars">TARS</label>
-                        <input type="radio" name="protocol" class="protocol" id="protocol-not-tars" value="not_tars"/><label for="protocol-not-tars">非TARS</label>
+                        <label><input type="radio" name="protocol" class="protocol" id="protocol-tars" value="tars" checked="true" />TARS</label>
+                        <label><input type="radio" name="protocol" class="protocol" id="protocol-not-tars" value="not_tars"/>非TARS</label>
                     </div>
 
                 </td>
@@ -160,6 +160,8 @@
             $tr = $(this).parents('tr').clone();
             $tr.find('.btn-success').attr('class','btn btn-danger btn-xs').find('.glyphicon').attr('class','glyphicon glyphicon-minus');
             $tr.find('.bind-ip').val($.trim($('#node-name').val()));
+            $tr.find('.port-type').attr('name','port-type-'+lines);
+            $tr.find('.protocol').attr('name','protocol-'+lines);
             $table.find('tbody').append($tr);
             lines++;
         }
@@ -178,6 +180,12 @@
     $table.on('keydown','.num-control',function (e) {
         if(!(e.keyCode>47 && e.keyCode<59) && !(e.keyCode>95 && e.keyCode<106) && e.keyCode!=8 && e.keyCode!=46){
             return false;
+        }
+    });
+    $table.on('blur','.port',function () {
+        if(this.value>65535 || this.value<0){
+            this.value = '';
+            showErrorMsg($('#main_title'),'端口范围0~65535，您的输入超出了范围');
         }
     });
     $('#node-name').keyup(function () {

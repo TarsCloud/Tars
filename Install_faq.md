@@ -1,3 +1,5 @@
+[Click me switch to English version](Install_faq.en.md)
+
 ## 1. 部署ip不能为127.0.0.1，原因如下：
 
 第一，每个服务一般都有一个或者多个对外服务的obj，obj要对外提供访问，不能用127.0.0.1;
@@ -85,8 +87,24 @@ make framework-tar这个命令打包的是tars核心基础服务，核心基础�
 ![tars](docs/question_images/registry_not_founded.png)
 
 首先，确定核心基础服务tarsregistry、tarsAdminRegistry、tarsnode、tarsconfig、tarspatch的进程是否是活的，比如用ps -ef|grep tars命令查看，如果进程不存在，看看是否是db配置信息有问题
+
 然后，确定rsync进程是否存在
-最好，查看tarsnode的日志，看看有什么错误日志。
+
+最后，查看tarsnode的日志，看看有什么错误日志。
+
+![tars](docs/question_images/registry_not_invoker.png)
+
+看看Install.md的第4.3节中的安装web管理系统部分，是否正确配置，如下：
+
+![tars](docs/question_images/registry_web_endpoint.png)
+
+错误的示例如下：
+
+![tars](docs/question_images/registry_web_empty.png)
+
+## 18 发布失败，发现上传tars java的war包大小有问题
+
+检查一下部署web的机器是否安装了unzip 
 
 
 

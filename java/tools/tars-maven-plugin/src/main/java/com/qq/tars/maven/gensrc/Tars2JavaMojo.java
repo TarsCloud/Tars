@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -46,6 +47,7 @@ import com.qq.tars.maven.parse.ast.TarsNamespace;
 import com.qq.tars.maven.parse.ast.TarsOperation;
 import com.qq.tars.maven.parse.ast.TarsParam;
 import com.qq.tars.maven.parse.ast.TarsPrimitiveType;
+import com.qq.tars.maven.parse.ast.TarsPrimitiveType.PrimitiveType;
 import com.qq.tars.maven.parse.ast.TarsRoot;
 import com.qq.tars.maven.parse.ast.TarsStruct;
 import com.qq.tars.maven.parse.ast.TarsStructMember;
@@ -57,6 +59,8 @@ public class Tars2JavaMojo extends AbstractMojo {
 
     @Parameter(required = true)
     private Tars2JavaConfig tars2JavaConfig;
+
+    private AtomicInteger var = new AtomicInteger(0);
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         // 1. check configurations
@@ -265,7 +269,7 @@ public class Tars2JavaMojo extends AbstractMojo {
         // 定义成员变量
         for (TarsStructMember m : struct.memberList()) {
             out.println("\t@TarsStructProperty(order = " + m.tag() + ", isRequire = " + m.isRequire() + ")");
-            out.println("\tpublic " + type(m.memberType(), nsMap) + " " + m.memberName() + " = " + (m.defaultValue() == null ? typeInit(m.memberType(), nsMap) : m.defaultValue()) + ";");
+            out.println("\tpublic " + type(m.memberType(), nsMap) + " " + m.memberName() + " = " + (m.defaultValue() == null ? typeInit(m.memberType(), nsMap, false) : m.defaultValue()) + ";");
         }
         out.println();
 
@@ -377,11 +381,21 @@ public class Tars2JavaMojo extends AbstractMojo {
         //writeTo
         out.println("\tpublic void writeTo(TarsOutputStream _os) {");
         for (TarsStructMember m : struct.memberList()) {
-            boolean withNull = typeWithNullWrite(m.memberType(), nsMap);
-            if (withNull) {
-                out.println("\t\tif (null != " + m.memberName() + ") {");
-                out.println("\t\t\t_os.write(" + m.memberName() + ", " + m.tag() + ");");
-                out.println("\t\t}");
+            if (!m.isRequire()) {
+                if (m.memberType().isPrimitive() || isEnum(m.memberType(), nsMap)) {
+                    TarsPrimitiveType primitiveType = m.memberType().asPrimitive();
+                    if (primitiveType != null && primitiveType.primitiveType().equals(PrimitiveType.STRING)) {
+                        out.println("\t\tif (null != " + m.memberName() + ") {");
+                        out.println("\t\t\t_os.write(" + m.memberName() + ", " + m.tag() + ");");
+                        out.println("\t\t}");
+                    } else {
+                        out.println("\t\t_os.write(" + m.memberName() + ", " + m.tag() + ");");
+                    }
+                } else {
+                    out.println("\t\tif (null != " + m.memberName() + ") {");
+                    out.println("\t\t\t_os.write(" + m.memberName() + ", " + m.tag() + ");");
+                    out.println("\t\t}");
+                }
             } else {
                 out.println("\t\t_os.write(" + m.memberName() + ", " + m.tag() + ");");
             }
@@ -389,14 +403,39 @@ public class Tars2JavaMojo extends AbstractMojo {
         out.println("\t}");
         out.println();
 
+        //cache var
+        for (TarsStructMember m : struct.memberList()) {
+            boolean isenum = isEnum(m.memberType(), nsMap);
+            if ((!isenum && m.memberType().isCustom()) || m.memberType().isMap() || (m.memberType().isVector())) {
+                String memberName = "cache_" + m.memberName();
+                out.println("\tstatic " + type(m.memberType(), true, nsMap) + " " + memberName + ";");
+                out.println("\tstatic { ");
+                genCacheVar(memberName, true, m.memberType(), nsMap, out);
+                out.println("\t}");
+            }
+        }
+        out.println();
+
         //readFrom
         out.println("\tpublic void readFrom(TarsInputStream _is) {");
         for (TarsStructMember m : struct.memberList()) {
             String type = null;
-            if (m.memberType().isCustom() || m.memberType().isMap() || (m.memberType().isVector() && !tars2JavaConfig.forceArray)) {
+            boolean isenum = isEnum(m.memberType(), nsMap);
+            if ((!isenum && m.memberType().isCustom()) || m.memberType().isMap() || (m.memberType().isVector())) {
                 type = type(m.memberType(), nsMap);
+                out.println("\t\tthis." + m.memberName() + " = " + (type == null ? "" : "(" + type + ") ") + "_is.read(cache_" + m.memberName() + ", " + m.tag() + ", " + m.isRequire() + ");");
+            } else {
+                if (m.memberType().isPrimitive()) {
+                    TarsPrimitiveType primitiveType = m.memberType().asPrimitive();
+                    if (primitiveType.primitiveType().equals(PrimitiveType.STRING)) {
+                        out.println("\t\tthis." + m.memberName() + " = " + "_is.readString(" + m.tag() + ", " + m.isRequire() + ");");
+                    } else {
+                        out.println("\t\tthis." + m.memberName() + " = " + (type == null ? "" : "(" + type + ") ") + "_is.read(" + m.memberName() + ", " + m.tag() + ", " + m.isRequire() + ");");
+                    }
+                } else {
+                    out.println("\t\tthis." + m.memberName() + " = " + (type == null ? "" : "(" + type + ") ") + "_is.read(" + m.memberName() + ", " + m.tag() + ", " + m.isRequire() + ");");
+                }
             }
-            out.println("\t\tthis." + m.memberName() + " = " + (type == null ? "" : "(" + type + ") ") + "_is.read(" + m.memberName() + ", " + m.tag() + ", " + m.isRequire() + ");");
         }
         out.println("\t}");
         out.println();
@@ -407,17 +446,36 @@ public class Tars2JavaMojo extends AbstractMojo {
         getLog().info("generate Struct " + structClass);
     }
 
-    private boolean typeWithNullWrite(TarsType jt, Map<String, List<TarsNamespace>> nsMap) {
-        if (jt.isPrimitive()) {
-            TarsPrimitiveType p = jt.asPrimitive();
-            switch (p.primitiveType()) {
-                case STRING:
-                    return true;
-                default:
-                    return false;
+    private void genCacheVar(String memberName, boolean hasDeclare, TarsType type,
+                             Map<String, List<TarsNamespace>> nsMap, PrintWriter out) {
+        if (type.isCustom() && !isEnum(type, nsMap)) {
+            out.println("\t\t" + (hasDeclare ? memberName : (type(type, true, nsMap) + " " + memberName)) + " = new " + type(type, true, nsMap) + "();");
+        } else if (type.isMap()) {
+            TarsMapType mapType = type.asMap();
+            out.println("\t\t" + (hasDeclare ? memberName : (type(type, true, nsMap) + " " + memberName)) + " = new java.util.HashMap<" + type(mapType.keyType(), true, nsMap) + ", " + type(mapType.valueType(), true, nsMap) + ">();");
+
+            String varkey = "var_" + var.incrementAndGet();
+            String varval = "var_" + var.incrementAndGet();
+
+            genCacheVar(varkey, false, mapType.keyType(), nsMap, out);
+            genCacheVar(varval, false, mapType.valueType(), nsMap, out);
+
+            out.println("\t\t" + memberName + ".put(" + varkey + " ," + varval + ");");
+
+        } else if (type.isVector()) {
+            TarsVectorType v = type.asVector();
+            String varType = "var_" + var.incrementAndGet();
+            if (v.isByteArray()) {
+                out.println("\t\t" + (hasDeclare ? memberName : (type(type, false, nsMap) + " " + memberName)) + " = new " + type(v.subType(), false, nsMap) + "[1];");
+                genCacheVar(varType, false, v.subType(), nsMap, out);
+                out.println("\t\t" + memberName + "[0] = " + varType + ";");
+            } else {
+                out.println("\t\t" + (hasDeclare ? memberName : (type(type, true, nsMap) + " " + memberName)) + " = new java.util.ArrayList<" + type(v.subType(), true, nsMap) + ">();");
+                genCacheVar(varType, false, v.subType(), nsMap, out);
+                out.println("\t\t" + memberName + ".add(" + varType + ");");
             }
-        } else {
-            return !(nsMap != null && isEnum(jt, nsMap));
+        } else if (type.isPrimitive()) {
+            out.println("\t\t" + (hasDeclare ? memberName : (type(type, false, nsMap) + " " + memberName)) + " = " + typeInit(type, nsMap, true) + ";");
         }
     }
 
@@ -598,11 +656,7 @@ public class Tars2JavaMojo extends AbstractMojo {
             if (v.isByteArray()) {
                 return "byte[]";
             } else {
-                if (tars2JavaConfig.forceArray) {
-                    return type(v.subType(), false, nsMap) + "[]";
-                } else {
-                    return "java.util.List<" + type(v.subType(), true, nsMap) + ">";
-                }
+                return "java.util.List<" + type(v.subType(), true, nsMap) + ">";
             }
         } else if (jt.isMap()) {
             TarsMapType m = jt.asMap();
@@ -642,33 +696,85 @@ public class Tars2JavaMojo extends AbstractMojo {
         return false;
     }
 
-    public String typeInit(TarsType jt, Map<String, List<TarsNamespace>> nsMap) {
-        if (jt.isPrimitive()) {
-            TarsPrimitiveType p = jt.asPrimitive();
-            switch (p.primitiveType()) {
-                case VOID:
-                    return "";
-                case BOOL:
-                    return "false";
-                case BYTE:
-                    return "(byte)0";
-                case SHORT:
-                    return "(short)0";
-                case INT:
-                    return "0";
-                case LONG:
-                    return "0L";
-                case FLOAT:
-                    return "0F";
-                case DOUBLE:
-                    return "0D";
-                case STRING:
-                    return "\"\"";
-                default:
-                    return "";
+    private String typeInit(TarsType jt, Map<String, List<TarsNamespace>> nsMap, boolean useDefault) {
+        if (!useDefault) {
+            if (jt.isPrimitive()) {
+                TarsPrimitiveType p = jt.asPrimitive();
+                switch (p.primitiveType()) {
+                    case VOID:
+                        return "";
+                    case BOOL:
+                        return "false";
+                    case BYTE:
+                        return "(byte)0";
+                    case SHORT:
+                        return "(short)0";
+                    case INT:
+                        return "0";
+                    case LONG:
+                        return "0L";
+                    case FLOAT:
+                        return "0F";
+                    case DOUBLE:
+                        return "0D";
+                    case STRING:
+                        return "\"\"";
+                    default:
+                        return "";
+                }
+            } else {
+                return nsMap != null && isEnum(jt, nsMap) ? "0" : "null";
             }
         } else {
-            return nsMap != null && isEnum(jt, nsMap) ? "0" : "null";
+            if (jt.isPrimitive()) {
+                TarsPrimitiveType p = jt.asPrimitive();
+                switch (p.primitiveType()) {
+                    case VOID:
+                        return "";
+                    case BOOL:
+                        return "false";
+                    case BYTE:
+                        return "(byte)0";
+                    case SHORT:
+                        return "(short)0";
+                    case INT:
+                        return "0";
+                    case LONG:
+                        return "0L";
+                    case FLOAT:
+                        return "0F";
+                    case DOUBLE:
+                        return "0D";
+                    case STRING:
+                        return "\"\"";
+                    default:
+                        return "";
+                }
+            } else if (jt.isVector()) {
+                TarsVectorType v = jt.asVector();
+                if (v.isByteArray()) {
+                    return "new byte[1]";
+                } else {
+                    return "new java.util.ArrayList<" + type(v.subType(), true, nsMap) + ">()";
+                }
+            } else if (jt.isMap()) {
+                TarsMapType m = jt.asMap();
+                return "new java.util.HashMap<" + type(m.keyType(), true, nsMap) + ", " + type(m.valueType(), true, nsMap) + ">()";
+            } else if (jt.isCustom()) {
+                TarsCustomType ct = jt.asCustom();
+
+                boolean isEnum = nsMap != null ? isEnum(jt, nsMap) : false;
+                if (isEnum) {
+                    return "0";
+                }
+                if (ct.namespace() == null) {
+                    return "new " + ct.typeName() + "()";
+                } else {
+                    return "new " + packageName(tars2JavaConfig.packagePrefixName, ct.namespace()) + "." + ct.typeName() + "()";
+                }
+            } else {
+                return "";
+            }
         }
     }
 
