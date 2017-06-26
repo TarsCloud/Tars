@@ -1241,11 +1241,8 @@ void EndpointManager::updateConHashProxyWeighted(bool bStatic, vector<AdapterPro
         return ;
     }
 
-    if(bStatic)
-    {
-        vLastConHashProxys = _vRegProxys;
-        conHash.clear();
-    }
+    vLastConHashProxys = _vRegProxys;
+    conHash.clear();
 
     for(size_t i = 0; i < _vRegProxys.size(); ++i)
     {
@@ -1257,7 +1254,7 @@ void EndpointManager::updateConHashProxyWeighted(bool bStatic, vector<AdapterPro
             {
                 iWeight = 1;
             }
-            conHash.addNode(_vRegProxys[i]->endpoint().desc(), i, _vRegProxys[i]->getWeight());
+            conHash.addNode(_vRegProxys[i]->endpoint().desc(), i, iWeight);
         }
     }
 
@@ -1362,7 +1359,7 @@ AdapterProxy* EndpointManager::getConHashProxyForNormal(int64_t hashCode)
     {
         int64_t iBegin = TNOWMS;
 
-        updateConHashProxyWeighted(true, _lastConHashProxys, _consistentHash);
+        updateConHashProxyWeighted(false, _lastConHashProxys, _consistentHash);
 
         int64_t iEnd = TNOWMS;
 
