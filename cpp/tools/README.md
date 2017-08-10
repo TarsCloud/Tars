@@ -15,3 +15,4 @@ tars2php      | 通过tars文件生成 PHP 代码的IDL工具的源码实现
 tars2python   | 通过tars文件生成 Python 代码的IDL工具的源码实现
 tars2node     | 通过tars文件生成 Node.js 代码的IDL工具的源码实现
 tars2android  | 通过tars文件生成 Android 代码的IDL工具的源码实现
+tars2go       | 通过tars文件生成 golang 代码的IDL工具的源码实现
