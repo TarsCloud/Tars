@@ -31,7 +31,7 @@ macro(complice_lex OUT_DEPENDS_LEX_LIST)
 
         get_filename_component(NAME_WE ${FILE} NAME_WE)
 
-        # 生成tars文件
+        # 鐢熸垚tars鏂囦欢
         set(LEX_IN ${FILE})
         set(LEX_CPP ${NAME_WE}.lex.cpp)
 
@@ -43,7 +43,7 @@ macro(complice_lex OUT_DEPENDS_LEX_LIST)
 
         list(APPEND DEPENDS_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${LEX_CPP})
 
-        #设置需要清除的文件
+        #璁剧疆闇�瑕佹竻闄ょ殑鏂囦欢
         get_filename_component(PATH ${FILE} PATH)
         list(APPEND CLEAN_LIST ${PATH}/${LEX_CPP})
 
@@ -78,7 +78,7 @@ macro(complice_yacc OUT_DEPENDS_YACC_LIST)
 
         list(APPEND DEPENDS_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${YACC_H})
 
-        #设置需要清除的文件
+        #璁剧疆闇�瑕佹竻闄ょ殑鏂囦欢
         get_filename_component(PATH ${FILE} PATH)
         
         list(APPEND CLEAN_LIST ${PATH}/${YACC_H})
@@ -105,3 +105,4 @@ add_subdirectory(tars2oc)
 add_subdirectory(tars2php)
 add_subdirectory(tars2android)
 add_subdirectory(tars2node)
+add_subdirectory(tars2go)
