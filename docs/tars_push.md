@@ -37,7 +37,7 @@
 首先我们按照第三方协议代码部署一个TestPushServant 服务
 如下图所示在管理平台部署一个服务端
 
-![tars](/images/tars_push_deploy.PNG)
+![tars](images/tars_push_deploy.PNG)
 
 参考tars 支持第三方协议
 
@@ -675,7 +675,7 @@ void RecvThread::run(void)
 
 如果push 成功，结果如下
 
-![tars](images/tars_result.png)
+![tars](images/tars_result.PNG)
 
 
 
