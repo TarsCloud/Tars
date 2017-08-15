@@ -33,6 +33,8 @@
 #include "util/tc_squeue.h"
 #include "util/tc_mmap.h"
 #include "util/tc_fifo.h"
+#include "util/tc_buffer.h"
+#include "util/tc_buffer_pool.h"
 
 using namespace std;
 
@@ -920,7 +922,7 @@ public:
              * @param buffer
              * @return int, -1:发送出错, 0:无数据, 1:发送完毕, 2:还有数据
              */
-            virtual int send(const string& buffer, const string &ip, uint16_t port);
+            virtual int send(const string& buffer, const string &ip, uint16_t port, bool byEpollout = false);
 
             /**
              * 发送数据
@@ -928,6 +930,14 @@ public:
              * @return int
              */
              virtual int send();
+
+			/**
+			 * 发送buffer-slices
+			 * @param slices
+			 * @return int, -1:发送出错, >= 0:发送的字节数
+			 */
+			int send(const std::vector<TC_Slice>& slices);
+
 
             /**
              * 读取数据
@@ -957,6 +967,27 @@ public:
             bool setRecvBuffer(size_t nSize=DEFAULT_RECV_BUFFERSIZE);
 
             friend class NetThread;
+
+        private:
+			/**
+			 * tcp发送数据
+			 */
+            int tcpSend(const void* data, size_t len);
+            int tcpWriteV(const std::vector<iovec>& buffers);
+
+			/**
+			 * 清空buffer-slices
+			 * @param slices
+			 */
+			void clearSlices(std::vector<TC_Slice>& slices);
+
+			/**
+			 * 整理buffer-slices
+			 * @param slices
+			 * @param toSkippedBytes 
+			 */
+			void adjustSlices(std::vector<TC_Slice>& slices, size_t toSkippedBytes);
+
 
         public:
             /**
@@ -1009,9 +1040,7 @@ public:
             /**
              * 发送数据buffer
              */
-            string              _sendbuffer;
-
-            volatile size_t        _sendPos;
+            std::vector<TC_Slice>  _sendbuffer;
 
             /**
              * 需要过滤的头部字节数
@@ -1493,6 +1522,22 @@ public:
          * udp连接时接收包缓存大小,针对所有udp接收缓存有效
          */
         size_t                         _nUdpRecvBufferSize;
+
+		/**
+		 * 属于该网络线程的内存池,目前主要用于发送使用
+		 */
+		TC_BufferPool*                 _bufferPool;
+
+		/**
+		 * 该网络线程的内存池所负责分配的最小字节和最大字节(2的幂向上取整)
+		 */
+        size_t                         _poolMinBlockSize;
+        size_t                         _poolMaxBlockSize;
+
+		/**
+		 * 该网络线程的内存池hold的最大字节
+		 */
+        size_t                         _poolMaxBytes;
     };
     ////////////////////////////////////////////////////////////////////////////
 public:
@@ -1516,6 +1561,11 @@ public:
      *设置空连接超时时间
      */
     void setEmptyConnTimeout(int timeout);
+
+	/**
+	 *设置NetThread的内存池信息
+	 */
+	void setNetThreadBufferPoolInfo(size_t minBlock, size_t maxBlock, size_t maxBytes);
 
     /**
      * 设置本地日志

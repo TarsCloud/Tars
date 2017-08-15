@@ -29,9 +29,6 @@ Transceiver::Transceiver(AdapterProxy * pAdapterProxy,const EndpointInfo &ep)
 , _connStatus(eUnconnected)
 , _conTimeoutTime(0)
 {
-    //预分配好一定的内存
-    _sendBuffer.reserve(1024);
-
     _fdInfo.iType = FDInfo::ET_C_NET;
     _fdInfo.p     = (void *)this;
     _fdInfo.fd    = -1;
@@ -148,9 +145,9 @@ void Transceiver::close()
 
     _fd = -1;
 
-    _sendBuffer.clear();
+    _sendBuffer.Clear();
 
-    _recvBuffer.clear();
+    _recvBuffer.Clear();
 
     TLOGINFO("[TARS][trans close:"<< _adapterProxy->getObjProxy()->name()<< "," << _ep.desc() << "]" << endl);
 }
@@ -165,11 +162,13 @@ int Transceiver::doRequest()
     int iRet = 0;
 
     //buf不为空,先发生buffer的内容
-    if(!_sendBuffer.empty())
+    if(!_sendBuffer.IsEmpty())
     {
-        size_t length = _sendBuffer.length();
+        size_t length = 0;
+        void* data = NULL;
+        _sendBuffer.PeekData(data, length);
 
-        iRet = this->send(_sendBuffer.c_str(), _sendBuffer.size(), 0);
+        iRet = this->send(data, length, 0);
 
         //失败，直接返回
         if(iRet < 0)
@@ -179,15 +178,11 @@ int Transceiver::doRequest()
 
         if(iRet > 0)
         {
-            if((size_t)iRet == length)
-            {
-                _sendBuffer.clear();
-            }
+            _sendBuffer.Consume(iRet);
+            if (_sendBuffer.IsEmpty())
+                _sendBuffer.Shrink();
             else
-            {
-                _sendBuffer.erase(_sendBuffer.begin(), _sendBuffer.begin()+iRet);
                 return 0;
-            }
         }
     }
 
@@ -203,19 +198,20 @@ int Transceiver::doRequest()
 
 int Transceiver::sendRequest(const char * pData, size_t iSize)
 {
-    if(_connStatus != eConnected)
-    {
-        return eRetError;
-    }
-
     //空数据 直接返回成功
     if(iSize == 0)
     {
         return eRetOk;
     }
 
-    //buf不为空,直接返回失败,等buffer可写了,epoll会通知写时间
-    if(!_sendBuffer.empty())
+    if(_connStatus != eConnected)
+    {
+        return eRetError;
+    }
+
+    //buf不为空,直接返回失败
+    //等buffer可写了,epoll会通知写时间
+    if(!_sendBuffer.IsEmpty())
     {
         return eRetError;
     }
@@ -231,7 +227,7 @@ int Transceiver::sendRequest(const char * pData, size_t iSize)
     //没有全部发送完,写buffer 返回成功
     if(iRet < (int)iSize)
     {
-        _sendBuffer.assign(pData+iRet, iSize-iRet);
+        _sendBuffer.PushData(pData+iRet,iSize-iRet);
         return eRetFull;
     }
 
@@ -242,8 +238,6 @@ int Transceiver::sendRequest(const char * pData, size_t iSize)
 TcpTransceiver::TcpTransceiver(AdapterProxy * pAdapterProxy, const EndpointInfo &ep)
 : Transceiver(pAdapterProxy, ep)
 {
-    //预分配好一定的内存
-    _recvBuffer.reserve(1024);
 }
 
 int TcpTransceiver::doResponse(list<ResponsePacket>& done)
@@ -257,37 +251,48 @@ int TcpTransceiver::doResponse(list<ResponsePacket>& done)
 
     done.clear();
 
-    char buff[8192] = {0};
-
     do
     {
-        if ((iRet = this->recv(buff, sizeof(buff), 0)) > 0)
+        _recvBuffer.AssureSpace(8 * 1024);
+        char stackBuffer[64 * 1024];
+
+        struct iovec vecs[2];
+        vecs[0].iov_base = _recvBuffer.WriteAddr();
+        vecs[0].iov_len = _recvBuffer.WritableSize();
+        vecs[1].iov_base = stackBuffer;
+        vecs[1].iov_len = sizeof stackBuffer;
+
+        if ((iRet = this->readv(vecs, 2)) > 0)
         {
-            _recvBuffer.append(buff,iRet);
+            if (static_cast<size_t>(iRet) <= vecs[0].iov_len)
+            {
+                _recvBuffer.Produce(iRet);
+            }
+            else
+            {
+                _recvBuffer.Produce(vecs[0].iov_len);
+                size_t stackBytes = static_cast<size_t>(iRet) - vecs[0].iov_len;
+                _recvBuffer.PushData(stackBuffer, stackBytes);
+            }
         }
     }
     while (iRet>0);
 
     TLOGINFO("[TARS][tcp doResponse objname:" << _adapterProxy->getObjProxy()->name() 
-        << ",fd:" << _fd << ",recvbuf:" << _recvBuffer.length() << "]" << endl);
+        << ",fd:" << _fd << ",recvbuf:" << _recvBuffer.ReadableSize() << "]" << endl);
 
-    if(!_recvBuffer.empty())
+    if(!_recvBuffer.IsEmpty())
     {
         try
         {
             size_t pos = _adapterProxy->getObjProxy()->getProxyProtocol().responseFunc(
-                _recvBuffer.c_str(),
-                _recvBuffer.length(), done);
+                _recvBuffer.ReadAddr(),
+                _recvBuffer.ReadableSize(), done);
 
             if(pos > 0)
             {
-                //用erase, 不用substr, 从而可以保留预分配的空间
-                _recvBuffer.erase(_recvBuffer.begin(), _recvBuffer.begin() + min(pos, _recvBuffer.length()));
-
-                if(_recvBuffer.capacity() - _recvBuffer.length() > 102400)
-                {
-                   _recvBuffer.reserve(max(_recvBuffer.length(),(size_t)1024));
-                }
+                _recvBuffer.Consume(pos);
+                _recvBuffer.Shrink();
             }
         }
         catch (exception &ex)
@@ -332,6 +337,31 @@ int TcpTransceiver::send(const void* buf, uint32_t len, uint32_t flag)
 
     TLOGINFO("[TARS][tcp send," << _adapterProxy->getObjProxy()->name() << ",fd:" << _fd 
         << ",desc:" << _ep.desc() << ",len:" << iRet << "]" << endl);
+
+    return iRet;
+}
+
+int TcpTransceiver::readv(const struct iovec* vecs, int32_t vcnt)
+{
+    //只有是连接状态才能收发数据
+    if(eConnected != _connStatus)
+        return -1;
+
+    int iRet = ::readv(_fd, vecs, vcnt);
+
+    if (iRet == 0 || (iRet < 0 && errno != EAGAIN))
+    {
+        TLOGINFO("[TARS][tcp readv, " << _adapterProxy->getObjProxy()->name()
+                << ",fd:" << _fd << ", " << _ep.desc() <<",ret " << iRet
+                << ", fail! errno:" << errno << "," << strerror(errno) << ",close]" << endl);
+
+        close();
+
+        return 0;
+    }
+
+    TLOGINFO("[TARS][tcp readv," << _adapterProxy->getObjProxy()->name()
+            << ",fd:" << _fd << "," << _ep.desc() << ",ret:" << iRet << "]" << endl);
 
     return iRet;
 }
