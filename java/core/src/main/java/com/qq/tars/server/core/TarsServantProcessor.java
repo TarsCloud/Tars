@@ -67,7 +67,7 @@ public class TarsServantProcessor extends Processor {
             if (response.getRet() != TarsHelper.SERVERSUCCESS || TarsHelper.isPing(request.getFunctionName())) {
                 return response;
             }
-            int maxWaitingTimeInQueue = ConfigurationManager.getInstance().getserverConfig().getServantAdapterConfMap().get(request.getServantName()).getQueueTimeout();
+            int maxWaitingTimeInQueue = ConfigurationManager.getInstance().getServerConfig().getServantAdapterConfMap().get(request.getServantName()).getQueueTimeout();
             waitingTime = (int) (startTime - req.getBornTime());
             if (waitingTime > maxWaitingTimeInQueue) {
                 throw new TarsException("Wait too long, server busy.");
@@ -88,7 +88,7 @@ public class TarsServantProcessor extends Processor {
             Thread.currentThread().setContextClassLoader(appContext.getAppContextClassLoader());
 
             skeleton = appContext.getCapHomeSkeleton(request.getServantName());
-            if (skeleton == null) throw new RuntimeException("failed to find the service named[" + request.getServantName() + "]");
+            if (skeleton == null) throw new RuntimeException("failed to find the servant named[" + request.getServantName() + "]");
 
             value = skeleton.invoke(request.getMethodInfo().getMethod(), request.getMethodParameters());
             response.setResult(value);
@@ -134,7 +134,7 @@ public class TarsServantProcessor extends Processor {
 
     private void reportServerStat(String moduleName, TarsServantRequest request, TarsServantResponse response,
                                   long startTime) {
-        ServerConfig serverConfig = ConfigurationManager.getInstance().getserverConfig();
+        ServerConfig serverConfig = ConfigurationManager.getInstance().getServerConfig();
         ServantAdapterConfig servantAdapterConfig = serverConfig.getServantAdapterConfMap().get(request.getServantName());
         if (servantAdapterConfig == null) {
             return;
@@ -180,7 +180,7 @@ public class TarsServantProcessor extends Processor {
     }
 
     private static boolean isFlowLogEnable() {
-        return ConfigurationManager.getInstance().getserverConfig().getLogRate() - rand.nextInt(100) > 0;
+        return ConfigurationManager.getInstance().getServerConfig().getLogRate() - rand.nextInt(100) > 0;
     }
 
     private static String encodeStringParam(String longParam, int len) {

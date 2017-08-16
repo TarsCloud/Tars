@@ -28,10 +28,12 @@ public class ServantAdapterConfig {
     private String servant = null;
     private String protocol = "tars";
     private int threads = 1;
+    private String handleGroup = null;
 
     public ServantAdapterConfig load(Config conf, String adapterName) {
         String path = "/tars/application/server/" + adapterName;
         endpoint = Endpoint.parseString(conf.get(path + "<endpoint>"));
+        handleGroup = conf.get(path + "<handlegroup>", null);
         protocol = conf.get(path + "<protocol>", "tars");
         maxConns = conf.getInt(path + "<maxconns>", 128);
         queueCap = conf.getInt(path + "<queuecap>", 1024);
@@ -101,6 +103,15 @@ public class ServantAdapterConfig {
 
     public ServantAdapterConfig setProtocol(String protocol) {
         this.protocol = protocol;
+        return this;
+    }
+
+    public String getHandleGroup() {
+        return handleGroup;
+    }
+
+    public ServantAdapterConfig setHandleGroup(String handleGroup) {
+        this.handleGroup = handleGroup;
         return this;
     }
 }

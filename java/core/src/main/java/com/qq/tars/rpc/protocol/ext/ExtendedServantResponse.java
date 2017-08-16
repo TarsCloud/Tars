@@ -14,14 +14,25 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.qq.tars.rpc.protocol;
+package com.qq.tars.rpc.protocol.ext;
 
-import com.qq.tars.net.core.Response;
 import com.qq.tars.net.core.Session;
+import com.qq.tars.rpc.protocol.ServantResponse;
 
-public abstract class ServantResponse extends Response {
+@SuppressWarnings("serial")
+public class ExtendedServantResponse extends ServantResponse implements java.io.Serializable {
 
-    public ServantResponse(Session session) {
+    private Throwable throwable = null;
+
+    public ExtendedServantResponse(Session session) {
         super(session);
+    }
+
+    public Throwable getThrowable() {
+        return throwable;
+    }
+
+    public void setThrowable(Throwable throwable) {
+        this.throwable = throwable;
     }
 }

@@ -151,7 +151,7 @@ public class PropertyReportHelper {
                 return;
             }
 
-            PropertyFPrx propertyFPrx = communicator.stringToProxy(PropertyFPrx.class, ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig().getProperty());
+            PropertyFPrx propertyFPrx = communicator.stringToProxy(PropertyFPrx.class, ConfigurationManager.getInstance().getServerConfig().getCommunicatorConfig().getProperty());
 
             Map<StatPropMsgHead, StatPropMsgBody> sendData = new HashMap<StatPropMsgHead, StatPropMsgBody>();
             int sendLen = 0;

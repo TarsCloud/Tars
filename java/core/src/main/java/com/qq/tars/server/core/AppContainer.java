@@ -43,9 +43,9 @@ public class AppContainer implements Container {
     }
 
     public void loadApps() throws Exception {
-        String root = ConfigurationManager.getInstance().getserverConfig().getBasePath();
+        String root = ConfigurationManager.getInstance().getServerConfig().getBasePath();
         File dirs = new File(root + "/apps");
-        final ClassLoaderManager protocolManager = ClassLoaderManager.getInstance();
+        final ClassLoaderManager manager = ClassLoaderManager.getInstance();
 
         dirs.listFiles(new FileFilter() {
 
@@ -57,7 +57,7 @@ public class AppContainer implements Container {
                 if (path.isDirectory()) {
                     AppContext context = new AppContext(name, path);
                     contexts.put(name, context);
-                    protocolManager.registerClassLoader(name, context.getAppContextClassLoader());
+                    manager.registerClassLoader(name, context.getAppContextClassLoader());
                 }
                 return false;
             }
@@ -88,6 +88,8 @@ public class AppContainer implements Container {
     }
 
     public void stopApps() throws Exception {
-
+        for (AppContext appContext : contexts.values()) {
+            appContext.stop();
+        }
     }
 }

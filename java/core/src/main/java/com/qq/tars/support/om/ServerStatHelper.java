@@ -47,7 +47,7 @@ public class ServerStatHelper {
 
     public void report() {
         try {
-            ServerConfig serverConfig = ConfigurationManager.getInstance().getserverConfig();
+            ServerConfig serverConfig = ConfigurationManager.getInstance().getServerConfig();
             LinkedHashMap<String, ServantAdapterConfig> adapterMap = serverConfig.getServantAdapterConfMap();
             if (adapterMap == null || adapterMap.isEmpty()) {
                 return;

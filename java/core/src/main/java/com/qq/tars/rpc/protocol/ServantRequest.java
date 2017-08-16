@@ -28,14 +28,6 @@ public abstract class ServantRequest extends Request {
         super(session);
     }
 
-//    public void setRequestSequenceId(int requestId) {
-//        this.setTicketNumber(requestId);
-//    }
-//
-//    public int getRequestSequenceId() {
-//        return getTicketNumber();
-//    }
-
     public String getServantName() {
         return servantName;
     }

@@ -14,14 +14,13 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.qq.tars.rpc.protocol;
+package com.qq.tars.rpc.protocol.ext;
 
-import com.qq.tars.net.core.Response;
-import com.qq.tars.net.core.Session;
+import com.qq.tars.protocol.annotation.Servant;
 
-public abstract class ServantResponse extends Response {
+@Servant
+public interface ExtendedServant<Res, Resp> {
 
-    public ServantResponse(Session session) {
-        super(session);
-    }
+    public void process(Res request, Resp response);
+
 }

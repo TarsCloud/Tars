@@ -52,7 +52,7 @@ public class AdminFServantImpl implements AdminFServant {
     @Override
     public void shutdown() {
         try {
-            System.out.println(ConfigurationManager.getInstance().getserverConfig().getApplication() + "." + ConfigurationManager.getInstance().getserverConfig().getServerName() + " is stopped.");
+            System.out.println(ConfigurationManager.getInstance().getServerConfig().getApplication() + "." + ConfigurationManager.getInstance().getServerConfig().getServerName() + " is stopped.");
             NotifyHelper.getInstance().syncReport("[alarm] server is stopped.");
         } catch (Exception e) {
             OmLogger.record("shutdown error", e);
@@ -133,7 +133,7 @@ public class AdminFServantImpl implements AdminFServant {
         String adminConnInfo = String.format(ADATER_CONN, "Admin", 128);
         builder.append(adminConnInfo);
 
-        for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getserverConfig().getServantAdapterConfMap().entrySet()) {
+        for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getServerConfig().getServantAdapterConfMap().entrySet()) {
             if (OmConstants.AdminServant.equals(adapterConfigEntry.getKey())) {
                 continue;
             }
@@ -160,7 +160,7 @@ public class AdminFServantImpl implements AdminFServant {
 
         builder.append("name \t AdminAdapter\n");
         builder.append("servant \t AdminObj\n");
-        builder.append("endpoint \t tcp -h 127.0.0.1 -p " + ConfigurationManager.getInstance().getserverConfig().getLocalPort() + " -t 3000" + "\n");
+        builder.append("endpoint \t tcp -h 127.0.0.1 -p " + ConfigurationManager.getInstance().getServerConfig().getLocalPort() + " -t 3000" + "\n");
         builder.append("maxconns \t 128\n");
         builder.append("queuecap \t 128\n");
         builder.append("queuetimeout \t 3000\n");
@@ -171,7 +171,7 @@ public class AdminFServantImpl implements AdminFServant {
 
         builder.append("--------------------------------------------------\n");
 
-        for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getserverConfig().getServantAdapterConfMap().entrySet()) {
+        for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getServerConfig().getServantAdapterConfMap().entrySet()) {
             if (OmConstants.AdminServant.equals(adapterConfigEntry.getKey())) {
                 continue;
             }
@@ -196,7 +196,7 @@ public class AdminFServantImpl implements AdminFServant {
 
     private String makeServerConfigInfo() {
         StringBuilder builder = new StringBuilder(1024);
-        ServerConfig serverConfig = ConfigurationManager.getInstance().getserverConfig();
+        ServerConfig serverConfig = ConfigurationManager.getInstance().getServerConfig();
         builder.append("[server config]:\n");
         builder.append("Application \t" + serverConfig.getApplication() + "\n");
         builder.append("ServerName \t" + serverConfig.getServerName() + "\n");
@@ -216,7 +216,7 @@ public class AdminFServantImpl implements AdminFServant {
 
     private String makeProxyConfigInfo() {
         StringBuilder builder = new StringBuilder(1024);
-        CommunicatorConfig commConfig = ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig();
+        CommunicatorConfig commConfig = ConfigurationManager.getInstance().getServerConfig().getCommunicatorConfig();
         builder.append("[proxy config]:\n");
         builder.append("locator \t" + commConfig.getLocator() + "\n");
         builder.append("sync-invoke-timeout \t" + commConfig.getSyncInvokeTimeout() + "\n");
