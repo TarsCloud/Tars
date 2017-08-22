@@ -246,8 +246,8 @@ class TarsInputStream(object):
         length = self.__buffer.length();
         while self.__buffer.position < length:
             t, p, l = self.__peekFrom();
-            if tag <= t or t == DataHead.EN_STRUCTEND:
-                return (p == DataHead.EN_STRUCTEND) if False else (t == tag);
+            if tag <= t or p == DataHead.EN_STRUCTEND:
+                return False if p == DataHead.EN_STRUCTEND else t == tag;
 
             self.__buffer.position += l;
             self.__skipField(p);

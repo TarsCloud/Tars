@@ -89,7 +89,7 @@ class AsyncProcThread:
             reqmsg.response.iVerson = reqmsg.request.iVerson
             reqmsg.response.cPacketType = reqmsg.request.cPacketType
             reqmsg.response.iRequestId = reqmsg.request.iRequestId
-            reqmsg.response.iRet = ServantProxy.TARSSYNCCALLTIMEOUT
+            reqmsg.response.iRet = ServantProxy.TARSASYNCCALLTIMEOUT
 
         self.__queue.put(reqmsg)
 
