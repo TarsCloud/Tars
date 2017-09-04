@@ -133,7 +133,7 @@ bool NotifyImp::IsNeedFilte(const string& sServerName,const string& sResult)
 void NotifyImp::reportServer(const string& sServerName, const string& sThreadId, const string& sResult, tars::TarsCurrentPtr current)
 {
     TLOGDEBUG("NotifyImp::reportServer sServerName:" << sServerName << "|ip:" << current->getIp() << "|sThreadId:" << sThreadId << "|sResult:" << sResult << endl);
-    DLOG << "NotifyImp::reportServer sServerName:" << sServerName << "|ip:" << current->getIp() << "|sThreadId:" << sThreadId << "|sResult:" << sResult << endl;
+    //DLOG << "NotifyImp::reportServer sServerName:" << sServerName << "|ip:" << current->getIp() << "|sThreadId:" << sThreadId << "|sResult:" << sResult << endl;
 
     if(IsNeedFilte(sServerName,sResult))
     {
@@ -209,8 +209,8 @@ void NotifyImp::reportNotifyInfo(const tars::ReportInfo & info, tars::TarsCurren
             TLOGDEBUG("NotifyImp::reportNotifyInfo reportServer:" << info.sApp + "." + info.sServer << "|sSet:" << info.sSet << "|sContainer:" << info.sContainer << "|ip:" << current->getIp() 
                 << "|sThreadId:" << info.sThreadId << "|sMessage:" << info.sMessage << endl);
 
-            DLOG << "NotifyImp::reportNotifyInfo reportServer:" << info.sApp + "." + info.sServer << "|sSet:" << info.sSet << "|sContainer:" << info.sContainer << "|ip:" << current->getIp() 
-                << "|sThreadId:" << info.sThreadId << "|sMessage:" << info.sMessage << endl;
+        //   DLOG << "NotifyImp::reportNotifyInfo reportServer:" << info.sApp + "." + info.sServer << "|sSet:" << info.sSet << "|sContainer:" << info.sContainer << "|ip:" << current->getIp() 
+           //    << "|sThreadId:" << info.sThreadId << "|sMessage:" << info.sMessage << endl;
 
             if (IsNeedFilte(info.sApp + info.sServer, info.sMessage))
             {
@@ -287,13 +287,13 @@ void NotifyImp::reportNotifyInfo(const tars::ReportInfo & info, tars::TarsCurren
 
             if (info.eLevel == NOTIFYERROR)
             {
-                FDLOG("NOTIFYERROR") << "NotifyImp::reportNotifyInfo  notifyServer:" << info.sApp + "." + info.sServer << "|sSet:" << info.sSet << "|sContainer:" << info.sContainer << "|ip:" << current->getIp() 
-                    << "|eLevel:" << tars::etos(info.eLevel) << "|sMessage:" << info.sMessage << endl;
+               // FDLOG("NOTIFYERROR") << "NotifyImp::reportNotifyInfo  notifyServer:" << info.sApp + "." + info.sServer << "|sSet:" << info.sSet << "|sContainer:" << info.sContainer << "|ip:" << current->getIp() 
+               //     << "|eLevel:" << tars::etos(info.eLevel) << "|sMessage:" << info.sMessage << endl;
             }
             else
             {
-                DLOG << "NotifyImp::reportNotifyInfo  notifyServer:" << info.sApp + "." + info.sServer << "|sSet:" << info.sSet << "|sContainer:" << info.sContainer << "|ip:" << current->getIp() 
-                    << "|eLevel:" << tars::etos(info.eLevel) << "|sMessage:" << info.sMessage << endl;
+               // DLOG << "NotifyImp::reportNotifyInfo  notifyServer:" << info.sApp + "." + info.sServer << "|sSet:" << info.sSet << "|sContainer:" << info.sContainer << "|ip:" << current->getIp() 
+                //    << "|eLevel:" << tars::etos(info.eLevel) << "|sMessage:" << info.sMessage << endl;
             }
 
             string sServerId = info.sApp + info.sServer + "_" + current->getIp();
