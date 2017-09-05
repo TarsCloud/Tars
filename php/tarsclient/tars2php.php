@@ -229,6 +229,23 @@ class FileConverter
         $product = $moduleElements[0];
         $project = $moduleElements[1];
         $service = $moduleElements[2];
+        if (strtolower(substr(php_uname('a'), 0, 3)) === 'win') {
+            exec("mkdir " . $product);
+            exec("mkdir " . $product . "\\" . $project);
+            exec("DEL " . $product . "\\" . $project . "\\" . $service . "\\*.*");
+            exec("mkdir " . $product . "\\" . $project . "\\" . $service);
+
+            $this->moduleName = $product . "\\" . $project . "\\" . $service;
+
+            exec("mkdir " . $this->moduleName . "\\classes");
+            exec("mkdir " . $this->moduleName . "\\tars");
+            exec("copy " . $this->fromFile . " " . $this->moduleName . "\\tars");
+
+            $this->namespaceName = $product . "\\" . $project . "\\" . $service;
+
+            $this->uniqueName = $product . "_" . $project . "_" . $service;
+            return;
+        }
 
         exec("mkdir ".$product);
         exec("mkdir ".$product."/".$project);
@@ -274,7 +291,11 @@ class FileConverter
                 $tokens = preg_split("/#include/", $line);
                 $includeFile = trim($tokens[1],"\" \r\n");
 
-                exec("cp ".$includeFile." ".$this->moduleName."/tars");
+                if (strtolower(substr(php_uname('a'), 0, 3)) === 'win') {
+                    exec("copy " . $includeFile . " " . $this->moduleName . "\\tars");
+                }else {
+                    exec("cp " . $includeFile . " " . $this->moduleName . "/tars");
+                }
 
                 $includeParser = new IncludeParser();
                 $includeParser->includeScan($includeFile,$this->preEnums,$this->preStructs,
@@ -282,7 +303,7 @@ class FileConverter
             }
 
             // 如果空行，或者是注释，就直接略过
-            if (!$line || $line[0] === '/' || $line[0] === '*') {
+            if (!$line || trim($line)[0] === '/' || trim($line)[0] === '*' || trim($line) === '{') {
                 continue;
             }
 
@@ -337,7 +358,7 @@ class FileConverter
             }
 
             // 如果空行，或者是注释，就直接略过
-            if (!$line || $line[0] === '/' || $line[0] === '*') {
+            if (!$line || trim($line)[0] === '/' || trim($line)[0] === '*') {
                 continue;
             }
             // 正则匹配,发现是在consts中
@@ -386,7 +407,7 @@ class FileConverter
 
 class IncludeParser {
     public function includeScan($includeFile,&$preEnums,&$preStructs,
-                                 &$preNamespaceEnums,&$preNamespaceStructs)
+                                &$preNamespaceEnums,&$preNamespaceStructs)
     {
         $fp = fopen($includeFile, 'r');
         if (!$fp) {
@@ -395,7 +416,7 @@ class IncludeParser {
         }
         while (($line = fgets($fp, 1024)) !== false) {
             // 如果空行，或者是注释，就直接略过
-            if (!$line || $line[0] === '/' || $line[0] === '*') {
+            if (!$line || trim($line)[0] === '/' || trim($line)[0] === '*') {
                 continue;
             }
 
@@ -433,7 +454,7 @@ class IncludeParser {
 
 
     public function includeParse($includeFile,&$preEnums,&$preStructs,$uniqueName,$moduleName,$namespaceName,$servantName,
-        &$preNamespaceEnums,&$preNamespaceStructs)
+                                 &$preNamespaceEnums,&$preNamespaceStructs)
     {
         $fp = fopen($includeFile, 'r');
         if (!$fp) {
@@ -442,7 +463,7 @@ class IncludeParser {
         }
         while (($line = fgets($fp, 1024)) !== false) {
             // 如果空行，或者是注释，就直接略过
-            if (!$line || $line[0] === '/' || $line[0] === '*') {
+            if (!$line || trim($line)[0] === '/' || trim($line)[0] === '*') {
                 continue;
             }
 
@@ -620,7 +641,7 @@ class InterfaceParser {
 
         return [
             'syn' => $interfaceClass,
-         ];
+        ];
     }
 
     /**
@@ -1260,7 +1281,7 @@ class StructParser {
     public $namespaceName;
 
     public function __construct($fp,$line,$uniqueName,$moduleName,$structName,$preStructs,$preEnums,$namespaceName,
-        $preNamespaceEnums,$preNamespaceStructs)
+                                $preNamespaceEnums,$preNamespaceStructs)
     {
         $this->fp = $fp;
         $this->uniqueName = $uniqueName;
