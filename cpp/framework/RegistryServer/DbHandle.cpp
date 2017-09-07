@@ -317,9 +317,9 @@ vector<ServerDescriptor> CDbHandle::getServers(const string& app, const string& 
 
                 int iDefaultAsyncThreadNum = 3;
 
-                if("taf_nodejs" == server.serverType) 
+                if("tars_nodejs" == server.serverType) 
                 { 
-                    //taf_nodejs类型的业务需要设置这个值为0
+                    //tars_nodejs类型的业务需要设置这个值为0
                     iDefaultAsyncThreadNum = 0; 
                 }
 

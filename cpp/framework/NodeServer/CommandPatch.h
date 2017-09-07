@@ -438,10 +438,10 @@ inline int CommandPatch::execute(string &sResult)
             }
         }
 
-        //对于taf_nodejs需要先删除exepath下的文件
+        //对于tars_nodejs需要先删除exepath下的文件
         if (iRet == 0) 
         { 
-            if (_serverObjectPtr->getServerType() == "taf_nodejs") 
+            if (_serverObjectPtr->getServerType() == "tars_nodejs") 
             { 
                 if(TC_File::removeFile(_serverObjectPtr->getExePath(),true) != 0 || !TC_File::makeDirRecursive(_serverObjectPtr->getExePath())) 
                 { 
@@ -453,7 +453,7 @@ inline int CommandPatch::execute(string &sResult)
 
         if(iRet == 0)
         {
-            if (_serverObjectPtr->getServerType() == "taf_nodejs") 
+            if (_serverObjectPtr->getServerType() == "tars_nodejs") 
             { 
                 TC_File::copyFile(sLocalExtractPach + "/" + sServerName+ "/" + sServerName, _serverObjectPtr->getExePath(), true); 
             }
