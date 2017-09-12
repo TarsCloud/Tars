@@ -890,6 +890,15 @@ void Application::initializeServer()
 
     _epollServer = new TC_EpollServer(iNetThreadNum);
 
+	//网络线程的内存池配置
+    {
+        size_t minBlockSize = TC_Common::strto<size_t>(toDefault(_conf.get("/taf/application/server<poolminblocksize>"), "1024")); // 1KB
+        size_t maxBlockSize = TC_Common::strto<size_t>(toDefault(_conf.get("/taf/application/server<poolmaxblocksize>"), "8388608")); // 8MB
+        size_t maxBytes = TC_Common::strto<size_t>(toDefault(_conf.get("/taf/application/server<poolmaxbytes>"), "67108864")); // 64MB
+        _epollServer->setNetThreadBufferPoolInfo(minBlockSize, maxBlockSize, maxBytes);
+    }
+
+
     //初始化服务是否对空链接进行超时检查
     bool bEnable = (_conf.get("/tars/application/server<emptyconcheck>","0")=="1")?true:false;
 

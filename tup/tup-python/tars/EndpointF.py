@@ -14,8 +14,6 @@
 #
 
 from core import tarscore;
-#from tars.core import ServantProxy;
-#from tars.core import ServantProxyCallback;
 
 
 
@@ -32,7 +30,10 @@ class EndpointF(tarscore.struct):
         self.grouprealid = 0;
         self.setId = "";
         self.qos = 0;
-    
+        self.bakFlag = 0;
+        self.weight = 0;
+        self.weightType = 0;
+
     @staticmethod
     def writeTo(oos, value):
         oos.write(tarscore.string, 0, value.host);
@@ -44,6 +45,9 @@ class EndpointF(tarscore.struct):
         oos.write(tarscore.int32, 6, value.grouprealid);
         oos.write(tarscore.string, 7, value.setId);
         oos.write(tarscore.int32, 8, value.qos);
+        oos.write(tarscore.int32, 9, value.bakFlag);
+        oos.write(tarscore.int32, 11, value.weight);
+        oos.write(tarscore.int32, 12, value.weightType);
     
     @staticmethod
     def readFrom(ios):
@@ -57,6 +61,9 @@ class EndpointF(tarscore.struct):
         value.grouprealid= ios.read(tarscore.int32, 6, False, value.grouprealid);
         value.setId= ios.read(tarscore.string, 7, False, value.setId);
         value.qos= ios.read(tarscore.int32, 8, False, value.qos);
+        value.bakFlag= ios.read(tarscore.int32, 9, False, value.bakFlag);
+        value.weight= ios.read(tarscore.int32, 11, False, value.weight);
+        value.weightType= ios.read(tarscore.int32, 12, False, value.weightType);
         return value;
 
 

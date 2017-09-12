@@ -314,7 +314,15 @@ vector<ServerDescriptor> CDbHandle::getServers(const string& app, const string& 
                 TC_Config tParent, tProfile;
                 tParent.parseString(mapProfile[res[i]["template_name"]]);
                 tProfile.parseString(server.profile);
+
                 int iDefaultAsyncThreadNum = 3;
+
+                if("tars_nodejs" == server.serverType) 
+                { 
+                    //tars_nodejs类型的业务需要设置这个值为0
+                    iDefaultAsyncThreadNum = 0; 
+                }
+
                 int iConfigAsyncThreadNum = TC_Common::strto<int>(TC_Common::trim(res[i]["async_thread_num"]));
                 iDefaultAsyncThreadNum = iConfigAsyncThreadNum > iDefaultAsyncThreadNum ? iConfigAsyncThreadNum : iDefaultAsyncThreadNum;
                 server.asyncThreadNum = TC_Common::strto<int>(tProfile.get("/tars/application/client<asyncthread>", TC_Common::tostr(iDefaultAsyncThreadNum)));

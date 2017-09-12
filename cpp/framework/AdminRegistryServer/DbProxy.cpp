@@ -489,6 +489,10 @@ vector<ServerDescriptor> DbProxy::getServers(const string& app, const string& se
                 tParent.parseString(mapProfile[res[i]["template_name"]]);
                 tProfile.parseString(server.profile);
                 int iDefaultAsyncThreadNum = 3;
+                if (server.serverType == "tars_nodejs")
+                {
+                    iDefaultAsyncThreadNum = 0;
+                }
                 int iConfigAsyncThreadNum  = TC_Common::strto<int>(TC_Common::trim(res[i]["async_thread_num"]));
                 iDefaultAsyncThreadNum     = iConfigAsyncThreadNum > iDefaultAsyncThreadNum ? iConfigAsyncThreadNum : iDefaultAsyncThreadNum;
                 server.asyncThreadNum      = TC_Common::strto<int>(tProfile.get("/tars/application/client<asyncthread>", TC_Common::tostr(iDefaultAsyncThreadNum)));

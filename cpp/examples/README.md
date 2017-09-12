@@ -8,3 +8,4 @@ PromiseDemo      |   promise编程的示例
 HttpDemo         |   http服务端的示例
 CoroutineDemo    |   协程的示例
 StressDemo       |   tars c++压测代码
+PushDemo         |   tars push 模式demo

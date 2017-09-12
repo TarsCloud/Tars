@@ -20,6 +20,7 @@
 #include "servant/EndpointInfo.h"
 #include "servant/NetworkUtil.h"
 #include "servant/CommunicatorEpoll.h"
+#include "util/tc_buffer.h"
 #include <list>
 
 using namespace std;
@@ -229,12 +230,12 @@ protected:
     /*
      * 发送缓存buff
      */
-    string                   _sendBuffer;
+    TC_Buffer                _sendBuffer;
 
     /*
      * 接收缓存buff
      */
-    string                   _recvBuffer;
+    TC_Buffer                _recvBuffer;
 };
 
 //////////////////////////////////////////////////////////
@@ -270,6 +271,14 @@ public:
      */
     virtual int recv(void* buf, uint32_t len, uint32_t flag);
 
+    /**
+     * TCP 接收实现
+     * @param iovec
+     * @param count
+     *
+     * @return int
+     */
+    int readv(const struct iovec*, int32_t count);
     /**
      * 处理返回，判断接收是否有完整的包
      * @param done
