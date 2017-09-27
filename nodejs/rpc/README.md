@@ -1,7 +1,7 @@
 
 ## 00 - 安装
 
-> $ npm install @tars/tars
+> $ npm install @tars/rpc
 
 ## 01 - tars简介
 
@@ -44,9 +44,7 @@ TARS编码协议的编解码规则以及Tars文件的编写方法，请参考 [@
 
 **由Tars文件生成客户端或者服务端的代码的方法：**
 
-首先安装tars2node模块，这个模块是一个命令行应用程序，所以需要全局安装
-
-`npm install -g @tars/tars2node`
+tars2node工具可由cpp/tools/tars2node源码编译得到
 
 通过`tars2node xxxx.tars --client `命令得到client端代理类
 
