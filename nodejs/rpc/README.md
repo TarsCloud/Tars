@@ -147,7 +147,7 @@ module TRom
 
 ```javascript
 //STEP01 引入系统模块以及工具生成的代码
-var Tars  = require("@tars/tars").client;
+var Tars  = require("@tars/rpc").client;
 var TRom = require("./NodeJsCommProxy.js").TRom;
 
 //STEP02 初始化Tars客户端
@@ -238,7 +238,7 @@ TRom.NodeJsCommImp.prototype.secRequest = function (current, binRequest, binResp
 接下来，创建一个服务入口文件。它主要负责读取配置文件、配置端口、设置协议解析器、启动服务等等工作。
 
 ```javascript
-var Tars  = require("@tars/tars").server;
+var Tars  = require("@tars/rpc").server;
 var TRom = require("./NodeJsCommImp.js").TRom;
 
 var svr  = Tars.createServer(TRom.NodeJsCommImp);
@@ -285,7 +285,7 @@ console.log("server started.");
 除了使用配置文件设置这两个参数之外，我们可以调用[tars].client对外暴露的函数进行设置：
 
 ```
-var Tars  = require("@tars/tars").client;
+var Tars  = require("@tars/rpc").client;
 
 Tars.set("locator", "tars.tarsregistry.QueryObj@tcp -h 172.27.208.171 -p 17890");
 Tars.set("timeout", 60000);
@@ -368,7 +368,7 @@ tarsnode生成的配置文件类似与如下：
 
 ```javascript
 //STEP01 引入关键模块
-var Tars       = require("@tars/tars");
+var Tars       = require("@tars/rpc");
 var TRom      = require("./NodeJsCommImp.js");
 
 //STEP02 创建一个服务的实例
@@ -387,7 +387,7 @@ svr.start();
 
 ```
 //STEP01 引入关键模块
-var Tars  = require("@tars/tars").server;
+var Tars  = require("@tars/rpc").server;
 var TRom = require("./NodeJsCommImp.js").TRom;
 
 //STEP02 创建一个服务的实例
@@ -408,7 +408,7 @@ console.log("server started.");
 
 ```
 //STEP01 引入关键模块
-var Tars   = require("@tars/tars");
+var Tars   = require("@tars/rpc");
 var TRom  = require("./NodeJsCommImp.js");
 
 Tars.server.getServant("./TRom.NodeJsTestServer.config.conf").forEach(function (config){
@@ -458,7 +458,7 @@ Tars.server.getServant("./TRom.NodeJsTestServer.config.conf").forEach(function (
 ```javascript
 //将文件保存为Protocol.js
 var EventEmitter = require("events").EventEmitter;
-var util         = require("@tars/util");
+var util         = require("util");
 
 var stream = function () {
     EventEmitter.call(this);
@@ -555,7 +555,7 @@ stream.prototype.reset = function () {
 客户端使用该协议解析器，调用服务端的代码：
 
 ```
-var Tars      = require("@tars/tars").client;
+var Tars      = require("@tars/rpc").client;
 var Protocol = require("./ProtocolClient.js");
 
 var prx      = Tars.stringToProxy(Tars.ServantProxy, "test@tcp -h 127.0.0.1 -p 12306 -t 60000");
@@ -622,7 +622,7 @@ module.exports = Handle;
 
 服务端启动函数的代码示例：
 ```
-var Tars         = require("@tars/tars").server;
+var Tars         = require("@tars/rpc").server;
 var Protocol    = require("./ProtocolClient.js");
 var Handle      = require("./EchoHandle.js");
 
