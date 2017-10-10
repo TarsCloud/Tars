@@ -628,19 +628,21 @@ PHP_METHOD(tup,decode) {
 
     code = atoi(JString_data(tmp));
 
+    // 获取msg
+    char * msg;
+    ret = Unipacket_getMsg(unpack,&tmp);
+
+    msg = JS_STRVAL(tmp);
+    int msg_len = JS_STRLEN(tmp);
+
     if(code != TARS_SUCCESS) {
         add_assoc_long(return_value,"code",code);
+        add_assoc_stringl(return_value,"msg",msg, msg_len, 1);
+
         if(tmp) JString_del(&tmp);
         if(unpack) UniPacket_del(&unpack);
         return;
     }
-
-    // 获取msg
-    char * msg;
-    ret = Unipacket_getMsg(unpack,tmp);
-
-    msg = JS_STRVAL(tmp);
-    int msg_len = JS_STRLEN(tmp);
 
     TarsOutputStream *os = TarsOutputStream_new();
     if (!os) {

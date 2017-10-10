@@ -130,7 +130,7 @@ void  UniPacket_setVersion(UniPacket * pack, Short siVersion);
 Short UniPacket_getVersion(UniPacket * pack);
 
 Int32 Unipacket_getCode(UniPacket* unpack,JString *tmp);
-Int32 Unipacket_getMsg(UniPacket* unpack,JString *tmp);
+Int32 Unipacket_getMsg(UniPacket* unpack,JString **tmp);
 
 Int32 UniPacket_decode(UniPacket * pack, const char* buff, uint32_t len);
 
