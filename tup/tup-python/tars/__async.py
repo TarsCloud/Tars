@@ -68,8 +68,6 @@ class AsyncProcThread:
 
         for runner in self.__runners:
             runner.terminate()
-            # todo
-            # self.__queue.notify
 
         for runner in self.__runners:
             runner.join()

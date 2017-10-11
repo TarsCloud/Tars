@@ -53,7 +53,7 @@ class DataHead:
             helper = (tag << 4) | vtype;
             buff.writeBuf(struct.pack('!B', helper));
         else:
-            helper = ((0xF0 | vtype) << 8) | tag;
+            helper = (0xF0 | vtype) << 8 | tag;
             buff.writeBuf(struct.pack('!H', helper));
 
 class TarsOutputStream(object):
@@ -247,7 +247,7 @@ class TarsInputStream(object):
         while self.__buffer.position < length:
             t, p, l = self.__peekFrom();
             if tag <= t or p == DataHead.EN_STRUCTEND:
-                return False if p == DataHead.EN_STRUCTEND else t == tag;
+                return False if (p == DataHead.EN_STRUCTEND) else (t == tag);
 
             self.__buffer.position += l;
             self.__skipField(p);

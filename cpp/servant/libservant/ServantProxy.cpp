@@ -116,6 +116,7 @@ ServantProxyThreadData::ServantProxyThreadData()
 
 ServantProxyThreadData::~ServantProxyThreadData()
 {
+    try
     {
         TC_LockT<TC_ThreadMutex> lock(_mutex);
 
@@ -136,6 +137,9 @@ ServantProxyThreadData::~ServantProxyThreadData()
         }
 
         _pSeq->del(_reqQNo);
+    }
+    catch (...)
+    {
     }
 }
 

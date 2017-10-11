@@ -393,7 +393,7 @@ CREATE TABLE `t_server_conf` (
   `tars_version` varchar(128) NOT NULL DEFAULT '',
   `posttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `lastuser` varchar(30) DEFAULT NULL,
-  `server_type` enum('tars_cpp','not_tars','tars_java') NOT NULL DEFAULT 'tars_cpp',
+  `server_type` enum('tars_cpp','not_tars','tars_java', 'tars_nodejs') NOT NULL DEFAULT 'tars_cpp',
   `start_script_path` varchar(128) DEFAULT NULL,
   `stop_script_path` varchar(128) DEFAULT NULL,
   `monitor_script_path` varchar(128) DEFAULT NULL,

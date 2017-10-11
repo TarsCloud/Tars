@@ -148,7 +148,8 @@ clean:
 	rm -vf $(LOCAL_OBJ) $(TARS_H) $(TARGET) $(TARGETS) ${CLEANFILE} .*.d.tmp gmon.out
 
 cleanall:
-	rm -vf $(LOCAL_OBJ) $(TARS_H) $(TARGET) $(TARGETS) $(DEP_FILE) ${CLEANFILE} *.o .*.d.tmp .*.d gmon.out *.tgz
+	rm -vf $(LOCAL_OBJ) $(TARS_H) $(TARGET) $(TARGETS) $(DEP_FILE) ${CLEANFILE} *.o .*.d.tmp .*.d gmon.out
+	rm -vf $(TARGET)*.tgz
 
 HELP += $(HELP_CLEAN)
 HELP += $(HELP_CLEANALL)
