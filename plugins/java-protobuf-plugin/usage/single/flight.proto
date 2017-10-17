@@ -1,0 +1,20 @@
+option java_generic_services = true;
+package com.iflytek.grpc.flight;
+
+message QueryFlightRequest{
+  required string name=1;
+  required string password=2;
+  required string departureCity=3;
+  required string destinationCity=4;
+};
+
+message QueryFlightResponse{
+  required int32 errcode=1;
+  required string errmsg=2;
+  required string flightsInfo=3;
+};
+
+service FlightService{
+  rpc queryFlight(QueryFlightRequest) returns (QueryFlightResponse);
+  rpc queryFlightDelay(QueryFlightRequest) returns (QueryFlightResponse);
+}
