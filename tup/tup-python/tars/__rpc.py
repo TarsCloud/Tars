@@ -158,7 +158,6 @@ class ServantProxy(object):
         @type status:
         @return: 响应报文
         @rtype: ResponsePacket
-        @todo: 发送内容还没有context和status
         '''
         tarsLogger.debug('ServantProxy:tars_invoke, func: %s', sFuncName)
         req = RequestPacket()
@@ -213,7 +212,6 @@ class ServantProxy(object):
         @type callback: ServantProxyCallback的子类
         @return: 响应报文
         @rtype: ResponsePacket
-        @todo: 发送内容还没有context和status
         '''
         tarsLogger.debug('ServantProxy:tars_invoke')
         req = RequestPacket()
@@ -261,8 +259,6 @@ class ServantProxy(object):
         @type reqmsg: ReqMessage
         @return: 调用成功或失败
         @rtype: bool
-        @todo: 返回值处理不明确，需要修改tars_invoke和返回值处理部分
-               函数体太大，适当拆分
         '''
         tarsLogger.debug('ServantProxy:invoke, func: %s', reqmsg.request.sFuncName)
         ret = self.__object.invoke(reqmsg)
@@ -291,7 +287,6 @@ class ServantProxy(object):
             reqmsg.lock.wait(self.__timeout())
             reqmsg.lock.release()
 
-            # TODO : 怎么知道这是等待超时而不是收到notify
             if not reqmsg.response:
                 errmsg = ('ServantProxy::invoke timeout: %d, servant name'
                           ': %s, adapter: %s, request id: %d' % (
@@ -426,7 +421,6 @@ class Communicator:
         self.__reactor.start()
 
         self.__qTimeout = QueueTimeout()
-        # TODO 这里需要设置超时时间
         self.__qTimeout.setHandler(self.handleTimeout)
         self.__qTimeout.start()
 
@@ -440,7 +434,6 @@ class Communicator:
     def terminate(self):
         '''
         @brief: 不再使用通讯器需调用此函数释放资源
-        @todo: 解决重复调用问题和析构时调用些函数
         '''
         tarsLogger.debug('Communicator:terminate')
 
@@ -551,7 +544,6 @@ class Communicator:
         @return: 设置是否成功
         @rtype: bool
         '''
-        #TODO 是否有必要加锁
         try:
             self.__config['tars']['application']['client'][name] = value
             return True
@@ -565,7 +557,6 @@ class Communicator:
         @type propertys: map, key type: str, value type: str
         @return: 无
         @rtype: None
-        @todo: 有待实现
         '''
         pass
 
@@ -719,7 +710,6 @@ class AdapterProxy:
         @type forceConnect: bool
         @return: 连接是否有效
         @rtype: bool
-        @todo: 功能有待完善，forceConnect的判断没有加上
         '''
         tarsLogger.debug('AdapterProxy:checkActive')
         self.__lock.acquire()
@@ -810,7 +800,6 @@ class AdapterProxy:
                        self.__trans.getEndPointInfo())
         return True
 
-    # TODO adapter超时设置
     def finishInvoke(self, isTimeout):
         pass
 
@@ -1038,8 +1027,6 @@ class AdapterProxyManager:
         @brief: 刷新服务器列表
         @return: 新的服务列表
         @rtype: EndPointInfo列表
-        @todo: 有必要在这里加锁吗？
-        @note: setEndpoints是加了锁的
         '''
         tarsLogger.debug('AdapterProxyManager:refreshEndpoints')
         if self.__isDirectProxy:
@@ -1084,7 +1071,6 @@ class AdapterProxyManager:
     def setEndpoints(self, eplist):
         '''
         @brief: 设置服务端信息
-        @todo: 这块代码写得太乱了
         '''
         tarsLogger.debug('AdapterProxyManager:setEndpoints')
         adps = {}

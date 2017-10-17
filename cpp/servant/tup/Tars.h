@@ -551,6 +551,38 @@ namespace tars
             ::memcpy(buf, _buf + _cur + offset, len);
         }
 
+        /// 读取缓存 for vector<char>
+        template <typename Alloc>
+        void readBuf(std::vector<Char, Alloc>& v, size_t len)
+        {
+            if(len <= _buf_len && (_cur + len) <= _buf_len)
+            {
+                peekBuf(v, len);
+                _cur += len;
+            }
+            else
+            {
+                char s[64];
+                snprintf(s, sizeof(s), "buffer overflow when skip, over %u.", (uint32_t)_buf_len);
+                throw TarsDecodeException(s);
+            }
+        }
+
+        /// 读取缓存，但不改变偏移量 for vector<char>
+        template <typename Alloc>
+        void peekBuf(std::vector<Char, Alloc>& v, size_t len, size_t offset = 0)
+        {
+            if (_cur + offset + len > _buf_len)
+            {
+                char s[64];
+                snprintf(s, sizeof(s), "buffer overflow when peekBuf, over %u.", (uint32_t)_buf_len);
+                throw TarsDecodeException(s);
+            }
+
+            const char* begin = _buf + _cur + offset;
+            v.assign(begin, begin + len);
+        }
+
         /// 跳过len个字节
         void skip(size_t len)
         {
@@ -1481,11 +1513,7 @@ namespace tars
                             throw TarsDecodeInvalidValue(s);
                         }
                         
-                        v.reserve(size);
-                        v.resize(size);
-                        
-                        this->readBuf(&v[0], size);
-                        //TarsReadTypeBuf(*this, v[0], Int32);
+                        this->readBuf(v, size);
                     }
                     break;
                 case TarsHeadeList:

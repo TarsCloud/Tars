@@ -808,7 +808,7 @@ ids // 配置文件ID，用;分隔
     "serial": true, // 是否串行
     "items": [{
         "server_id": "",    // 服务
-        "command ": "",     // 命令字
+        "command": "",     // 命令字
         "parameters": {     // 参数
         }
     }]
