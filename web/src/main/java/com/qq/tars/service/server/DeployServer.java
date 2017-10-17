@@ -35,7 +35,7 @@ public class DeployServer {
     private String nodeName;
 
     @NotBlank
-    @Value(values = {"tars_cpp", "tars_java", "not_tars"})
+    @Value(values = {"tars_cpp", "tars_java", "tars_nodejs", "tars_php", "not_tars"})
     private String serverType;
 
     @NotBlank

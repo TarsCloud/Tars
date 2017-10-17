@@ -1,0 +1,35 @@
+{
+  "name": "@tars/deploy",
+  "preferGlobal": "true",
+  "version": "0.0.5",
+  "description": "TARS 框架服务打包工具",
+  "author": {
+    "name": "Superzheng",
+    "email": "superzheng@tencent.com"
+  },
+  "homepage": "https://github.com/tars-node/deploy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tars-node/deploy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tars-node/deploy/issues"
+  },
+  "keywords": [
+    "deploy",
+    "tars"
+  ],
+  "dependencies": {
+    "commander": "2.9.0",
+    "chalk": "1.1.3",
+    "async": "2.1.5",
+    "fs-extra": "2.0.0",
+    "fstream": "1.0.11",
+    "tar": "2.2.1",
+    "pad": "1.1.0"
+  },
+  "bin": {
+    "tars-deploy": "./bin/tars-deploy"
+  },
+  "license": "BSD-3-Clause"
+}

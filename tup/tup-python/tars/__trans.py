@@ -61,7 +61,6 @@ class EndPointInfo:
 class Transceiver:
     '''
     @brief: 网络传输基类，提供网络send/recv接口
-    @todo: log里还没有object name
     '''
     CONNECTED = 0
     CONNECTING = 1
@@ -177,7 +176,6 @@ class Transceiver:
         @return: None
         @rtype: None
         @note: 没有加锁，多线程调用会有race conditions
-        @todo: 用列表实现_sendBuff会比字符串连接省时间
         '''
         self._sendBuff += msg
 
