@@ -233,7 +233,7 @@ class SimpleStruct extends \TARS_Struct {
 
 3. 在composer.json中指定require类库:
 ```
-    "phptars/tars-assistant" : "0.1.6"
+    "phptars/tars-assistant" : "0.1.7"
 ```
 
 4. 执行composer install命令安装类库,此时会出现vendor目录
