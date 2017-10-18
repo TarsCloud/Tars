@@ -34,6 +34,8 @@ extern zend_module_entry phptars_module_entry;
 #include "TSRM.h"
 #endif
 
+#include "php7_wrapper.h"
+
 zend_class_entry * tup_ce;
 zend_class_entry * tup_exception_ce;
 zend_class_entry * tars_ce;
