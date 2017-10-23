@@ -62,6 +62,7 @@ public class Server {
             System.out.println("[SERVER] server is ready...");
         } catch (Throwable ex) {
             System.out.println("[SERVER] failed to start server...");
+            ex.printStackTrace();
             System.out.close();
             System.err.close();
             System.exit(-1);

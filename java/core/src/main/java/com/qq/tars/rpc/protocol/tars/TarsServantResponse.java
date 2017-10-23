@@ -23,6 +23,7 @@ import com.qq.tars.net.client.ticket.TicketManager;
 import com.qq.tars.net.core.Session;
 import com.qq.tars.net.protocol.ProtocolException;
 import com.qq.tars.protocol.tars.TarsInputStream;
+import com.qq.tars.rpc.protocol.Codec;
 import com.qq.tars.rpc.protocol.ServantResponse;
 
 public class TarsServantResponse extends ServantResponse implements java.io.Serializable {
@@ -61,7 +62,8 @@ public class TarsServantResponse extends ServantResponse implements java.io.Seri
         }
         this.setRequest((TarsServantRequest) ticket.request());
         try {
-            TarsCodecHelper.decodeResponseBody(this);
+            ((TarsCodec) this.session.getProtocolFactory().getDecoder()).decodeResponseBody(this);
+//            TarsCodecHelper.decodeResponseBody(this);
         } catch (Throwable e) {
             this.setCause(e);
         }

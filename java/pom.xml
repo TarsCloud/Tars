@@ -12,6 +12,7 @@
 		<module>net</module>
 		<module>core</module>
     	<module>tools</module>
+		<module>protobuf</module>
   	</modules>
 
 	<properties>

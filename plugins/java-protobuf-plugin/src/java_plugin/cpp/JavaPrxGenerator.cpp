@@ -267,6 +267,7 @@ namespace JavaTarsPrxGenerator
         TarsWriteServiceDocComment(p, service);
         p->Print(
                 *vars,
+                "@Servant\n"
                 "@ServantCodec(codec = ProtoCodec.class)\n"
                         "public interface $service_class_name$ {\n");
         p->Indent();

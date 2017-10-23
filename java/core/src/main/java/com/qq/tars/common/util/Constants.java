@@ -56,6 +56,7 @@ public interface Constants {
 
     String TARS_PROTOCOL = "tars";
     String HTTP_PROTOCOL = "http";
+    String PROTO_PROTOCOL = "protobuff";
     String TARS_AT = "@";
     String TARS_API = "api";
     String TARS_JCE_VERSION = "version";

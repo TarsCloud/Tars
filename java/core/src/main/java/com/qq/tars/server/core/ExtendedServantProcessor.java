@@ -74,7 +74,7 @@ public abstract class ExtendedServantProcessor<RES extends ExtendedServantReques
             context.setAttribute(Context.INTERNAL_SESSION_DATA, session);
 
             // 4. Get the AppContext
-            appContext = container.getDefaultAppContext();
+            appContext = (AppContextImpl) container.getDefaultAppContext();
             if (appContext == null) throw new RuntimeException("failed to find the application named:[ROOT]");
 
             // 5. Set the AppClassLoader
