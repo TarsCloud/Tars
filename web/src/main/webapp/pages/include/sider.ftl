@@ -15,7 +15,7 @@
 -->
 
 <div class="frame-sidebar">
-    <div class="panel panel-default" style="margin-left:10px">
+    <div class="panel-default">
         <div class="panel-body">
             <div class="tree-container" id="tree-container">
                 <div id="filetree" class="ztree"></div>
