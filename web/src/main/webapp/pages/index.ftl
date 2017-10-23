@@ -36,7 +36,7 @@
     <script src="../js/common.js"></script>
     <script src="../js/index.js"></script>
     <style>
-        .frame-sidebar{position:absolute;width:250px;left:0;top:65px;bottom:0;overflow:hidden}
+        .frame-sidebar{position:absolute;width:240px;left:10px;top:65px;bottom:15px;overflow-y:auto;overflow-x: hidden;border:solid 1px #ddd;border-radius: 5px;}
         .frame-primary{margin: 65px 0 0 250px;}
         .tab-pane iframe{width: 100%;height: 100%;}
     </style>
