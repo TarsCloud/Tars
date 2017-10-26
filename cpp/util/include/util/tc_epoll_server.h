@@ -327,6 +327,9 @@ public:
         uint32_t  _iWaitTime;
 
     };
+
+    typedef TC_Functor<bool /*processed*/, TL::TLMaker<void* /*conn*/, const std::string& /*data*/ >::Result> auth_process_wrapper_functor;
+
     ////////////////////////////////////////////////////////////////////////////
     // 服务端口管理,监听socket信息
     class BindAdapter : public TC_ThreadLock, public TC_HandleBase
@@ -674,6 +677,18 @@ public:
          */
         size_t getBackPacketBuffLimit();
 
+        /**
+         * 注册鉴权包裹函数
+         * @param apwf
+         */
+        void setAuthProcessWrapper(const auth_process_wrapper_functor& apwf) { _authWrapper = apwf; }
+
+        void setAkSk(const std::string& ak, const std::string& sk) { _accessKey = ak; _secretKey = sk; }
+
+        bool checkAkSk(const std::string& ak, const std::string& sk) { return ak == _accessKey && sk == _secretKey; }
+
+        std::string getSk(const std::string& ak) const { return (_accessKey == ak) ? _secretKey : ""; }
+
     public:
 
         //统计上报的对象
@@ -788,6 +803,16 @@ public:
         //回包缓存限制大小
         size_t                    _iBackPacketBuffLimit;
 
+        /**
+         * 包裹认证函数,不能为空
+         */
+        auth_process_wrapper_functor _authWrapper;
+
+        /**
+         * 该obj的AK SK
+         */
+        std::string                 _accessKey;
+        std::string                 _secretKey;
     };
 
     ////////////////////////////////////////////////////////////////////////////
@@ -910,6 +935,11 @@ public:
 
             bool IsEmptyConn() const  {return _bEmptyConn;}
 
+            /**
+             * Init Auth State;
+             */
+            void tryInitAuthState(int initState);
+
         protected:
             /**
              * 关闭连接
@@ -931,12 +961,12 @@ public:
              */
              virtual int send();
 
-			/**
-			 * 发送buffer-slices
-			 * @param slices
-			 * @return int, -1:发送出错, >= 0:发送的字节数
-			 */
-			int send(const std::vector<TC_Slice>& slices);
+             /**
+              * 发送buffer-slices
+              * @param slices
+              * @return int, -1:发送出错, >= 0:发送的字节数
+              */
+             int send(const std::vector<TC_Slice>& slices);
 
 
             /**
@@ -969,25 +999,24 @@ public:
             friend class NetThread;
 
         private:
-			/**
-			 * tcp发送数据
-			 */
+            /**
+             * tcp发送数据
+             */
             int tcpSend(const void* data, size_t len);
             int tcpWriteV(const std::vector<iovec>& buffers);
 
-			/**
-			 * 清空buffer-slices
-			 * @param slices
-			 */
-			void clearSlices(std::vector<TC_Slice>& slices);
+            /**
+             * 清空buffer-slices
+             * @param slices
+             */
+            void clearSlices(std::vector<TC_Slice>& slices);
 
-			/**
-			 * 整理buffer-slices
-			 * @param slices
-			 * @param toSkippedBytes 
-			 */
-			void adjustSlices(std::vector<TC_Slice>& slices, size_t toSkippedBytes);
-
+            /**
+             * 整理buffer-slices
+             * @param slices
+             * @param toSkippedBytes 
+             */
+            void adjustSlices(std::vector<TC_Slice>& slices, size_t toSkippedBytes);
 
         public:
             /**
@@ -1069,6 +1098,15 @@ public:
             char                *_pRecvBuffer;
 
             size_t                _nRecvBufferSize;
+        public:
+            /*
+             *该连接的鉴权状态
+             */
+            int                 _authState;
+            /*
+             *该连接的鉴权状态是否初始化了
+             */
+            bool                _authInit;
         };
         ////////////////////////////////////////////////////////////////////////////
         /**
@@ -1523,20 +1561,20 @@ public:
          */
         size_t                         _nUdpRecvBufferSize;
 
-		/**
-		 * 属于该网络线程的内存池,目前主要用于发送使用
-		 */
-		TC_BufferPool*                 _bufferPool;
+        /**
+         * 属于该网络线程的内存池,目前主要用于发送使用
+         */
+        TC_BufferPool*                 _bufferPool;
 
-		/**
-		 * 该网络线程的内存池所负责分配的最小字节和最大字节(2的幂向上取整)
-		 */
+        /**
+         * 该网络线程的内存池所负责分配的最小字节和最大字节(2的幂向上取整)
+         */
         size_t                         _poolMinBlockSize;
         size_t                         _poolMaxBlockSize;
 
-		/**
-		 * 该网络线程的内存池hold的最大字节
-		 */
+        /**
+         * 该网络线程的内存池hold的最大字节
+         */
         size_t                         _poolMaxBytes;
     };
     ////////////////////////////////////////////////////////////////////////////
@@ -1562,10 +1600,10 @@ public:
      */
     void setEmptyConnTimeout(int timeout);
 
-	/**
-	 *设置NetThread的内存池信息
-	 */
-	void setNetThreadBufferPoolInfo(size_t minBlock, size_t maxBlock, size_t maxBytes);
+    /**
+     *设置NetThread的内存池信息
+     */
+    void setNetThreadBufferPoolInfo(size_t minBlock, size_t maxBlock, size_t maxBytes);
 
     /**
      * 设置本地日志

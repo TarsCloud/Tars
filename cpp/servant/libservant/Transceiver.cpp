@@ -18,6 +18,7 @@
 #include "servant/AdapterProxy.h"
 #include "servant/Application.h"
 #include "servant/TarsLogger.h"
+#include "servant/AuthLogic.h"
 
 namespace tars
 {
@@ -28,6 +29,7 @@ Transceiver::Transceiver(AdapterProxy * pAdapterProxy,const EndpointInfo &ep)
 , _fd(-1)
 , _connStatus(eUnconnected)
 , _conTimeoutTime(0)
+, _authState(AUTH_INIT)
 {
     _fdInfo.iType = FDInfo::ET_C_NET;
     _fdInfo.p     = (void *)this;
@@ -131,6 +133,59 @@ void Transceiver::setConnected()
     _connStatus = eConnected;
     _adapterProxy->setConTimeout(false);
     _adapterProxy->addConnExc(false);
+
+    _onConnect();
+}
+
+void Transceiver::_onConnect()
+{
+    _doAuthReq();
+}
+
+void Transceiver::_doAuthReq()
+{
+    ObjectProxy* obj = _adapterProxy->getObjProxy();
+        
+    TLOGINFO("[TARS][_onConnect:" << obj->name() << " auth Type is " << _adapterProxy->endpoint().authType() << endl);
+    
+    if (_adapterProxy->endpoint().authType() == AUTH_TYPENONE)
+    {
+        _authState = AUTH_SUCC;
+        _adapterProxy->doInvoke();
+    }
+    else
+    {
+        BasicAuthInfo basic;
+        basic.sObjName = obj->name();
+        basic.sAccessKey = obj->getAccessKey();
+        basic.sSecretKey = obj->getSecretKey();
+
+        this->sendAuthData(basic);
+    }
+}
+
+bool Transceiver::sendAuthData(const BasicAuthInfo& info)
+{
+    assert (_authState != AUTH_SUCC);
+
+    ObjectProxy* objPrx = _adapterProxy->getObjProxy();
+
+    // 走框架的AK/SK认证 
+    std::string out = tars::defaultCreateAuthReq(info); 
+                                        
+    RequestPacket request; 
+    request.sBuffer.assign(out.begin(), out.end()); 
+
+    std::string toSend; 
+    objPrx->getProxyProtocol().requestFunc(request, toSend); 
+    if (sendRequest(toSend.data(), toSend.size(), true) == eRetError) 
+    { 
+        TLOGERROR("[TARS][Transceiver::setConnected failed sendRequest for Auth\n"); 
+        close(); 
+        return false; 
+    } 
+
+    return true;
 }
 
 void Transceiver::close()
@@ -148,6 +203,8 @@ void Transceiver::close()
     _sendBuffer.Clear();
 
     _recvBuffer.Clear();
+
+    _authState = AUTH_INIT;
 
     TLOGINFO("[TARS][trans close:"<< _adapterProxy->getObjProxy()->name()<< "," << _ep.desc() << "]" << endl);
 }
@@ -191,12 +248,11 @@ int Transceiver::doRequest()
 
     //object里面应该是空的
     assert(_adapterProxy->getObjProxy()->timeoutQSize()  == 0);
-    //_adapterProxy->getObjProxy()->doInvoke();
 
     return 0;
 }
 
-int Transceiver::sendRequest(const char * pData, size_t iSize)
+int Transceiver::sendRequest(const char * pData, size_t iSize, bool forceSend)
 {
     //空数据 直接返回成功
     if(iSize == 0)
@@ -208,6 +264,13 @@ int Transceiver::sendRequest(const char * pData, size_t iSize)
     {
         return eRetError;
     }
+        
+    if (!forceSend && _authState != AUTH_SUCC)
+    {   
+        ObjectProxy* obj = _adapterProxy->getObjProxy();
+        TLOGINFO("[TARS][Transceiver::sendRequest temporary failed because need auth for " << obj->name() << endl);
+        return eRetError; // 需要鉴权但还没通过，不能发送非认证消息
+    }   
 
     //buf不为空,直接返回失败
     //等buffer可写了,epoll会通知写时间
@@ -398,6 +461,9 @@ UdpTransceiver::UdpTransceiver(AdapterProxy * pAdapterProxy, const EndpointInfo 
 : Transceiver(pAdapterProxy, ep)
 , _recvBuffer(NULL)
 {
+    // UDP不支持鉴权
+    _authState = AUTH_SUCC;
+
     if(!_recvBuffer)
     {
         _recvBuffer = new char[DEFAULT_RECV_BUFFERSIZE];
@@ -411,7 +477,7 @@ UdpTransceiver::UdpTransceiver(AdapterProxy * pAdapterProxy, const EndpointInfo 
 
 UdpTransceiver::~UdpTransceiver()
 {
-    if(!_recvBuffer)
+    if(_recvBuffer)
     {
         delete _recvBuffer;
         _recvBuffer = NULL;

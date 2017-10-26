@@ -32,9 +32,10 @@ TC_Endpoint::TC_Endpoint()
     _qos = 0;
     _weight = -1;
     _weighttype = 0;
+    _authType = 0;
 }
 
-void TC_Endpoint::init(const string& host, int port, int timeout, int istcp, int grid, int qos, int weight, unsigned int weighttype)
+void TC_Endpoint::init(const string& host, int port, int timeout, int istcp, int grid, int qos, int weight, unsigned int weighttype, int authType)
 {
     _host = host;
     _port = port;
@@ -56,6 +57,8 @@ void TC_Endpoint::init(const string& host, int port, int timeout, int istcp, int
         _weight = (weight > 100 ? 100 : weight);
         _weighttype = weighttype;
     }
+
+    _authType = authType;
 }
 
 void TC_Endpoint::parse(const string &str)
@@ -64,6 +67,7 @@ void TC_Endpoint::parse(const string &str)
     _qos = 0;
     _weight = -1;
     _weighttype = 0;
+    _authType = 0;
 
     const string delim = " \t\n\r";
 
@@ -196,6 +200,16 @@ void TC_Endpoint::parse(const string &str)
                 }
                 break;
             }
+            // auth type
+            case 'e':
+            {
+                istringstream p(argument);
+                if (!(p >> const_cast<int&>(_authType)) || !p.eof() || _authType < 0 || _authType > 1)
+                {
+                    throw TC_EndpointParse_Exception("TC_Endpoint::parse -e error : " + str);
+                }
+                break;
+            }
             default:
             {
                 ///throw TC_EndpointParse_Exception("TC_Endpoint::parse error : " + str);
@@ -221,6 +235,11 @@ void TC_Endpoint::parse(const string &str)
     {
         const_cast<string&>(_host) = "0.0.0.0";
     }
+
+    if (_authType < 0)
+        _authType = 0;
+    else if (_authType > 0)
+        _authType = 1;
 }
 
 /*************************************TC_TCPClient**************************************/

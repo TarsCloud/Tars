@@ -1176,6 +1176,7 @@ int CDbHandle::loadObjectIdCache(const bool bRecoverProtect, const int iRecoverP
                 epf.port        = ep.getPort();
                 epf.timeout     = ep.getTimeout();
                 epf.istcp       = ep.isTcp();
+                epf.authType    = ep.getAuthType();
                 epf.grouprealid = getGroupId(epf.host);
                 string ip_group_name = res[i]["ip_group_name"];
                 epf.grouprealid = ip_group_name.empty() ? getGroupId(epf.host) : getGroupIdByName(ip_group_name);

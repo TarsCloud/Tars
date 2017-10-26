@@ -610,6 +610,7 @@ TC_EpollServer::NetThread::Connection::Connection(TC_EpollServer::BindAdapter *p
 , _bEmptyConn(true)
 , _pRecvBuffer(NULL)
 , _nRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
+, _authInit(false)
 
 {
     assert(fd != -1);
@@ -632,7 +633,7 @@ TC_EpollServer::NetThread::Connection::Connection(BindAdapter *pBindAdapter, int
 ,_bEmptyConn(false) /*udp is always false*/
 ,_pRecvBuffer(NULL)
 ,_nRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
-
+, _authInit(false)
 
 {
     _iLastRefreshTime = TNOW;
@@ -653,6 +654,7 @@ TC_EpollServer::NetThread::Connection::Connection(BindAdapter *pBindAdapter)
 ,_bEmptyConn(false) /*udp is always false*/
 ,_pRecvBuffer(NULL)
 ,_nRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
+, _authInit(false)
 
 {
     _iLastRefreshTime = TNOW;
@@ -670,6 +672,15 @@ TC_EpollServer::NetThread::Connection::~Connection()
     if(_lfd != -1)
     {
         assert(!_sock.isValid());
+    }
+}
+
+void TC_EpollServer::NetThread::Connection::tryInitAuthState(int initState)
+{
+    if (!_authInit)
+    {
+        _authState = initState;
+        _authInit = true;
     }
 }
 
@@ -760,6 +771,10 @@ int TC_EpollServer::NetThread::Connection::parseProtocol(recv_queue::queue_type 
             }
             else if(b == TC_EpollServer::PACKET_FULL)
             {
+                if (_pBindAdapter->_authWrapper &&
+                    _pBindAdapter->_authWrapper(this, ro))
+                    continue;
+
                 tagRecvData* recv = new tagRecvData();
                 recv->buffer           = ro;
                 recv->ip               = _ip;

@@ -272,6 +272,25 @@ ServantProxy::ServantProxy(Communicator * pCommunicator, ObjectProxy ** ppObject
     {
         _minTimeout = 1;
     }
+    // get AK/SK
+    const TC_Config& conf = Application::getConfig();
+    vector<string> adapterNames;
+             
+    if (conf.getDomainVector("/tars/application/client", adapterNames))
+    {
+        vector<string>::const_iterator it = std::find(adapterNames.begin(), adapterNames.end(), tars_name());
+        if (it != adapterNames.end())
+        {
+            string accessKey = conf.get("/tars/application/client/" + *it + "<accesskey>");
+            string secretKey = conf.get("/tars/application/client/" + *it + "<secretkey>");
+
+            for(size_t i = 0;i < _objectProxyNum; ++i)
+            {
+               _objectProxy[i]->setAccessKey(accessKey);
+               _objectProxy[i]->setSecretKey(secretKey);
+            }
+        }
+    }
 }
 
 ServantProxy::~ServantProxy()
