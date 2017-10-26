@@ -383,7 +383,7 @@ TaskListParallel::TaskListParallel(const TaskReq &taskReq)
 : TaskList(taskReq)
 {
     //最大并行线程数
-    size_t num = taskReq.taskItemReq.size() < 20 ? 20 : taskReq.taskItemReq.size();
+    size_t num = taskReq.taskItemReq.size() > 10 ? 10 : taskReq.taskItemReq.size();
     _pool.init(num); 
     _pool.start();
 }
@@ -430,6 +430,38 @@ ExecuteTask::~ExecuteTask()
 {
     _terminate = true;
 }
+
+void ExecuteTask::run()
+{
+    const time_t diff = 2*60;//2分钟
+    while (!_terminate)
+    {
+        {
+            TC_ThreadLock::Lock lock(*this);
+            map<string, TaskList* >::iterator it = _task.begin();
+            while (it != _task.end())
+            {
+                if(TC_TimeProvider::getInstance()->getNow() - it->second->getCreateTime() > diff)
+                {
+                    TLOGDEBUG("==============ExecuteTask::run, delete old task, taskNo=" << it->first << endl);
+                    TaskList *tmp = it->second;
+                    _task.erase(it++);
+                    delete tmp;
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+        }
+
+        {
+            TC_LockT<TC_ThreadLock> lock(*this);
+            timedWait(5*1000);
+        }
+    }
+}
+
 
 int ExecuteTask::addTaskReq(const TaskReq &taskReq)
 {
