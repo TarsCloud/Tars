@@ -108,6 +108,8 @@ public:
 
     virtual void run();
 
+    void terminate();
+
     /**
      * 添加任务请求
      * 

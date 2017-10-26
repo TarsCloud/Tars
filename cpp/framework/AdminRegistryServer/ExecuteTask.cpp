@@ -424,11 +424,20 @@ void TaskListParallel::doTask(TaskItemReq req, size_t index)
 
 ExecuteTask::ExecuteTask()
 {
+    _terminate = false;
+    start();
 }
 
 ExecuteTask::~ExecuteTask()
 {
+    terminate();
+}
+
+void ExecuteTask::terminate()
+{
     _terminate = true;
+    TC_LockT<TC_ThreadLock> lock(*this);
+    notifyAll();
 }
 
 void ExecuteTask::run()
