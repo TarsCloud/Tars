@@ -28,6 +28,21 @@ class Utils {
         'string' => '\TARS::STRING',
         'vector' => 'new \TARS_VECTOR',
         'map' => 'new \TARS_MAP',
+        'Bool' => '\TARS::BOOL',
+        'Byte' => '\TARS::CHAR',
+        'Char' => '\TARS::CHAR',
+        'Unsigned byte' => '\TARS::UINT8',
+        'Unsigned char' => '\TARS::UINT8',
+        'Short' => '\TARS::SHORT',
+        'Unsigned short' => '\TARS::UINT16',
+        'Int' => '\TARS::INT32',
+        'Unsigned int' => '\TARS::UINT32',
+        'Long' => '\TARS::INT64',
+        'Float' => '\TARS::FLOAT',
+        'Double' => '\TARS::DOUBLE',
+        'String' => '\TARS::STRING',
+        'Vector' => 'new \TARS_VECTOR',
+        'Map' => 'new \TARS_MAP',
     );
 
     public static $typeMap = array(
@@ -48,6 +63,23 @@ class Utils {
         'map' => '\TARS::MAP',
         'enum' => '\TARS::UINT8',// 应该不会出现
         'struct' => '\TARS::STRUCT',// 应该不会出现
+        'Bool' => '\TARS::BOOL',
+        'Byte' => '\TARS::CHAR',
+        'Char' => '\TARS::CHAR',
+        'Unsigned byte' => '\TARS::UINT8',
+        'Unsigned char' => '\TARS::UINT8',
+        'Short' => '\TARS::SHORT',
+        'Unsigned short' => '\TARS::UINT16',
+        'Int' => '\TARS::INT32',
+        'Unsigned int' => '\TARS::UINT32',
+        'Long' => '\TARS::INT64',
+        'Float' => '\TARS::FLOAT',
+        'Double' => '\TARS::DOUBLE',
+        'String' => '\TARS::STRING',
+        'Vector' => '\TARS::VECTOR',
+        'Map' => '\TARS::MAP',
+        'Enum' => '\TARS::UINT8',// 应该不会出现
+        'Struct' => '\TARS::STRUCT',// 应该不会出现
     );
 
     public static function getPackMethods($type) {
@@ -67,7 +99,23 @@ class Utils {
             'string' => 'putString',
             'enum' => 'putUInt8',
             'map' => 'putMap',
-            'vector' => 'putVector'
+            'vector' => 'putVector',
+            'Bool' => 'putBool',
+            'Byte' => 'putChar',
+            'Char' => 'putChar',
+            'Unsigned byte' => 'putUInt8',
+            'Unsigned char' => 'putUInt8',
+            'Short' => 'putShort',
+            'Unsigned short' => 'putUInt16',
+            'Int' => 'putInt32',
+            'Unsigned int' => 'putUInt32',
+            'Long' => 'putInt64',
+            'Float' => 'putFloat',
+            'Double' => 'putDouble',
+            'String' => 'putString',
+            'Enum' => 'putUInt8',
+            'Map' => 'putMap',
+            'Vector' => 'putVector'
         ];
 
         if(isset($packMethods[$type]))
@@ -92,7 +140,23 @@ class Utils {
             'string' => 'getString',
             'enum' => 'getUInt8',
             'map' => 'getMap',
-            'vector' => 'getVector'
+            'vector' => 'getVector',
+            'Bool' => 'getBool',
+            'Byte' => 'getChar',
+            'Char' => 'getChar',
+            'Unsigned byte' => 'getUInt8',
+            'Unsigned char' => 'getUInt8',
+            'Short' => 'getShort',
+            'Unsigned short' => 'getUInt16',
+            'Int' => 'getInt32',
+            'Unsigned int' => 'getUInt32',
+            'Long' => 'getInt64',
+            'Float' => 'getFloat',
+            'Double' => 'getDouble',
+            'String' => 'getString',
+            'Enum' => 'getUInt8',
+            'Map' => 'getMap',
+            'Vector' => 'getVector'
         ];
 
 
@@ -1335,8 +1399,8 @@ class InterfaceParser {
             else if(Utils::isMap($type)) {
 
                 $mapFill = $this->tripleTab."\$".$valueName."_map = ".$this->getExtType($param['wholeType'],$valueName).";".$this->returnSymbol.
-                    $this->tripleTab."foreach(\$".$valueName." as "."\$single".$valueName.") {".$this->returnSymbol.
-                    $this->quardupleTab."\$".$valueName."_map->pushBack(\$single".$valueName.");".$this->returnSymbol.
+                    $this->tripleTab."foreach(\$".$valueName." as "."\$key => \$value) {".$this->returnSymbol.
+                    $this->quardupleTab."\$".$valueName."_map->pushBack([\$key => \$value]);".$this->returnSymbol.
                     $this->tripleTab."}".$this->returnSymbol;
                 $bodyMiddle .= $mapFill;
                 $bodyMiddle .= $this->tripleTab.$commonPrefix.$packMethod."(\"".$valueName."\",\$".$valueName."_map);".$this->returnSymbol;

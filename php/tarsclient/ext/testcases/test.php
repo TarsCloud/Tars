@@ -330,10 +330,10 @@ class TarsTest extends PHPUnit_Framework_TestCase
 
     public function testSimpleMap()
     {
-        $strings = [["test1"=>1],["test2"=>2]];
+        $strings = ["test1"=>1,"test2"=>2];
         $map = new \TARS_MAP(\TARS::STRING,\TARS::INT64);
-        foreach ($strings as $string) {
-            $map->pushBack($string);
+        foreach ($strings as $key => $value) {
+            $map->pushBack([$key => $value]);
         }
 
         $buf = \TUPAPI::putMap("map",$map);
