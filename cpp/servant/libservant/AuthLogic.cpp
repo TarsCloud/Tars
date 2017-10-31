@@ -87,6 +87,10 @@ bool processAuth(void* c, const string& data)
         TarsOutputStream<BufferWriter> os;
         ResponsePacket response; 
         response.iVersion = TARSVERSION;
+        response.iRequestId = request.iRequestId;
+        response.iMessageType = request.iMessageType;
+        response.cPacketType = request.cPacketType;
+        response.iRet = 0;
         response.sBuffer.assign(out.begin(), out.end());
 
         response.writeTo(os);
@@ -136,8 +140,11 @@ int processAuthReqHelper(const BasicAuthPackage& pkg, const BasicAuthInfo& info)
     //assert (info.sHashSecretKey2 == "69c5fcebaa65b560eaf06c3fbeb481ae44b8d618");
 
     string tmpKey;
+    string hash2;
     {
-        string tmp = info.sHashSecretKey2;
+        string hash1 = TC_SHA::sha1str(info.sHashSecretKey2.data(), info.sHashSecretKey2.size());
+        hash2 = TC_SHA::sha1str(hash1.data(), hash1.size());
+        string tmp = hash2;
         const char* pt = (const char* )&pkg.iTime;
         for (size_t i = 0; i < sizeof pkg.iTime; ++ i)
         {
@@ -163,8 +170,8 @@ int processAuthReqHelper(const BasicAuthPackage& pkg, const BasicAuthInfo& info)
 
     // 4.server got secret1, then sha1(secret1), to compare secret2;
     string clientSecret2 = TC_SHA::sha1str(secret1.data(), secret1.size());
-    if (clientSecret2.size() != info.sHashSecretKey2.size() ||
-        !std::equal(clientSecret2.begin(), clientSecret2.end(), info.sHashSecretKey2.begin()))
+    if (clientSecret2.size() != hash2.size() ||
+        !std::equal(clientSecret2.begin(), clientSecret2.end(), hash2.begin()))
     {
         return AUTH_ERROR;
     }

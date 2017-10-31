@@ -173,7 +173,14 @@ bool Transceiver::sendAuthData(const BasicAuthInfo& info)
     // 走框架的AK/SK认证 
     std::string out = tars::defaultCreateAuthReq(info); 
                                         
+    const int kAuthType = 0x40;
     RequestPacket request; 
+    request.sFuncName = "tarsInnerAuthServer";
+    request.sServantName = "authServant";
+    request.iVersion = TARSVERSION;
+    request.iRequestId = 0;
+    request.cPacketType = TARSNORMAL;
+    request.iMessageType = kAuthType;
     request.sBuffer.assign(out.begin(), out.end()); 
 
     std::string toSend; 
