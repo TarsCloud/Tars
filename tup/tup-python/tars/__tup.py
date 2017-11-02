@@ -60,7 +60,7 @@ class TarsUniPacket(object):
         if self.__code.status.has_key("STATUS_RESULT_DESC") == False:
             return '';
 
-        return string.atoi(self.__code.status["STATUS_RESULT_DESC"]);
+        return self.__code.status["STATUS_RESULT_DESC"];
 
     def put(self, vtype, name, value):
         oos = TarsOutputStream();

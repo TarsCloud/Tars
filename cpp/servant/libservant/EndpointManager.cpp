@@ -237,7 +237,7 @@ void QueryEpBase::setEndpoints(const string & sEndpoints, set<EndpointInfo> & se
 
             EndpointInfo::EType type = (ep.isTcp() ? EndpointInfo::TCP : EndpointInfo::UDP);
 
-            string sSetDivision("");
+            string sSetDivision;
 
             //解析set分组信息
             {
@@ -269,7 +269,7 @@ void QueryEpBase::setEndpoints(const string & sEndpoints, set<EndpointInfo> & se
                 }
             }
 
-            EndpointInfo epi(ep.getHost(), ep.getPort(), type, ep.getGrid(), sSetDivision, ep.getQos(), ep.getWeight(), ep.getWeightType());
+            EndpointInfo epi(ep.getHost(), ep.getPort(), type, ep.getGrid(), sSetDivision, ep.getQos(), ep.getWeight(), ep.getWeightType(), ep.getAuthType());
 
             setEndpoints.insert(epi);
         }
@@ -474,7 +474,7 @@ void QueryEpBase::doEndpoints(const vector<tars::EndpointF>& activeEp, const vec
 
         EndpointInfo::EType type = (activeEp[i].istcp ? EndpointInfo::TCP : EndpointInfo::UDP);
 
-        EndpointInfo ep(activeEp[i].host, activeEp[i].port, type, activeEp[i].grid, activeEp[i].setId, activeEp[i].qos, activeEp[i].weight, activeEp[i].weightType);
+        EndpointInfo ep(activeEp[i].host, activeEp[i].port, type, activeEp[i].grid, activeEp[i].setId, activeEp[i].qos, activeEp[i].weight, activeEp[i].weightType, activeEp[i].authType);
 
         activeEps.insert(ep);
     }
@@ -484,7 +484,7 @@ void QueryEpBase::doEndpoints(const vector<tars::EndpointF>& activeEp, const vec
     {
         EndpointInfo::EType type = (inactiveEp[i].istcp ? EndpointInfo::TCP : EndpointInfo::UDP);
 
-        EndpointInfo ep(inactiveEp[i].host, inactiveEp[i].port, type, inactiveEp[i].grid, inactiveEp[i].setId, inactiveEp[i].qos, inactiveEp[i].weight, inactiveEp[i].weightType);
+        EndpointInfo ep(inactiveEp[i].host, inactiveEp[i].port, type, inactiveEp[i].grid, inactiveEp[i].setId, inactiveEp[i].qos, inactiveEp[i].weight, inactiveEp[i].weightType, inactiveEp[i].authType);
 
         inactiveEps.insert(ep);
     }
@@ -590,7 +590,7 @@ void QueryEpBase::setEndPointToCache(bool bInactive)
         bool isTcp = (iter->type() == EndpointInfo::TCP ? true : false);
 
         //这里的超时时间 只是对服务端有效。这里的值无效。所以默认用3000了
-        TC_Endpoint ep(iter->host(), iter->port(), 3000, isTcp, iter->grid(), iter->qos(), iter->weight(), iter->getWeightType());
+        TC_Endpoint ep(iter->host(), iter->port(), 3000, isTcp, iter->grid(), iter->qos(), iter->weight(), iter->getWeightType(), iter->authType());
 
         if (!sEndpoints.empty())
         {
@@ -1241,11 +1241,8 @@ void EndpointManager::updateConHashProxyWeighted(bool bStatic, vector<AdapterPro
         return ;
     }
 
-    if(bStatic)
-    {
-        vLastConHashProxys = _vRegProxys;
-        conHash.clear();
-    }
+    vLastConHashProxys = _vRegProxys;
+    conHash.clear();
 
     for(size_t i = 0; i < _vRegProxys.size(); ++i)
     {
@@ -1257,7 +1254,7 @@ void EndpointManager::updateConHashProxyWeighted(bool bStatic, vector<AdapterPro
             {
                 iWeight = 1;
             }
-            conHash.addNode(_vRegProxys[i]->endpoint().desc(), i, _vRegProxys[i]->getWeight());
+            conHash.addNode(_vRegProxys[i]->endpoint().desc(), i, iWeight);
         }
     }
 
@@ -1362,7 +1359,7 @@ AdapterProxy* EndpointManager::getConHashProxyForNormal(int64_t hashCode)
     {
         int64_t iBegin = TNOWMS;
 
-        updateConHashProxyWeighted(true, _lastConHashProxys, _consistentHash);
+        updateConHashProxyWeighted(false, _lastConHashProxys, _consistentHash);
 
         int64_t iEnd = TNOWMS;
 
@@ -1817,7 +1814,7 @@ void EndpointThread::update(const set<EndpointInfo> & active, const set<Endpoint
     set<EndpointInfo>::iterator iter= active.begin();
     for(;iter != active.end(); ++iter)
     {
-        TC_Endpoint ep(iter->host(), iter->port(), 3000, iter->type() == EndpointInfo::TCP ? 1 : 0, iter->grid());
+        TC_Endpoint ep(iter->host(), iter->port(), 3000, iter->type() == EndpointInfo::TCP ? 1 : 0, iter->grid(), iter->authType());
 
         _activeTCEndPoint.push_back(ep);
 
@@ -1827,7 +1824,7 @@ void EndpointThread::update(const set<EndpointInfo> & active, const set<Endpoint
     iter = inactive.begin();
     for(;iter != inactive.end(); ++iter)
     {
-        TC_Endpoint ep(iter->host(), iter->port(), 3000, iter->type() == EndpointInfo::TCP ? 1 : 0, iter->grid());
+        TC_Endpoint ep(iter->host(), iter->port(), 3000, iter->type() == EndpointInfo::TCP ? 1 : 0, iter->grid(), iter->authType());
 
         _inactiveTCEndPoint.push_back(ep);
 

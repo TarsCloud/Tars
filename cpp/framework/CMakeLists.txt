@@ -95,7 +95,7 @@ set(FRAMEWORK-TGZ "${CMAKE_BINARY_DIR}/framework.tgz")
 
 #需要压缩的文件
 set(MODULES "tars_install.sh")
-list(APPEND MODULES "tarsnode_install.sh")
+set(MODULES "${MODULES} tarsnode_install.sh")
 
 foreach (MODULE ${DEPENDS_LIST})
     set(MODULES "${MODULES} ${MODULE}")

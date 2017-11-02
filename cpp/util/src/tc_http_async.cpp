@@ -277,7 +277,7 @@ void TC_HttpAsync::AsyncRequest::doReceive()
 
 ///////////////////////////////////////////////////////////////////////////
 
-TC_HttpAsync::TC_HttpAsync() : _epoller(true), _terminate(false)
+TC_HttpAsync::TC_HttpAsync() : _terminate(false)
 {
     memset(&_proxyAddr,0,sizeof(struct sockaddr));
     memset(&_bindAddr,0,sizeof(struct sockaddr));

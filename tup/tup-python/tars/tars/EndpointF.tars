@@ -15,8 +15,11 @@ module register
         6 optional int grouprealid;
         7 optional string setId;
         8 optional int qos;
+        9 optional int bakFlag;
+        11 optional int weight;
+        12 optional int weightType;
     };
-    key[EndpointF, host, port, timeout, istcp, grid, qos];
+    key[EndpointF, host, port, timeout, istcp, grid, qos, weight, weightType];
 };
 
 

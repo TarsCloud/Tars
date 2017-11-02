@@ -25,7 +25,7 @@ HttpServer g_app;
 struct HttpProtocol
 {
     /**
-     * ½âÎöhttpÇëÇó
+     * è§£æhttpè¯·æ±‚
      * @param in
      * @param out
      *
@@ -35,9 +35,9 @@ struct HttpProtocol
     {
         try
         {
-                        //ÅĞ¶ÏÇëÇóÊÇ·ñÊÇHTTPÇëÇó
+                        //åˆ¤æ–­è¯·æ±‚æ˜¯å¦æ˜¯HTTPè¯·æ±‚
             bool b = TC_HttpRequest ::checkRequest(in.c_str(), in.length());
-                        //ÍêÕûµÄHTTPÇëÇó
+                        //å®Œæ•´çš„HTTPè¯·æ±‚
             if(b)
             {
                 out = in;
@@ -55,7 +55,7 @@ struct HttpProtocol
             return TC_EpollServer::PACKET_ERR;
         }
 
-        return TC_EpollServer::PACKET_LESS;             //±íÊ¾ÊÕµ½µÄ°ü²»ÍêÈ«
+        return TC_EpollServer::PACKET_LESS;             //è¡¨ç¤ºæ”¶åˆ°çš„åŒ…ä¸å®Œå…¨
     }
 
 };

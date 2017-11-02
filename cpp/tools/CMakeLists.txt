@@ -12,7 +12,7 @@ function(tars2language TARGET)
 
     aux_source_directory(. DIR_SRCS)
 
-    link_libraries(tarsparse)
+    link_libraries(tarsparse iconv)
 
     add_executable(${TARGET} ${DIR_SRCS})
 
@@ -31,7 +31,7 @@ macro(complice_lex OUT_DEPENDS_LEX_LIST)
 
         get_filename_component(NAME_WE ${FILE} NAME_WE)
 
-        # 生成tars文件
+        # 锟夛亢锞筹繅tars锟庯縿锞硷烤
         set(LEX_IN ${FILE})
         set(LEX_CPP ${NAME_WE}.lex.cpp)
 
@@ -43,7 +43,7 @@ macro(complice_lex OUT_DEPENDS_LEX_LIST)
 
         list(APPEND DEPENDS_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${LEX_CPP})
 
-        #设置需要清除的文件
+        #锟夛卡锟栵績锟愶卡锟掞惊锟囷骏锞筹拷锞碉縿锟庯縿锞硷烤
         get_filename_component(PATH ${FILE} PATH)
         list(APPEND CLEAN_LIST ${PATH}/${LEX_CPP})
 
@@ -78,7 +78,7 @@ macro(complice_yacc OUT_DEPENDS_YACC_LIST)
 
         list(APPEND DEPENDS_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${YACC_H})
 
-        #设置需要清除的文件
+        #锟夛卡锟栵績锟愶卡锟掞惊锟囷骏锞筹拷锞碉縿锟庯縿锞硷烤
         get_filename_component(PATH ${FILE} PATH)
         
         list(APPEND CLEAN_LIST ${PATH}/${YACC_H})
@@ -98,4 +98,10 @@ endmacro()
 add_subdirectory(tarsgrammar)
 add_subdirectory(tarsparse)
 add_subdirectory(tars2cpp)
-
+add_subdirectory(tars2python)
+add_subdirectory(tars2cs)
+add_subdirectory(tars2c)
+add_subdirectory(tars2oc)
+add_subdirectory(tars2php)
+add_subdirectory(tars2android)
+add_subdirectory(tars2node)

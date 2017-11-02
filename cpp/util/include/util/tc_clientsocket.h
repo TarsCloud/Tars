@@ -56,6 +56,7 @@ struct TC_EndpointParse_Exception : public TC_Exception
 class TC_Endpoint
 {
 public:
+	enum EType { UDP = 0, TCP = 1 };
     /**
      *
      */
@@ -68,9 +69,9 @@ public:
      * @param timeout, 超时时间, 毫秒
      * @param type, SOCK_STREAM或SOCK_DGRAM
      */
-    TC_Endpoint(const string& host, int port, int timeout, int istcp = true, int grid = 0, int qos = 0, int weight = -1, unsigned int weighttype = 0)
+    TC_Endpoint(const string& host, int port, int timeout, int istcp = true, int grid = 0, int qos = 0, int weight = -1, unsigned int weighttype = 0, int authType = 0)
     {
-        init(host, port, timeout, istcp, grid, qos, weight, weighttype);
+        init(host, port, timeout, istcp, grid, qos, weight, weighttype, authType);
     }
 
     /**
@@ -96,6 +97,7 @@ public:
         _qos    = l._qos;
         _weight = l._weight;
         _weighttype = l._weighttype;
+        _authType = l._authType;
     }
 
     /**
@@ -116,6 +118,7 @@ public:
             _qos    = l._qos;
             _weight = l._weight;
             _weighttype = l._weighttype;
+            _authType = l._authType;
         }
 
         return *this;
@@ -129,7 +132,7 @@ public:
      */
     bool operator == (const TC_Endpoint& l)
     {
-        return (_host == l._host && _port == l._port && _timeout == l._timeout && _istcp == l._istcp && _grid == l._grid && _qos == l._qos && _weight == l._weight && _weighttype == l._weighttype);
+        return (_host == l._host && _port == l._port && _timeout == l._timeout && _istcp == l._istcp && _grid == l._grid && _qos == l._qos && _weight == l._weight && _weighttype == l._weighttype && _authType == l._authType);
     }
 
     /**
@@ -237,6 +240,16 @@ public:
      */
     bool isUnixLocal() const            { return _port == 0; }
 
+	/**
+     * @brief 获取认证类型
+     */
+    int getAuthType() const             { return _authType; }
+
+	/**
+     * @brief 设置认证类型
+     */
+    void setAuthType(int type)          { _authType = type; }
+
     /**
      * @brief 字符串描述
      *
@@ -250,6 +263,7 @@ public:
         if (_qos != 0) os << " -q " << _qos;
         if (_weight != -1) os << " -w " << _weight;
         if (_weighttype != 0) os << " -v " << _weighttype;
+		if (_authType != 0) os << " -e " << _authType;
         return os.str();
     }
 
@@ -274,7 +288,7 @@ public:
     void parse(const string &desc);
 
 private:
-    void init(const string& host, int port, int timeout, int istcp, int grid, int qos, int weight, unsigned int weighttype);
+    void init(const string& host, int port, int timeout, int istcp, int grid, int qos, int weight, unsigned int weighttype, int authType);
 
 protected:
     /**
@@ -316,6 +330,10 @@ protected:
      *  节点的权重使用方式
      */
     unsigned int    _weighttype;
+    /**
+     *  鉴权类型
+     */
+    int         _authType;
 };
 
 /*************************************TC_ClientSocket**************************************/

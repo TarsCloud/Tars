@@ -106,6 +106,10 @@ make framework-tar这个命令打包的是tars核心基础服务，核心基础�
 
 检查一下部署web的机器是否安装了unzip 
 
+## 19 发布大的tgz 包没有反应
+
+修改 src/main/resources/conf-spring/spring-context-mvc.xml   
+中的maxUploadSize 大小，然后重启resein就ok了
 
 
 

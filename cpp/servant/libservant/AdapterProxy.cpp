@@ -476,6 +476,30 @@ void AdapterProxy::finishInvoke(ResponsePacket & rsp)
     TLOGINFO("[TARS][AdapterProxy::finishInvoke(ResponsePacket) objname:" << _objectProxy->name() << ",desc:" << _endpoint.desc() 
         << ",id:" << rsp.iRequestId << endl);
 
+    if (_trans->getAuthState() != AUTH_SUCC)
+    {
+        std::string ret(rsp.sBuffer.begin(), rsp.sBuffer.end());
+        tars::AUTH_STATE tmp = AUTH_SUCC;
+        tars::stoe(ret, tmp);
+        int newstate = tmp;
+
+        TLOGINFO("[TARS]AdapterProxy::finishInvoke from state " << _trans->getAuthState() << " to " << newstate << endl);
+        _trans->setAuthState(newstate);
+
+        if (newstate == AUTH_SUCC)
+        {
+            // flush old buffered msg when auth is not complete
+            doInvoke();
+        }
+        else
+        {
+            TLOGERROR("newstate is " << newstate << ", error close!\n");
+            _trans->close();
+        }
+
+        return;
+    }
+
     ReqMessage * msg = NULL;
 
     //requestid 为0 是push消息

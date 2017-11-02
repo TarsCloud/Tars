@@ -1,0 +1,100 @@
+#!/usr/bin/env node
+
+/**
+ * Tencent is pleased to support the open source community by making Tars available.
+ *
+ * Copyright (C) 2016THL A29 Limited, a Tencent company. All rights reserved.
+ *
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use this file except 
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed 
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ */
+
+'use strict';
+
+var os = require('os');
+
+var chalk = require('chalk');
+var commander = require('commander');
+var pad = require('pad');
+
+var pkg  = require('../package.json');
+var deploy = require('../deploy');
+
+commander
+	.version(pkg.version)
+	.option('-f, --force', 'Force to Build Package')
+	.usage('ServerName [options]')
+	.parse(process.argv)
+	.on('--help', function() {
+		console.log('  Examples:');
+		console.log();
+		console.log('    $ tars-deploy TestServer');
+		console.log('    $ tars-deploy TestServer -f');
+	});
+
+if (process.argv.length == 2) {
+	commander.parse(process.argv);
+	commander.outputHelp();
+	process.exit(0);
+}
+
+var name = process.argv[2];
+
+if (!/^[0-9a-z]+$/i.test(name)) {
+	console.error(chalk.red('name illegal, eg: TestServer'));
+	process.exit(-1);
+}
+
+console.info('-- Building Environment');
+console.info('   node version: "' + process.version + '"');
+console.info('   node path: "' + process.execPath + '"');
+console.info('   deploy tool version: "v' + pkg.version + '"');
+console.info('   system arch: "' + process.arch + '"');
+console.info('   system platform: "' + os.platform() + '"');
+
+if (!commander.force && os.platform() !== 'linux') {
+	console.error(chalk.red('Making a deploy package must be under linux system, add --force to continue'));
+	process.exit(-1);
+}
+
+console.info('');
+console.info('-- Building deploy package from: "' + process.cwd() + '"');
+
+var progressIndex = 0;
+
+deploy.on('progress:start', function(msg) {
+	if (progressIndex !== -1) {
+		progressIndex += 1;
+		console.info('[' + pad(3, Math.ceil(50 * progressIndex / deploy.STEP_COUNT)) + '%] ' + chalk.green(msg));
+	} else {
+		console.info(chalk.magenta(msg));
+	}
+});
+
+deploy.on('progress:end', function(msg) {
+	if (progressIndex !== -1) {
+		progressIndex += 1;
+		console.info('[' + pad(3, Math.ceil(50 * progressIndex / deploy.STEP_COUNT)) + '%] ' + msg);
+	} else {
+		console.info(msg);
+	}
+});
+
+deploy.on('error', function(err) {
+	progressIndex = -1;
+	console.error(chalk.red(err.toString()));
+});
+
+deploy.on('done', function(filepath) {
+	console.info('');
+	console.info('-- Built deploy package to: "' + filepath + '"');
+});
+
+deploy.make(name, process.cwd());

@@ -37,7 +37,8 @@ public class Utils {
 
     public static String getLocalIp() {
         try {
-            Pattern pattern = Pattern.compile("(172|10)\\.[0-9]+\\.[0-9]+\\.[0-9]+");
+//            Pattern pattern = Pattern.compile("(172|10)\\.[0-9]+\\.[0-9]+\\.[0-9]+");
+            Pattern pattern = Pattern.compile("(192|10)\\.[0-9]+\\.[0-9]+\\.[0-9]+");
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 
             while (interfaces.hasMoreElements()) {

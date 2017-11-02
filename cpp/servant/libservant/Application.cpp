@@ -24,6 +24,7 @@
 #include "servant/BaseF.h"
 #include "servant/AppCache.h"
 #include "servant/NotifyObserver.h"
+#include "servant/AuthLogic.h"
 
 #include <signal.h>
 #include <sys/resource.h>
@@ -898,6 +899,15 @@ void Application::initializeServer()
 
     _epollServer = new TC_EpollServer(iNetThreadNum);
 
+    //网络线程的内存池配置
+    {
+        size_t minBlockSize = TC_Common::strto<size_t>(toDefault(_conf.get("/tars/application/server<poolminblocksize>"), "1024")); // 1KB
+        size_t maxBlockSize = TC_Common::strto<size_t>(toDefault(_conf.get("/tars/application/server<poolmaxblocksize>"), "8388608")); // 8MB
+        size_t maxBytes = TC_Common::strto<size_t>(toDefault(_conf.get("/tars/application/server<poolmaxbytes>"), "67108864")); // 64MB
+        _epollServer->setNetThreadBufferPoolInfo(minBlockSize, maxBlockSize, maxBytes);
+    }
+
+
     //初始化服务是否对空链接进行超时检查
     bool bEnable = (_conf.get("/tars/application/server<emptyconcheck>","0")=="1")?true:false;
 
@@ -1054,6 +1064,17 @@ void Application::bindAdapter(vector<TC_EpollServer::BindAdapterPtr>& adapters)
             ServantHelperManager::getInstance()->setAdapterServant(adapterName[i], servant);
 
             TC_EpollServer::BindAdapterPtr bindAdapter = new TC_EpollServer::BindAdapter(_epollServer.get());
+               
+            // 设置该obj的鉴权账号密码，只要一组就够了
+            {    
+                std::string accKey = _conf.get("/tars/application/server/" + adapterName[i] + "<accesskey>"); 
+                std::string secretKey = _conf.get("/tars/application/server/" + adapterName[i] + "<secretkey>"); 
+
+                if (!accKey.empty()) 
+                    bindAdapter->setAkSk(accKey, secretKey); 
+
+                bindAdapter->setAuthProcessWrapper(&tars::processAuth); 
+            }  
 
             string sLastPath = "/tars/application/server/" + adapterName[i];
 

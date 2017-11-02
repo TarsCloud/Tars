@@ -127,7 +127,7 @@ void KeepAliveThread::run()
 
         {
             int64_t useMs = (TC_TimeProvider::getInstance()->getNowMs() - startMs);
-            NODE_LOG("KeepAliveThread")->error() << FILE_FUN << "run use:" << useMs << " ms" << endl;
+            NODE_LOG("KeepAliveThread")->debug() << FILE_FUN << "run use:" << useMs << " ms" << endl;
         }
 
         timedWait(ServerFactory::getInstance()->getMinMonitorIntervalMs());
@@ -347,6 +347,6 @@ void KeepAliveThread::checkAlive()
 
     {
         int64_t useMs = (TC_TimeProvider::getInstance()->getNowMs() - startMs);
-        NODE_LOG("KeepAliveThread")->error() << FILE_FUN << "checkAlive use:" << useMs << " ms" << endl;
+        NODE_LOG("KeepAliveThread")->debug() << FILE_FUN << "checkAlive use:" << useMs << " ms" << endl;
     }
 }

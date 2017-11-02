@@ -27,7 +27,6 @@ namespace tars
 CommunicatorEpoll::CommunicatorEpoll(Communicator * pCommunicator,size_t netThreadSeq)
 : _communicator(pCommunicator)
 , _terminate(false)
-, _ep(true)
 , _nextTime(0)
 , _nextStatTime(0)
 , _objectProxyFactory(NULL)
@@ -244,7 +243,7 @@ void CommunicatorEpoll::handleOutputImp(Transceiver * pTransceiver)
                     << "," << strerror(iVal) << endl);
             return;
         }
-
+ 
         pTransceiver->setConnected();
     }
 

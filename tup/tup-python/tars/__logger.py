@@ -23,7 +23,7 @@
 @brief: 日志模块
 '''
 
-# TODO 这部分实现非常粗糙，仅能用于调试，需改进为业务层提供良好接口控制
+# 仅用于调试
 
 import logging
 from logging.handlers import RotatingFileHandler

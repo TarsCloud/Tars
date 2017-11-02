@@ -4,15 +4,15 @@ PWD_DIR=`pwd`
 MachineIp=
 MachineName=
 
-##°²×°glibc-devel
+##ï¾°ï¾²ï¿—ï¾°glibc-devel
 
 yum install -y glibc-devel
 
-##°²×°flex¡¢bison
+##ï¾°ï¾²ï¿—ï¾°flexï¾¡ï¾¢bison
 
 yum install -y flex bison
 
-##°²×°cmake
+##ï¾°ï¾²ï¿—ï¾°cmake
 
 tar zxvf cmake-2.8.8.tar.gz
 cd cmake-2.8.8
@@ -21,7 +21,7 @@ make
 make install
 cd -
 
-##°²×°java jdk
+##ï¾°ï¾²ï¿—ï¾°java jdk
 tar zxvf jdk-8u111-linux-x64.tar.gz
 echo "export JAVA_HOME=${PWD_DIR}/jdk1.8.0_111" >> /etc/profile
 echo "CLASSPATH=\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >> /etc/profile
@@ -32,7 +32,7 @@ source /etc/profile
 
 java -version
 
-##°²×°maven
+##ï¾°ï¾²ï¿—ï¾°maven
 tar zxvf apache-maven-3.3.9-bin.tar.gz
 echo "export MAVEN_HOME=${PWD_DIR}/apache-maven-3.3.9/" >> /etc/profile
 echo "export PATH=\$PATH:\$MAVEN_HOME/bin" >> /etc/profile
@@ -41,7 +41,7 @@ source /etc/profile
 
 mvn -v
 
-##°²×°resin
+##ï¾°ï¾²ï¿—ï¾°resin
 
 cp resin-4.0.49.tar.gz /usr/local/
 cd /usr/local/
@@ -53,14 +53,14 @@ make install
 cd ${PWD_DIR}
 ln -s /usr/local/resin-4.0.49 /usr/local/resin
 
-##°²×°rapidjson
+##ï¾°ï¾²ï¿—ï¾°rapidjson
 yum install -y git
 
 git clone https://github.com/Tencent/rapidjson.git
 
 cp -r ./rapidjson ../cpp/thirdparty/
 
-##°²×°mysql
+##ï¾°ï¾²ï¿—ï¾°mysql
 
 yum install -y ncurses-devel
 yum install -y zlib-devel
@@ -88,41 +88,41 @@ cd -
 sed -i "s/192.168.2.131/${MachineIp}/g" `grep 192.168.2.131 -rl ./conf/*`
 cp ./conf/my.cnf /usr/local/mysql/
 
-##Æô¶¯mysql
+##ï¿†ï¿´ï¾¶ï¾¯mysql
 service mysql start
 chkconfig mysql on
 
-##Ìí¼ÓmysqlµÄbinÂ·¾¶
+##ï¿Œï¿­ï¾¼ï¿“mysqlï¾µï¿„binï¿‚ï¾·ï¾¾ï¾¶
 echo "PATH=\$PATH:/usr/local/mysql/bin" >> /etc/profile
 echo "export PATH" >> /etc/profile
 source /etc/profile
 
-##ĞŞ¸Ämysql rootÃÜÂë
+##ï¿ï¿ï¾¸ï¿„mysql rootï¿ƒï¿œï¿‚ï¿«
 cd /usr/local/mysql/
 ./bin/mysqladmin -u root password 'root@appinside'
 ./bin/mysqladmin -u root -h ${MachineName} password 'root@appinside'
 cd -
 
-##Ìí¼ÓmysqlµÄ¿âÂ·¾¶
+##ï¿Œï¿­ï¾¼ï¿“mysqlï¾µï¿„ï¾¿ï¿¢ï¿‚ï¾·ï¾¾ï¾¶
 echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf
 ldconfig
 
 
-##°²×°javaÓïÑÔ¿ò¼Ü
+##ï¾°ï¾²ï¿—ï¾°javaï¿“ï¿¯ï¿‘ï¿”ï¾¿ï¿²ï¾¼ï¿œ
 cd ../java/
 mvn clean install 
 mvn clean install -f core/client.pom.xml 
 mvn clean install -f core/server.pom.xml
 cd -
 
-##°²×°c++ÓïÑÔ¿ò¼Ü
+##ï¾°ï¾²ï¿—ï¾°c++ï¿“ï¿¯ï¿‘ï¿”ï¾¿ï¿²ï¾¼ï¿œ
 cd ../cpp/build/
 chmod u+x build.sh
 ./build.sh all
 ./build.sh install
 cd -
 
-##TarsÊı¾İ¿â»·¾³³õÊ¼»¯
+##Tarsï¿Šï¿½ï¾¾ï¿ï¾¿ï¿¢ï¾»ï¾·ï¾¾ï¾³ï¾³ï¿µï¿Šï¾¼ï¾»ï¾¯
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;"
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'localhost' identified by 'tars2015' with grant option;"
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'${MachineName}' identified by 'tars2015' with grant option;"
@@ -135,7 +135,7 @@ chmod u+x exec-sql.sh
 ./exec-sql.sh
 cd -
 
-##´ò°ü¿ò¼Ü»ù´¡·şÎñ
+##ï¾´ï¿²ï¾°ï¿¼ï¾¿ï¿²ï¾¼ï¿œï¾»ï¿¹ï¾´ï¾¡ï¾·ï¿¾ï¿ï¿±
 cd ../cpp/build/
 make framework-tar
 
@@ -147,23 +147,24 @@ make tarsquerystat-tar
 make tarsqueryproperty-tar
 cd -
 
-##°²×°ºËĞÄ»ù´¡·şÎñ
+##ï¾°ï¾²ï¿—ï¾°ï¾ºï¿‹ï¿ï¿„ï¾»ï¿¹ï¾´ï¾¡ï¾·ï¿¾ï¿ï¿±
 mkdir -p /usr/local/app/tars/
 cd ../cpp/build/
-cp build/framework.tgz /usr/local/app/tars/
+cp framework.tgz /usr/local/app/tars/
 cd /usr/local/app/tars
 tar xzfv framework.tgz
 
 sed -i "s/192.168.2.131/${MachineIp}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${MachineIp}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${MachineIp}/g" `grep registry.tars.com -rl ./*`
+sed -i "s/web.tars.com/${MachineIp}/g" `grep web.tars.com -rl ./*`
 
 chmod u+x tars_install.sh
-tars_install.sh
+./tars_install.sh
 
 ./tarspatch/util/init.sh
 
-##°²×°web¹ÜÀíÏµÍ³
+##ï¾°ï¾²ï¿—ï¾°webï¾¹ï¿œï¿€ï¿­ï¿ï¾µï¿ï¾³
 cd ${PWD_DIR}
 cd ../web/
 sed -i "s/db.tars.com/${MachineIp}/g" `grep db.tars.com -rl ./src/main/resources/*`

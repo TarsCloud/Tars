@@ -38,7 +38,7 @@ CommunicatorPtr c = new Communicator(conf);
 > * 若仍有问题请查看node日志。
 
 10. core文件如何打开，生成在什么地方？
-> * core文件是在tafnode启动脚本添加ulimite -c unlimited 打开，目前core文件生成在 /user/local/app/tars/app_log下.
+> * core文件是在tafnode启动脚本添加ulimite -c unlimited 打开，目前core文件生成在 /usr/local/app/tars/app_log下.
 
 11. 主控Registry故障是否会影响业务服务的正常访问？
 > * 不会影响业务服务正常访问，框架底层会缓存后端服务的ip列表。
