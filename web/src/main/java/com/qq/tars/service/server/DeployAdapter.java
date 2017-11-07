@@ -59,6 +59,10 @@ public class DeployAdapter {
     @Min(0)
     private Integer queuetimeout;
 
+    @Min(0)
+    @Max(1)
+    private Integer auth;
+
     public String getObjName() {
         return objName;
     }
@@ -129,5 +133,13 @@ public class DeployAdapter {
 
     public void setQueuetimeout(Integer queuetimeout) {
         this.queuetimeout = queuetimeout;
+    }
+
+    public Integer getAuth() {
+        return auth;
+    }
+
+    public void setAuth(Integer e) {
+        this.auth = e;
     }
 }

@@ -36,6 +36,8 @@ public class ExpandPreviewServer {
 
     private String status;
 
+    private int auth;
+
     public String getApplication() {
         return application;
     }
@@ -107,4 +109,16 @@ public class ExpandPreviewServer {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public int getAuth() {
+        return auth;
+    }
+
+    public void setAuth(int auth) {
+        if (auth != 0)
+            this.auth = 1;
+        else
+            this.auth = 0;
+    }
+
 }
