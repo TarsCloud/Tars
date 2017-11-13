@@ -326,13 +326,12 @@ int Transceiver::sendRequest(const char * pData, size_t iSize, bool forceSend)
         return eRetError;
     }
         
-#if TARS_SSL
-    if (!forceSend && !_openssl->IsHandshaked())
-        return eRetError;
-#endif
-
     if (!forceSend && _authState != AUTH_SUCC)
     {   
+#if TARS_SSL
+        if (isSSL() && !_openssl)
+            return eRetError;
+#endif
         ObjectProxy* obj = _adapterProxy->getObjProxy();
         TLOGINFO("[TARS][Transceiver::sendRequest temporary failed because need auth for " << obj->name() << endl);
         return eRetError; // 需要鉴权但还没通过，不能发送非认证消息
@@ -463,13 +462,18 @@ int TcpTransceiver::doResponse(list<ResponsePacket>& done)
             if(pos > 0)
             {
 #if TARS_SSL
-                std::string* plainBuf = _openssl->RecvBuffer();
-                plainBuf->erase(0, pos);
-#else
-                _recvBuffer.Consume(pos);
-                if (_recvBuffer.Capacity() > 8 * 1024 * 1024)
-                    _recvBuffer.Shrink();
+                if (isSSL())
+                {
+                    std::string* plainBuf = _openssl->RecvBuffer();
+                    plainBuf->erase(0, pos);
+                }
+                else
 #endif
+                {
+                    _recvBuffer.Consume(pos);
+                    if (_recvBuffer.Capacity() > 8 * 1024 * 1024)
+                        _recvBuffer.Shrink();
+                }
             }
         }
         catch (exception &ex)

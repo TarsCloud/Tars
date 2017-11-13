@@ -577,7 +577,7 @@ function addAdapter() {
             }
             if(paramObj.endpoint){
                 var tmp = paramObj.endpoint.split(/\s-/);
-                var regProtocol = /^tcp|udp$/gi,
+                var regProtocol = /^tcp|udp|ssl$/gi,
                     regHost = /^h\s(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/gi,
                     regT = /^t\s([1-9]|[1-9]\d+)$/gi,
                     regPort = /^p\s\d{4,5}$/,
@@ -608,7 +608,7 @@ function addAdapter() {
                     check = false;
                 }
                 if(!check){
-                    showErrorMsg($box,'绑定地址填写错误!!!  <br>绑定地址格式：以tcp 或者 udp开头，有 -h -t -p 三个必选参数和-e可选参数， -p 0-65535  -t 大于 0  -h ip格式 -e 0-1');
+                    showErrorMsg($box,'绑定地址填写错误!!!  <br>绑定地址格式：以tcp 、ssl 或者 udp开头，有 -h -t -p 三个必选参数和-e可选参数， -p 0-65535  -t 大于 0  -h ip格式 -e 0-1');
                     return;
                 }
             }
@@ -698,7 +698,7 @@ function updateAdapter(id,tar,protocol,handlegroup,allowip) {
             }
             if(paramObj.endpoint){
                 var tmp = paramObj.endpoint.split(/\s-/);
-                var regProtocol = /^tcp|udp$/gi,
+                var regProtocol = /^tcp|udp|ssl$/gi,
                     regHost = /^h\s(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/gi,
                     regT = /^t\s([1-9]|[1-9]\d+)$/gi,
                     regPort = /^p\s\d{4,5}$/,
@@ -729,7 +729,7 @@ function updateAdapter(id,tar,protocol,handlegroup,allowip) {
                     check = false;
                 }
                 if(!check){
-                    showErrorMsg($box,'绑定地址填写错误!!!  <br>绑定地址格式：以tcp 或者 udp开头，有 -h -t -p 三个必选参数和-e可选参数， -p 0-65535  -t 大于 0  -h ip格式 -e 0-1');
+                    showErrorMsg($box,'绑定地址填写错误!!!  <br>绑定地址格式：以tcp 、ssl 或者 udp开头，有 -h -t -p 三个必选参数和-e可选参数， -p 0-65535  -t 大于 0  -h ip格式 -e 0-1');
                     return;
                 }
             }

@@ -81,7 +81,8 @@ bool SSLManager::AddCtx(const std::string& name,
     SSL_CTX_clear_options(ctx, SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION); 
 
     RETURN_IF_FAIL (SSL_CTX_set_session_id_context(ctx, (const unsigned char*)ctx, sizeof ctx));
-    RETURN_IF_FAIL (SSL_CTX_load_verify_locations(ctx, cafile.data(), NULL));
+    if (!cafile.empty())
+        RETURN_IF_FAIL (SSL_CTX_load_verify_locations(ctx, cafile.data(), NULL));
 
     // 客户端可以不提供证书的
     if (!certfile.empty()) 
