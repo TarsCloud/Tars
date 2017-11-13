@@ -1,7 +1,7 @@
-# tars tls功能
+# tars tls通信支持
 
-OpenSSL是一个极其健壮、功能齐全的TLS和SSL协议库，也是一个通用的密码算法库。它为我们的通信提供了安全性和完整性保证。因此，tars结合OpenSSL库支持TLS是必须的功能。
-TLS协议和上层的HTTP结合，即支持了https协议。
+OpenSSL是一个极其健壮、功能齐全的TLS和SSL协议库，也是一个通用的密码算法库。它为我们的通信提供了安全性和完整性保证。tars结合OpenSSL库支持TLS是一个常用的重要功能。
+TLS协议和应用层的HTTP结合，即支持了https协议。
 另外，TLS功能和[tars鉴权功能](tars_auth.md)可以同时启用。
 目前只有C++支持TLS功能，java即将支持。
 
