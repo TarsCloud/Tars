@@ -662,6 +662,10 @@ class InterfaceParser {
                     if($nextnextChar == '/') {
                         return;
                     }
+                    else{
+                        $pos = ftell($this->fp);
+                        fseek($this->fp,$pos - 1);
+                    }
                 }
             }
         }
@@ -973,16 +977,26 @@ class InterfaceParser {
         $word = trim($word);
         // 遍历所有的类型
         foreach (Utils::$wholeTypeMap as $key => $value) {
-            $word = str_replace($key,$value,$word);
-        }
+            if(Utils::isStruct($word,$this->preStructs)) {
+                if(!in_array($word,$this->useStructs)) {
+                    $this->extraUse .= "use ".$this->namespaceName."\\classes\\".$word.";".$this->returnSymbol;
+                    $this->useStructs[] = $word;
+                }
 
-        if(Utils::isStruct($word,$this->preStructs)) {
-            if(!in_array($word,$this->useStructs)) {
-                $this->extraUse .= "use ".$this->namespaceName."\\classes\\".$word.";".$this->returnSymbol;
-                $this->useStructs[] = $word;
+                $word = "new " . $word . "()";
             }
+            else if(in_array($word,$this->preNamespaceStructs)) {
+                $words = explode("::",$word);
+                $word = $words[1];
+                if(!in_array($word,$this->useStructs)) {
+                    $this->extraUse .= "use protocol\\".$this->namespaceName."\\classes\\".$word.";".$this->returnSymbol;
+                    $this->useStructs[] = $word;
+                }
 
-            $word = "new " . $word . "()";
+                $word = "new " . $word . "()";
+                break;
+            }
+            else $word = str_replace($key,$value,$word);
         }
 
         return $word;
@@ -1620,6 +1634,10 @@ class StructParser {
                     if($nextnextChar == '/') {
                         $lineString .= $nextnextChar;
                         return $lineString;
+                    }
+                    else{
+                        $pos = ftell($this->fp);
+                        fseek($this->fp,$pos - 1);
                     }
                 }
             }
