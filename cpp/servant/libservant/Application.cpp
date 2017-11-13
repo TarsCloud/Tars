@@ -1037,6 +1037,7 @@ void Application::initializeServer()
             path += "/";
 
         string ca = path + _conf.get("/tars/application/serverssl/<ca>");
+        if (ca == path) ca.clear();
         string cert = path + _conf.get("/tars/application/serverssl/<cert>");
         string key = path + _conf.get("/tars/application/serverssl/<key>");
         bool verifyClient = (_conf.get("/tars/application/serverssl/<verifyclient>", "0") == "0") ? false : true;
