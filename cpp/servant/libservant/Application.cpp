@@ -29,6 +29,11 @@
 #include <signal.h>
 #include <sys/resource.h>
 
+#if TARS_SSL
+#include "util/tc_sslmgr.h"
+#endif
+
+
 namespace tars
 {
 
@@ -581,6 +586,9 @@ void Application::main(int argc, char *argv[])
 {
     try
     {
+#if TARS_SSL
+        SSLManager::GlobalInit();
+#endif
         TC_Common::ignorePipe();
 
         //解析配置文件
@@ -769,6 +777,26 @@ void Application::initializeClient()
 
     //输出
     outClient(cout);
+#if TARS_SSL
+    try {
+        string path = _conf.get("/tars/application/clientssl/<path>", "./");
+        if (path.empty() || path[path.length() - 1] != '/')
+            path += "/";
+
+        string ca = path + _conf.get("/tars/application/clientssl/<ca>");
+        string cert = path + _conf.get("/tars/application/clientssl/<cert>");
+        if (cert == path) cert.clear();
+        string key = path + _conf.get("/tars/application/clientssl/<key>");
+        if (key == path) key.clear();
+
+        if (!SSLManager::getInstance()->AddCtx("client", ca, cert, key, false))
+            cout << "failed add client cert " << ca << endl;
+        else
+            cout << "succ add client cert " << ca << endl;
+    }
+    catch(...) {
+    }
+#endif
 }
 
 void Application::outClient(ostream &os)
@@ -1001,6 +1029,25 @@ void Application::initializeServer()
 
         _epollServer->_pReportRspQueue = p.get();
     }
+
+#if TARS_SSL
+    try {
+        string path = _conf.get("/tars/application/serverssl/<path>", "./");
+        if (path.empty() || path[path.length() - 1] != '/')
+            path += "/";
+
+        string ca = path + _conf.get("/tars/application/serverssl/<ca>");
+        string cert = path + _conf.get("/tars/application/serverssl/<cert>");
+        string key = path + _conf.get("/tars/application/serverssl/<key>");
+        bool verifyClient = (_conf.get("/tars/application/serverssl/<verifyclient>", "0") == "0") ? false : true;
+
+        if (!SSLManager::getInstance()->AddCtx("server", ca, cert, key, verifyClient))
+            cout << "failed add server cert " << ca << endl;
+        else
+            cout << "succ add server cert " << ca << ", verifyClient " << verifyClient << endl;
+    } catch(...) {
+    }
+#endif
 }
 
 void Application::outServer(ostream &os)

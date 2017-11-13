@@ -28,6 +28,10 @@ using namespace std;
 
 namespace tars
 {
+#if TARS_SSL
+    class TC_OpenSSL;
+#endif
+
 class AdapterProxy;
 
 //////////////////////////////////////////////////////////
@@ -74,6 +78,11 @@ public:
      * 初始化
      */
     virtual void init(){}
+
+    /**
+     * 是否ssl
+     */
+    bool isSSL() const ;
 
     /*
      * 检查连接是否超时
@@ -266,6 +275,12 @@ protected:
      * 鉴权状态
      */
     int                      _authState;
+
+protected:
+#if TARS_SSL
+    TC_OpenSSL* _openssl;
+#endif
+
 };
 
 //////////////////////////////////////////////////////////
@@ -370,7 +385,6 @@ private:
      * 接收缓存
      */
     char                *_recvBuffer;
-
 };
 //////////////////////////////////////////////////////////
 

@@ -27,7 +27,7 @@ TC_Endpoint::TC_Endpoint()
     _host = "0.0.0.0";
     _port = 0;
     _timeout = 3000;
-    _istcp = true;
+    _type = TCP;
     _grid = 0;
     _qos = 0;
     _weight = -1;
@@ -35,12 +35,12 @@ TC_Endpoint::TC_Endpoint()
     _authType = 0;
 }
 
-void TC_Endpoint::init(const string& host, int port, int timeout, int istcp, int grid, int qos, int weight, unsigned int weighttype, int authType)
+void TC_Endpoint::init(const string& host, int port, int timeout, int type, int grid, int qos, int weight, unsigned int weighttype, int authType)
 {
     _host = host;
     _port = port;
     _timeout = timeout;
-    _istcp = istcp;
+    _type = type;
     _grid = grid;
     _qos = qos;
     if (weighttype == 0)
@@ -89,15 +89,19 @@ void TC_Endpoint::parse(const string &str)
     string desc = str.substr(beg, end - beg);
     if(desc == "tcp")
     {
-        _istcp = true;
+        _type = TCP;
+    }
+    else if (desc == "ssl")
+    {
+        _type = SSL;
     }
     else if(desc == "udp")
     {
-        _istcp = false;
+        _type = UDP;
     }
     else
     {
-        throw TC_EndpointParse_Exception("TC_Endpoint::parse tcp or udp error : " + str);
+        throw TC_EndpointParse_Exception("TC_Endpoint::parse tcp or udp or ssl error : " + str);
     }
 
     desc = str.substr(end);

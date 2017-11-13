@@ -7,6 +7,12 @@ add_library(tarsservant ${DIR_SRCS})
 
 target_link_libraries(tarsservant)
 
+if(${TARS_SSL} EQUAL 1)
+    target_link_libraries(tarsservant; crypto; ssl)
+else() 
+    target_link_libraries(tarsservant)
+endif()
+
 add_dependencies(tarsservant COPY-SERVENT-TARS tarsframework)
 
 install(TARGETS tarsservant

@@ -1175,7 +1175,21 @@ int CDbHandle::loadObjectIdCache(const bool bRecoverProtect, const int iRecoverP
                 epf.host        = ep.getHost();
                 epf.port        = ep.getPort();
                 epf.timeout     = ep.getTimeout();
-                epf.istcp       = ep.isTcp();
+
+                // 现在支持三种类型：0 UDP, 1 TCP, 2 SSL
+                // 所以istcp字段作为int类型使用
+                if (!ep.isTcp()) 
+                { 
+                    epf.istcp = EndpointInfo::UDP; 
+                } 
+                else 
+                { 
+                    if (ep.isSSL()) 
+                        epf.istcp = EndpointInfo::SSL; 
+                    else 
+                        epf.istcp = EndpointInfo::TCP; 
+                }
+
                 epf.authType    = ep.getAuthType();
                 epf.grouprealid = getGroupId(epf.host);
                 string ip_group_name = res[i]["ip_group_name"];

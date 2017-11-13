@@ -56,7 +56,7 @@ struct TC_EndpointParse_Exception : public TC_Exception
 class TC_Endpoint
 {
 public:
-	enum EType { UDP = 0, TCP = 1 };
+	enum EType { UDP = 0, TCP = 1, SSL = 2 };
     /**
      *
      */
@@ -69,9 +69,9 @@ public:
      * @param timeout, 超时时间, 毫秒
      * @param type, SOCK_STREAM或SOCK_DGRAM
      */
-    TC_Endpoint(const string& host, int port, int timeout, int istcp = true, int grid = 0, int qos = 0, int weight = -1, unsigned int weighttype = 0, int authType = 0)
+    TC_Endpoint(const string& host, int port, int timeout, int type = 1, int grid = 0, int qos = 0, int weight = -1, unsigned int weighttype = 0, int authType = 0)
     {
-        init(host, port, timeout, istcp, grid, qos, weight, weighttype, authType);
+        init(host, port, timeout, type, grid, qos, weight, weighttype, authType);
     }
 
     /**
@@ -92,7 +92,7 @@ public:
         _host   = l._host;
         _port   = l._port;
         _timeout= l._timeout;
-        _istcp  = l._istcp;
+        _type   = l._type;
         _grid   = l._grid;
         _qos    = l._qos;
         _weight = l._weight;
@@ -113,7 +113,7 @@ public:
             _host   = l._host;
             _port   = l._port;
             _timeout= l._timeout;
-            _istcp  = l._istcp;
+            _type   = l._type;
             _grid   = l._grid;
             _qos    = l._qos;
             _weight = l._weight;
@@ -132,7 +132,7 @@ public:
      */
     bool operator == (const TC_Endpoint& l)
     {
-        return (_host == l._host && _port == l._port && _timeout == l._timeout && _istcp == l._istcp && _grid == l._grid && _qos == l._qos && _weight == l._weight && _weighttype == l._weighttype && _authType == l._authType);
+        return (_host == l._host && _port == l._port && _timeout == l._timeout && _type == l._type && _grid == l._grid && _qos == l._qos && _weight == l._weight && _weighttype == l._weighttype && _authType == l._authType);
     }
 
     /**
@@ -179,14 +179,29 @@ public:
      *
      * @return bool
      */
-    bool isTcp() const                  { return _istcp; }
+    int  isTcp() const                  { return _type == TCP || _type == SSL; }
+    /**
+     * @brief  是否是SSL
+     *
+     * @return int
+     */
+    int isSSL() const                  { return _type == SSL; }
 
     /**
      * @brief 设置为TCP或UDP
      * @param bTcp
      */
-    void setTcp(bool bTcp)              { _istcp = bTcp; }
+    void setTcp(bool bTcp)              { _type = bTcp; }
 
+    /**
+     * @brief 设置为TCP/UDP/SSL
+     * @param type
+     */
+    void setType(int type)              { _type = type; }
+    /**
+     * @brief 获取协议类型
+     */
+    int getType() const                { return _type; }
     /**
      * @brief 获取路由状态
      * @param grid
@@ -258,7 +273,14 @@ public:
     string toString()
     {
         ostringstream os;
-        os << (isTcp()?"tcp" : "udp") << " -h " << _host << " -p " << _port << " -t " << _timeout;
+        if (_type == TCP)
+            os << "tcp";
+        else if (_type == UDP)
+            os << "udp";
+        else 
+            os << "ssl";
+
+        os << " -h " << _host << " -p " << _port << " -t " << _timeout;
         if (_grid != 0) os << " -g " << _grid;
         if (_qos != 0) os << " -q " << _qos;
         if (_weight != -1) os << " -w " << _weight;
@@ -309,7 +331,7 @@ protected:
     /**
      * 类型
      */
-    int         _istcp;
+    int         _type;
 
     /**
      * 路由状态

@@ -40,6 +40,11 @@ using namespace std;
 
 namespace tars
 {
+
+#if TARS_SSL
+    class TC_OpenSSL;
+#endif
+
 /////////////////////////////////////////////////
 /**
  * @file  tc_epoll_server.h
@@ -1107,6 +1112,9 @@ public:
              *该连接的鉴权状态是否初始化了
              */
             bool                _authInit;
+#if TARS_SSL
+            TC_OpenSSL*         _openssl;
+#endif
         };
         ////////////////////////////////////////////////////////////////////////////
         /**

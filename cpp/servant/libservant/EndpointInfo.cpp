@@ -76,6 +76,7 @@ string EndpointInfo::createCompareDesc()
     ostringstream os;
     if (_type == EndpointInfo::UDP) { os << "udp:"; }
     if (_type == EndpointInfo::TCP) { os << "tcp:"; }
+    if (_type == EndpointInfo::SSL) { os << "ssl:"; }
     os << _grid << ":" << _host << ":" << _port
        << ":" << _setDivision << ":" << _qos << ":" << _weight << ":" << _weighttype << ":" << _authType;
 
@@ -85,7 +86,14 @@ string EndpointInfo::createCompareDesc()
 string EndpointInfo::createDesc() const
 {
     ostringstream os;
-    os << (type() == EndpointInfo::TCP?"tcp":(type() == EndpointInfo::UDP?"udp":""));
+
+    if (_type == EndpointInfo::TCP)
+        os << "tcp";
+    else if (_type == EndpointInfo::UDP)
+        os << "udp";
+    else
+        os << "ssl";
+
     os << " -h " << host();
     os << " -p " << port();
     if(0 != _grid)

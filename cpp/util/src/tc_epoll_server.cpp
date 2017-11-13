@@ -28,6 +28,10 @@
 #include <netinet/tcp.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#if TARS_SSL
+#include "util/tc_openssl.h"
+#endif
+
 
 namespace tars
 {
@@ -611,6 +615,9 @@ TC_EpollServer::NetThread::Connection::Connection(TC_EpollServer::BindAdapter *p
 , _pRecvBuffer(NULL)
 , _nRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
 , _authInit(false)
+#if TARS_SSL
+, _openssl(NULL)
+#endif
 
 {
     assert(fd != -1);
@@ -633,7 +640,10 @@ TC_EpollServer::NetThread::Connection::Connection(BindAdapter *pBindAdapter, int
 ,_bEmptyConn(false) /*udp is always false*/
 ,_pRecvBuffer(NULL)
 ,_nRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
-, _authInit(false)
+,_authInit(false)
+#if TARS_SSL
+, _openssl(NULL)
+#endif
 
 {
     _iLastRefreshTime = TNOW;
@@ -654,7 +664,10 @@ TC_EpollServer::NetThread::Connection::Connection(BindAdapter *pBindAdapter)
 ,_bEmptyConn(false) /*udp is always false*/
 ,_pRecvBuffer(NULL)
 ,_nRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
-, _authInit(false)
+,_authInit(false)
+#if TARS_SSL
+, _openssl(NULL)
+#endif
 
 {
     _iLastRefreshTime = TNOW;
@@ -673,6 +686,10 @@ TC_EpollServer::NetThread::Connection::~Connection()
     {
         assert(!_sock.isValid());
     }
+
+#if TARS_SSL
+    delete _openssl;
+#endif
 }
 
 void TC_EpollServer::NetThread::Connection::tryInitAuthState(int initState)
@@ -688,6 +705,13 @@ void TC_EpollServer::NetThread::Connection::close()
 {
     if(_lfd != -1)
     {
+#if TARS_SSL
+        if (_openssl)
+        {
+            _openssl->Release();
+            _openssl = NULL;
+        }
+#endif
         if(_sock.isValid())
         {
             _sock.close();
@@ -760,9 +784,32 @@ int TC_EpollServer::NetThread::Connection::parseProtocol(recv_queue::queue_type 
                 }
             }
 
+            std::string* rbuf = &_recvbuffer;
+#if TARS_SSL
+            // ssl connection
+            if (_pBindAdapter->getEndpoint().isSSL())
+            {
+                std::string out;
+                if (!_openssl->Read(_recvbuffer.data(), _recvbuffer.size(), out))
+                {
+                    _pBindAdapter->getEpollServer()->error("[TARS][SSL_read failed");
+                    return -1;
+                }
+                else
+                {
+                    if (!out.empty())
+                        this->send(out, "", 0);
+
+                    rbuf = _openssl->RecvBuffer();
+                }
+
+                _recvbuffer.clear();
+            }
+#endif
+
             string ro;
 
-            int b = _pBindAdapter->getProtocol()(_recvbuffer, ro);
+            int b = _pBindAdapter->getProtocol()(*rbuf, ro);
 
             if(b == TC_EpollServer::PACKET_LESS)
             {
@@ -797,7 +844,7 @@ int TC_EpollServer::NetThread::Connection::parseProtocol(recv_queue::queue_type 
                     o.clear();
                 }
 
-                if(_recvbuffer.empty())
+                if(rbuf->empty())
                 {
                     break;
                 }
@@ -1762,6 +1809,38 @@ void TC_EpollServer::NetThread::addTcpConnection(TC_EpollServer::NetThread::Conn
 
     //注意epoll add必须放在最后, 否则可能导致执行完, 才调用上面语句
     _epoller.add(cPtr->getfd(), cPtr->getId(), EPOLLIN | EPOLLOUT);
+#if TARS_SSL
+    if (cPtr->getBindAdapter()->getEndpoint().isSSL())
+    {
+        cPtr->getBindAdapter()->getEpollServer()->info("[TARS][addTcpConnection ssl connection");
+
+        // 分配ssl对象, ctxName 放在obj proxy里
+        SSL* ssl = NewSSL("server");
+        if (!ssl)
+        {
+            cPtr->getBindAdapter()->getEpollServer()->error("[TARS][SSL_accept not find server cert");
+            this->close(uid);
+            return;
+        }
+
+        delete cPtr->_openssl;
+        cPtr->_openssl = new TC_OpenSSL();
+        cPtr->_openssl->Init(ssl, true);
+        std::string out = cPtr->_openssl->DoHandshake();
+        if (cPtr->_openssl->HasError())
+        {
+            cPtr->getBindAdapter()->getEpollServer()->error("[TARS][SSL_accept error: " + cPtr->getBindAdapter()->getEndpoint().toString());
+            this->close(uid);
+            return;
+        }
+    
+        // send the encrypt data from write buffer
+        if (!out.empty())
+        {
+            this->sendBuffer(cPtr, out, "", 0);
+        }
+    }
+#endif
 }
 
 void TC_EpollServer::NetThread::addUdpConnection(TC_EpollServer::NetThread::Connection *cPtr)
@@ -1914,6 +1993,16 @@ void TC_EpollServer::NetThread::processPipe()
 
                 if(cPtr)
                 {
+#if TARS_SSL
+                    if (cPtr->getBindAdapter()->getEndpoint().isSSL() && cPtr->_openssl->IsHandshaked())
+                    {
+                        std::string out = cPtr->_openssl->Write((*it)->buffer.data(), (*it)->buffer.size());
+                        if (cPtr->_openssl->HasError())
+                            break; // should not happen
+    
+                        (*it)->buffer = out;
+                    }
+#endif
                     int ret = sendBuffer(cPtr, (*it)->buffer, (*it)->ip, (*it)->port);
 
                     if(ret < 0)

@@ -20,6 +20,9 @@
 #include "servant/TarsLogger.h"
 #include "servant/AuthLogic.h"
 
+#if TARS_SSL
+#include "util/tc_openssl.h"
+#endif
 namespace tars
 {
 ///////////////////////////////////////////////////////////////////////
@@ -30,6 +33,9 @@ Transceiver::Transceiver(AdapterProxy * pAdapterProxy,const EndpointInfo &ep)
 , _connStatus(eUnconnected)
 , _conTimeoutTime(0)
 , _authState(AUTH_INIT)
+#if TARS_SSL
+, _openssl(NULL)
+#endif
 {
     _fdInfo.iType = FDInfo::ET_C_NET;
     _fdInfo.p     = (void *)this;
@@ -50,6 +56,11 @@ void Transceiver::checkTimeout()
         _adapterProxy->setConTimeout(true);
         close();
     }
+}
+
+bool Transceiver::isSSL() const 
+{ 
+    return _adapterProxy->endpoint().type() == EndpointInfo::SSL; 
 }
 
 void Transceiver::reconnect()
@@ -139,7 +150,41 @@ void Transceiver::setConnected()
 
 void Transceiver::_onConnect()
 {
-    _doAuthReq();
+    ObjectProxy* obj = _adapterProxy->getObjProxy();
+#if TARS_SSL
+    if (isSSL())
+    {
+        // 分配ssl对象
+        SSL* ssl = NewSSL("client");
+        if (!ssl)
+        {
+            TLOGERROR("[TARS][_onConnect:" << obj->name() << " can't find client SSL_CTX " << endl);
+            this->close();
+            return;
+        }
+
+        delete _openssl;
+        _openssl = new TC_OpenSSL();
+        _openssl->Init(ssl, false);
+        std::string out = _openssl->DoHandshake();
+        if (_openssl->HasError())
+        {
+            TLOGERROR("[TARS] SSL_connect failed " << endl);
+            this->close();
+            return;
+        }
+
+        // send the encrypt data from write buffer
+        if (!out.empty())
+        {
+            this->sendRequest(out.data(), out.size(), true);
+        }
+    }
+    else
+#endif
+    {
+        _doAuthReq();
+    }
 }
 
 void Transceiver::_doAuthReq()
@@ -198,6 +243,15 @@ bool Transceiver::sendAuthData(const BasicAuthInfo& info)
 void Transceiver::close()
 {
     if(!isValid()) return;
+
+#if TARS_SSL
+    if (_openssl)
+    {
+        _openssl->Release();
+        delete _openssl;
+        _openssl = NULL;
+    }
+#endif
 
     _adapterProxy->getObjProxy()->getCommunicatorEpoll()->delFd(_fd,&_fdInfo,EPOLLIN|EPOLLOUT);
 
@@ -272,6 +326,11 @@ int Transceiver::sendRequest(const char * pData, size_t iSize, bool forceSend)
         return eRetError;
     }
         
+#if TARS_SSL
+    if (!forceSend && !_openssl->IsHandshaked())
+        return eRetError;
+#endif
+
     if (!forceSend && _authState != AUTH_SUCC)
     {   
         ObjectProxy* obj = _adapterProxy->getObjProxy();
@@ -285,6 +344,17 @@ int Transceiver::sendRequest(const char * pData, size_t iSize, bool forceSend)
     {
         return eRetError;
     }
+
+#if TARS_SSL
+    // 握手数据已加密,直接发送，会话数据需加密
+    std::string out;
+    if (isSSL() && _openssl->IsHandshaked())
+    {
+        out = _openssl->Write(pData, iSize);
+        pData = out.data();
+        iSize = out.size();
+    }
+#endif
 
     int iRet = this->send(pData,iSize,0);
 
@@ -355,14 +425,51 @@ int TcpTransceiver::doResponse(list<ResponsePacket>& done)
     {
         try
         {
+            const char* data = _recvBuffer.ReadAddr();
+            size_t len = _recvBuffer.ReadableSize();
+#if TARS_SSL
+            if (isSSL())
+            {
+                const bool preNotHandshake = !_openssl->IsHandshaked();
+                std::string out;
+                if (!_openssl->Read(_recvBuffer.ReadAddr(), _recvBuffer.ReadableSize(), out))
+                {
+                    TLOGERROR("[TARS][SSL_connect Failed: " << _adapterProxy->getObjProxy()->name() << endl);
+                    this->close();
+                    return -1;
+                }
+                else
+                {
+                    if (!out.empty())
+                        this->sendRequest(out.data(), out.size(), true);
+                }
+
+                _recvBuffer.Clear();
+
+                if (!_openssl->IsHandshaked())
+                    return 0;
+
+                if (preNotHandshake) 
+                    _doAuthReq();
+                
+                std::string* plainBuf = _openssl->RecvBuffer();
+                data = plainBuf->data();
+                len  = plainBuf->size();
+            }
+#endif
             size_t pos = _adapterProxy->getObjProxy()->getProxyProtocol().responseFunc(
-                _recvBuffer.ReadAddr(),
-                _recvBuffer.ReadableSize(), done);
+                data, len, done);
 
             if(pos > 0)
             {
+#if TARS_SSL
+                std::string* plainBuf = _openssl->RecvBuffer();
+                plainBuf->erase(0, pos);
+#else
                 _recvBuffer.Consume(pos);
-                _recvBuffer.Shrink();
+                if (_recvBuffer.Capacity() > 8 * 1024 * 1024)
+                    _recvBuffer.Shrink();
+#endif
             }
         }
         catch (exception &ex)

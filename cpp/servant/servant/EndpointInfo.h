@@ -31,7 +31,7 @@ namespace tars
 class EndpointInfo
 {
 public:
-    enum EType { TCP = 1, UDP = 2, };
+    enum EType { UDP = 0, TCP = 1, SSL = 2};
 
     /**
      * 构造函数
