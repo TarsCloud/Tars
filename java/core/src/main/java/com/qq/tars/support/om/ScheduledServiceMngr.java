@@ -33,7 +33,7 @@ public class ScheduledServiceMngr {
 
     private static final int PROPERTY_REPORT_MIN_INTERVAL = 30000;
 
-    private static int REPORT_INTERVAL = ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig().getReportInterval();
+    private static int REPORT_INTERVAL = ConfigurationManager.getInstance().getServerConfig().getCommunicatorConfig().getReportInterval();
     private final Random random = new Random(System.currentTimeMillis() / 1000);
 
     private ScheduledExecutorManager taskExecutorManager = ScheduledExecutorManager.getInstance();

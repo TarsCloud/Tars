@@ -45,6 +45,7 @@ import com.qq.tars.rpc.protocol.tup.UniAttribute;
 @SuppressWarnings("unchecked")
 public class TarsCodecHelper {
 
+/*
     public static IoBuffer encodeRequest(TarsServantRequest request, Session session, String charsetName) throws ProtocolException {
         request.setCharsetName(charsetName);
         TarsOutputStream os = new TarsOutputStream();
@@ -265,7 +266,7 @@ public class TarsCodecHelper {
             request.setStatus(status);
 
             String servantName = request.getServantName();
-            Map<String, TarsMethodInfo> methodInfoMap = AnalystManager.getInstance().getMethodMap("", servantName);
+            Map<String, TarsMethodInfo> methodInfoMap = AnalystManager.getInstance().getMethodMapByName(servantName);
 
             if (methodInfoMap == null || methodInfoMap.isEmpty()) {
                 request.setRet(TarsHelper.SERVERNOSERVANTERR);
@@ -338,7 +339,7 @@ public class TarsCodecHelper {
         return request;
     }
 
-    private static ClassLoader resolveProtocolClassLoader() {
+    public static ClassLoader resolveProtocolClassLoader() {
         ClassLoader classLoader = ClassLoaderManager.getInstance().getClassLoader("");
         if (classLoader == null) {
             classLoader = Thread.currentThread().getContextClassLoader();
@@ -410,7 +411,7 @@ public class TarsCodecHelper {
         ajos.setServerEncoding(charsetName);
 
         int ret = response.getRet();
-        Map<String, TarsMethodInfo> methodInfoMap = AnalystManager.getInstance().getMethodMap("", request.getServantName());
+        Map<String, TarsMethodInfo> methodInfoMap = AnalystManager.getInstance().getMethodMapByName(request.getServantName());
         if (ret == TarsHelper.SERVERSUCCESS && methodInfoMap != null) {
             TarsMethodInfo methodInfo = methodInfoMap.get(request.getFunctionName());
             TarsMethodParameterInfo returnInfo = methodInfo.getReturnInfo();
@@ -449,7 +450,7 @@ public class TarsCodecHelper {
         }
 
         int ret = response.getRet();
-        Map<String, TarsMethodInfo> methodInfoMap = AnalystManager.getInstance().getMethodMap("", request.getServantName());
+        Map<String, TarsMethodInfo> methodInfoMap = AnalystManager.getInstance().getMethodMapByName(request.getServantName());
         if (ret == TarsHelper.SERVERSUCCESS && methodInfoMap != null) {
             TarsMethodInfo methodInfo = methodInfoMap.get(request.getFunctionName());
             TarsMethodParameterInfo returnInfo = methodInfo.getReturnInfo();
@@ -477,4 +478,5 @@ public class TarsCodecHelper {
         }
         return unaOut.encode();
     }
+*/
 }

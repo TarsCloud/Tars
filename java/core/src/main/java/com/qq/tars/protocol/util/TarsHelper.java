@@ -200,7 +200,8 @@ public class TarsHelper {
             if (CommonUtils.isJavaBase(clazz) || clazz.isArray() || isStruct(clazz)) {
                 return getJavaBaseOrArrayOrJavaBeanStamp((Class<?>) type);
             } else {
-                throw new RuntimeException("the class: " + clazz + " not a exact class, please check it.");
+                return clazz;
+//                throw new RuntimeException("the class: " + clazz + " not a exact class, please check it.");
             }
         } else if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;

@@ -19,7 +19,7 @@ package com.qq.tars.server.apps;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.lang.reflect.Constructor;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,11 +30,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.qq.tars.common.util.StringUtils;
+import com.qq.tars.net.core.Processor;
 import com.qq.tars.protocol.annotation.Servant;
-import com.qq.tars.protocol.annotation.ServantCodec;
 import com.qq.tars.protocol.util.TarsHelper;
-import com.qq.tars.rpc.ext.ExtendedProtocolFactory;
 import com.qq.tars.rpc.protocol.Codec;
+import com.qq.tars.rpc.protocol.ext.ExtendedServant;
 import com.qq.tars.rpc.protocol.tars.support.AnalystManager;
 import com.qq.tars.server.common.XMLConfigElement;
 import com.qq.tars.server.common.XMLConfigFile;
@@ -43,6 +43,7 @@ import com.qq.tars.server.config.ServantAdapterConfig;
 import com.qq.tars.server.config.ServerConfig;
 import com.qq.tars.server.core.AppContext;
 import com.qq.tars.server.core.AppContextListener;
+import com.qq.tars.server.core.ServantAdapter;
 import com.qq.tars.server.core.ServantHomeSkeleton;
 import com.qq.tars.support.admin.AdminFServant;
 import com.qq.tars.support.admin.impl.AdminFServantImpl;
@@ -59,6 +60,7 @@ public class AppContextImpl implements AppContext {
     private boolean ready = true;
 
     private ConcurrentHashMap<String, ServantHomeSkeleton> skeletonMap = new ConcurrentHashMap<String, ServantHomeSkeleton>();
+    private ConcurrentHashMap<String, ServantAdapter> servantAdapterMap = new ConcurrentHashMap<String, ServantAdapter>();
 
     private HashMap<String, String> contextParams = new HashMap<String, String>();
 
@@ -74,7 +76,7 @@ public class AppContextImpl implements AppContext {
             this.classLoader = new AppClassLoader(name, findURLClassPath());
             Thread.currentThread().setContextClassLoader(this.classLoader);
             initFromConfigFile();
-            injectOmServants();
+            injectAdminServant();
             initServants();
             appContextStarted();
             System.out.println("[SERVER] The application started successfully.  {appname=" + name + "}");
@@ -86,11 +88,18 @@ public class AppContextImpl implements AppContext {
         }
     }
 
-    private void injectOmServants() {
+    private void injectAdminServant() {
         try {
             String skeletonName = OmConstants.AdminServant;
-            ServantHomeSkeleton skeleton = new ServantHomeSkeleton(skeletonName, new AdminFServantImpl(), AdminFServant.class, -1);
+            ServantHomeSkeleton skeleton = new ServantHomeSkeleton(skeletonName, new AdminFServantImpl(), AdminFServant.class, null, null, -1);
             skeleton.setAppContext(this);
+
+            ServerConfig serverCfg = ConfigurationManager.getInstance().getServerConfig();
+            ServantAdapterConfig config = serverCfg.getServantAdapterConfMap().get(OmConstants.AdminServant);
+            ServantAdapter servantAdapter = new ServantAdapter(config);
+            servantAdapter.bind(skeleton);
+            servantAdapterMap.put(skeletonName, servantAdapter);
+
             skeletonMap.put(skeletonName, skeleton);
         } catch (Exception e) {
             System.err.println("init om service failed:context=[" + name + "]");
@@ -129,7 +138,6 @@ public class AppContextImpl implements AppContext {
         loadAppContextListeners(elements);
 
         loadAppServants(elements);
-
     }
 
     private void loadInitParams(ArrayList<XMLConfigElement> list) {
@@ -167,26 +175,33 @@ public class AppContextImpl implements AppContext {
         }
     }
 
-    private ServantHomeSkeleton loadServant(XMLConfigElement element) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        String homeName = null, homeApi = null, homeClass = null;
+    @SuppressWarnings("unchecked")
+    private ServantHomeSkeleton loadServant(XMLConfigElement element) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+        String homeName = null, homeApiName = null, homeClassName = null, processorClazzName = null,
+                codecClazzName = null;
         Class<?> homeApiClazz = null;
+        Class<? extends Codec> codecClazz = null;
+        Class<? extends Processor> processorClazz = null;
         Object homeClassImpl = null;
         ServantHomeSkeleton skeleton = null;
         int maxLoadLimit = -1;
 
-        ServerConfig serverCfg = ConfigurationManager.getInstance().getserverConfig();
+        ServerConfig serverCfg = ConfigurationManager.getInstance().getServerConfig();
 
         homeName = element.getStringAttribute("name");
         if (StringUtils.isEmpty(homeName)) {
             throw new RuntimeException("servant name is null.");
         }
         homeName = String.format("%s.%s.%s", serverCfg.getApplication(), serverCfg.getServerName(), homeName);
-        homeApi = getChildNodeValue(element, "home-api");
-        homeClass = getChildNodeValue(element, "home-class");
-        maxLoadLimit = StringUtils.convertInt(getChildNodeValue(element, "load-limit"), maxLoadLimit);
+        homeApiName = getChildNodeValue(element, "home-api");
+        homeClassName = getChildNodeValue(element, "home-class");
+        processorClazzName = getChildNodeValue(element, "home-processor-class");
+        codecClazzName = getChildNodeValue(element, "home-codec-class");
 
-        homeApiClazz = this.classLoader.loadClass(homeApi);
-        homeClassImpl = this.classLoader.loadClass(homeClass).newInstance();
+        homeApiClazz = this.classLoader.loadClass(homeApiName);
+        homeClassImpl = this.classLoader.loadClass(homeClassName).newInstance();
+        codecClazz = (Class<? extends Codec>) (StringUtils.isEmpty(codecClazzName) ? null : this.classLoader.loadClass(codecClazzName));
+        processorClazz = (Class<? extends Processor>) (StringUtils.isEmpty(processorClazzName) ? null : this.classLoader.loadClass(processorClazzName));
 
         if (TarsHelper.isServant(homeApiClazz)) {
             String servantName = homeApiClazz.getAnnotation(Servant.class).name();
@@ -196,39 +211,13 @@ public class AppContextImpl implements AppContext {
         }
 
         ServantAdapterConfig servantAdapterConfig = serverCfg.getServantAdapterConfMap().get(homeName);
-        skeleton = new ServantHomeSkeleton(homeName, homeClassImpl, homeApiClazz, maxLoadLimit);
+
+        ServantAdapter ServerAdapter = new ServantAdapter(servantAdapterConfig);
+        skeleton = new ServantHomeSkeleton(homeName, homeClassImpl, homeApiClazz, codecClazz, processorClazz, maxLoadLimit);
         skeleton.setAppContext(this);
-
-        skeleton.setMaxThreadPoolSize(servantAdapterConfig.getThreads());
-        skeleton.setMinThreadPoolSize(servantAdapterConfig.getThreads());
-        skeleton.setQueueSize(servantAdapterConfig.getQueueCap());
-
-        if (homeApiClazz.isAnnotationPresent(ServantCodec.class)) {
-            Codec codec = createCodec(homeApiClazz, serverCfg);
-            if (codec == null) {
-                throw new RuntimeException("Can't found codec for servant [" + homeApi + "]");
-            }
-            ExtendedProtocolFactory.registerExtendedCodecImpl(codec, name());
-        }
+        ServerAdapter.bind(skeleton);
+        servantAdapterMap.put(homeName, ServerAdapter);
         return skeleton;
-    }
-
-    private Codec createCodec(Class<?> api, ServerConfig serverCfg) throws InstantiationException {
-        Codec codec = null;
-        ServantCodec servantCodec = api.getAnnotation(ServantCodec.class);
-        if (servantCodec != null) {
-            Class<? extends Codec> codecClass = servantCodec.codec();
-            if (codecClass != null) {
-                Constructor<? extends Codec> constructor;
-                try {
-                    constructor = codecClass.getConstructor(new Class[] { String.class });
-                    codec = constructor.newInstance(serverCfg.getCharsetName());
-                } catch (Exception e) {
-                    throw new InstantiationException("error occurred on create codec, codec=" + codecClass.getName());
-                }
-            }
-        }
-        return codec;
     }
 
     private void loadAppContextListeners(ArrayList<XMLConfigElement> elements) {
@@ -304,10 +293,20 @@ public class AppContextImpl implements AppContext {
             ServantHomeSkeleton skeleton = skeletonMap.get(skeletonName);
             Class<?> api = skeleton.getApiClass();
             try {
+                if (api.isAssignableFrom(ExtendedServant.class)) {
+                    continue;
+                }
                 AnalystManager.getInstance().registry(name(), api, skeleton.name());
             } catch (Exception e) {
                 System.err.println("app[" + name + "] init servant[" + api.getName() + "] failed");
             }
+        }
+    }
+
+    @Override
+    public void stop() {
+        for (ServantAdapter servantAdapter : servantAdapterMap.values()) {
+            servantAdapter.stop();
         }
     }
 }

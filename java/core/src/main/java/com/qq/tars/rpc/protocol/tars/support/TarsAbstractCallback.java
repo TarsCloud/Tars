@@ -20,6 +20,8 @@ import java.lang.reflect.Method;
 
 import com.qq.tars.protocol.tars.annotation.TarsCallback;
 import com.qq.tars.rpc.exc.ClientException;
+import com.qq.tars.rpc.protocol.Codec;
+import com.qq.tars.rpc.protocol.tars.TarsCodec;
 import com.qq.tars.rpc.protocol.tars.TarsCodecHelper;
 import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
@@ -33,7 +35,7 @@ public abstract class TarsAbstractCallback implements com.qq.tars.net.client.Cal
         try {
             Method callback = getCallbackMethod("callback_".concat(request.getFunctionName()));
             callback.setAccessible(true);
-            callback.invoke(this, TarsCodecHelper.decodeCallbackArgs(response));
+            callback.invoke(this, ((TarsCodec) response.getSession().getProtocolFactory().getDecoder()).decodeCallbackArgs(response));
         } catch (Throwable ex) {
             throw new ClientException(ex);
         }

@@ -27,268 +27,277 @@ import com.qq.tars.support.om.OmConstants;
 
 public class ServerConfig {
 
-    private String application;
-    private String serverName;
-    private Endpoint local;
-    private String node;
-    private String basePath;
-    private String config;
-    private String notify;
-    private String log;
-    private String logPath;
-    private String logLevel;
-    private int logRate;
-    private String dataPath;
-    private String localIP;
-    private int localPort;
+	private String application;
+	private String serverName;
+	private Endpoint local;
+	private String node;
+	private String basePath;
+	private String config;
+	private String notify;
+	private String log;
+	private String logPath;
+	private String logLevel;
+	private int logRate;
+	private String dataPath;
+	private String localIP;
 
-    private int sessionTimeOut;
-    private int sessionCheckInterval;
-    private boolean tcpNoDelay;
-    private int udpBufferSize;
+	private int sessionTimeOut;
+	private int sessionCheckInterval;
+	private boolean tcpNoDelay;
+	private int udpBufferSize;
 
-    private String charsetName;
+	private String charsetName;
 
-    private LinkedHashMap<String, ServantAdapterConfig> servantAdapterConfMap;
-    private CommunicatorConfig communicatorConfig;
+	private LinkedHashMap<String, ServantAdapterConfig> servantAdapterConfMap;
+	private CommunicatorConfig communicatorConfig;
 
-    public ServerConfig load(Config conf) {
-        application = conf.get("/tars/application/server<app>", "UNKNOWN");
-        serverName = conf.get("/tars/application/server<server>", null);
+	public ServerConfig load(Config conf) {
+		application = conf.get("/tars/application/server<app>", "UNKNOWN");
+		serverName = conf.get("/tars/application/server<server>", null);
 
-        String localStr = conf.get("/tars/application/server<local>");
-        local = localStr == null || localStr.length() <= 0 ? null : Endpoint.parseString(localStr);
-        node = conf.get("/tars/application/server<node>");
-        basePath = conf.get("/tars/application/server<basepath>");
-        dataPath = conf.get("/tars/application/server<datapath>");
+		String localStr = conf.get("/tars/application/server<local>");
+		local = localStr == null || localStr.length() <= 0 ? null : Endpoint
+				.parseString(localStr);
+		node = conf.get("/tars/application/server<node>");
+		basePath = conf.get("/tars/application/server<basepath>");
+		dataPath = conf.get("/tars/application/server<datapath>");
 
-        charsetName = conf.get("/tars/application/server<charsetname>", "UTF-8");
+		charsetName = conf
+				.get("/tars/application/server<charsetname>", "UTF-8");
 
-        config = conf.get("/tars/application/server<config>");
-        notify = conf.get("/tars/application/server<notify>");
+		config = conf.get("/tars/application/server<config>");
+		notify = conf.get("/tars/application/server<notify>");
 
-        log = conf.get("/tars/application/server<log>");
-        logPath = conf.get("/tars/application/server<logpath>", null);
-        logLevel = conf.get("/tars/application/server<loglevel>");
-        logRate = conf.getInt("/tars/application/server<lograte>", 5);
+		log = conf.get("/tars/application/server<log>");
+		logPath = conf.get("/tars/application/server<logpath>", null);
+		logLevel = conf.get("/tars/application/server<loglevel>");
+		logRate = conf.getInt("/tars/application/server<lograte>", 5);
 
-        localIP = conf.get("/tars/application/server<localip>");
+		localIP = conf.get("/tars/application/server<localip>");
 
-        sessionTimeOut = conf.getInt("/tars/application/server<sessiontimeout>", 120000);
-        sessionCheckInterval = conf.getInt("/tars/application/server<sessioncheckinterval>", 60000);
-        udpBufferSize = conf.getInt("/tars/application/server<udpbuffersize>", 4096);
-        tcpNoDelay = conf.getBool("/tars/application/server<tcpnodelay>", false);
+		sessionTimeOut = conf.getInt(
+				"/tars/application/server<sessiontimeout>", 120000);
+		sessionCheckInterval = conf.getInt(
+				"/tars/application/server<sessioncheckinterval>", 60000);
+		udpBufferSize = conf.getInt("/tars/application/server<udpbuffersize>",
+				4096);
+		tcpNoDelay = conf
+				.getBool("/tars/application/server<tcpnodelay>", false);
 
-        servantAdapterConfMap = new LinkedHashMap<String, ServantAdapterConfig>();
-        List<String> adapterNameList = conf.getSubTags("/tars/application/server");
-        if (adapterNameList != null) {
-            for (String adapterName : adapterNameList) {
-                ServantAdapterConfig config = new ServantAdapterConfig();
-                config.load(conf, adapterName);
-                servantAdapterConfMap.put(config.getServant(), config);
-            }
-        }
-        servantAdapterConfMap.put(OmConstants.AdminServant, new ServantAdapterConfig());
+		servantAdapterConfMap = new LinkedHashMap<String, ServantAdapterConfig>();
+		List<String> adapterNameList = conf
+				.getSubTags("/tars/application/server");
+		if (adapterNameList != null) {
+			for (String adapterName : adapterNameList) {
+				ServantAdapterConfig config = new ServantAdapterConfig();
+				config.load(conf, adapterName);
+				servantAdapterConfMap.put(config.getServant(), config);
+			}
+		}
 
-        if (application != null && serverName != null && logPath != null) {
-            logPath = logPath + File.separator + application + File.separator + serverName;
-        }
-        communicatorConfig = new CommunicatorConfig().load(conf);
-        if (logPath != null) {
-            communicatorConfig.setLogPath(logPath);
-        }
-        communicatorConfig.setLogLevel(logLevel);
-        communicatorConfig.setDataPath(dataPath);
-        return this;
-    }
+		ServantAdapterConfig adminServantAdapterConfig = new ServantAdapterConfig();
+		adminServantAdapterConfig.setEndpoint(local);
+		adminServantAdapterConfig.setServant(String.format("%s.%s.%s",
+				application, serverName, OmConstants.AdminServant));
+		servantAdapterConfMap.put(OmConstants.AdminServant,
+				adminServantAdapterConfig);
 
-    public String getApplication() {
-        return application;
-    }
+		if (application != null && serverName != null && logPath != null) {
+			logPath = logPath + File.separator + application + File.separator
+					+ serverName;
+		}
+		communicatorConfig = new CommunicatorConfig().load(conf);
+		if (logPath != null) {
+			communicatorConfig.setLogPath(logPath);
+		}
+		communicatorConfig.setLogLevel(logLevel);
+		communicatorConfig.setDataPath(dataPath);
+		return this;
+	}
 
-    public ServerConfig setApplication(String application) {
-        this.application = application;
-        return this;
-    }
+	public String getApplication() {
+		return application;
+	}
 
-    public String getServerName() {
-        return serverName;
-    }
+	public ServerConfig setApplication(String application) {
+		this.application = application;
+		return this;
+	}
 
-    public ServerConfig setServerName(String serverName) {
-        this.serverName = serverName;
-        return this;
-    }
+	public String getServerName() {
+		return serverName;
+	}
 
-    public Endpoint getLocal() {
-        return local;
-    }
+	public ServerConfig setServerName(String serverName) {
+		this.serverName = serverName;
+		return this;
+	}
 
-    public ServerConfig setLocal(Endpoint local) {
-        this.local = local;
-        return this;
-    }
+	public Endpoint getLocal() {
+		return local;
+	}
 
-    public String getNode() {
-        return node;
-    }
+	public ServerConfig setLocal(Endpoint local) {
+		this.local = local;
+		return this;
+	}
 
-    public ServerConfig setNode(String node) {
-        this.node = node;
-        return this;
-    }
+	public String getNode() {
+		return node;
+	}
 
-    public String getBasePath() {
-        return basePath;
-    }
+	public ServerConfig setNode(String node) {
+		this.node = node;
+		return this;
+	}
 
-    public ServerConfig setBasePath(String basePath) {
-        this.basePath = basePath;
-        return this;
-    }
+	public String getBasePath() {
+		return basePath;
+	}
 
-    public String getConfig() {
-        return config;
-    }
+	public ServerConfig setBasePath(String basePath) {
+		this.basePath = basePath;
+		return this;
+	}
 
-    public ServerConfig setConfig(String config) {
-        this.config = config;
-        return this;
-    }
+	public String getConfig() {
+		return config;
+	}
 
-    public String getNotify() {
-        return notify;
-    }
+	public ServerConfig setConfig(String config) {
+		this.config = config;
+		return this;
+	}
 
-    public ServerConfig setNotify(String notify) {
-        this.notify = notify;
-        return this;
-    }
+	public String getNotify() {
+		return notify;
+	}
 
-    public String getLog() {
-        return log;
-    }
+	public ServerConfig setNotify(String notify) {
+		this.notify = notify;
+		return this;
+	}
 
-    public ServerConfig setLog(String log) {
-        this.log = log;
-        return this;
-    }
+	public String getLog() {
+		return log;
+	}
 
-    public String getLogPath() {
-        return logPath;
-    }
+	public ServerConfig setLog(String log) {
+		this.log = log;
+		return this;
+	}
 
-    public ServerConfig setLogPath(String logPath) {
-        this.logPath = logPath;
-        return this;
-    }
+	public String getLogPath() {
+		return logPath;
+	}
 
-    public int getLogRate() {
-        return logRate;
-    }
+	public ServerConfig setLogPath(String logPath) {
+		this.logPath = logPath;
+		return this;
+	}
 
-    public ServerConfig setLogRate(int logRate) {
-        this.logRate = logRate;
-        return this;
-    }
+	public int getLogRate() {
+		return logRate;
+	}
 
-    public String getLogLevel() {
-        return logLevel;
-    }
+	public ServerConfig setLogRate(int logRate) {
+		this.logRate = logRate;
+		return this;
+	}
 
-    public ServerConfig setLogLevel(String logLevel) {
-        this.logLevel = logLevel;
-        return this;
-    }
+	public String getLogLevel() {
+		return logLevel;
+	}
 
-    public String getLocalIP() {
-        return localIP;
-    }
+	public ServerConfig setLogLevel(String logLevel) {
+		this.logLevel = logLevel;
+		return this;
+	}
 
-    public ServerConfig setLocalIP(String localIP) {
-        this.localIP = localIP;
-        return this;
-    }
+	public String getLocalIP() {
+		return localIP;
+	}
 
-    public LinkedHashMap<String, ServantAdapterConfig> getServantAdapterConfMap() {
-        return servantAdapterConfMap;
-    }
+	public ServerConfig setLocalIP(String localIP) {
+		this.localIP = localIP;
+		return this;
+	}
 
-    public ServerConfig setServantAdapterConfMap(LinkedHashMap<String, ServantAdapterConfig> servantAdapterConfMap) {
-        this.servantAdapterConfMap = servantAdapterConfMap;
-        return this;
-    }
+	public LinkedHashMap<String, ServantAdapterConfig> getServantAdapterConfMap() {
+		return servantAdapterConfMap;
+	}
 
-    public CommunicatorConfig getCommunicatorConfig() {
-        return communicatorConfig;
-    }
+	public ServerConfig setServantAdapterConfMap(
+			LinkedHashMap<String, ServantAdapterConfig> servantAdapterConfMap) {
+		this.servantAdapterConfMap = servantAdapterConfMap;
+		return this;
+	}
 
-    public ServerConfig setCommunicatorConfig(CommunicatorConfig communicatorConfig) {
-        this.communicatorConfig = communicatorConfig;
-        return this;
-    }
+	public CommunicatorConfig getCommunicatorConfig() {
+		return communicatorConfig;
+	}
 
-    public String getDataPath() {
-        return dataPath;
-    }
+	public ServerConfig setCommunicatorConfig(
+			CommunicatorConfig communicatorConfig) {
+		this.communicatorConfig = communicatorConfig;
+		return this;
+	}
 
-    public ServerConfig setDataPath(String dataPath) {
-        this.dataPath = dataPath;
-        return this;
-    }
+	public String getDataPath() {
+		return dataPath;
+	}
 
-    public int getSessionTimeOut() {
-        return sessionTimeOut;
-    }
+	public ServerConfig setDataPath(String dataPath) {
+		this.dataPath = dataPath;
+		return this;
+	}
 
-    public ServerConfig setSessionTimeOut(int sessionTimeOut) {
-        this.sessionTimeOut = sessionTimeOut;
-        return this;
-    }
+	public int getSessionTimeOut() {
+		return sessionTimeOut;
+	}
 
-    public int getSessionCheckInterval() {
-        return sessionCheckInterval;
-    }
+	public ServerConfig setSessionTimeOut(int sessionTimeOut) {
+		this.sessionTimeOut = sessionTimeOut;
+		return this;
+	}
 
-    public ServerConfig setSessionCheckInterval(int sessionCheckInterval) {
-        this.sessionCheckInterval = sessionCheckInterval;
-        return this;
-    }
+	public int getSessionCheckInterval() {
+		return sessionCheckInterval;
+	}
 
-    public boolean isTcpNoDelay() {
-        return tcpNoDelay;
-    }
+	public ServerConfig setSessionCheckInterval(int sessionCheckInterval) {
+		this.sessionCheckInterval = sessionCheckInterval;
+		return this;
+	}
 
-    public ServerConfig setTcpNoDelay(boolean tcpNoDelay) {
-        this.tcpNoDelay = tcpNoDelay;
-        return this;
-    }
+	public boolean isTcpNoDelay() {
+		return tcpNoDelay;
+	}
 
-    public int getUdpBufferSize() {
-        return udpBufferSize;
-    }
+	public ServerConfig setTcpNoDelay(boolean tcpNoDelay) {
+		this.tcpNoDelay = tcpNoDelay;
+		return this;
+	}
 
-    public ServerConfig setUdpBufferSize(int udpBufferSize) {
-        this.udpBufferSize = udpBufferSize;
-        return this;
-    }
+	public int getUdpBufferSize() {
+		return udpBufferSize;
+	}
 
-    public String getCharsetName() {
-        return charsetName;
-    }
+	public ServerConfig setUdpBufferSize(int udpBufferSize) {
+		this.udpBufferSize = udpBufferSize;
+		return this;
+	}
 
-    public ServerConfig setCharsetName(String charsetName) {
-        this.charsetName = charsetName;
-        return this;
-    }
+	public String getCharsetName() {
+		return charsetName;
+	}
 
-    public int getLocalPort() {
-        return localPort;
-    }
+	public ServerConfig setCharsetName(String charsetName) {
+		this.charsetName = charsetName;
+		return this;
+	}
 
-    public ServerConfig setLocalPort(int localPort) {
-        this.localPort = localPort;
-        return this;
-    }
-
+	public int getLocalPort() {
+		return this.local.port();
+	}
 }
