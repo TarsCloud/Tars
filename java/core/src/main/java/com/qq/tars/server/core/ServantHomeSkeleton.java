@@ -110,13 +110,13 @@ public class ServantHomeSkeleton extends AppService {
         return codecClazz;
     }
 
-    private AppContext appContext;
+    private AppContextImpl appContext;
 
-    public void setAppContext(AppContext context) {
+    public void setAppContext(AppContextImpl context) {
         appContext = context;
     }
 
-    public AppContext getAppContext() {
+    public AppContextImpl getAppContext() {
         return appContext;
     }
 }
