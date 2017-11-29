@@ -20,20 +20,7 @@ import java.util.Collection;
 
 import com.qq.tars.rpc.common.exc.NoInvokerException;
 
-public interface LoadBalance<T> {
+public interface LoadBalance {
 
-    /**
-     * 根据负载均衡策略，挑选invoker
-     *
-     * @param invokeContext
-     * @return
-     * @throws NoInvokerException
-     */
-    Invoker<T> select(InvokeContext invokeContext) throws NoInvokerException;
-
-    /**
-     * 通知invoker列表的更新
-     * @param invokers
-     */
-    void refresh(Collection<Invoker<T>> invokers);
+    <T> Invoker<T> select(Collection<Invoker<T>> invokers, InvokeContext context) throws NoInvokerException;
 }

@@ -32,8 +32,7 @@ import com.qq.tars.rpc.common.Invoker;
 import com.qq.tars.rpc.common.LoadBalance;
 import com.qq.tars.rpc.common.exc.NoInvokerException;
 
-@Deprecated
-public class DefaultLoadBalance {
+public class DefaultLoadBalance implements LoadBalance {
 
     private final AtomicInteger sequence = new AtomicInteger();
     private volatile ServantProxyConfig config;
