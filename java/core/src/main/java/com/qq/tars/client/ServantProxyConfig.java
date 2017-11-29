@@ -53,6 +53,11 @@ public final class ServantProxyConfig {
 
     private boolean directConnection = false;
 
+    private int minStaticWeightLimit = 10;
+    private int maxStaticWeightLimit = 100;
+
+    private int defaultConHashVirtualNodes = 100;
+
     public ServantProxyConfig(String objectName) {
         this(null, null, objectName);
     }
@@ -267,6 +272,31 @@ public final class ServantProxyConfig {
 
     public void setReportInterval(int reportInterval) {
         this.reportInterval = reportInterval;
+    }
+
+    public int getMaxStaticWeightLimit() {
+        return maxStaticWeightLimit;
+    }
+
+    public void setMaxStaticWeightLimit(int maxStaticWeightLimit) {
+        this.maxStaticWeightLimit = maxStaticWeightLimit;
+    }
+
+
+    public int getMinStaticWeightLimit() {
+        return minStaticWeightLimit;
+    }
+
+    public void setMinStaticWeightLimit(int minStaticWeightLimit) {
+        this.minStaticWeightLimit = minStaticWeightLimit;
+    }
+
+    public int getDefaultConHashVirtualNodes() {
+        return defaultConHashVirtualNodes;
+    }
+
+    public void setDefaultConHashVirtualNodes(int defaultConHashVirtualNodes) {
+        this.defaultConHashVirtualNodes = defaultConHashVirtualNodes;
     }
 
     @Override

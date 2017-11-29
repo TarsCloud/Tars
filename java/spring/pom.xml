@@ -9,9 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>tars-protobuf</artifactId>
+    <artifactId>tars-spring</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
+
+    <properties>
+        <spring.version>4.2.9.RELEASE</spring.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -20,9 +24,19 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>2.6.1</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
         </dependency>
     </dependencies>
 </project>

@@ -86,9 +86,13 @@ public final class QueryHelper {
             value.append("-p").append(" ").append(endpointF.port).append(" ");
             value.append("-t").append(" 3000 ");
             value.append("-a").append(" ").append(active ? "1" : "0").append(" ");
-            value.append("-g").append(" ").append(endpointF.grid);
+            value.append("-g").append(" ").append(endpointF.grid).append(" ");
             if (endpointF.setId != null && endpointF.setId.length() > 0) {
                 value.append(" ").append("-s").append(" ").append(endpointF.setId);
+            }
+            if (endpointF.weightType != 0) {
+                value.append(" ").append("-v").append(" ").append(endpointF.weightType);
+                value.append(" ").append("-w").append(" ").append(endpointF.weight);
             }
         }
         return value.toString();
