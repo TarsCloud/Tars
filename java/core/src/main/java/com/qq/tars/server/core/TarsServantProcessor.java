@@ -52,7 +52,7 @@ public class TarsServantProcessor extends Processor {
         TarsServantResponse response = null;
         ServantHomeSkeleton skeleton = null;
         Object value = null;
-        AppContextImpl appContext = null;
+        AppContext appContext = null;
         ClassLoader oldClassLoader = null;
         int waitingTime = -1;
         long startTime = req.getProcessTime();
@@ -85,7 +85,7 @@ public class TarsServantProcessor extends Processor {
             appContext = container.getDefaultAppContext();
             if (appContext == null) throw new RuntimeException("failed to find the application named:[ROOT]");
 
-            Thread.currentThread().setContextClassLoader(appContext.getAppContextClassLoader());
+//            Thread.currentThread().setContextClassLoader(appContext.getAppContextClassLoader());
 
             skeleton = appContext.getCapHomeSkeleton(request.getServantName());
             if (skeleton == null) throw new RuntimeException("failed to find the servant named[" + request.getServantName() + "]");

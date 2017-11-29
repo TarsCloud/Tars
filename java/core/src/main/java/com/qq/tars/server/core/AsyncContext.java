@@ -47,7 +47,7 @@ public final class AsyncContext {
     }
 
     private ServantHomeSkeleton getCapHomeSkeleton() {
-        AppContextImpl appContext = container.getDefaultAppContext();
+        AppContext appContext = container.getDefaultAppContext();
         return appContext.getCapHomeSkeleton(this.context.request().getServantName());
     }
 

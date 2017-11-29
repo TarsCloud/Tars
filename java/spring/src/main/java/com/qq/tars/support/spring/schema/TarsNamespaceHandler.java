@@ -14,16 +14,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.qq.tars.server.core;
+package com.qq.tars.support.spring.schema;
 
-public interface AppContext {
+import com.qq.tars.support.spring.ListenerConfig;
+import com.qq.tars.support.spring.ServantConfig;
+import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
-    public String getInitParameter(String name);
-
-    public abstract String name();
-
-    public void stop();
-
-    public ServantHomeSkeleton getCapHomeSkeleton(String homeName);
+public class TarsNamespaceHandler extends NamespaceHandlerSupport {
+    @Override
+    public void init() {
+        registerBeanDefinitionParser("servant", new TarsBeanDefinitionParser(ServantConfig.class));
+        registerBeanDefinitionParser("listener", new TarsBeanDefinitionParser(ListenerConfig.class));
+    }
 }
-
