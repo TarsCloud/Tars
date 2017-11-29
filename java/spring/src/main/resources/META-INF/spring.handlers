@@ -1,1 +1,1 @@
-http\://www.qq.com/schema/tars=com.qq.tars.support.spring.schema.TarsNamespaceHandler
+http\://tars.tencent.com/schema/tars=com.qq.tars.support.spring.schema.TarsNamespaceHandler

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://www.qq.com/schema/tars"
+<xsd:schema xmlns="http://tars.tencent.com/schema/tars"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://www.qq.com/schema/tars"
+            targetNamespace="http://tars.tencent.com/schema/tars"
             elementFormDefault="qualified" attributeFormDefault="unqualified">
     <xsd:element name="servant">
         <xsd:complexType>
