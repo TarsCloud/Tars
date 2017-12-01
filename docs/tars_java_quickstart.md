@@ -38,32 +38,32 @@
 
 - 框架依赖配置
 ```xml
-     <dependency>
-     		<groupId>qq-cloud-central</groupId>
-     		<artifactId>tars-server</artifactId>
-     		<version>1.0.3</version>
-     		<type>jar</type>
-     	</dependency>
+<dependency>
+	<groupId>qq-cloud-central</groupId>
+     	<artifactId>tars-server</artifactId>
+     	<version>1.0.3</version>
+     	<type>jar</type>
+</dependency>
 ```
 - 插件依赖配置
 ```xml
-   <plugin>
-   		<groupId>qq-cloud-central</groupId>
-   		<artifactId>tars-maven-plugin</artifactId>
-   		<version>1.0.3</version>
-   		<configuration>
-   			<tars2JavaConfig>
-   				<tarsFiles>
-   					<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-   				</tarsFiles>
-   				<tarsFileCharset>UTF-8</tarsFileCharset>
-   				<servant>true</servant>
-   				<srcPath>${basedir}/src/main/java</srcPath>
-   				<charset>UTF-8</charset>
-   				<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
-   			</tars2JavaConfig>
-   		</configuration>
-   	</plugin>
+<plugin>
+	<groupId>qq-cloud-central</groupId>
+   	<artifactId>tars-maven-plugin</artifactId>
+   	<version>1.0.3</version>
+  	<configuration>
+   		<tars2JavaConfig>
+  			<tarsFiles>
+   				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+   			</tarsFiles>
+  			<tarsFileCharset>UTF-8</tarsFileCharset>
+   			<servant>true</servant>
+  			<srcPath>${basedir}/src/main/java</srcPath>
+  			<charset>UTF-8</charset>
+   			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
+  		</tars2JavaConfig>
+   	</configuration>
+</plugin>
 ```
 ## 服务开发 <a id="main-chapter-2"></a>
 
@@ -71,13 +71,13 @@
 
 接口文件定义是通过Tars接口描述语言来定义，在src/main/resources目录下建立hello.tars文件，内容如下
 ```
-	module TestApp 
+module TestApp 
+{
+	interface Hello
 	{
-		interface Hello
-		{
-		    string hello(int no, string name);
-		};
+	    string hello(int no, string name);
 	};
+};
 ```
 ### 接口文件编译
 
@@ -119,12 +119,13 @@
 
 新创建一个HelloServantImpl.java文件，实现HelloServant.java接口
 ```java
-	public class HelloServantImpl implements HelloServant {
+public class HelloServantImpl implements HelloServant {
 
     @Override
     public String hello(int no, String name) {
         return String.format("hello no=%s, name=%s, time=%s", no, name, System.currentTimeMillis());
     }
+}
 ```
 
 ### 服务暴露配置
@@ -150,7 +151,7 @@
 - 构建客户端工程项目
 - 添加依赖
 ```xml
-   <dependency>
+   	<dependency>
    		<groupId>qq-cloud-central</groupId>
    		<artifactId>tars-client</artifactId>
    		<version>1.0.1</version>
@@ -159,7 +160,7 @@
 ```
 - 添加插件
 ```xml	
-   <plugin>
+	<plugin>
    		<groupId>qq-cloud-central</groupId>
    		<artifactId>tars-maven-plugin</artifactId>
    		<version>1.0.1</version>
