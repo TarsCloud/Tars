@@ -19,43 +19,43 @@
 - 框架依赖配置
 ```
      <dependency>
-     		<groupId>qq-cloud-central</groupId>
-     		<artifactId>tars-server</artifactId>
-     		<version>1.0.3</version>
-     		<type>jar</type>
-     	</dependency>
+	<groupId>qq-cloud-central</groupId>
+	<artifactId>tars-server</artifactId>
+	<version>1.0.3</version>
+	<type>jar</type>
+     </dependency>
 ```
 - 插件依赖配置
 ```
    <plugin>
-   		<groupId>qq-cloud-central</groupId>
-   		<artifactId>tars-maven-plugin</artifactId>
-   		<version>1.0.3</version>
-   		<configuration>
-   			<tars2JavaConfig>
-   				<tarsFiles>
-   					<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-   				</tarsFiles>
-   				<tarsFileCharset>UTF-8</tarsFileCharset>
-   				<servant>true</servant>
-   				<srcPath>${basedir}/src/main/java</srcPath>
-   				<charset>UTF-8</charset>
-   				<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
-   			</tars2JavaConfig>
-   		</configuration>
-   	</plugin>
+	<groupId>qq-cloud-central</groupId>
+	<artifactId>tars-maven-plugin</artifactId>
+	<version>1.0.3</version>
+	<configuration>
+		<tars2JavaConfig>
+			<tarsFiles>
+				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+			</tarsFiles>
+			<tarsFileCharset>UTF-8</tarsFileCharset>
+			<servant>true</servant>
+			<srcPath>${basedir}/src/main/java</srcPath>
+			<charset>UTF-8</charset>
+			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
+		</tars2JavaConfig>
+	</configuration>
+   </plugin>
 ```
 ### 接口文件定义 ###
 
 接口文件定义是通过Tars接口描述语言来定义，在src/main/resources目录下建立hello.tars文件，内容如下
 ```    	
-	module TestApp 
+module TestApp 
+{
+	interface Hello
 	{
-		interface Hello
-		{
-		    string hello(int no, string name);
-		};
+	    string hello(int no, string name);
 	};
+};
 ```
 ### 接口文件编译 ###
 
