@@ -14,16 +14,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.qq.tars.server.core;
+package com.qq.tars.support.spring;
 
-public interface AppContext {
+public class ListenerConfig {
+    private String ref;
 
-    public String getInitParameter(String name);
+    public String getRef() {
+        return ref;
+    }
 
-    public abstract String name();
-
-    public void stop();
-
-    public ServantHomeSkeleton getCapHomeSkeleton(String homeName);
+    public void setRef(String ref) {
+        this.ref = ref;
+    }
 }
-

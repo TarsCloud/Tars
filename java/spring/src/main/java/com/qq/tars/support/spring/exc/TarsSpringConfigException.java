@@ -14,16 +14,10 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.qq.tars.server.core;
+package com.qq.tars.support.spring.exc;
 
-public interface AppContext {
-
-    public String getInitParameter(String name);
-
-    public abstract String name();
-
-    public void stop();
-
-    public ServantHomeSkeleton getCapHomeSkeleton(String homeName);
+public class TarsSpringConfigException extends RuntimeException {
+    public TarsSpringConfigException(String string) {
+        super(string);
+    }
 }
-

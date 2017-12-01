@@ -60,13 +60,13 @@ public final class Communicator {
         return stringToProxy(clazz, servantProxyConfig, null);
     }
 
-    public <T> T stringToProxy(Class<T> clazz, ServantProxyConfig servantProxyConfig, LoadBalance loadBalance) throws CommunicatorConfigException {
+    public <T> T stringToProxy(Class<T> clazz, ServantProxyConfig servantProxyConfig, LoadBalance<T> loadBalance) throws CommunicatorConfigException {
         return stringToProxy(clazz, servantProxyConfig.getObjectName(), servantProxyConfig, loadBalance, null);
     }
 
     @SuppressWarnings("unchecked")
     private <T> T stringToProxy(Class<T> clazz, String objName, ServantProxyConfig servantProxyConfig,
-                                LoadBalance loadBalance, ProtocolInvoker<T> protocolInvoker) throws CommunicatorConfigException {
+                                LoadBalance<T> loadBalance, ProtocolInvoker<T> protocolInvoker) throws CommunicatorConfigException {
         if (!inited.get()) {
             throw new CommunicatorConfigException("communicator uninitialized!");
         }

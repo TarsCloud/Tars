@@ -73,6 +73,9 @@ public class ParseTools {
 
         int active = 1;
         String setDivision = null;
+        String enableAuth = "0";
+        int weightType = 0;
+        int weight = 0;
         for (int i = 0; i < items.length; i++) {
             if (items[i].equals("-h")) {
                 host = items[i + 1];
@@ -82,6 +85,12 @@ public class ParseTools {
                 active = Integer.parseInt(items[i + 1]);
             } else if (items[i].equals("-s")) {
                 setDivision = items[i + 1];
+            } else if (items[i].equals("-e")) {
+            	enableAuth = items[i + 1];
+            } else if (items[i].equals("-v")) {
+                weightType = Integer.parseInt(items[i + 1]);
+            } else if (items[i].equals("-w")) {
+                weight = Integer.parseInt(items[i + 1]);
             }
         }
         if (StringUtils.isEmpty(host) || port == -1) {
@@ -98,6 +107,10 @@ public class ParseTools {
         parameters.put(Constants.TARS_CLIENT_UDPMODE, Boolean.toString(items[0].toLowerCase().equals("udp")));
         parameters.put(Constants.TARS_CLIENT_TCPNODELAY, Boolean.toString(conf.isTcpNoDelay()));
         parameters.put(Constants.TARS_CLIENT_CHARSETNAME, conf.getCharsetName());
+        parameters.put(Constants.TARS_CLIENT_ENABLEAUTH, enableAuth);
+        parameters.put(Constants.TARS_CLIENT_WEIGHT_TYPE, String.valueOf(weightType));
+        parameters.put(Constants.TARS_CLIENT_WEIGHT, String.valueOf(weight));
+
         return new Url(conf.getProtocol(), host, port, objectName, parameters);
     }
 }

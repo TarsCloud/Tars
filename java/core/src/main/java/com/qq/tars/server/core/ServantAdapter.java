@@ -38,7 +38,7 @@ import com.qq.tars.server.config.ConfigurationManager;
 import com.qq.tars.server.config.ServantAdapterConfig;
 import com.qq.tars.server.config.ServerConfig;
 
-public class ServantAdapter {
+public class ServantAdapter implements Adapter {
 
     private SelectorManager selectorManager = null;
 
@@ -50,8 +50,8 @@ public class ServantAdapter {
         this.servantAdapterConfig = servantAdapterConfig;
     }
 
-    public void bind(ServantHomeSkeleton skeleton) throws IOException {
-        this.skeleton = skeleton;
+    public void bind(AppService appService) throws IOException {
+        this.skeleton = (ServantHomeSkeleton) appService;
         ServerConfig serverCfg = ConfigurationManager.getInstance().getServerConfig();
 
         boolean keepAlive = true;
