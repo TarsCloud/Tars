@@ -27,6 +27,8 @@ public class TarsMethodInfo {
 
     private String serviceName;
     private String comment;
+    
+    private int routeKeyIndex = -1;
 
     public String getServiceName() {
         return serviceName;
@@ -71,4 +73,12 @@ public class TarsMethodInfo {
     public void setComment(String comment) {
         this.comment = comment;
     }
+    
+	public int getRouteKeyIndex() {
+		return routeKeyIndex;
+	}
+
+	public void setRouteKeyIndex(int routeKeyIndex) {
+		this.routeKeyIndex = routeKeyIndex;
+	}
 }

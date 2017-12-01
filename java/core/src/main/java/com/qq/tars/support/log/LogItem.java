@@ -26,13 +26,22 @@ public final class LogItem {
     private Level level;
 
     private String str;
+    
+    private boolean dyeFlag;
+    
+    private String dyeFileName;
+    
+    private String dyeServantName;
 
     private ThrowableInfo throwInfo = null;
 
-    public LogItem(Level level, String str, Throwable th) {
+    public LogItem(Level level, String str, boolean dyeFlag, String dyeFileName, String dyeServantName, Throwable th) {
         this.time = System.currentTimeMillis();
         this.level = level;
         this.str = str;
+        this.dyeFlag = dyeFlag;
+        this.dyeFileName = dyeFileName;
+        this.dyeServantName = dyeServantName;
         if (th != null) {
             this.throwInfo = new ThrowableInfo(th);
         }
@@ -44,6 +53,18 @@ public final class LogItem {
 
     public String getStr() {
         return this.str;
+    }
+    
+    public boolean getDyeFlag() {
+    	return this.dyeFlag;
+    }
+    
+    public String getDyeFileName() {
+    	return this.dyeFileName;
+    }
+    
+    public String getDyeServantName() {
+    	return this.dyeServantName;
     }
 
     public ThrowableInfo getThrowInfo() {
@@ -59,6 +80,18 @@ public final class LogItem {
             strBuf.append(this.throwInfo.getThrowableStr());
         }
 
+        return strBuf.toString();
+    }
+    
+    public String toDyeingString() {
+        StringBuilder strBuf = new StringBuilder();
+        strBuf.append(this.dyeServantName).append("|");
+        strBuf.append(Utils.getDateAllInfo(this.time)).append("\t");
+        strBuf.append(this.level.name()).append("\t");
+        strBuf.append(this.str).append("\n");
+        if (this.throwInfo != null) {
+            strBuf.append(this.throwInfo.getThrowableStr());
+        }
         return strBuf.toString();
     }
 

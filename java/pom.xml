@@ -10,6 +10,7 @@
 
 	<modules>
 		<module>net</module>
+		<module>distributedContext</module>
 		<module>core</module>
     	<module>tools</module>
 		<module>protobuf</module>
