@@ -48,7 +48,7 @@
 ### 接口文件定义 ###
 
 接口文件定义是通过Tars接口描述语言来定义，在src/main/resources目录下建立hello.tars文件，内容如下
-​    	
+```    	
 	module TestApp 
 	{
 		interface Hello
@@ -56,7 +56,7 @@
 		    string hello(int no, string name);
 		};
 	};
-
+```
 ### 接口文件编译 ###
 
 提供插件编译生成java代码，在tars-maven-plugin添加生成java文件配置
