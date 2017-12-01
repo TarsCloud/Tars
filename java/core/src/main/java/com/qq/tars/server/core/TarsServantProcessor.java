@@ -86,7 +86,7 @@ public class TarsServantProcessor extends Processor {
             context.setAttribute(Context.INTERNAL_SERVICE_NAME, request.getServantName());
             context.setAttribute(Context.INTERNAL_METHOD_NAME, request.getFunctionName());
             context.setAttribute(Context.INTERNAL_SESSION_DATA, session);
-            
+
             DistributedContext distributedContext = DistributedContextManager.getDistributedContext();
             distributedContext.put(DyeingSwitch.REQ, request);
             distributedContext.put(DyeingSwitch.RES, response);
@@ -216,7 +216,7 @@ public class TarsServantProcessor extends Processor {
         response.setContext(request.getContext());
         return response;
     }
-    
+
     public void preInvokeSkeleton() {
     	DistributedContext distributedContext = DistributedContextManager.getDistributedContext();
     	Request request = distributedContext.get(DyeingSwitch.REQ);
@@ -230,7 +230,7 @@ public class TarsServantProcessor extends Processor {
     	DistributedContext distributedContext = DistributedContextManager.getDistributedContext();
     	distributedContext.clear();
     }
-    
+
     private void initDyeing(TarsServantRequest request) {
     	String routeKey;
     	String fileName;

@@ -50,8 +50,6 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
     private ScheduledFuture<?> statReportFuture;
     private ScheduledFuture<?> queryRefreshFuture;
 
-    private final Object refreshLock = new Object();
-
     private final Random random = new Random(System.currentTimeMillis() / 1000);
 
     public ObjectProxy(Class<T> api, String objName, ServantProxyConfig servantProxyConfig, LoadBalance loadBalance,
@@ -91,7 +89,7 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
                 return null;
             }
 
-            Invoker invoker = loadBalancer.select(context);
+            Invoker<T> invoker = loadBalancer.select(protocolInvoker.getInvokers(), context);
             return invoker.invoke(context);
         } catch (Throwable e) {
             if (ClientLogger.getLogger().isDebugEnabled()) {
@@ -113,12 +111,9 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
     }
 
     public void refresh() {
-        synchronized (refreshLock) {
-            registryStatReproter();
-            registryServantNodeRefresher();
-            protocolInvoker.refresh();
-            loadBalancer.refresh(protocolInvoker.getInvokers());
-        }
+        registryStatReproter();
+        registryServantNodeRefresher();
+        protocolInvoker.refresh();
     }
 
     public void destroy() {
@@ -132,8 +127,6 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
     }
 
     private void initialize() {
-        loadBalancer.refresh(protocolInvoker.getInvokers());
-
         if (StringUtils.isNotEmpty(this.servantProxyConfig.getLocator()) && !StringUtils.isEmpty(this.servantProxyConfig.getStat())) {
             this.registryStatReproter();
         }

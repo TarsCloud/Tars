@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>qq-cloud-central</groupId>
 	<artifactId>tars-parent</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.2</version>
 	<packaging>pom</packaging>
 	<name>Tars</name>
 	<description>Super POM For Projects</description>
@@ -14,7 +14,6 @@
 		<module>core</module>
     	<module>tools</module>
 		<module>protobuf</module>
-		<module>spring</module>
   	</modules>
 
 	<properties>

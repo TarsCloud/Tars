@@ -18,8 +18,7 @@ package com.qq.tars.client;
 
 import java.lang.reflect.Constructor;
 
-
-import com.qq.tars.client.rpc.loadbalance.DefaultLoadBalance;
+import com.qq.tars.client.cluster.DefaultLoadBalance;
 import com.qq.tars.client.rpc.tars.TarsProtocolInvoker;
 import com.qq.tars.client.support.ServantCacheManager;
 import com.qq.tars.client.util.ClientLogger;
@@ -43,7 +42,7 @@ class ObjectProxyFactory {
     }
 
     public <T> ObjectProxy<T> getObjectProxy(Class<T> api, String objName, ServantProxyConfig servantProxyConfig,
-                                             LoadBalance<T> loadBalance, ProtocolInvoker<T> protocolInvoker) throws ClientException {
+                                             LoadBalance loadBalance, ProtocolInvoker<T> protocolInvoker) throws ClientException {
         if (servantProxyConfig == null) {
             servantProxyConfig = createServantProxyConfig(objName);
         } else {
@@ -78,8 +77,8 @@ class ObjectProxyFactory {
         return protocolInvoker;
     }
 
-    private <T> LoadBalance<T> createLoadBalance(ServantProxyConfig servantProxyConfig) {
-        return new DefaultLoadBalance<T>(servantProxyConfig);
+    private LoadBalance createLoadBalance(ServantProxyConfig servantProxyConfig) {
+        return new DefaultLoadBalance(servantProxyConfig);
     }
 
     private <T> Codec createCodec(Class<T> api, ServantProxyConfig servantProxyConfig) throws ClientException {
