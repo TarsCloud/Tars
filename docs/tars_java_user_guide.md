@@ -86,13 +86,12 @@ module TestApp
 	</plugin>
 
 在工程根目录下执行mvn tars:tars2java
-​			
-	@Servant
-	public interface HelloServant {
-	
-		public String hello(int no, String name);
-	}	
-
+```			
+@Servant
+public interface HelloServant {
+    public String hello(int no, String name);
+}	
+```
 ### 服务接口实现 ###
 
 新创建一个HelloServantImpl.java文件，实现HelloServant.java接口
