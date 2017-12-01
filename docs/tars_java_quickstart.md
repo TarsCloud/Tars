@@ -37,16 +37,16 @@
 在构建项目中pom.xml中添加依赖jar包
 
 - 框架依赖配置
-
+```xml
      <dependency>
      		<groupId>qq-cloud-central</groupId>
      		<artifactId>tars-server</artifactId>
      		<version>1.0.3</version>
      		<type>jar</type>
      	</dependency>
-
+```
 - 插件依赖配置
-
+```xml
    <plugin>
    		<groupId>qq-cloud-central</groupId>
    		<artifactId>tars-maven-plugin</artifactId>
@@ -64,13 +64,13 @@
    			</tars2JavaConfig>
    		</configuration>
    	</plugin>
-
+```
 ## 服务开发 <a id="main-chapter-2"></a>
 
 ### 接口文件定义
 
 接口文件定义是通过Tars接口描述语言来定义，在src/main/resources目录下建立hello.tars文件，内容如下
-​    	
+```
 	module TestApp 
 	{
 		interface Hello
@@ -78,11 +78,11 @@
 		    string hello(int no, string name);
 		};
 	};
-
+```
 ### 接口文件编译
 
 提供插件编译生成java代码，在tars-maven-plugin添加生成java文件配置
-
+```xml
 	<plugin>
 		<groupId>qq-cloud-central</groupId>
 		<artifactId>tars-maven-plugin</artifactId>
@@ -106,31 +106,31 @@
 			</tars2JavaConfig>
 		</configuration>
 	</plugin>
-
+```
 在工程根目录下执行mvn tars:tars2java
-​			
+```java
 	@Servant
 	public interface HelloServant {
 	
 		public String hello(int no, String name);
 	}	
-
+```
 ### 服务接口实现
 
 新创建一个HelloServantImpl.java文件，实现HelloServant.java接口
-
+```java
 	public class HelloServantImpl implements HelloServant {
 
     @Override
     public String hello(int no, String name) {
         return String.format("hello no=%s, name=%s, time=%s", no, name, System.currentTimeMillis());
     }
-
+```
 
 ### 服务暴露配置
 
 在WEB-INF下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下
-​			
+```xml		
 	<?xml version="1.0" encoding="UTF-8"?>
 	<servants>
 		<servant name="HelloObj">
@@ -138,7 +138,7 @@
 			<home-class>com.qq.tars.quickstart.server.testapp.impl.HelloServantImpl</home-class>
 		</servant>
 	</servants>
-
+```
 说明：除了此方法之外，还可以采用spring模式来配置服务，详情见tars_java_spring.md。
 
 ### 服务编译打包
@@ -149,16 +149,16 @@
 
 - 构建客户端工程项目
 - 添加依赖
-     	
+```xml
    <dependency>
    		<groupId>qq-cloud-central</groupId>
    		<artifactId>tars-client</artifactId>
    		<version>1.0.1</version>
    		<type>jar</type>
    	</dependency>    
-
+```
 - 添加插件
-   ​	
+```xml	
    <plugin>
    		<groupId>qq-cloud-central</groupId>
    		<artifactId>tars-maven-plugin</artifactId>
@@ -182,9 +182,9 @@
    			</tars2JavaConfig>
    		</configuration>
    	</plugin>
-
+```
 - 根据服务tars接口文件生成代码
-
+```java
       @Servant
       public interface HelloPrx {
       
@@ -196,9 +196,9 @@
       
       	public void async_hello(@TarsCallback HelloPrxCallback callback, int no, String name, @TarsContext java.util.Map<String, String> ctx);
       }
-
+```
 - 同步调用
-
+```java
         public static void main(String[] args) {
         	CommunicatorConfig cfg = new CommunicatorConfig();
         	//构建通信器
@@ -208,9 +208,9 @@
             String ret = proxy.hello(1000, "HelloWorld");
             System.out.println(ret);
         }
-
+```
 - 异步调用
-
+```java
         public static void main(String[] args) {
         	CommunicatorConfig cfg = new CommunicatorConfig();
         	//构建通信器
@@ -233,7 +233,7 @@
         		}
         	}, 1000, "HelloWorld");
         }
-
+```
 
 ## 管理系统 <a id="main-chapter-3"></a>
 
