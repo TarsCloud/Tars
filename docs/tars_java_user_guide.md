@@ -17,16 +17,16 @@
 在构建项目**pom.xml**中添加依赖jar包
 
 - 框架依赖配置
-'''xml
+```
      <dependency>
      		<groupId>qq-cloud-central</groupId>
      		<artifactId>tars-server</artifactId>
      		<version>1.0.3</version>
      		<type>jar</type>
      	</dependency>
-'''
+```
 - 插件依赖配置
-'''xml
+```
    <plugin>
    		<groupId>qq-cloud-central</groupId>
    		<artifactId>tars-maven-plugin</artifactId>
@@ -44,7 +44,7 @@
    			</tars2JavaConfig>
    		</configuration>
    	</plugin>
-'''x
+```
 ### 接口文件定义 ###
 
 接口文件定义是通过Tars接口描述语言来定义，在src/main/resources目录下建立hello.tars文件，内容如下
