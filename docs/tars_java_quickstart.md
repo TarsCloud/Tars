@@ -18,7 +18,7 @@
 
 通过IDE或者maven创建一个maven web项目，
 这里以eclipse为例，File -> New -> Project -> Maven Project -> maven-archetype-webapp，再输入groupId、artifactId，生成完成之后可以通过eclipse进行导入，目录结构如下
-​    
+```
 	hello_server_project
 	|___src
 	|	|___main
@@ -31,7 +31,7 @@
 	|___test
 	|___target
 	|___pom.xml
-
+```
 
 ### 依赖配置
 在构建项目中pom.xml中添加依赖jar包
