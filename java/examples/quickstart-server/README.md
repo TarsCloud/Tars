@@ -1,4 +1,4 @@
-## 使用方法
+## 本地IDE启动方法
 
 1. 使用ide打开项目。
 2. 配置启动Main Class为com.qq.tars.server.startup.Main。
