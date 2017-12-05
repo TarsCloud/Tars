@@ -24,7 +24,7 @@
 	|	|___main
 	|		|___java
 	|		|___resource
-	│           ├── servants.xml
+	│          ├── servants.xml
 	|           └── META-INF
 	|		|___scripts
 	|		|___webapp

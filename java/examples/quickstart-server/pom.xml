@@ -17,7 +17,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>qq-cloud-central</groupId>
-			<artifactId>tars-server</artifactId>
+			<artifactId>tars-core</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 		</dependency>
