@@ -401,7 +401,19 @@ inline int CommandPatch::execute(string &sResult)
         }
 
         //解压
-        string cmd = "tar xzfv " + sLocalTgzFile + " -C " + sLocalExtractPach;
+        string cmd,sLocalTgzFile_bak;
+		if (_serverObjectPtr->getServerType() == "tars_java") //如果是tars_java，使用war 方法
+
+        {
+            sLocalTgzFile_bak=TC_Common::replace(sLocalTgzFile,".tgz",".war");
+            cmd +=" mv "+sLocalTgzFile+" "+sLocalTgzFile_bak+";";
+            cmd += "unzip -oq  " + sLocalTgzFile_bak+ " -d "+ sLocalExtractPach+"/"+sServerName;
+        }
+		else
+		{
+			cmd = "tar xzfv " + sLocalTgzFile + " -C " + sLocalExtractPach;
+		}	
+      //  string cmd = "tar xzfv " + sLocalTgzFile + " -C " + sLocalExtractPach;
         if(iRet == 0)
         {
             system(cmd.c_str());

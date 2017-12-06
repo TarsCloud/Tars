@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://tars.tencent.com/schema/tars"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://tars.tencent.com/schema/tars"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xsd:element name="servant">
+        <xsd:complexType>
+            <xsd:attribute name="name" type="xsd:string" use="required"/>
+            <xsd:attribute name="interface" type="xsd:string"/>
+            <xsd:attribute name="ref" type="xsd:string"/>
+            <xsd:attribute name="protocol" type="xsd:string"/>
+            <xsd:attribute name="src" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="listener">
+        <xsd:complexType>
+            <xsd:attribute name="ref" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

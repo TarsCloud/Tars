@@ -17,46 +17,46 @@
 在构建项目**pom.xml**中添加依赖jar包
 
 - 框架依赖配置
-
-    	<dependency>
-			<groupId>qq-cloud-central</groupId>
-			<artifactId>tars-server</artifactId>
-			<version>1.0.1</version>
-			<type>jar</type>
-		</dependency>
-
+```
+<dependency>
+    <groupId>qq-cloud-central</groupId>
+    <artifactId>tars-server</artifactId>
+    <version>1.0.3</version>
+    <type>jar</type>
+</dependency>
+```
 - 插件依赖配置
-
-		<plugin>
-			<groupId>qq-cloud-central</groupId>
-			<artifactId>tars-maven-plugin</artifactId>
-			<version>1.0.1</version>
-			<configuration>
-				<tars2JavaConfig>
-					<tarsFiles>
-						<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-					</tarsFiles>
-					<tarsFileCharset>UTF-8</tarsFileCharset>
-					<servant>true</servant>
-					<srcPath>${basedir}/src/main/java</srcPath>
-					<charset>UTF-8</charset>
-					<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
-				</tars2JavaConfig>
-			</configuration>
-		</plugin>
-
+```
+<plugin>
+    <groupId>qq-cloud-central</groupId>
+    <artifactId>tars-maven-plugin</artifactId>
+    <version>1.0.3</version>
+    <configuration>
+	<tars2JavaConfig>
+	    <tarsFiles>
+		<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+	    </tarsFiles>
+	    <tarsFileCharset>UTF-8</tarsFileCharset>
+	    <servant>true</servant>
+	    <srcPath>${basedir}/src/main/java</srcPath>
+	    <charset>UTF-8</charset>
+	    <packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
+	</tars2JavaConfig>
+    </configuration>
+</plugin>
+```
 ### 接口文件定义 ###
 
 接口文件定义是通过Tars接口描述语言来定义，在src/main/resources目录下建立hello.tars文件，内容如下
-    	
-	module TestApp 
+```    	
+module TestApp 
+{
+	interface Hello
 	{
-		interface Hello
-		{
-		    string hello(int no, string name);
-		};
+	    string hello(int no, string name);
 	};
-
+};
+```
 ### 接口文件编译 ###
 
 提供插件编译生成java代码，在tars-maven-plugin添加生成java文件配置
@@ -64,7 +64,7 @@
 	<plugin>
 		<groupId>qq-cloud-central</groupId>
 		<artifactId>tars-maven-plugin</artifactId>
-		<version>1.0.1</version>
+		<version>1.0.3</version>
 		<configuration>
 			<tars2JavaConfig>
 				<!-- tars文件位置 -->
@@ -86,13 +86,12 @@
 	</plugin>
 
 在工程根目录下执行mvn tars:tars2java
-			
-	@Servant
-	public interface HelloServant {
-
-		public String hello(int no, String name);
-	}	
-
+```			
+@Servant
+public interface HelloServant {
+    public String hello(int no, String name);
+}	
+```
 ### 服务接口实现 ###
 
 新创建一个HelloServantImpl.java文件，实现HelloServant.java接口
@@ -102,13 +101,13 @@
     @Override
     public String hello(int no, String name) {
         return String.format("hello no=%s, name=%s, time=%s", no, name, System.currentTimeMillis());
-	}
+    }
 
 
 ### 服务暴露配置 ###
 
-在WEB-INF下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下
-			
+在WEB-INF下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下:
+​			
 	<?xml version="1.0" encoding="UTF-8"?>
 	<servants>
 		<servant name="HelloObj">
@@ -116,6 +115,8 @@
 			<home-class>com.qq.tars.quickstart.server.testapp.impl.HelloServantImpl</home-class>
 		</servant>
 	</servants>
+
+说明：除了此方法之外，还可以采用spring模式来配置服务，详情见tars_java_spring.md。
 
 ### 服务配置ServerConfig
 
@@ -166,10 +167,10 @@
 	       deactivating-timeout=2000
 	       #日志等级
 	       logLevel=DEBUG
-           #防空闲连接超时设置
+	       #防空闲连接超时设置
 		   sessionTimeOut=120000
 		   #防空闲连接超时检查周期
-           sessionCheckInterval=60000
+	       sessionCheckInterval=60000
 	    </server>
 	  </application>
 	</tars>
@@ -300,7 +301,7 @@ Adapter配置如下：
 通常情况下面，B接收到请求后，在接口处理完毕以后就需要返回应答给A，因此如果B在接口中又发起异步请求到C，则无法实现。
 
 因此需要在实现接口方法中，声明启动异步来实现跨服务的异步调用，
-	
+​	
 	//声明启动异步上下文
 	AsyncContext context = AsyncContext.startAsync();
 	//接口实现
@@ -354,10 +355,10 @@ Adapter配置如下：
 	        #地址
 	        locator                     = tars.tarsregistry.QueryObj@tcp -h 127.0.0.1 -p 17890
 	        #同步最大超时时间(毫秒)
-            connect-timeout             = 3000
-            #网络连接数
-            connections                 = 4
-            #网络连接超时时间(毫秒)
+	        connect-timeout             = 3000
+	        #网络连接数
+	        connections                 = 4
+	        #网络连接超时时间(毫秒)
 	        sync-invoke-timeout         = 3000
 	        #异步最大超时时间(毫秒)
 	        async-invoke-timeout        = 5000
@@ -395,7 +396,7 @@ Adapter配置如下：
 上面的超时时间对通信器生成的所有proxy都有效，如果需要单独设置超时时间，设置如下：
 
 针对proxy设置(ServantProxyConfig与CommunicatorConfig类似)
-	
+​	
 	//设置该代理单独初始化配置
 	public <T> T stringToProxy(Class<T> clazz, ServantProxyConfig servantProxyConfig)
 
@@ -424,7 +425,7 @@ tcp：tcp协议
 -p：端口地址，这里是9985
 
 如果HelloServer在两台服务器上运行，则HelloPrx初始化方式如下：
-	
+​	
 	HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj@tcp -h 127.0.0.1 -p 9985:tcp -h 192.168.1.1 -p 9983");
 
 即，HelloObj的地址设置为两台服务器的地址。此时请求会分发到两台服务器上（分发方式可以指定，这里不做介绍），如果一台服务器down，则自动将请求分到另外一台，并定时重试开始down的那一台服务器。
@@ -436,7 +437,7 @@ tcp：tcp协议
 #### 单向调用
 
 所谓单向调用，表示客户端只管发送数据，而不接收服务端的响应，也不管服务端是否接收到请求。
-	
+​	
 	HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj");
 	//发起远程调用
 	prx.async_hello(null, 1000, "hello word");
@@ -444,32 +445,32 @@ tcp：tcp协议
 #### 同步调用
 
 请看如下调用示例：
-	
+​	
 	HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj");
 	//发起远程调用
 	prx.hello(1000, "hello word");
 
 #### 异步调用
-	
+
 请看如下调用示例：
 
 	HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj");
 	//发起远程调用
 	prx.async_hello(new HelloPrxCallback() {
-            
-            @Override
-            public void callback_expired() {
-            }
-            
-            @Override
-            public void callback_exception(Throwable ex) {
-            }
-            
-            @Override
-            public void callback_hello(String ret) {
-                System.out.println(ret);
-            }
-        }, 1000, "hello word");
+	        
+	        @Override
+	        public void callback_expired() {
+	        }
+	        
+	        @Override
+	        public void callback_exception(Throwable ex) {
+	        }
+	        
+	        @Override
+	        public void callback_hello(String ret) {
+	            System.out.println(ret);
+	        }
+	    }, 1000, "hello word");
 
 
 注意：
@@ -483,7 +484,7 @@ tcp：tcp协议
 详细使用规则如下，
 
 假设业务服务端HelloServer部署在两个set上，分别为Test.s.1和Test.n.1。那么客户端指定set方式调用配置
-	
+​	
 		enableset                      = Y
 		setdivision                    = Test.s.1
 
@@ -497,7 +498,7 @@ Tars服务框架提供了从tarsconfig拉取服务的配置到本地目录的功
 以HelloServer为例：
 
 	public class AppStartListener implements AppContextListener {
-	
+
 	    @Override
 	    public void appContextStarted(AppContextEvent event) {
 	        ConfigHelper.getInstance().loadConfig("helloServer.conf");
@@ -509,7 +510,7 @@ Tars服务框架提供了从tarsconfig拉取服务的配置到本地目录的功
 	}
 
 在servant.xml中注册配置
-	
+​	
 	<listener>
 		<listener-class>com.qq.tars.quickstart.server.AppStartListener</listener-class>
 	</listener>
@@ -527,7 +528,7 @@ Tars服务框架提供了从tarsconfig拉取服务的配置到本地目录的功
 ## 服务日志
 
 框架支持本地和远程日志，获取日志Logger对象如下
-	
+​	
 	private final static Logger FLOW_LOGGER = Logger.getLogger("flow", LogType.LOCAL);
 
 说明：打远程日志前需要预先申请远程日志服务
@@ -542,7 +543,7 @@ Tars服务框架提供了从tarsconfig拉取服务的配置到本地目录的功
 - 发送管理命令
 
 服务的管理命令的发送方式：通过管理平台，将服务发布到平台上，通过管理平台发送命令；
-	
+​	
 TARS服务框架目前内置命令：
 
 > * tars.help    		//查看所有管理命令
@@ -557,7 +558,7 @@ TARS服务框架目前内置命令：
 只需注册相关命令以及命令处理类，如下
 
 	CustemCommandHelper.getInstance().registerCustemHandler("cmdName",new CommandHandler() {
-	
+
 		@Override
 		public void handle(String cmdName, String params) {
 			
@@ -568,7 +569,7 @@ TARS服务框架目前内置命令：
 为了更好监控，框架支持在程序中将异常直接上报到tarsnotify，并可以在管理平台页面上查看到。
 
 框架提供异常上报工具，使用如下
-	
+​	
 	NotifyHelper.getInstance().notifyNormal(info);
 	NotifyHelper.getInstance().notifyWarn(info);
 	NotifyHelper.getInstance().notifyError(info);
@@ -592,7 +593,7 @@ TARS服务框架目前内置命令：
 > * 计数（count）
 
 示例代码如下：
-	
+​	
 	PropertyReportHelper.getInstance().createPropertyReporter("queue_size");
 	PropertyReportHelper.getInstance().reportPropertyValue("queue_size", 100);
 
@@ -600,3 +601,63 @@ TARS服务框架目前内置命令：
 > * 上报数据是定时上报的，可以在通信器的配置中设置，目前是1分钟一次;
 > * 注意调用createPropertyReport时，必须在服务启动以后创建并保存好创建的对象，后续拿这个对象report即可，不要每次使用的时候create;
 
+## 染色日志
+
+为了方便在debug时实时查看某个用户在调用某服务某接口后引起的后续相关调用消息流的日志，框架中支持将该用户触发的所有日志单独打印一份到一个指定日志文件中。
+
+染色日志有主动打开和被动打开两种方法：
+
+- 主动染色：
+
+> - 在发起请求的客户端显式调用框架中的染色开启接口，从打开开关到显式调用框架中染色关闭接口，中间的日志都会额外打印为染色日志。
+> - 在开启染色功能时，所有的发起的taf请求都会自动传递染色状态，被调服务接收到请求后产生的日志也会打印为染色日志，在该请求处理完成后，会自动关闭被调服务的染色开关。
+
+示例代码如下：
+
+```
+DyeingSwitch.enableActiveDyeing("helloServer");   //主动打开开关接口，参数表示染色日志名称
+...业务处理
+logger.info("hello world");   //此时出于染色开启状态，该条日志会额外打印一份到染色日志中
+...业务处理
+DyeingSwitch.closeActiveDyeing();    //主动关闭染色开关接口
+```
+
+说明：
+
+> - 开启染色日志时传递的参数推荐填写服务名，如果填写为null则默认名称为default;
+> - 染色日志的日志级别和日志类型与原本日志相同，如果原本日志只打本地，那么染色日志也只打本地，原本日志要打远程染色日志才会打远程;
+
+- 被动染色：
+
+  > - 在请求的服务端预设预先设定染色条件，如果接收到的请求满足染色条件，那么服务端框架层会自动打开染色开关;
+  > - 染色状态传递的机制和主动染色相同，但是不需要在业务层显式关闭染色开关;
+
+使用方法如下：
+
+首先在需要染色的Tars接口上定义染色routeKey，这个值就是判断是否开启染色的变量，示例如下：
+
+```
+@Servant
+public HelloServant {
+     public String sayHello(@TarsRouteKey int no, String name);  //使用注释routeKey来表示开启染色的参数变量
+}
+```
+
+在定义染色routeKey之后，可以通过管理命令"tars.setdyeing"来设置需要染色用户标识（就是routeKey注释对应的值），远程对象名称和接口函数名（可选）。
+
+管理命令格式如下：
+
+```
+tars.setdyeing dyeingKey dyeingServant [dyeingInterface]  //三个参数分别对应上文所提值，接口名可选填
+```
+
+假设远程对象名称是TestApp.HelloServer.HelloObj,请求接口名为sayHello,需要染色的用户号码为12345，对应的管理命令如下：
+
+```
+tars.setdyeing 12345 TestApp.HelloServer.HelloObj sayHello
+```
+
+- 染色日志查询：
+
+  > - 本地染色日志：日志默认所在目录为/usr/local/app/tars/app_log/tars_dyeing/，对于主动染色，日志名为打开开关时传入的参数加固定后缀；对于被动染色，日志名为染色入口服务的Server名称加固定后缀。后缀为_dyeing。
+  > - 远程日志：在tarslog服务打日志所在机器上 的/usr/local/app/tars/remote_app_log/tars_dyeing/dyeing/目录下，日志名为tars_dyeing.dyeing_{此部分同本地染色日志名}。

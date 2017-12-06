@@ -82,11 +82,6 @@ public class UploadController extends WrappedController {
 
                 String packageType = "suse";
 
-                // 如果是war包，需要打包框架
-                if (temporary.endsWith(".war")) {
-                    temporary = patchService.war2tgz(temporary, moduleName);
-                }
-
                 // 发布包上传目录
                 String updateTgzPath = uploadTgzBasePath + "/" + application + "/" + moduleName;
 

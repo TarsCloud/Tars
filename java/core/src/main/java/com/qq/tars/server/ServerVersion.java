@@ -20,7 +20,7 @@ public final class ServerVersion {
 
     public static final String major = "1";
     public static final String minor = "0";
-    public static final String build = "1";
+    public static final String build = "3";
 
     public static String getVersion() {
         return major + "." + minor + "." + build;

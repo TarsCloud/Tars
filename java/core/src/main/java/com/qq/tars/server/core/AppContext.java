@@ -23,4 +23,7 @@ public interface AppContext {
     public abstract String name();
 
     public void stop();
+
+    public ServantHomeSkeleton getCapHomeSkeleton(String homeName);
 }
+

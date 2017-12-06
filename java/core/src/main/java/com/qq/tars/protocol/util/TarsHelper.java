@@ -40,6 +40,7 @@ import com.qq.tars.protocol.tars.annotation.TarsContext;
 import com.qq.tars.protocol.tars.annotation.TarsHolder;
 import com.qq.tars.protocol.tars.annotation.TarsMethod;
 import com.qq.tars.protocol.tars.annotation.TarsMethodParameter;
+import com.qq.tars.protocol.tars.annotation.TarsRouteKey;
 import com.qq.tars.protocol.tars.annotation.TarsStruct;
 import com.qq.tars.protocol.tars.annotation.TarsStructProperty;
 import com.qq.tars.protocol.tars.support.TarsMethodInfo;
@@ -366,6 +367,10 @@ public class TarsHelper {
                 if (!isCallback(allParameterAnnotations[order])) {
                     parameterInfo.setStamp(TarsHelper.getParameterStamp(genericParameterType));
                 }
+                
+                if (isRoutekey(allParameterAnnotations[order])) {
+                	methodInfo.setRouteKeyIndex(order);
+                }
             } catch (Exception e) {
                 throw new RuntimeException("failed to create parameter info:" + method + ", index=[" + order + "]", e);
             }
@@ -447,6 +452,18 @@ public class TarsHelper {
             }
         }
         return false;
+    }
+    
+    public static boolean isRoutekey(Annotation[] annotations) {
+    	if (annotations == null || annotations.length < 0) {
+    		return false;
+    	}
+    	for (Annotation annotation : annotations) {
+    		if (annotation.annotationType() ==TarsRouteKey.class) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
     public static boolean isStruct(Class<?> clazz) {
