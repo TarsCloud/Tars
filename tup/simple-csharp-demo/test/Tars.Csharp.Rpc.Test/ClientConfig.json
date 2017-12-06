@@ -1,0 +1,29 @@
+﻿{
+  "Client": {
+    "Locator": "",
+    "SyncInvokeTimeout": 3000,
+    "AsyncInvokeTimeout": 3000,
+    "RefreshEndpointInterval": 60000,
+    "ReportInterval": 60000,
+    //"LogPath": "",
+    "LogLevel": "",
+    //"DataPath": "",
+    "Stat": "",
+    "Property": "",
+    "SampleRate": 1000,
+    "MaxSampleCount": 200,
+    //"SendThread": "",
+    //"RecvThread": "",
+    "AsyncThread": 1,
+    "ModuleName": "",
+    "EnableSet": "",
+    "Division": "",
+    "Connections": 4,
+    "ConnectTimeout": 3000,
+    "CorePoolSize": 2,
+    "MaxPoolSize": 4,
+    "KeepAliveTime": 120,
+    "QueueSize": 20000,
+    "CharsetName": "UTF-8"
+  }
+}

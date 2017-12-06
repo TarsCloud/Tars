@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspectCore.Extensions.Reflection" Version="0.2.4" />
+    <PackageReference Include="Google.Protobuf" Version="3.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tars.Csharp.Codecs\Tars.Csharp.Codecs.csproj" />
+  </ItemGroup>
+
+</Project>
