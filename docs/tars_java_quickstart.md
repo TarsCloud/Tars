@@ -29,7 +29,6 @@
    │   │          └── HelloServantImpl.java
    │   ├── resources
    │   │   ├── servants.xml
-   │   │   └── META-INF
    │   └── webapp
    └── test
        ├── java
