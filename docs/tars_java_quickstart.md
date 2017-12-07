@@ -19,18 +19,24 @@
 通过IDE或者maven创建一个maven web项目，
 这里以eclipse为例，File -> New -> Project -> Maven Project -> maven-archetype-webapp，再输入groupId、artifactId，生成完成之后可以通过eclipse进行导入，目录结构如下
 ```
-	hello_server_project
-	|___src
-	|	|___main
-	|		|___java
-	|		|___resource
-	│          ├── servants.xml
-	|           └── META-INF
-	|		|___scripts
-	|		|___webapp
-	|___test
-	|___target
-	|___pom.xml
+├── pom.xml
+└── src
+   ├── main
+   │   ├── java
+   │   │   └── tars
+   │   │       └── test
+   │   │          ├── HelloServant.java
+   │   │          └── HelloServantImpl.java
+   │   ├── resources
+   │   │   ├── servants.xml
+   │   │   └── META-INF
+   │   └── webapp
+   └── test
+       ├── java
+       │   └── tars
+       │       └── test
+       │           └── TarsTest.java
+       └── resources
 ```
 
 ### 依赖配置
