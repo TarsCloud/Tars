@@ -28,7 +28,7 @@
    │   │          ├── HelloServant.java
    │   │          └── HelloServantImpl.java
    │   ├── resources
-   │   │   ├── servants.xml
+   │   │   └── servants.xml
    │   └── webapp
    └── test
        ├── java
