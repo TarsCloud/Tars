@@ -159,7 +159,7 @@ public class HelloServantImpl implements HelloServant {
    	<dependency>
    		<groupId>qq-cloud-central</groupId>
    		<artifactId>tars-client</artifactId>
-   		<version>1.0.1</version>
+   		<version>1.0.3</version>
    		<type>jar</type>
    	</dependency>    
 ```
@@ -168,7 +168,7 @@ public class HelloServantImpl implements HelloServant {
 	<plugin>
    		<groupId>qq-cloud-central</groupId>
    		<artifactId>tars-maven-plugin</artifactId>
-   		<version>1.0.1</version>
+   		<version>1.0.3</version>
    		<configuration>
    			<tars2JavaConfig>
    				<!-- tars文件位置 -->
