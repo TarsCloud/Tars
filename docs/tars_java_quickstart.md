@@ -88,37 +88,37 @@ module TestApp
 
 提供插件编译生成java代码，在tars-maven-plugin添加生成java文件配置
 ```xml
-	<plugin>
-		<groupId>qq-cloud-central</groupId>
-		<artifactId>tars-maven-plugin</artifactId>
-		<version>1.0.3</version>
-		<configuration>
-			<tars2JavaConfig>
-				<!-- tars文件位置 -->
-				<tarsFiles>
-					<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-				</tarsFiles>
-				<!-- 源文件编码 -->
-				<tarsFileCharset>UTF-8</tarsFileCharset>
-				<!-- 生成服务端代码 -->
-				<servant>true</servant>
-				<!-- 生成源代码编码 -->
-				<charset>UTF-8</charset>
-				<!-- 生成的源代码目录 -->
-				<srcPath>${basedir}/src/main/java</srcPath>
-				<!-- 生成源代码包前缀 -->
-				<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
-			</tars2JavaConfig>
-		</configuration>
-	</plugin>
+<plugin>
+	<groupId>qq-cloud-central</groupId>
+	<artifactId>tars-maven-plugin</artifactId>
+	<version>1.0.3</version>
+	<configuration>
+		<tars2JavaConfig>
+			<!-- tars文件位置 -->
+			<tarsFiles>
+				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+			</tarsFiles>
+			<!-- 源文件编码 -->
+			<tarsFileCharset>UTF-8</tarsFileCharset>
+			<!-- 生成服务端代码 -->
+			<servant>true</servant>
+			<!-- 生成源代码编码 -->
+			<charset>UTF-8</charset>
+			<!-- 生成的源代码目录 -->
+			<srcPath>${basedir}/src/main/java</srcPath>
+			<!-- 生成源代码包前缀 -->
+			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
+		</tars2JavaConfig>
+	</configuration>
+</plugin>
 ```
 在工程根目录下执行mvn tars:tars2java
 ```java
-	@Servant
-	public interface HelloServant {
-	
-		public String hello(int no, String name);
-	}	
+@Servant
+public interface HelloServant {
+
+	public String hello(int no, String name);
+}	
 ```
 ### 服务接口实现
 
@@ -137,13 +137,13 @@ public class HelloServantImpl implements HelloServant {
 
 在WEB-INF下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下
 ```xml		
-	<?xml version="1.0" encoding="UTF-8"?>
-	<servants>
-		<servant name="HelloObj">
-			<home-api>com.qq.tars.quickstart.server.testapp.HelloServant</home-api>
-			<home-class>com.qq.tars.quickstart.server.testapp.impl.HelloServantImpl</home-class>
-		</servant>
-	</servants>
+<?xml version="1.0" encoding="UTF-8"?>
+<servants>
+	<servant name="HelloObj">
+		<home-api>com.qq.tars.quickstart.server.testapp.HelloServant</home-api>
+		<home-class>com.qq.tars.quickstart.server.testapp.impl.HelloServantImpl</home-class>
+	</servant>
+</servants>
 ```
 说明：除了此方法之外，还可以采用spring模式来配置服务，详情见tars_java_spring.md。
 
@@ -156,89 +156,89 @@ public class HelloServantImpl implements HelloServant {
 - 构建客户端工程项目
 - 添加依赖
 ```xml
-   	<dependency>
-   		<groupId>qq-cloud-central</groupId>
-   		<artifactId>tars-client</artifactId>
-   		<version>1.0.3</version>
-   		<type>jar</type>
-   	</dependency>    
+<dependency>
+	<groupId>qq-cloud-central</groupId>
+   	<artifactId>tars-client</artifactId>
+   	<version>1.0.3</version>
+   	<type>jar</type>
+</dependency>    
 ```
 - 添加插件
 ```xml	
-	<plugin>
-   		<groupId>qq-cloud-central</groupId>
-   		<artifactId>tars-maven-plugin</artifactId>
-   		<version>1.0.3</version>
-   		<configuration>
-   			<tars2JavaConfig>
-   				<!-- tars文件位置 -->
-   				<tarsFiles>
-   					<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-   				</tarsFiles>
-   				<!-- 源文件编码 -->
-   				<tarsFileCharset>UTF-8</tarsFileCharset>
-   				<!-- 生成代码，PS：客户端调用，这里需要设置为false -->
-   				<servant>false</servant>
-   				<!-- 生成源代码编码 -->
-   				<charset>UTF-8</charset>
-   				<!-- 生成的源代码目录 -->
-   				<srcPath>${basedir}/src/main/java</srcPath>
-   				<!-- 生成源代码包前缀 -->
-   				<packagePrefixName>com.qq.tars.quickstart.client.</packagePrefixName>
-   			</tars2JavaConfig>
-   		</configuration>
-   	</plugin>
+<plugin>
+   	<groupId>qq-cloud-central</groupId>
+   	<artifactId>tars-maven-plugin</artifactId>
+   	<version>1.0.3</version>
+   	<configuration>
+   		<tars2JavaConfig>
+   			<!-- tars文件位置 -->
+   			<tarsFiles>
+   				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+   			</tarsFiles>
+   			<!-- 源文件编码 -->
+   			<tarsFileCharset>UTF-8</tarsFileCharset>
+   			<!-- 生成代码，PS：客户端调用，这里需要设置为false -->
+   			<servant>false</servant>
+   			<!-- 生成源代码编码 -->
+   			<charset>UTF-8</charset>
+   			<!-- 生成的源代码目录 -->
+   			<srcPath>${basedir}/src/main/java</srcPath>
+   			<!-- 生成源代码包前缀 -->
+   			<packagePrefixName>com.qq.tars.quickstart.client.</packagePrefixName>
+   		</tars2JavaConfig>
+   	</configuration>
+</plugin>
 ```
 - 根据服务tars接口文件生成代码
 ```java
-      @Servant
-      public interface HelloPrx {
+@Servant
+public interface HelloPrx {
       
-      	public String hello(int no, String name);
+	public String hello(int no, String name);
       
       	public String hello(int no, String name, @TarsContext java.util.Map<String, String> ctx);
       
       	public void async_hello(@TarsCallback HelloPrxCallback callback, int no, String name);
       
       	public void async_hello(@TarsCallback HelloPrxCallback callback, int no, String name, @TarsContext java.util.Map<String, String> ctx);
-      }
+}
 ```
 - 同步调用
 ```java
-        public static void main(String[] args) {
-        	CommunicatorConfig cfg = new CommunicatorConfig();
-        	//构建通信器
-            Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
-        	//通过通信器，生成代理对象
-            HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj");
-            String ret = proxy.hello(1000, "HelloWorld");
-            System.out.println(ret);
-        }
+public static void main(String[] args) {
+	CommunicatorConfig cfg = new CommunicatorConfig();
+        //构建通信器
+        Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
+        //通过通信器，生成代理对象
+        HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj");
+        String ret = proxy.hello(1000, "HelloWorld");
+        System.out.println(ret);
+}
 ```
 - 异步调用
 ```java
-        public static void main(String[] args) {
-        	CommunicatorConfig cfg = new CommunicatorConfig();
-        	//构建通信器
-            Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
-        	//通过通信器，生成代理对象
-            HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj");
-        	proxy.async_hello(new HelloPrxCallback() {
+public static void main(String[] args) {
+	CommunicatorConfig cfg = new CommunicatorConfig();
+        //构建通信器
+        Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
+        //通过通信器，生成代理对象
+        HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj");
+        proxy.async_hello(new HelloPrxCallback() {
         		
-        		@Override
-        		public void callback_expired() {
-        		}
+        	@Override
+        	public void callback_expired() {
+        	}
         		
-        		@Override
-        		public void callback_exception(Throwable ex) {
-        		}
+        	@Override
+        	public void callback_exception(Throwable ex) {
+        	}
         		
-        		@Override
-        		public void callback_hello(String ret) {
-        			System.out.println(ret);
-        		}
-        	}, 1000, "HelloWorld");
-        }
+        	@Override
+        	public void callback_hello(String ret) {
+        		System.out.println(ret);
+        	}
+        }, 1000, "HelloWorld");
+}
 ```
 
 ## 管理系统 <a id="main-chapter-3"></a>
