@@ -28,11 +28,12 @@ Tars支持使用Spring配置servant，使用此功能需要依赖tars-spring.jar
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tars="http://tars.tencent.com/schema/tars"        		xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-       http://tars.tencent.com/schema/tars
-       http://tars.tencent.com/schema/tars/tars.xsd http://www.springframework.org/schema/context 		   http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:tars="http://tars.tencent.com/schema/tars"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://tars.tencent.com/schema/tars http://tars.tencent.com/schema/tars/tars.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 </beans>
 ```
 
