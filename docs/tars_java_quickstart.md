@@ -135,7 +135,7 @@ public class HelloServantImpl implements HelloServant {
 
 ### 服务暴露配置
 
-在WEB-INF下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下
+在resources下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下
 ```xml		
 <?xml version="1.0" encoding="UTF-8"?>
 <servants>
