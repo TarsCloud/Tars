@@ -28,6 +28,21 @@ class Utils {
         'string' => '\TARS::STRING',
         'vector' => 'new \TARS_VECTOR',
         'map' => 'new \TARS_MAP',
+        'Bool' => '\TARS::BOOL',
+        'Byte' => '\TARS::CHAR',
+        'Char' => '\TARS::CHAR',
+        'Unsigned byte' => '\TARS::UINT8',
+        'Unsigned char' => '\TARS::UINT8',
+        'Short' => '\TARS::SHORT',
+        'Unsigned short' => '\TARS::UINT16',
+        'Int' => '\TARS::INT32',
+        'Unsigned int' => '\TARS::UINT32',
+        'Long' => '\TARS::INT64',
+        'Float' => '\TARS::FLOAT',
+        'Double' => '\TARS::DOUBLE',
+        'String' => '\TARS::STRING',
+        'Vector' => 'new \TARS_VECTOR',
+        'Map' => 'new \TARS_MAP',
     );
 
     public static $typeMap = array(
@@ -48,12 +63,29 @@ class Utils {
         'map' => '\TARS::MAP',
         'enum' => '\TARS::UINT8',// 应该不会出现
         'struct' => '\TARS::STRUCT',// 应该不会出现
+        'Bool' => '\TARS::BOOL',
+        'Byte' => '\TARS::CHAR',
+        'Char' => '\TARS::CHAR',
+        'Unsigned byte' => '\TARS::UINT8',
+        'Unsigned char' => '\TARS::UINT8',
+        'Short' => '\TARS::SHORT',
+        'Unsigned short' => '\TARS::UINT16',
+        'Int' => '\TARS::INT32',
+        'Unsigned int' => '\TARS::UINT32',
+        'Long' => '\TARS::INT64',
+        'Float' => '\TARS::FLOAT',
+        'Double' => '\TARS::DOUBLE',
+        'String' => '\TARS::STRING',
+        'Vector' => '\TARS::VECTOR',
+        'Map' => '\TARS::MAP',
+        'Enum' => '\TARS::UINT8',// 应该不会出现
+        'Struct' => '\TARS::STRUCT',// 应该不会出现
     );
 
     public static function getPackMethods($type) {
         $packMethods = [
             'bool' => 'putBool',
-            'byte' => 'putUInt8',
+            'byte' => 'putChar',
             'char' => 'putChar',
             'unsigned byte' => 'putUInt8',
             'unsigned char' => 'putUInt8',
@@ -67,7 +99,23 @@ class Utils {
             'string' => 'putString',
             'enum' => 'putUInt8',
             'map' => 'putMap',
-            'vector' => 'putVector'
+            'vector' => 'putVector',
+            'Bool' => 'putBool',
+            'Byte' => 'putChar',
+            'Char' => 'putChar',
+            'Unsigned byte' => 'putUInt8',
+            'Unsigned char' => 'putUInt8',
+            'Short' => 'putShort',
+            'Unsigned short' => 'putUInt16',
+            'Int' => 'putInt32',
+            'Unsigned int' => 'putUInt32',
+            'Long' => 'putInt64',
+            'Float' => 'putFloat',
+            'Double' => 'putDouble',
+            'String' => 'putString',
+            'Enum' => 'putUInt8',
+            'Map' => 'putMap',
+            'Vector' => 'putVector'
         ];
 
         if(isset($packMethods[$type]))
@@ -78,7 +126,7 @@ class Utils {
     public static function getUnpackMethods($type) {
         $unpackMethods = [
             'bool' => 'getBool',
-            'byte' => 'getUInt8',
+            'byte' => 'getChar',
             'char' => 'getChar',
             'unsigned byte' => 'getUInt8',
             'unsigned char' => 'getUInt8',
@@ -92,7 +140,23 @@ class Utils {
             'string' => 'getString',
             'enum' => 'getUInt8',
             'map' => 'getMap',
-            'vector' => 'getVector'
+            'vector' => 'getVector',
+            'Bool' => 'getBool',
+            'Byte' => 'getChar',
+            'Char' => 'getChar',
+            'Unsigned byte' => 'getUInt8',
+            'Unsigned char' => 'getUInt8',
+            'Short' => 'getShort',
+            'Unsigned short' => 'getUInt16',
+            'Int' => 'getInt32',
+            'Unsigned int' => 'getUInt32',
+            'Long' => 'getInt64',
+            'Float' => 'getFloat',
+            'Double' => 'getDouble',
+            'String' => 'getString',
+            'Enum' => 'getUInt8',
+            'Map' => 'getMap',
+            'Vector' => 'getVector'
         ];
 
 
@@ -188,7 +252,7 @@ class Utils {
 
         preg_match('/[a-zA-Z][0-9a-zA-Z]/',$mathName,$matches);
         if(empty($matches)) {
-            Utils::abnormalExit('error',$name.'名称有误');
+            //Utils::abnormalExit('error',$name.'名称有误'.$line);
         }
         return $mathName;
 
@@ -575,8 +639,8 @@ class InterfaceParser {
         if($nextChar == '/') {
             while (1) {
                 $tmpChar = fgetc($this->fp);
-                if($tmpChar == "\n") {
 
+                if($tmpChar == "\n") {
                     $this->state = 'lineEnd';
                     break;
                 }
@@ -588,7 +652,7 @@ class InterfaceParser {
                 $tmpChar =fgetc($this->fp);
 
                 if($tmpChar === false) {
-                    Utils::abnormalExit('error','注释换行错误,请检查');
+                    Utils::abnormalExit('error','注释换行错误,请检查'.$tmpChar);
                 }
                 else if($tmpChar === "\n") {
 
@@ -598,12 +662,16 @@ class InterfaceParser {
                     if($nextnextChar == '/') {
                         return;
                     }
+                    else{
+                        $pos = ftell($this->fp);
+                        fseek($this->fp,$pos - 1);
+                    }
                 }
             }
         }
         // 注释不正常
         else {
-            Utils::abnormalExit('error','注释换行错误,请检查');
+            Utils::abnormalExit('error','注释换行错误,请检查'.$nextChar);
         }
     }
 
@@ -628,6 +696,7 @@ class InterfaceParser {
     public function parse() {
 
         while ($this->state != 'end') {
+            $this->state = 'init';
             $this->InterfaceFuncParseLine();
         }
 
@@ -654,9 +723,10 @@ class InterfaceParser {
         $line = '';
         $this->state = 'init';
         while(1) {
-            $char =fgetc($this->fp);
 
             if($this->state == 'init') {
+                $char =fgetc($this->fp);
+
                 // 有可能是换行
                 if($char == '{' || Utils::isSpace($char) || $char == '\n' || $char == '\r'
                     || $char == '\x0B') {
@@ -682,6 +752,8 @@ class InterfaceParser {
                 }
             }
             else if($this->state == 'identifier') {
+                $char =fgetc($this->fp);
+
                 if($char == '/') {
                     $this->copyAnnotation();
                 }
@@ -719,7 +791,6 @@ class InterfaceParser {
         }
 
         if(empty($line)) return;
-        //$line = fgets($this->fp, 1024);
 
         $line = trim($line);
         // 如果空行，或者是注释，或者是大括号就直接略过
@@ -906,16 +977,26 @@ class InterfaceParser {
         $word = trim($word);
         // 遍历所有的类型
         foreach (Utils::$wholeTypeMap as $key => $value) {
-            $word = str_replace($key,$value,$word);
-        }
+            if(Utils::isStruct($word,$this->preStructs)) {
+                if(!in_array($word,$this->useStructs)) {
+                    $this->extraUse .= "use ".$this->namespaceName."\\classes\\".$word.";".$this->returnSymbol;
+                    $this->useStructs[] = $word;
+                }
 
-        if(Utils::isStruct($word,$this->preStructs)) {
-            if(!in_array($word,$this->useStructs)) {
-                $this->extraUse .= "use ".$this->namespaceName."\\classes\\".$word.";".$this->returnSymbol;
-                $this->useStructs[] = $word;
+                $word = "new " . $word . "()";
             }
+            else if(in_array($word,$this->preNamespaceStructs)) {
+                $words = explode("::",$word);
+                $word = $words[1];
+                if(!in_array($word,$this->useStructs)) {
+                    $this->extraUse .= "use protocol\\".$this->namespaceName."\\classes\\".$word.";".$this->returnSymbol;
+                    $this->useStructs[] = $word;
+                }
 
-            $word = "new " . $word . "()";
+                $word = "new " . $word . "()";
+                break;
+            }
+            else $word = str_replace($key,$value,$word);
         }
 
         return $word;
@@ -1079,6 +1160,160 @@ class InterfaceParser {
         ];
 
     }
+
+    public function returnParser($returnType)
+    {
+        if(Utils::isStruct($returnType,$this->preStructs)) {
+            if(!in_array($returnType,$this->useStructs)) {
+                $this->extraUse .= "use ".$this->namespaceName."\\classes\\".$returnType.";".$this->returnSymbol;
+                $this->useStructs[] = $returnType;
+            }
+            $returnInfo = [
+                'type' => $returnType,
+                'wholeType' => $returnType,
+                'valueName' => $returnType
+            ];
+            return $returnInfo;
+        }
+        else if( Utils::isBasicType($returnType)) {
+            $returnInfo = [
+                'type' => $returnType,
+                'wholeType' => $returnType,
+                'valueName' => $returnType
+            ];
+            return $returnInfo;
+        }
+
+        $this->state = 'init';
+        $word = '';
+        $wholeType = '';
+        $type = '';
+        $mapVectorState = false;
+        $valueName = '';
+
+        for ($i = 0; $i < strlen($returnType) ; $i++) {
+            $char = $returnType[$i];
+            if($this->state == 'init') {
+                // 有可能是换行
+                if(Utils::isSpace($char)) {
+                    continue;
+                }
+                else if($char == "\n") {
+                    break;
+                }
+                else if(Utils::inIdentifier($char)) {
+                    $this->state = 'identifier';
+                    $word .= $char;
+                }
+                else {
+                    Utils::abnormalExit('error','Interface内格式错误,请更正jce');
+                }
+            }
+            else if($this->state == 'identifier') {
+                // 如果遇到了space,需要检查是不是在map或vector的类型中,如果当前积累的word并不合法
+                // 并且又不是处在vector或map的前置状态下的话,那么就是出错了
+                //echo "[debug][state={$this->state}]word:".$word."\n";
+                if(Utils::isSpace($char)) {
+                    if(Utils::isBasicType($word)) {
+                        $type = $word;
+                        $this->state = 'init';
+                        $word = '';
+                    }
+                    else if(Utils::isStruct($word,$this->preStructs)) {
+
+                        // 同时要把它增加到本Interface的依赖中
+                        if(!in_array($word,$this->useStructs)) {
+                            $this->extraUse .= "use ".$this->namespaceName."\\classes\\".$word.";".$this->returnSymbol;
+                            $this->useStructs[] = $word;
+                        }
+
+
+                        $type = $word;
+                        $this->state = 'init';
+                        $word = '';
+                    }
+                    else if(Utils::isEnum($word,$this->preEnums)) {
+                        $type = 'unsigned byte';
+                        $this->state = 'init';
+                        $word = '';
+                    }
+                    else if(in_array($word,$this->preNamespaceStructs)) {
+                        $word = explode("::",$word);
+                        $word = $word[1];
+                        // 同时要把它增加到本Interface的依赖中
+                        if(!in_array($word,$this->useStructs)) {
+                            $this->extraUse .= "use ".$this->namespaceName."\\classes\\".$word.";".$this->returnSymbol;
+                            $this->useStructs[] = $word;
+                        }
+
+                        $type = $word;
+                        $this->state = 'init';
+                        $word = '';
+                    }
+                    else if(in_array($word,$this->preNamespaceEnums)) {
+                        $type = 'unsigned byte';
+                        $this->state = 'init';
+                        $word = '';
+                    }
+                    else if(Utils::isMap($word)) {
+                        $mapVectorState = true;
+                    }
+                    else if(Utils::isVector($word)) {
+                        $mapVectorState = true;
+                    }
+                    else {
+                        // 读到了vector和map中间的空格,还没读完
+                        if($mapVectorState) {
+                            continue;
+                        }
+                        // 否则剩余的部分应该就是值和默认值
+                        else {
+                            if(!empty($word))
+                                $valueName = $word;
+                            $this->state = 'init';
+                            $word = '';
+                        }
+                    }
+                }
+                // 标志着map和vector的开始,不等到'>'的结束不罢休
+                // 这时候需要使用栈来push,然后一个个对应的pop,从而达到type的遍历
+                else if($char == '<') {
+                    // 贪婪的向后,直到找出所有的'>'
+                    $type = $word;
+                    // 还会有一个wholeType,表示完整的部分
+                    $mapVectorStack = [];
+                    $wholeType = $type;
+                    $wholeType .= '<';
+                    array_push($mapVectorStack,'<');
+                    while(!empty($mapVectorStack)) {
+                        $moreChar = $returnType[$i+1];
+                        $wholeType .= $moreChar;
+                        if($moreChar == '<') {
+                            array_push($mapVectorStack,'<');
+                        }
+                        else if($moreChar == '>') {
+                            array_pop($mapVectorStack);
+                        }
+                        $i++;
+                    }
+
+                    $this->state = 'init';
+                    $word = '';
+                }
+                else $word .= $char;
+            }
+        }
+
+        $returnInfo = [
+            'type' => $type,
+            'wholeType' => $wholeType,
+            'valueName' => $valueName
+        ];
+
+
+        return $returnInfo;
+
+    }
     /**
      * @param $tag
      * @param $requireType
@@ -1096,7 +1331,9 @@ class InterfaceParser {
         // 处理通用的头部
         $funcHeader = $this->generateFuncHeader($funcName,$inParams,$outParams);
 
-        $funcBodyArr = $this->generateFuncBody($inParams,$outParams,$returnType);
+        $returnInfo = $this->returnParser($returnType);
+
+        $funcBodyArr = $this->generateFuncBody($inParams,$outParams,$returnInfo);
         $synFuncBody = $funcBodyArr['syn'];
 
 
@@ -1142,7 +1379,7 @@ class InterfaceParser {
      * @param $outParams
      * 生成函数的包体
      */
-    public function generateFuncBody($inParams,$outParams,$returnType) {
+    public function generateFuncBody($inParams,$outParams,$returnInfo) {
         $bodyPrefix = $this->doubleTab."\$this->_tarsAssistant->setRequest(\$this->_servantName,__FUNCTION__,\$this->_ip,\$this->_port);".$this->doubleReturn.
             $this->doubleTab."try {".$this->returnSymbol;
 
@@ -1176,8 +1413,8 @@ class InterfaceParser {
             else if(Utils::isMap($type)) {
 
                 $mapFill = $this->tripleTab."\$".$valueName."_map = ".$this->getExtType($param['wholeType'],$valueName).";".$this->returnSymbol.
-                    $this->tripleTab."foreach(\$".$valueName." as "."\$single".$valueName.") {".$this->returnSymbol.
-                    $this->quardupleTab."\$".$valueName."_map->pushBack(\$single".$valueName.");".$this->returnSymbol.
+                    $this->tripleTab."foreach(\$".$valueName." as "."\$key => \$value) {".$this->returnSymbol.
+                    $this->quardupleTab."\$".$valueName."_map->pushBack([\$key => \$value]);".$this->returnSymbol.
                     $this->tripleTab."}".$this->returnSymbol;
                 $bodyMiddle .= $mapFill;
                 $bodyMiddle .= $this->tripleTab.$commonPrefix.$packMethod."(\"".$valueName."\",\$".$valueName."_map);".$this->returnSymbol;
@@ -1231,11 +1468,33 @@ class InterfaceParser {
         }
 
         // 还要尝试去获取一下接口的返回码哦
-        $returnUnpack = Utils::getUnpackMethods($returnType);
+        $returnUnpack = Utils::getUnpackMethods($returnInfo['type']);
+        $valueName = $returnInfo['valueName'];
 
-        if($returnType !== 'void') {
-            $bodyMiddle .= $this->tripleTab."return \$this->_tarsAssistant->".$returnUnpack."(\"\");".$this->doubleReturn.
-                $this->doubleTab."}".$this->returnSymbol;
+        if($returnInfo['type'] !== 'void') {
+            if(Utils::isVector($returnInfo['type']) || Utils::isMap($returnInfo['type'])) {
+                $bodyMiddle .= $this->tripleTab."return \$this->_tafAssistant->".$returnUnpack."(\"\","
+                    .$this->getExtType($returnInfo['wholeType'],$valueName).");".$this->doubleReturn.
+                    $this->doubleTab."}".$this->returnSymbol;
+
+            }
+            else if(Utils::isStruct($returnInfo['type'],$this->preStructs)) {
+                $bodyMiddle .= $this->tripleTab."\$returnVal = new $valueName();".$this->returnSymbol;
+                $bodyMiddle .= $this->tripleTab."\$this->_tafAssistant->".$returnUnpack."(\"\",\$returnVal);".$this->returnSymbol;
+                $bodyMiddle .= $this->tripleTab."return \$returnVal;".$this->doubleReturn.
+                    $this->doubleTab."}".$this->returnSymbol;
+
+
+                if (!in_array($returnInfo['type'], $this->useStructs)) {
+                    $this->extraUse .= "use " . $this->namespaceName . "\\classes\\" . $returnInfo['type'] . ";" . $this->returnSymbol;
+                    $this->useStructs[] = $returnInfo['type'];
+                }
+            }
+            else {
+                $bodyMiddle .= $this->tripleTab."return \$this->_tafAssistant->".$returnUnpack."(\"\");".$this->doubleReturn.
+                    $this->doubleTab."}".$this->returnSymbol;
+
+            }
         }
         else {
             $bodyMiddle .= $this->doubleTab."}".$this->returnSymbol;
@@ -1375,6 +1634,10 @@ class StructParser {
                     if($nextnextChar == '/') {
                         $lineString .= $nextnextChar;
                         return $lineString;
+                    }
+                    else{
+                        $pos = ftell($this->fp);
+                        fseek($this->fp,$pos - 1);
                     }
                 }
             }

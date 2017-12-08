@@ -160,7 +160,7 @@ PHP_MINIT_FUNCTION(phptars)
 
     // tup_exception
     INIT_CLASS_ENTRY(ce, "TARS_Exception", tup_exception_methods);
-    tup_exception_ce = zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
+    tup_exception_ce = my_zend_register_internal_class_ex(&ce, zend_exception_get_default(TSRMLS_C), NULL TSRMLS_CC);
 
 
     TUP_STARTUP(ttars);
@@ -209,7 +209,8 @@ void tup_throw_exception(long err_code, char * fmt, ...) {
 
 PHP_METHOD(tup_exception, __construct) {
     char * msg;
-    int code, msg_len;
+    int code;
+    zend_size_t msg_len;
     zval * self;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &msg, &msg_len, &code) == FAILURE) {
@@ -230,7 +231,8 @@ PHP_METHOD(tup_exception, __construct) {
  */
 #define __TUP_PUT(type, packer) do { \
     char * name, * buf; \
-    int name_len, ret; \
+    int ret; \
+    zend_size_t name_len; \
     uint32_t len; \
     zval * value; \
     type dest; \
@@ -256,7 +258,7 @@ PHP_METHOD(tup_exception, __construct) {
     } \
     memcpy(buf, TarsOutputStream_getBuffer(att->value_os), TarsOutputStream_getLength(att->value_os)); \
     UniAttribute_del(&att); \
-    RETVAL_STRINGL(buf, len, 1); \
+    MY_RETVAL_STRINGL(buf, len, 1); \
     TarsFree(buf); \
 } while (0)
 /* }}} */
@@ -265,7 +267,8 @@ PHP_METHOD(tup_exception, __construct) {
  */
 #define __TUP_GET(type, dest) do { \
     char * name, *buf; \
-    int name_len, len, ret; \
+    int ret; \
+    zend_size_t name_len, len; \
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss", &name, &name_len, &buf, &len) == FAILURE) { \
         ZEND_WRONG_PARAM_COUNT(); \
         return ; \
@@ -297,9 +300,10 @@ PHP_METHOD(tup_exception, __construct) {
  */
 PHP_METHOD(tup,encode) {
     char * servantName, *funcName;
-    long iVersion,cPacketType,iMessageType;
-    uint32_t iRequestId, servantLen, funcLen,outBuffLen,iTimeout;
+    long iVersion, iRequestId, cPacketType, iMessageType, iTimeout;
+    uint32_t outBuffLen;
     char *outBuff = NULL;
+    zend_size_t servantLen, funcLen;
 
     zval *inbuf_arr;
     zval * contexts;
@@ -334,6 +338,7 @@ PHP_METHOD(tup,encode) {
     }
 
     // 将buf装入预先设定的一个mapwrapper中
+#if PHP_MAJOR_VERSION < 7
     HashTable *inbuf_ht = Z_ARRVAL_P(inbuf_arr);
     for (
             zend_hash_internal_pointer_reset(inbuf_ht);
@@ -379,6 +384,49 @@ PHP_METHOD(tup,encode) {
             }
         }
     }
+#else
+    //PHP7
+    zend_string *zkey;
+    zval *inbuf_iter;
+    ulong num_key;
+
+    char *key;
+
+    ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(inbuf_arr), num_key, zkey, inbuf_iter){
+
+                key = ZSTR_VAL(zkey);
+
+                // 针对每一个buf,现在已经获取了key->buf这样的一个键值对
+                char *inbuf_val;
+                uint32_t inbuf_len;
+                convert_to_string(inbuf_iter);
+                inbuf_val = Z_STRVAL_P(inbuf_iter);
+                inbuf_len = Z_STRLEN_P(inbuf_iter);
+
+                TarsOutputStream_reset(os_tmp);
+                TarsOutputStream_reset(os_map);
+
+                ret = TarsOutputStream_writeStringBuffer(os_tmp, key, strlen(key), 0);
+                if (ret) {
+                    ENCODE_BUF_EXCEPTION();
+                    goto do_clean;
+                }
+
+                ret = TarsOutputStream_writeVectorCharBuffer(os_map, inbuf_val, inbuf_len, 1);
+                if (ret) {
+                    ENCODE_BUF_EXCEPTION();
+                    goto do_clean;
+                }
+
+                ret = JMapWrapper_put(map_wrapper, TarsOutputStream_getBuffer(os_tmp), TarsOutputStream_getLength(os_tmp),
+                                      TarsOutputStream_getBuffer(os_map), TarsOutputStream_getLength(os_map));
+                if (ret) {
+                    ENCODE_BUF_EXCEPTION();
+                    goto do_clean;
+                }
+
+            }ZEND_HASH_FOREACH_END();
+#endif
 
     // 将mapwrapper进行uniattribute的encode使之成为符合需求的字符串
     // 设置tup包初始化参数
@@ -402,6 +450,7 @@ PHP_METHOD(tup,encode) {
     // 如果设置了context
     if(NULL != contexts) {
         HashTable *contextsHt= Z_ARRVAL_P(contexts);
+#if PHP_MAJOR_VERSION < 7
         for (
             zend_hash_internal_pointer_reset(contextsHt);
             zend_hash_has_more_elements(contextsHt) == SUCCESS;
@@ -443,6 +492,45 @@ PHP_METHOD(tup,encode) {
                 }
             }
         }
+#else
+//PHP7
+        zend_string *zkey;
+        zval *contextsIter;
+        ulong num_key;
+
+        char *key;
+
+        ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(contexts), num_key, zkey, contextsIter) {
+
+            key = ZSTR_VAL(zkey);
+
+            char *contextVal;
+            uint32_t contextLen;
+            convert_to_string(contextsIter);
+            contextVal = Z_STRVAL_P(contextsIter);
+            contextLen = Z_STRLEN_P(contextsIter);
+
+            ret = TarsOutputStream_writeStringBuffer(context_key_tmp, key, strlen(key), 0);
+            if (ret) {
+                ENCODE_BUF_EXCEPTION();
+                goto do_clean;
+            }
+
+            ret = TarsOutputStream_writeStringBuffer(context_value_tmp, contextVal, contextLen, 1);
+            if (ret) {
+                ENCODE_BUF_EXCEPTION();
+                goto do_clean;
+            }
+
+            ret = JMapWrapper_put(pack->context, TarsOutputStream_getBuffer(context_key_tmp), TarsOutputStream_getLength(context_key_tmp),
+                                  TarsOutputStream_getBuffer(context_value_tmp), TarsOutputStream_getLength(context_value_tmp));
+            if(ret) {
+                TUP_SET_CONTEXT_EXCEPTION();
+                goto do_clean;
+            }
+
+        } ZEND_HASH_FOREACH_END();
+#endif
     }
 
     // 如果设置了status
@@ -450,6 +538,7 @@ PHP_METHOD(tup,encode) {
         TarsOutputStream_reset(context_key_tmp);
         TarsOutputStream_reset(context_value_tmp);
 
+#if PHP_MAJOR_VERSION < 7
         HashTable *statusesHt= Z_ARRVAL_P(statuses);
         for (
             zend_hash_internal_pointer_reset(statusesHt);
@@ -493,6 +582,46 @@ PHP_METHOD(tup,encode) {
                 }
             }
         }
+#else
+        //PHP7
+        zend_string *zkey;
+        zval *statusesIter;
+        ulong num_key;
+
+        char *key;
+
+        ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(statuses), num_key, zkey, statusesIter) {
+
+            key = ZSTR_VAL(zkey);
+
+            char *statusVal;
+            uint32_t statusLen;
+            convert_to_string(statusesIter);
+            statusVal = Z_STRVAL_P(statusesIter);
+            statusLen = Z_STRLEN_P(statusesIter);
+
+            ret = TarsOutputStream_writeStringBuffer(context_key_tmp, key, strlen(key), 0);
+            if (ret) {
+                ENCODE_BUF_EXCEPTION();
+                goto do_clean;
+            }
+
+            ret = TarsOutputStream_writeStringBuffer(context_value_tmp, statusVal, statusLen, 1);
+            if (ret) {
+                ENCODE_BUF_EXCEPTION();
+                goto do_clean;
+            }
+
+            ret = JMapWrapper_put(pack->status, TarsOutputStream_getBuffer(context_key_tmp), TarsOutputStream_getLength(context_key_tmp),
+                                  TarsOutputStream_getBuffer(context_value_tmp), TarsOutputStream_getLength(context_value_tmp));
+
+            if(ret) {
+                TUP_SET_STATUS_EXCEPTION();
+                goto do_clean;
+            }
+
+        } ZEND_HASH_FOREACH_END();
+#endif
     }
     if (context_key_tmp)      TarsOutputStream_del(&context_key_tmp);
     if (context_value_tmp)      TarsOutputStream_del(&context_value_tmp);
@@ -585,12 +714,13 @@ PHP_METHOD(tup,encode) {
     memcpy(outBuff, &iHeaderLen, sizeof(Int32));
     memcpy(outBuff + sizeof(Int32), TarsOutputStream_getBuffer(os_tmp), TarsOutputStream_getLength(os_tmp));
 
-    RETVAL_STRINGL(outBuff, len, 1);
+    MY_RETVAL_STRINGL(outBuff, len, 1);
+    free(outBuff);
 
 do_clean:
     if(pack) UniPacket_del(&pack);
     if(os_tmp) TarsOutputStream_del(&os_tmp);
-    if(outBuff) TarsFree(outBuff);
+    //if(outBuff) TarsFree(outBuff);
     if (map_wrapper) JMapWrapper_del(&map_wrapper);
     if (os_map)      TarsOutputStream_del(&os_map);
     if (context_key_tmp)      TarsOutputStream_del(&context_key_tmp);
@@ -602,7 +732,7 @@ PHP_METHOD(tup,decode) {
     char *outBuff = NULL;
 
     char * respBuffer;
-    uint32_t respBufferLen;
+    zend_size_t respBufferLen;
     int ret;
     zval *ret_val;
 
@@ -633,11 +763,11 @@ PHP_METHOD(tup,decode) {
     ret = Unipacket_getMsg(unpack,&tmp);
 
     msg = JS_STRVAL(tmp);
-    int msg_len = JS_STRLEN(tmp);
+    uint32_t msg_len = JS_STRLEN(tmp);
 
     if(code != TARS_SUCCESS) {
         add_assoc_long(return_value,"code",code);
-        add_assoc_stringl(return_value,"msg",msg, msg_len, 1);
+        my_add_assoc_stringl(return_value,"msg",msg, msg_len, 1);
 
         if(tmp) JString_del(&tmp);
         if(unpack) UniPacket_del(&unpack);
@@ -659,9 +789,9 @@ PHP_METHOD(tup,decode) {
     outBuff = TarsMalloc(len);
     memcpy(outBuff, TarsOutputStream_getBuffer(os), TarsOutputStream_getLength(os));
 
-    add_assoc_stringl(return_value,"sBuffer",outBuff, len, 1);
+    my_add_assoc_stringl(return_value,"sBuffer",outBuff, len, 1);
     add_assoc_long(return_value,"code",code);
-    add_assoc_stringl(return_value,"msg",msg, msg_len, 1);
+    my_add_assoc_stringl(return_value,"msg",msg, msg_len, 1);
 
 do_clean:
     if(os) TarsOutputStream_del(&os);
@@ -699,7 +829,7 @@ PHP_METHOD(tup, getChar) {
 
     Char b;
     __TUP_GET(Char, &b);
-    RETURN_STRINGL(&b, 1, 1);
+    MY_RETURN_STRINGL(&b, 1, 1);
 }
 /* }}} */
 
@@ -863,7 +993,8 @@ PHP_METHOD(tup, getFloat) {
 PHP_METHOD(tup, putString) {
 
     char * name, * buf;
-    int name_len, ret;
+    int ret;
+    zend_size_t name_len;
     uint32_t len;
     zval * value;
     JString * js = NULL;
@@ -914,7 +1045,7 @@ PHP_METHOD(tup, putString) {
 
     memcpy(buf, TarsOutputStream_getBuffer(att->value_os), TarsOutputStream_getLength(att->value_os));
 
-    RETVAL_STRINGL(buf, len, 1);
+    MY_RETVAL_STRINGL(buf, len, 1);
 
 do_clean :
     if (js) JString_del(&js);
@@ -928,7 +1059,8 @@ do_clean :
 PHP_METHOD(tup, getString) {
 
     char * name, *buf;
-    int name_len, len, ret;
+    zend_size_t name_len, len;
+    int ret;
     JString * js = NULL;
     UniAttribute * att = NULL;
 
@@ -968,7 +1100,7 @@ PHP_METHOD(tup, getString) {
         goto do_clean;
     }
 
-    RETVAL_STRINGL(JS_STRVAL(js), JS_STRLEN(js), 1);
+    MY_RETVAL_STRINGL(JS_STRVAL(js), JS_STRLEN(js), 1);
 
 
 do_clean :
@@ -984,19 +1116,20 @@ PHP_METHOD(tup, putVector) {
 
     zval * clazz;
     char * name, *buf = NULL;
-    int name_len, ret;
+    zend_size_t name_len;
+    int ret;
     uint32_t len;
     JArray * vct = NULL;
     JString * js = NULL;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "so", &name, &name_len, &clazz) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sO", &name, &name_len, &clazz, tars_vector_ce) == FAILURE) {
         ZEND_WRONG_PARAM_COUNT();
         return ;
     }
 
     if (name_len < TUP_NAME_MIN_LEN) return NAME_EXCEPTOIN();
 
-    vector_wrapper * obj = (vector_wrapper * ) zend_object_store_get_object(clazz TSRMLS_CC);
+    vector_wrapper * obj = Z_VECTOR_WRAPPER_P(clazz);
     if (!IS_VALID_TYPE(obj->t)) return TYPE_EXCEPTOIN();
 
     if (IS_JSTRING(obj->t)) {
@@ -1034,7 +1167,7 @@ PHP_METHOD(tup, putVector) {
 
     memcpy(buf, TarsOutputStream_getBuffer(att->value_os), TarsOutputStream_getLength(att->value_os));
 
-    RETVAL_STRINGL(buf, len, 1);
+    MY_RETVAL_STRINGL(buf, len, 1);
 
 do_clean :
     if (att) UniAttribute_del(&att);
@@ -1048,17 +1181,18 @@ do_clean :
 PHP_METHOD(tup, getVector) {
 
     char * buf, * name;
-    int len, name_len, ret;
+    zend_size_t len, name_len;
+    int ret;
     zval * clazz, * ret_val = NULL;
     JArray * vct;
     JString * js;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sos", &name, &name_len, &clazz, &buf, &len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sOs", &name, &name_len, &clazz, tars_vector_ce, &buf, &len) == FAILURE) {
         ZEND_WRONG_PARAM_COUNT();
         return ;
     }
 
-    vector_wrapper * obj = (vector_wrapper * ) zend_object_store_get_object(clazz TSRMLS_CC);
+    vector_wrapper * obj = Z_VECTOR_WRAPPER_P(clazz TSRMLS_CC);
     if (!IS_VALID_TYPE(obj->t)) return TYPE_EXCEPTOIN();
 
     UniAttribute * att = UniAttribute_new();
@@ -1095,7 +1229,7 @@ PHP_METHOD(tup, getVector) {
             goto do_clean;
         }
 
-        RETVAL_STRINGL(JS_STRVAL(js), JS_STRLEN(js), 1);
+        MY_RETVAL_STRINGL(JS_STRVAL(js), JS_STRLEN(js), 1);
     } else {
 
         vct = obj->ctx->vct;
@@ -1129,18 +1263,19 @@ do_clean :
 PHP_METHOD(tup, putMap) {
     zval * clazz;
     char * name, *buf = NULL;
-    int name_len, ret;
+    int ret;
+    zend_size_t name_len;
     uint32_t len;
     JMapWrapper * container;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "so", &name, &name_len, &clazz) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sO", &name, &name_len, &clazz, tars_map_ce) == FAILURE) {
         ZEND_WRONG_PARAM_COUNT();
         return ;
     }
 
     if (name_len < TUP_NAME_MIN_LEN) return NAME_EXCEPTOIN();
 
-    map_wrapper * obj = (map_wrapper * ) zend_object_store_get_object(clazz TSRMLS_CC);
+    map_wrapper * obj = Z_MAP_WRAPPER_P(clazz TSRMLS_CC);
     container = obj->ctx;
 
     UniAttribute * att = UniAttribute_new();
@@ -1162,7 +1297,7 @@ PHP_METHOD(tup, putMap) {
 
     memcpy(buf, TarsOutputStream_getBuffer(att->value_os), TarsOutputStream_getLength(att->value_os));
 
-    RETVAL_STRINGL(buf, len, 1);
+    MY_RETVAL_STRINGL(buf, len, 1);
 do_clean :
     UniAttribute_del(&att);
     if (buf) TarsFree(buf);
@@ -1175,11 +1310,12 @@ PHP_METHOD(tup, getMap) {
 
     zval * clazz, *ret_val = NULL;
     char * buf, * name;
-    int len, name_len, ret = 0;
+    zend_size_t len, name_len;
+    int ret = 0;
     JMapWrapper * container;
     UniAttribute * att = NULL;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sos", &name, &name_len, &clazz, &buf, &len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sOs", &name, &name_len, &clazz, tars_map_ce, &buf, &len) == FAILURE) {
         ZEND_WRONG_PARAM_COUNT();
         return ;
     }
@@ -1205,7 +1341,7 @@ PHP_METHOD(tup, getMap) {
     }
 
 
-    map_wrapper * obj = (map_wrapper * ) zend_object_store_get_object(clazz TSRMLS_CC);
+    map_wrapper * obj = Z_MAP_WRAPPER_P(clazz TSRMLS_CC);
     container = obj->ctx;
     JMapWrapper_clear(container);
 
@@ -1233,11 +1369,12 @@ do_clean :
 PHP_METHOD(tup, putStruct) {
     zval * clazz;
     char * name, *buf = NULL;
-    int name_len, ret;
+    int ret;
+    zend_size_t name_len;
     uint32_t len;
     UniAttribute * att = NULL;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "so", &name, &name_len, &clazz) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sO", &name, &name_len, &clazz, tars_struct_ce) == FAILURE) {
         ZEND_WRONG_PARAM_COUNT();
         return ;
     }
@@ -1265,7 +1402,7 @@ PHP_METHOD(tup, putStruct) {
 
     memcpy(buf, TarsOutputStream_getBuffer(att->value_os), TarsOutputStream_getLength(att->value_os));
 
-    RETVAL_STRINGL(buf, len, 1);
+    MY_RETVAL_STRINGL(buf, len, 1);
 
 do_clean :
     UniAttribute_del(&att);
@@ -1279,11 +1416,12 @@ do_clean :
 PHP_METHOD(tup, getStruct) {
 
     char * buf, * name;
-    int len, name_len, ret;
+    zend_size_t len, name_len;
+    int ret;
     zval * clazz, *ret_val;
     UniAttribute * attr = NULL;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sos", &name, &name_len, &clazz, &buf, &len) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sOs", &name, &name_len, &clazz, tars_struct_ce, &buf, &len) == FAILURE) {
         ZEND_WRONG_PARAM_COUNT();
         return ;
     }

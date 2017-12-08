@@ -227,6 +227,23 @@ public:
         _servantProxy = pServantProxy;
     }
 
+    /**
+     * 设置AK
+     */
+    void setAccessKey(const string& k) { _accessKey = k; }
+    /**
+     * 设置SK
+     */
+    void setSecretKey(const string& k) { _secretKey = k; }
+    /**
+     * 获取AK
+     */
+    const string& getAccessKey() const  { return _accessKey; }
+    /**
+     * 获取SK
+     */
+    const string& getSecretKey() const  { return _secretKey; }
+
 protected:
 
     /**
@@ -305,6 +322,12 @@ private:
      * ServantProxy
      */
     ServantProxy *                        _servantProxy;
+
+    /**
+     * AK/SK
+     */
+    std::string                           _accessKey;
+    std::string                           _secretKey;
 
 };
 ///////////////////////////////////////////////////////////////////////////////////

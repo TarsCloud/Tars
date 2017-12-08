@@ -1,11 +1,12 @@
+#include "./include/tup_c.h"
+#include "./include/tars_c.h"
+
 #include "php.h"
 #include "php_ini.h"
 #include "Zend/zend_interfaces.h"
 #include "ext/standard/info.h"
 #include "./include/php_tupapi.h"
 #include "./include/ttars.h"
-#include "./include/tup_c.h"
-#include "./include/tars_c.h"
 
 Int32 TUP_putBool(void * pack, const char * name, Bool value)
 {

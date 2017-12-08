@@ -27,19 +27,20 @@ TC_Endpoint::TC_Endpoint()
     _host = "0.0.0.0";
     _port = 0;
     _timeout = 3000;
-    _istcp = true;
+    _type = TCP;
     _grid = 0;
     _qos = 0;
     _weight = -1;
     _weighttype = 0;
+    _authType = 0;
 }
 
-void TC_Endpoint::init(const string& host, int port, int timeout, int istcp, int grid, int qos, int weight, unsigned int weighttype)
+void TC_Endpoint::init(const string& host, int port, int timeout, int type, int grid, int qos, int weight, unsigned int weighttype, int authType)
 {
     _host = host;
     _port = port;
     _timeout = timeout;
-    _istcp = istcp;
+    _type = type;
     _grid = grid;
     _qos = qos;
     if (weighttype == 0)
@@ -56,6 +57,8 @@ void TC_Endpoint::init(const string& host, int port, int timeout, int istcp, int
         _weight = (weight > 100 ? 100 : weight);
         _weighttype = weighttype;
     }
+
+    _authType = authType;
 }
 
 void TC_Endpoint::parse(const string &str)
@@ -64,6 +67,7 @@ void TC_Endpoint::parse(const string &str)
     _qos = 0;
     _weight = -1;
     _weighttype = 0;
+    _authType = 0;
 
     const string delim = " \t\n\r";
 
@@ -85,15 +89,19 @@ void TC_Endpoint::parse(const string &str)
     string desc = str.substr(beg, end - beg);
     if(desc == "tcp")
     {
-        _istcp = true;
+        _type = TCP;
+    }
+    else if (desc == "ssl")
+    {
+        _type = SSL;
     }
     else if(desc == "udp")
     {
-        _istcp = false;
+        _type = UDP;
     }
     else
     {
-        throw TC_EndpointParse_Exception("TC_Endpoint::parse tcp or udp error : " + str);
+        throw TC_EndpointParse_Exception("TC_Endpoint::parse tcp or udp or ssl error : " + str);
     }
 
     desc = str.substr(end);
@@ -196,6 +204,16 @@ void TC_Endpoint::parse(const string &str)
                 }
                 break;
             }
+            // auth type
+            case 'e':
+            {
+                istringstream p(argument);
+                if (!(p >> const_cast<int&>(_authType)) || !p.eof() || _authType < 0 || _authType > 1)
+                {
+                    throw TC_EndpointParse_Exception("TC_Endpoint::parse -e error : " + str);
+                }
+                break;
+            }
             default:
             {
                 ///throw TC_EndpointParse_Exception("TC_Endpoint::parse error : " + str);
@@ -221,6 +239,11 @@ void TC_Endpoint::parse(const string &str)
     {
         const_cast<string&>(_host) = "0.0.0.0";
     }
+
+    if (_authType < 0)
+        _authType = 0;
+    else if (_authType > 0)
+        _authType = 1;
 }
 
 /*************************************TC_TCPClient**************************************/

@@ -235,9 +235,15 @@ void QueryEpBase::setEndpoints(const string & sEndpoints, set<EndpointInfo> & se
         {
             TC_Endpoint ep(vEndpoints[i]);
 
-            EndpointInfo::EType type = (ep.isTcp() ? EndpointInfo::TCP : EndpointInfo::UDP);
+            EndpointInfo::EType type;
+            if (ep.isSSL())
+                type = EndpointInfo::SSL;
+            else if (ep.isTcp())
+                type = EndpointInfo::TCP;
+            else
+                type = EndpointInfo::UDP;
 
-            string sSetDivision("");
+            string sSetDivision;
 
             //解析set分组信息
             {
@@ -269,7 +275,7 @@ void QueryEpBase::setEndpoints(const string & sEndpoints, set<EndpointInfo> & se
                 }
             }
 
-            EndpointInfo epi(ep.getHost(), ep.getPort(), type, ep.getGrid(), sSetDivision, ep.getQos(), ep.getWeight(), ep.getWeightType());
+            EndpointInfo epi(ep.getHost(), ep.getPort(), type, ep.getGrid(), sSetDivision, ep.getQos(), ep.getWeight(), ep.getWeightType(), ep.getAuthType());
 
             setEndpoints.insert(epi);
         }
@@ -472,9 +478,10 @@ void QueryEpBase::doEndpoints(const vector<tars::EndpointF>& activeEp, const vec
             }
         }
 
-        EndpointInfo::EType type = (activeEp[i].istcp ? EndpointInfo::TCP : EndpointInfo::UDP);
 
-        EndpointInfo ep(activeEp[i].host, activeEp[i].port, type, activeEp[i].grid, activeEp[i].setId, activeEp[i].qos, activeEp[i].weight, activeEp[i].weightType);
+        //  tars istcp意思和这里枚举值对应
+        EndpointInfo::EType type = EndpointInfo::EType(activeEp[i].istcp);
+        EndpointInfo ep(activeEp[i].host, activeEp[i].port, type, activeEp[i].grid, activeEp[i].setId, activeEp[i].qos, activeEp[i].weight, activeEp[i].weightType, activeEp[i].authType);
 
         activeEps.insert(ep);
     }
@@ -482,9 +489,9 @@ void QueryEpBase::doEndpoints(const vector<tars::EndpointF>& activeEp, const vec
     //生成inactive set 用于比较
     for (uint32_t i = 0; i < inactiveEp.size(); ++i)
     {
-        EndpointInfo::EType type = (inactiveEp[i].istcp ? EndpointInfo::TCP : EndpointInfo::UDP);
-
-        EndpointInfo ep(inactiveEp[i].host, inactiveEp[i].port, type, inactiveEp[i].grid, inactiveEp[i].setId, inactiveEp[i].qos, inactiveEp[i].weight, inactiveEp[i].weightType);
+        //  tars istcp意思和这里枚举值对应
+        EndpointInfo::EType type = EndpointInfo::EType(inactiveEp[i].istcp);
+        EndpointInfo ep(inactiveEp[i].host, inactiveEp[i].port, type, inactiveEp[i].grid, inactiveEp[i].setId, inactiveEp[i].qos, inactiveEp[i].weight, inactiveEp[i].weightType, inactiveEp[i].authType);
 
         inactiveEps.insert(ep);
     }
@@ -587,10 +594,9 @@ void QueryEpBase::setEndPointToCache(bool bInactive)
 
     for (; iter != doEndpoints.end(); ++iter)
     {
-        bool isTcp = (iter->type() == EndpointInfo::TCP ? true : false);
-
         //这里的超时时间 只是对服务端有效。这里的值无效。所以默认用3000了
-        TC_Endpoint ep(iter->host(), iter->port(), 3000, isTcp, iter->grid(), iter->qos(), iter->weight(), iter->getWeightType());
+        TC_Endpoint ep(iter->host(), iter->port(), 3000, iter->type(), iter->grid(), iter->qos(), iter->weight(), iter->getWeightType());
+        ep.setAuthType(iter->authType());
 
         if (!sEndpoints.empty())
         {
@@ -1814,7 +1820,7 @@ void EndpointThread::update(const set<EndpointInfo> & active, const set<Endpoint
     set<EndpointInfo>::iterator iter= active.begin();
     for(;iter != active.end(); ++iter)
     {
-        TC_Endpoint ep(iter->host(), iter->port(), 3000, iter->type() == EndpointInfo::TCP ? 1 : 0, iter->grid());
+        TC_Endpoint ep(iter->host(), iter->port(), 3000, iter->type(), iter->grid());
 
         _activeTCEndPoint.push_back(ep);
 
@@ -1824,7 +1830,7 @@ void EndpointThread::update(const set<EndpointInfo> & active, const set<Endpoint
     iter = inactive.begin();
     for(;iter != inactive.end(); ++iter)
     {
-        TC_Endpoint ep(iter->host(), iter->port(), 3000, iter->type() == EndpointInfo::TCP ? 1 : 0, iter->grid());
+        TC_Endpoint ep(iter->host(), iter->port(), 3000, iter->type(), iter->grid());
 
         _inactiveTCEndPoint.push_back(ep);
 

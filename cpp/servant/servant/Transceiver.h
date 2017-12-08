@@ -20,6 +20,7 @@
 #include "servant/EndpointInfo.h"
 #include "servant/NetworkUtil.h"
 #include "servant/CommunicatorEpoll.h"
+#include "servant/Auth.h"
 #include "util/tc_buffer.h"
 #include <list>
 
@@ -27,6 +28,10 @@ using namespace std;
 
 namespace tars
 {
+#if TARS_SSL
+    class TC_OpenSSL;
+#endif
+
 class AdapterProxy;
 
 //////////////////////////////////////////////////////////
@@ -74,6 +79,11 @@ public:
      */
     virtual void init(){}
 
+    /**
+     * 是否ssl
+     */
+    bool isSSL() const ;
+
     /*
      * 检查连接是否超时
      */
@@ -104,7 +114,7 @@ public:
      * 如果fd缓冲区已满,返回错误
      * 如果数据发送一半，缓冲区满了,返回成功
      */
-    int sendRequest(const char * pData,size_t iSize);
+    int sendRequest(const char * pData,size_t iSize, bool forceSend = false);
 
     /*
      * 处理请求，判断Send BufferCache是否有完整的包
@@ -195,7 +205,31 @@ public:
         _connStatus = eUnconnected; 
     }
 
+    /** 
+     * * 设置鉴权状态
+     **/
+    void setAuthState(int newstate) { _authState = newstate; }
+
+    /** 
+     ** 获取鉴权状态
+     **/
+    int getAuthState() const { return _authState; }
+
+    /** 
+     ** 发送鉴权数据
+     **/
+    bool sendAuthData(const BasicAuthInfo& );
+
 protected:
+    /** 
+     ** 物理连接成功回调
+     **/
+    void                     _onConnect();
+
+    /** 
+     ** 鉴权初始化请求
+     **/
+    void                     _doAuthReq();
 
     /*
      * AdapterProxy
@@ -236,6 +270,17 @@ protected:
      * 接收缓存buff
      */
     TC_Buffer                _recvBuffer;
+
+    /*
+     * 鉴权状态
+     */
+    int                      _authState;
+
+protected:
+#if TARS_SSL
+    TC_OpenSSL* _openssl;
+#endif
+
 };
 
 //////////////////////////////////////////////////////////
@@ -340,7 +385,6 @@ private:
      * 接收缓存
      */
     char                *_recvBuffer;
-
 };
 //////////////////////////////////////////////////////////
 

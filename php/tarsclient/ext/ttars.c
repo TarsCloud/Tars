@@ -5,7 +5,11 @@
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
+#if PHP_MAJOR_VERSION < 7
 #include "ext/standard/php_smart_str.h"
+#else
+#include "ext/standard/php_smart_string.h"
+#endif
 #include "./include/tars_c.h"
 #include "./include/tup_c.h"
 #include "./include/php_tupapi.h"
@@ -16,12 +20,18 @@
 static zend_object_handlers vector_wrapper_handlers;
 static zend_object_handlers map_wrapper_handlers;
 
-static void vector_wrapper_dtor(void * object TSRMLS_DC);
-static void map_wrapper_dtor(void * object TSRMLS_DC);
+static void vector_wrapper_dtor(zend_object * object TSRMLS_DC);
+static void map_wrapper_dtor(zend_object * object TSRMLS_DC);
 
 static size_t tars_type_name(zval * this_ptr, int * type, char ** out);
-static inline zend_object_value map_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC);
-static inline zend_object_value vector_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC);
+
+#if PHP_MAJOR_VERSION < 7
+    static inline zend_object_value map_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC);
+    static inline zend_object_value vector_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC);
+#else
+static inline zend_object * map_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC);
+static inline zend_object * vector_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC);
+#endif
 /* }}} */
 
 /* {{{ _TARS_ZVAL_TO_BIG_NUMERIC 将zval结构转换成特定的数字类型
@@ -33,7 +43,8 @@ static inline zend_object_value vector_wrapper_object_new(zend_class_entry * cla
         case IS_NULL :                                  \
             ZVAL_LONG(z, 0);                            \
             break;                                      \
-        case IS_BOOL :                                  \
+        case IS_TRUE :                                  \
+        case IS_FALSE :                                 \
         case IS_DOUBLE :                                \
         case IS_STRING :                                \
             convert_to_long(z);                         \
@@ -95,7 +106,8 @@ static inline zend_object_value vector_wrapper_object_new(zend_class_entry * cla
         case IS_NULL :                                \
             ZVAL_DOUBLE(z, 0.0);                      \
             break;                                    \
-        case IS_BOOL :                                \
+        case IS_TRUE :                                \
+        case IS_FALSE :                               \
         case IS_LONG :                                \
         case IS_STRING :                              \
             convert_to_double(z);                     \
@@ -123,9 +135,9 @@ int bool_packer(zval * z, TarsOutputStream * stream, uint8_t tag, void * out) {
     convert_to_boolean(z);
     if (out) {
         Bool * tmp = out;
-        *tmp = Z_BVAL_P(z);
+        *tmp = (MY_Z_TYPE_P(z) == IS_TRUE) ? true : false;
     }
-    if (stream) ret = TarsOutputStream_writeBool(stream, Z_BVAL_P(z), tag);
+    if (stream) ret = TarsOutputStream_writeBool(stream, (MY_Z_TYPE_P(z) == IS_TRUE) ? true : false, tag);
     return ret;
 }
 /* }}} */
@@ -136,15 +148,18 @@ int char_packer(zval * z, TarsOutputStream * stream, uint8_t tag, void * out) {
 
     int ret = TARS_SUCCESS;
     Char __dest;
-    switch(Z_TYPE_P(z)) {
+    switch(MY_Z_TYPE_P(z)) {
         case IS_STRING :
             if (Z_STRLEN_P(z) > 1) {
                 return ERR_CANNOT_CONVERT;
             }
             __dest = Z_STRVAL_P(z)[0];
             break;
-        case IS_BOOL :
-            __dest = Z_BVAL_P(z)?'1':'0';
+        case IS_TRUE:
+            __dest = '1';
+            break;
+        case IS_FALSE:
+            __dest = '0';
             break;
         case IS_NULL :
             __dest = '0';
@@ -254,7 +269,8 @@ int string_packer(zval * z, TarsOutputStream * stream, uint8_t tag, void * out) 
         case IS_LONG :
         case IS_DOUBLE :
         case IS_NULL :
-        case IS_BOOL :
+        case IS_TRUE :
+        case IS_FALSE :
             convert_to_string(z);
             break;
         default :
@@ -282,7 +298,7 @@ int vector_packer(zval * zv, TarsOutputStream * out, uint8_t tag, void * vector_
         return ret;
     }
 
-    vector_wrapper * obj = (vector_wrapper * ) zend_object_store_get_object(this_ptr TSRMLS_CC);
+    vector_wrapper * obj = Z_VECTOR_WRAPPER_P(this_ptr TSRMLS_CC);
     if (IS_JSTRING(obj->t)) {
         JString * js = obj->ctx->str;
         //if (JString_size(js) == 0) {
@@ -323,7 +339,7 @@ int map_packer(zval * zv, TarsOutputStream * out, uint8_t tag, void * map_ptr) {
         return ret;
     }
 
-    map_wrapper * obj = (map_wrapper * ) zend_object_store_get_object(this_ptr TSRMLS_CC);
+    map_wrapper * obj = Z_MAP_WRAPPER_P(this_ptr TSRMLS_CC);
     JMapWrapper * container = obj->ctx;
     // 打包数据,这里应该是不需要的,之前遗留的逻辑
     //if (JMapWrapper_size(container) == 0) {
@@ -361,14 +377,17 @@ int struct_packer_wrapper(TarsOutputStream * o, void * struct_ptr) {
 
     if (!IS_CLASS_STRUCT(this_ptr)) return ERR_CLASS_MISMATCH;
 
-    props = Z_OBJPROP_P(this_ptr);
     // 获取字段信息列表
-    zval * tmp = zend_read_property(tars_struct_ce, this_ptr, ZEND_STRL(STRUCT_PROP_FIELDS), 1 TSRMLS_CC);
+    zval * tmp = my_zend_read_property(tars_struct_ce, this_ptr, ZEND_STRL(STRUCT_PROP_FIELDS), 1 TSRMLS_CC);
     if (Z_TYPE_P(tmp) == IS_ARRAY) {
         fields = Z_ARRVAL_P(tmp);
     }
 
     // 思路需要转换，只需要打包那些必须的元素，也就是fields中的内容
+#if PHP_MAJOR_VERSION < 7
+
+    props = Z_OBJPROP_P(this_ptr);
+
     for (
             zend_hash_internal_pointer_reset(fields);
             zend_hash_has_more_elements(fields) == SUCCESS;
@@ -477,6 +496,105 @@ int struct_packer_wrapper(TarsOutputStream * o, void * struct_ptr) {
             }
         }
     }
+#else
+    //PHP7
+    ulong tag;
+    zend_string *zkey;
+    zval *attributes;
+
+    ZEND_HASH_FOREACH_KEY_VAL(fields, tag, zkey, attributes) {
+        if (!attributes) {
+            return ERR_STATIC_FIELDS_PARAM_LOST;
+        }
+
+        char *name_key;
+        zval * val, *type, *sub = NULL, *extType;
+
+        // 首先获取name的具体名称，作为获取实际值的key
+        if ((val = zend_hash_str_find(Z_ARRVAL_P(attributes), "name", sizeof("name")-1)) != NULL) {
+            if (Z_TYPE_P(val) == IS_STRING) {
+                name_key = Z_STRVAL_P(val);
+            } else {
+                zval copyval = *val;
+                zval_copy_ctor(&copyval);
+                convert_to_string(&copyval);
+                name_key = Z_STRVAL(copyval);
+                zval_dtor(&copyval);
+            }
+
+            // 其次获取是否是必选的字段
+            Bool is_required;
+            if ((val = zend_hash_str_find(Z_ARRVAL_P(attributes), "required", sizeof("required")-1)) != NULL) {
+                if (Z_TYPE_P(val) == IS_TRUE || Z_TYPE_P(val) == IS_FALSE) {
+                    is_required = (Z_TYPE_P(val) == IS_TRUE ? true : false);
+                } else {
+                    zval copyval = *val;
+                    zval_copy_ctor(&copyval);
+                    convert_to_bool(&copyval);
+                    is_required = Z_BVAL(copyval);
+                    zval_dtor(&copyval);
+                }
+
+                // 获取其中的值 //TODO change old code ?
+                if ((val = my_zend_read_property(tars_struct_ce, this_ptr, name_key, strlen(name_key), 1 TSRMLS_CC))) {
+                    // 再次获取具体的类型
+                    if ((type = zend_hash_str_find(Z_ARRVAL_P(attributes), "type", sizeof("type")-1)) != NULL) {
+                        int real_type;
+                        if (Z_TYPE_P(type) == IS_LONG) {
+                            real_type = Z_LVAL_P(type);
+                        } else {
+                            zval copyval = *type;
+                            zval_copy_ctor(&copyval);
+                            convert_to_long(&copyval);
+                            real_type = Z_LVAL(copyval);
+                            zval_dtor(&copyval);
+                        }
+                        // 此时的val是真正从类中获取到的对象
+
+                        // 如果是struct类型
+                        if(IS_STRUCT(real_type)) {
+                            sub = val;
+                            ret = struct_packer(NULL,o, tag, sub);
+                        }
+                            // 其他复杂类型,包括vector和map sub本来是候补用的，在新的架构下，获取与普通类型并无差别
+                        else if (!IS_BASE_TYPE(real_type)) {
+                            // 需要重新获取extType参数,从而能够获取到vector和map的真正类型
+                            if ((extType = zend_hash_str_find(Z_ARRVAL_P(attributes), "extType", sizeof("extType")-1)) != NULL) {
+                                sub = extType;
+                                ret = packer_dispatch[real_type](val, o, tag, sub);
+                            }else {
+                                sub = val;
+                                ret = packer_dispatch[real_type](sub, o, tag, sub);
+                            }
+                        }
+                        else {
+                            ret = packer_dispatch[real_type](val, o, tag, sub);
+                        }
+
+                        if (ret != TARS_SUCCESS) return ret;
+                    }
+                    else {
+                        return ERR_STATIC_FIELDS_PARAM_LOST;
+                    }
+                }
+                else {
+                    // 如果是必填但是获取失败，那么报错
+                    if(is_required) {
+                        return ERR_REQUIRED_FIELD_LOST;
+                    }
+                    else return ERR_ARRAY_RETRIEVE;
+                }
+            }
+            else {
+                return ERR_STATIC_FIELDS_PARAM_LOST;
+            }
+        }
+        else {
+            return ERR_REQUIRED_FIELD_LOST;
+        }
+
+    } ZEND_HASH_FOREACH_END();
+#endif
 
     return ret;
 }
@@ -486,13 +604,12 @@ int struct_packer_wrapper(TarsOutputStream * o, void * struct_ptr) {
 int bool_unpacker(TarsInputStream * stream, uint8_t tag, Bool is_require, zval * this_ptr, void ** zv) {
 
     int ret;
-    zval * tmp;
+    zval tmp;
     Bool b = 0;
     ret = TarsInputStream_readBool(stream, &b, tag, is_require);
     if (ret == TARS_SUCCESS) {
-        ALLOC_INIT_ZVAL(tmp);
-        ZVAL_BOOL(tmp, b?1:0);
-        *zv = tmp;
+        ZVAL_BOOL(&tmp, b ? 1 : 0);
+        *zv = &tmp;
     }
     return ret;
 }
@@ -508,7 +625,7 @@ int char_unpacker(TarsInputStream * stream, uint8_t tag, Bool is_require, zval *
     ret = TarsInputStream_readChar(stream, &c, tag, is_require);
     if (ret == TARS_SUCCESS) {
         ALLOC_INIT_ZVAL(tmp);
-        ZVAL_STRINGL(tmp, &c, 1, 1);
+        MY_ZVAL_STRINGL(tmp, &c, 1, 1);
         * zv = tmp;
     }
     return ret;
@@ -576,7 +693,7 @@ int int32_unpacker(TarsInputStream * stream, uint8_t tag, Bool is_require, zval 
         } else {  \
             char buf[32]; \
             int len = slprintf(buf, 32, "%lld", l); \
-            ZVAL_STRINGL(tmp, buf, len, 1); \
+            MY_ZVAL_STRINGL(tmp, buf, len, 1); \
         } \
         * zv = tmp; \
     } \
@@ -644,7 +761,7 @@ int string_unpacker(TarsInputStream * stream, uint8_t tag, Bool is_require, zval
     ret = TarsInputStream_readString(stream, js, tag, is_require);
     if (ret == TARS_SUCCESS) {
         ALLOC_INIT_ZVAL(tmp);
-        ZVAL_STRINGL(tmp, JS_STRVAL(js), JS_STRLEN(js), 1);
+        MY_ZVAL_STRINGL(tmp, JS_STRVAL(js), JS_STRLEN(js), 1);
         * zv = tmp;
     }
 
@@ -667,7 +784,7 @@ int vector_unpacker(TarsInputStream * stream, uint8_t tag, Bool is_require, zval
     // 检查对象类型
     if (!IS_CLASS_VECTOR(this_ptr)) return ERR_CLASS_MISMATCH;
 
-    vector_wrapper * obj = (vector_wrapper * ) zend_object_store_get_object(this_ptr TSRMLS_CC);
+    vector_wrapper * obj = Z_VECTOR_WRAPPER_P(this_ptr TSRMLS_CC);
     if (!IS_VALID_TYPE(obj->t)) return ERR_TYPE_INVALID;
 
     // vector<char> 特殊处理
@@ -679,14 +796,14 @@ int vector_unpacker(TarsInputStream * stream, uint8_t tag, Bool is_require, zval
         if (ret != TARS_SUCCESS) return ret;
 
         ALLOC_INIT_ZVAL(cntr);
-        ZVAL_STRINGL(cntr, JS_STRVAL(js), JS_STRLEN(js), 1);
+        MY_ZVAL_STRINGL(cntr, JS_STRVAL(js), JS_STRLEN(js), 1);
     } else {
 
         container = obj->ctx->vct;
         unpacker = unpacker_dispatch[obj->t];
 
         if (!IS_BASE_TYPE(obj->t)) {
-            sub = zend_read_property(tars_vector_ce, this_ptr, ZEND_STRL(TARS_PROP_TYPE_CLASS), 1 TSRMLS_CC);
+            sub = my_zend_read_property(tars_vector_ce, this_ptr, ZEND_STRL(TARS_PROP_TYPE_CLASS), 1 TSRMLS_CC);
         }
 
         if (stream) {
@@ -707,7 +824,7 @@ int vector_unpacker(TarsInputStream * stream, uint8_t tag, Bool is_require, zval
 
             ret = unpacker(is, 0, true, sub, (void **)&tmp);
             if (ret != TARS_SUCCESS) goto error_clean;
-            zend_hash_next_index_insert(Z_ARRVAL_P(cntr), (void *)&tmp, sizeof(zval *), NULL);
+            my_zend_hash_next_index_insert(Z_ARRVAL_P(cntr), (void **) &tmp, sizeof(zval *), NULL);
         }
 
         TarsInputStream_del(&is);
@@ -718,7 +835,7 @@ int vector_unpacker(TarsInputStream * stream, uint8_t tag, Bool is_require, zval
     return TARS_SUCCESS;
 
 error_clean:
-    if (cntr) zval_ptr_dtor(&cntr);
+    if (cntr) my_zval_ptr_dtor(&cntr);
     return ret;
 }
 /* }}} */
@@ -731,7 +848,7 @@ int map_unpacker(TarsInputStream * stream, uint8_t tag, Bool is_require, zval * 
     int ret;
 
     if (!IS_CLASS_MAP(this_ptr)) return ERR_CLASS_MISMATCH;
-    map_wrapper * obj = (map_wrapper * ) zend_object_store_get_object(this_ptr TSRMLS_CC);
+    map_wrapper * obj = Z_MAP_WRAPPER_P(this_ptr TSRMLS_CC);
     container = obj->ctx;
     JMapWrapper_clear(container);
 
@@ -750,18 +867,18 @@ int _map_to_array(zval * this_ptr, JMapWrapper * container, void **zv) {
     tars_unpack_func_t funpacker, sunpacker;
     int i, ft, st, ret, format = 0;
 
-    type = zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_FIRST_TYPE), 1 TSRMLS_CC);
+    type = my_zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_FIRST_TYPE), 1 TSRMLS_CC);
     ft = Z_LVAL_P(type);
     if (!IS_VALID_TYPE(ft)) return ERR_TYPE_INVALID;
-    if (!IS_BASE_TYPE(ft)) fsub = zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_FIRST_TYPE_CLASS), 1 TSRMLS_CC);
+    if (!IS_BASE_TYPE(ft)) fsub = my_zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_FIRST_TYPE_CLASS), 1 TSRMLS_CC);
 
-    type = zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_SECOND_TYPE), 1 TSRMLS_CC);
+    type = my_zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_SECOND_TYPE), 1 TSRMLS_CC);
     st = Z_LVAL_P(type);
     if (!IS_VALID_TYPE(st)) return ERR_TYPE_INVALID;
-    if (!IS_BASE_TYPE(st)) ssub = zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_SECOND_TYPE_CLASS), 1 TSRMLS_CC);
+    if (!IS_BASE_TYPE(st)) ssub = my_zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_SECOND_TYPE_CLASS), 1 TSRMLS_CC);
 
-    type = zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_PARAM_FORMAT), 1 TSRMLS_CC);
-    if (Z_TYPE_P(type) == IS_BOOL && Z_BVAL_P(type)) {
+    type = my_zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_PARAM_FORMAT), 1 TSRMLS_CC);
+    if (MY_Z_TYPE_P(type) == IS_TRUE) {
         format = 1;
     }
 
@@ -801,12 +918,16 @@ int _map_to_array(zval * this_ptr, JMapWrapper * container, void **zv) {
              *    4. 其他类型要强制转换成长整型
              */
             if (Z_TYPE_P(key) == IS_LONG) {
-                zend_hash_index_update(Z_ARRVAL_P(cntr), Z_LVAL_P(key), (void *) &value, sizeof(zval *), NULL);
+                my_zend_hash_index_update(Z_ARRVAL_P(cntr), Z_LVAL_P(key), (void *) &value, sizeof(zval *), NULL);
             } else {
+#if PHP_MAJOR_VERSION < 7
                 zend_symtable_update(Z_ARRVAL_P(cntr), Z_STRVAL_P(key), Z_STRLEN_P(key) + 1, &value, sizeof(zval *), NULL);
+#else
+                zend_symtable_update(Z_ARRVAL_P(cntr), Z_STR_P(key), value);
+#endif
             }
 
-            zval_ptr_dtor(&key);
+            my_zval_ptr_dtor(&key);
         } else {
             // 以两维数组的方式返回
             zval * item;
@@ -814,9 +935,9 @@ int _map_to_array(zval * this_ptr, JMapWrapper * container, void **zv) {
             ALLOC_INIT_ZVAL(item);
             array_init(item);
 
-            zend_hash_add(Z_ARRVAL_P(item), MAP_FIRST_KEY, sizeof(MAP_FIRST_KEY), (void *)&key, sizeof(zval *), NULL);
-            zend_hash_add(Z_ARRVAL_P(item), MAP_SECOND_KEY, sizeof(MAP_SECOND_KEY), (void *)&value, sizeof(zval *), NULL);
-            zend_hash_next_index_insert(Z_ARRVAL_P(cntr), (void *)&item, sizeof(zval *), NULL);
+            my_zend_hash_add(Z_ARRVAL_P(item), MAP_FIRST_KEY, sizeof(MAP_FIRST_KEY), (void *)&key, sizeof(zval *), NULL);
+            my_zend_hash_add(Z_ARRVAL_P(item), MAP_SECOND_KEY, sizeof(MAP_SECOND_KEY), (void *)&value, sizeof(zval *), NULL);
+            my_zend_hash_next_index_insert(Z_ARRVAL_P(cntr), (void **) &item, sizeof(zval *), NULL);
         }
     }
 
@@ -826,7 +947,7 @@ int _map_to_array(zval * this_ptr, JMapWrapper * container, void **zv) {
 
 do_clean :
     TarsInputStream_del(&stream);
-    if (cntr) zval_ptr_dtor(&cntr);
+    if (cntr) my_zval_ptr_dtor(&cntr);
     return ret;
 }
 /* }}} */
@@ -870,8 +991,8 @@ int struct_unpacker_wrapper(TarsInputStream * is, zval * this_ptr,void ** zv) {
 
 
     // 获取字段信息列表
-    zval * tmp = zend_read_property(tars_struct_ce, this_ptr, ZEND_STRL(STRUCT_PROP_FIELDS), 1 TSRMLS_CC);
-    if (Z_TYPE_P(tmp) == IS_ARRAY) {
+    zval * tmp = my_zend_read_property(tars_struct_ce, this_ptr, ZEND_STRL(STRUCT_PROP_FIELDS), 1 TSRMLS_CC);
+    if (MY_Z_TYPE_P(tmp) == IS_ARRAY) {
         fields = Z_ARRVAL_P(tmp);
     }
 
@@ -879,6 +1000,7 @@ int struct_unpacker_wrapper(TarsInputStream * is, zval * this_ptr,void ** zv) {
     array_init(ret_zv);
 
     // 思路需要转换，只需要打包那些必须的元素，也就是fields中的内容
+#if PHP_MAJOR_VERSION < 7
     for (
             zend_hash_internal_pointer_reset(fields);
             zend_hash_has_more_elements(fields) == SUCCESS;
@@ -989,6 +1111,100 @@ int struct_unpacker_wrapper(TarsInputStream * is, zval * this_ptr,void ** zv) {
             }
         }
     }
+#else
+    //PHP7
+    ulong tag;
+    zend_string *zkey;
+    zval *attributes;
+
+    ZEND_HASH_FOREACH_KEY_VAL(fields, tag, zkey, attributes) {
+        if (!attributes) {
+            return ERR_STATIC_FIELDS_PARAM_LOST;
+        }
+
+        char *name_key;
+        zval * val, *type, *sub = NULL, *extType;
+
+        // 首先获取name的具体名称，作为获取实际值的key
+        if ((val = zend_hash_str_find(Z_ARRVAL_P(attributes), "name", sizeof("name")-1)) != NULL) {
+            if (Z_TYPE_P(val) == IS_STRING) {
+                name_key = Z_STRVAL_P(val);
+            } else {
+                zval copyval = *val;
+                zval_copy_ctor(&copyval);
+                convert_to_string(&copyval);
+                name_key = Z_STRVAL(copyval);
+                zval_dtor(&copyval);
+            }
+
+            // 其次获取是否是必选的字段
+            Bool is_required;
+            if ((val = zend_hash_str_find(Z_ARRVAL_P(attributes), "required", sizeof("required")-1)) != NULL) {
+                if (Z_TYPE_P(val) == IS_TRUE || Z_TYPE_P(val) == IS_FALSE) {
+                    is_required = Z_TYPE_P(val) == IS_TRUE ? true : false;
+                } else {
+                    zval copyval = *val;
+                    zval_copy_ctor(&copyval);
+                    convert_to_bool(&copyval);
+                    is_required = Z_BVAL(copyval);
+                    zval_dtor(&copyval);
+                }
+
+                // 再次获取具体的类型
+                // 获取其中的值 //TODO change old code ?
+                if ((val = my_zend_read_property(tars_struct_ce, this_ptr, name_key, strlen(name_key), 1 TSRMLS_CC))) {
+                    if ((type = zend_hash_str_find(Z_ARRVAL_P(attributes), "type", sizeof("type")-1)) != NULL) {
+                        int real_type;
+                        if (Z_TYPE_P(type) == IS_LONG) {
+                            real_type = Z_LVAL_P(type);
+                        } else {
+                            zval copyval = *type;
+                            zval_copy_ctor(&copyval);
+                            convert_to_long(&copyval);
+                            real_type = Z_LVAL(copyval);
+                            zval_dtor(&copyval);
+                        }
+
+                        zval * complicate_type;
+
+                        // 如果是struct类型
+                        if(IS_STRUCT(real_type)) {
+                            ret = struct_unpacker(is, tag, is_required, val, (void **)&prop);
+                        }
+                            // 其他复杂类型,包括vector和map
+                        else if (!IS_BASE_TYPE(real_type)) {
+                            ret = unpacker_dispatch[real_type](is, tag, is_required, val, (void **)&prop);
+                        }
+                            // 普通类型直接取fields里面的type
+                        else {
+                            ret = unpacker_dispatch[real_type](is, tag, is_required, type, (void **)&prop);
+                        }
+
+
+                        if (ret != TARS_SUCCESS) return ret;
+                        // 获取其中的值
+                        my_zend_hash_add(Z_ARRVAL_P(ret_zv), name_key, strlen(name_key)+1, (void **)&prop, sizeof(zval *), NULL);
+                    }
+                    else {
+                        return ERR_STATIC_FIELDS_PARAM_LOST;
+                    }
+
+                }
+                else {
+                    return ERR_STATIC_FIELDS_PARAM_LOST;
+                }
+            }
+            else {
+                return ERR_STATIC_FIELDS_PARAM_LOST;
+            }
+        }
+        else {
+            return ERR_REQUIRED_FIELD_LOST;
+        }
+
+    } ZEND_HASH_FOREACH_END();
+#endif
+
     * zv = ret_zv;
     return TARS_SUCCESS;
 }
@@ -997,16 +1213,20 @@ int struct_unpacker_wrapper(TarsInputStream * is, zval * this_ptr,void ** zv) {
 /* {{{ __CYCLE_PACKER
  */
 #define __CYCLE_PACKER(type, item, prop) \
-    if (!IS_BASE_TYPE(type) && Z_TYPE_PP(item) != IS_OBJECT) { \
-        zval * tmp = zend_read_property(Z_OBJCE_P(this_ptr), this_ptr, ZEND_STRL(prop), 1 TSRMLS_CC); \
+    if (!IS_BASE_TYPE(type) && MY_Z_TYPE_PP(item) != IS_OBJECT) { \
+        zval * tmp = my_zend_read_property(Z_OBJCE_P(this_ptr), this_ptr, ZEND_STRL(prop), 1 TSRMLS_CC); \
         if (!ZVAL_IS_NULL(tmp)) { \
             if (TTARS_TYPE_VECTOR == type) { \
                 ret = vector_converter(tmp, *item, ++depth); \
             } else if (TTARS_TYPE_MAP == type) { \
                 ret = map_converter(tmp, *item, ++depth); \
+            } else { \
+                return; \
             } \
-            if (ret != TARS_SUCCESS) goto do_clean ; \
-            item = &tmp; \
+            if (ret != TARS_SUCCESS) { \
+                goto do_clean ; \
+            } \
+            ZVAL_COPY(*item, tmp); \
         } \
     } \
 /* }}} */
@@ -1019,12 +1239,12 @@ int vector_converter(zval * this_ptr, zval * value, int depth) {
     HashTable * ht;
     JArray * container = NULL;
     JString * js = NULL;
-    smart_str js_str = {0};
+    my_smart_str js_str = {0};
     int ret = TARS_SUCCESS, free_zv = 0;
     zval * zv = NULL;
     char c;
 
-    vector_wrapper * obj = (vector_wrapper *) zend_object_store_get_object(this_ptr TSRMLS_CC);
+    vector_wrapper * obj = Z_VECTOR_WRAPPER_P(this_ptr TSRMLS_CC);
     if (!IS_VALID_TYPE(obj->t)) {
         return ERR_TYPE_INVALID;
     }
@@ -1048,6 +1268,8 @@ int vector_converter(zval * this_ptr, zval * value, int depth) {
     }
 
     ht = Z_ARRVAL_P(value);
+
+#if PHP_MAJOR_VERSION < 7
     for(
             zend_hash_internal_pointer_reset(ht);
             zend_hash_has_more_elements(ht) == SUCCESS;
@@ -1083,13 +1305,48 @@ int vector_converter(zval * this_ptr, zval * value, int depth) {
             TarsOutputStream_reset(out);
         }
     }
+#else
+    //PHP7
+    zend_string *zkey;
+    zval *item;
+    ulong num_key;
+
+    ZEND_HASH_FOREACH_KEY_VAL(ht, num_key, zkey, item) {
+        if (zkey) {
+            if (IS_JSTRING(obj->t)) {
+                ret = packer(item, NULL, 0, &c);
+                if (ret != TARS_SUCCESS) goto do_clean;
+
+                // 将单个字符拼成字符串串
+                smart_str_appendc(&js_str, c);
+            }
+                // todo 这里针对struct的逻辑
+                // 增加对结构体的单独处理
+            else if(IS_STRUCT(obj->t)) {
+                ret = packer (NULL,out, 0, item);
+                if (ret != TARS_SUCCESS) goto do_clean;
+                ret = JArray_pushBack(container, TarsOutputStream_getBuffer(out), TarsOutputStream_getLength(out));
+                if (ret != TARS_SUCCESS) goto do_clean;
+                TarsOutputStream_reset(out);
+            }
+            else {
+                __CYCLE_PACKER(obj->t, (zval **)&item, TARS_PROP_TYPE_CLASS);
+                ret = packer (item, out, 0, NULL);
+                if (ret != TARS_SUCCESS) goto do_clean;
+                ret = JArray_pushBack(container, TarsOutputStream_getBuffer(out), TarsOutputStream_getLength(out));
+                if (ret != TARS_SUCCESS) goto do_clean;
+                TarsOutputStream_reset(out);
+            }
+        }
+    } ZEND_HASH_FOREACH_END();
+#endif
 
 string_pack :
 
     if (IS_JSTRING(obj->t)) {
         if (!zv) {
             ALLOC_INIT_ZVAL(zv);
-            ZVAL_STRINGL(zv, js_str.c, js_str.len, 0);
+            MY_ZVAL_STRINGL(zv, js_str.c, js_str.len, 0);
             free_zv = 1;
         }
 
@@ -1100,7 +1357,7 @@ string_pack :
 
 do_clean :
     TarsOutputStream_del(&out);
-    if (free_zv) zval_ptr_dtor(&zv);
+    if (free_zv) my_zval_ptr_dtor(&zv);
     return ret;
 }
 /* }}} */
@@ -1121,17 +1378,17 @@ int map_converter(zval * this_ptr, zval * zv, int depth) {
     ht = Z_ARRVAL_P(zv);
 
     // 第一项参数类型
-    type = zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_FIRST_TYPE), 1 TSRMLS_CC);
+    type = my_zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_FIRST_TYPE), 1 TSRMLS_CC);
     if (Z_TYPE_P(type) != IS_LONG || !IS_VALID_TYPE(Z_LVAL_P(type))) return ERR_WRONG_PARAMS;
     ftype = Z_LVAL_P(type);
 
     // 第二个参数类型
-    type = zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_SECOND_TYPE), 1 TSRMLS_CC);
+    type = my_zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_SECOND_TYPE), 1 TSRMLS_CC);
     if (Z_TYPE_P(type) != IS_LONG || !IS_VALID_TYPE(Z_LVAL_P(type))) return ERR_WRONG_PARAMS;
     stype = Z_LVAL_P(type);
 
-    type = zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_PARAM_FORMAT), 1 TSRMLS_CC);
-    if (Z_TYPE_P(type) == IS_BOOL && Z_BVAL_P(type)) {
+    type = my_zend_read_property(tars_map_ce, this_ptr, ZEND_STRL(MAP_PROP_PARAM_FORMAT), 1 TSRMLS_CC);
+    if ((MY_Z_TYPE_P(type) == IS_TRUE)) {
         format = 1;
     }
 
@@ -1145,9 +1402,10 @@ int map_converter(zval * this_ptr, zval * zv, int depth) {
     TarsOutputStream *sStream  = TarsOutputStream_new();
     if (!sStream) { TarsOutputStream_del(&fStream); return ERR_MALLOC_FAILED;}
 
-    map_wrapper * obj = (map_wrapper * ) zend_object_store_get_object(this_ptr TSRMLS_CC);
+    map_wrapper * obj = Z_MAP_WRAPPER_P(this_ptr TSRMLS_CC);
     container = obj->ctx;
 
+#if PHP_MAJOR_VERSION < 7
     for(
             zend_hash_internal_pointer_reset(ht);
             zend_hash_has_more_elements(ht) == SUCCESS;
@@ -1219,9 +1477,77 @@ int map_converter(zval * this_ptr, zval * zv, int depth) {
         if (ret != TARS_SUCCESS) goto do_clean;
         if (key_zv) {zval_ptr_dtor(&key_zv); key_zv = NULL; }
     }
+#else
+    //PHP7
+    zend_string * zskey;
+    ulong num_key;
+
+    zval * key, *value, *item;
+    char *str;
+
+    ZEND_HASH_FOREACH_KEY_VAL(ht, num_key, zskey, item) {
+        if (!item) {
+            continue;
+        }
+
+        if (!format) {
+
+            // 申请一个zval
+            ALLOC_INIT_ZVAL(key_zv);
+
+            // 参数是以关联数组的方式传即 数组的键是map的第一个元素, 数组的值是第二个元素
+            if (zskey) {
+                ZVAL_STRINGL(key_zv, ZSTR_VAL(zskey), strlen(ZSTR_VAL(zskey)));
+            } else {
+                ZVAL_LONG(key_zv, num_key);
+            }
+
+            key = key_zv;
+            value = item;
+        } else {
+            // 参数是以二维数组的方式传即 数组中的键key对应的值是map的第一个元素, 键value对应的值是map的第二个元素
+            // 取一条记录
+            if (!item) {
+                continue;
+            }
+
+            // 检查参数是否正确
+            if (Z_TYPE_P(item) != IS_ARRAY ||
+                (key = (zval *) zend_hash_str_find(Z_ARRVAL_P(item), ZEND_STRS(MAP_FIRST_KEY)) == NULL) ||
+                (value = (zval *) zend_hash_str_find(Z_ARRVAL_P(item), ZEND_STRS(MAP_SECOND_KEY)) == NULL)) {
+                ret = ERR_DATA_FORMAT_ERROR;
+                goto do_clean;
+            }
+        }
+
+        TarsOutputStream_reset(fStream);
+        __CYCLE_PACKER(ftype, (zval **)&key, MAP_FIRST_TYPE_CLASS);
+        ret = fpacker(key, fStream, 0, NULL);
+        if (ret != TARS_SUCCESS) goto do_clean;
+
+        TarsOutputStream_reset(sStream);
+
+        // 针对结构体，进行特殊处理
+        if (IS_STRUCT(stype)) {
+            ret = spacker(NULL, sStream, 1, value);
+        } else {
+            __CYCLE_PACKER(stype, (zval **) &value, MAP_SECOND_TYPE_CLASS);
+            ret = spacker(value, sStream, 1, NULL);
+        }
+        if (ret != TARS_SUCCESS) goto do_clean;
+
+        ret = JMapWrapper_put(container, TarsOutputStream_getBuffer(fStream), TarsOutputStream_getLength(fStream),
+                              TarsOutputStream_getBuffer(sStream), TarsOutputStream_getLength(sStream));
+        if (ret != TARS_SUCCESS) goto do_clean;
+        if (key_zv) {
+            my_zval_ptr_dtor(&key_zv);
+            key_zv = NULL;
+        }
+    } ZEND_HASH_FOREACH_END();
+#endif
 
 do_clean :
-    if (key_zv) zval_ptr_dtor(&key_zv);
+    if (key_zv) my_zval_ptr_dtor(&key_zv);
 
     TarsOutputStream_del(&fStream);
     TarsOutputStream_del(&sStream);
@@ -1241,13 +1567,19 @@ size_t tars_type_name(zval * this_ptr, int * type, char ** out) {
     if (Z_TYPE_P(this_ptr) == IS_OBJECT) {
         zval * orig_type = zend_read_static_property(Z_OBJCE_P(this_ptr), ZEND_STRL(TARS_PROP_ORIG_TYPE), 1 TSRMLS_CC);
 
+#if PHP_MAJOR_VERSION >= 7
+        if (Z_TYPE_P(orig_type) == IS_REFERENCE) {
+            orig_type = Z_REFVAL_P(orig_type);
+        }
+#endif
+
         if (Z_TYPE_P(orig_type) == IS_LONG) {
             * type = Z_LVAL_P(orig_type);
             if (IS_BASE_TYPE(*type)) {
                 return 0;
             }
 
-            name = zend_read_property(Z_OBJCE_P(this_ptr), this_ptr, ZEND_STRL(TARS_PROP_TYPE_NAME), 1 TSRMLS_CC);
+            name = my_zend_read_property(Z_OBJCE_P(this_ptr), this_ptr, ZEND_STRL(TARS_PROP_TYPE_NAME), 1 TSRMLS_CC);
             if (Z_TYPE_P(name) != IS_STRING) {
                 return 0;
             }
@@ -1318,9 +1650,12 @@ size_t tars_type_name(zval * this_ptr, int * type, char ** out) {
 
 /* {{{ vector_wrapper_dtor(void * object)
  */
-static void vector_wrapper_dtor(void * object TSRMLS_DC) {
-
+static void vector_wrapper_dtor(zend_object * object TSRMLS_DC) {
+#if PHP_MAJOR_VERSION < 7
     vector_wrapper * obj = (vector_wrapper *) object;
+#else
+    vector_wrapper * obj = vector_wrapper_fetch_object(object);
+#endif
 
     if (obj->ctx) {
         if (obj->t == TTARS_TYPE_CHAR) {
@@ -1333,26 +1668,31 @@ static void vector_wrapper_dtor(void * object TSRMLS_DC) {
     }
 
     zend_object_std_dtor(&obj->std TSRMLS_CC);
-    efree(obj);
+    //efree(obj);
 }
 /* }}} */
 
 /* {{{ map_wrapper_dtor(void * object TSRMLS_DC)
  */
-static void map_wrapper_dtor(void * object TSRMLS_DC) {
-
+static void map_wrapper_dtor(zend_object * object TSRMLS_DC) {
+#if PHP_MAJOR_VERSION < 7
     map_wrapper * obj = (map_wrapper *) object;
+#else
+    map_wrapper * obj = map_wrapper_fetch_object(object);
+#endif
+
     if (obj->ctx) {
         JMapWrapper_del(&obj->ctx);
     }
 
     zend_object_std_dtor(&obj->std TSRMLS_CC);
-    efree(obj);
+//    efree(obj);
 }
 /* }}} */
 
 /* {{{  vector_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC)
  */
+#if PHP_MAJOR_VERSION < 7
 static inline zend_object_value vector_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC) {
 
     zval * tmp;
@@ -1376,10 +1716,30 @@ static inline zend_object_value vector_wrapper_object_new(zend_class_entry * cla
 
     return retval;
 }
+#else
+static inline zend_object * vector_wrapper_object_new(zend_class_entry * clazz) {
+    vector_wrapper * obj = (vector_wrapper *) ecalloc(1, sizeof(vector_wrapper) + zend_object_properties_size(clazz));
+
+//    memset(obj, 0, sizeof(vector_wrapper));
+//    vector_wrapper * obj = ecalloc(1, sizeof(vector_wrapper) + zend_object_properties_size(clazz));
+
+    zend_object_std_init(&obj->std, clazz TSRMLS_CC);
+    object_properties_init(&obj->std, clazz);
+
+    vector_wrapper_handlers.offset = XtOffsetOf(vector_wrapper, std);
+    vector_wrapper_handlers.free_obj = (zend_object_free_obj_t) vector_wrapper_dtor;
+
+    obj->std.handlers = &vector_wrapper_handlers;
+
+    return &obj->std;
+}
+
+#endif
 /* }}} */
 
 /* {{{ map_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC)
  */
+#if PHP_MAJOR_VERSION < 7
 static inline zend_object_value map_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC) {
 
     zval * tmp;
@@ -1398,11 +1758,28 @@ static inline zend_object_value map_wrapper_object_new(zend_class_entry * clazz 
     }
 #endif
 
-    retval.handle = zend_objects_store_put(obj, (zend_objects_store_dtor_t)zend_objects_destroy_object, map_wrapper_dtor, NULL TSRMLS_CC);
+    retval.handle = zend_objects_store_put(obj, (zend_objects_store_dtor_t)zend_objects_destroy_object, (zend_objects_free_object_storage_t) map_wrapper_dtor, NULL TSRMLS_CC);
     retval.handlers = &map_wrapper_handlers;
 
     return retval;
 }
+#else
+static inline zend_object * map_wrapper_object_new(zend_class_entry * clazz TSRMLS_DC) {
+    map_wrapper * obj = (map_wrapper *) ecalloc(1, sizeof(map_wrapper) + zend_object_properties_size(clazz));
+//    map_wrapper * obj = (map_wrapper *)emalloc(sizeof(map_wrapper));
+//    memset(obj, 0, sizeof(map_wrapper));
+
+    zend_object_std_init(&obj->std, clazz TSRMLS_CC);
+    object_properties_init(&obj->std, clazz);
+
+    map_wrapper_handlers.offset = XtOffsetOf(map_wrapper, std);
+    map_wrapper_handlers.free_obj = (zend_object_free_obj_t) map_wrapper_dtor;
+
+    obj->std.handlers = &map_wrapper_handlers;
+
+    return &obj->std;
+}
+#endif
 /* }}} */
 
 /* {{{  TTARS ARG INFO
@@ -1518,9 +1895,8 @@ PHP_METHOD(tars_vector, __construct) {
     tars_type_name(clazz, &type, &name);
     if (!name) return TYPE_EXCEPTOIN();
 
-    vector_wrapper * obj = (vector_wrapper * ) zend_object_store_get_object(getThis() TSRMLS_CC);
-    obj->ctx = emalloc(sizeof(vector_ctx));
-    memset(obj->ctx, 0, sizeof(vector_ctx));
+    vector_wrapper * obj = Z_VECTOR_WRAPPER_P(getThis() TSRMLS_CC);
+    obj->ctx = (vector_ctx *) ecalloc(1, sizeof(vector_ctx));
     if (IS_JSTRING(type)) {
         obj->ctx->str = JString_new();
     } else {
@@ -1556,7 +1932,7 @@ PHP_METHOD(tars_vector, pushBack) {
         return;
     }
 
-    vector_wrapper * obj = (vector_wrapper * ) zend_object_store_get_object(getThis() TSRMLS_CC);
+    vector_wrapper * obj = Z_VECTOR_WRAPPER_P(getThis() TSRMLS_CC);
     if (!IS_VALID_TYPE(obj->t)) return UNINIT_EXCEPTION(tars_vector_ce->name);
 
     if (IS_JSTRING(obj->t)) {
@@ -1572,7 +1948,7 @@ PHP_METHOD(tars_vector, pushBack) {
             ret = struct_packer(NULL,out, 0, value);
     }
     else if(!IS_BASE_TYPE(obj->t)) {
-        sub = zend_read_property(tars_vector_ce, this_ptr, ZEND_STRL(TARS_PROP_TYPE_CLASS), 1 TSRMLS_CC);
+        sub = my_zend_read_property(tars_vector_ce, getThis(), ZEND_STRL(TARS_PROP_TYPE_CLASS), 1 TSRMLS_CC);
         ret = packer_dispatch[obj->t](value, out, 0, sub);
     }
     else ret = packer_dispatch[obj->t](value, out, 0, (void *)&b);
@@ -1603,7 +1979,7 @@ do_clean :
 实现计数的方法
  */
 PHP_METHOD(tars_vector, count) {
-    zval * count_p = zend_read_property(tars_vector_ce, this_ptr, ZEND_STRL(TARS_PROP_VEC_COUNT), 1 TSRMLS_CC);
+    zval * count_p = my_zend_read_property(tars_vector_ce, getThis(), ZEND_STRL(TARS_PROP_VEC_COUNT), 1 TSRMLS_CC);
     int count = Z_LVAL_P(count_p);
     RETURN_LONG(count);
 }
@@ -1633,7 +2009,7 @@ PHP_METHOD(tars_map, __construct) {
     spprintf(&type_name, 0, "%s,%s", fname, sname);
     zend_update_property_string(tars_map_ce, getThis(), ZEND_STRL(TARS_PROP_TYPE_NAME), type_name TSRMLS_CC);
 
-    map_wrapper * obj = (map_wrapper * ) zend_object_store_get_object(getThis() TSRMLS_CC);
+    map_wrapper * obj = Z_MAP_WRAPPER_P(getThis() TSRMLS_CC);
     obj->ctx = JMapWrapper_new(fname, sname);
     if (!obj->ctx) return MALLOC_EXCEPTION("Map");
 
@@ -1675,8 +2051,8 @@ PHP_METHOD(tars_map, pushBack) {
         return ;
     }
 
-    type = zend_read_property(tars_map_ce, getThis(), ZEND_STRL(MAP_PROP_PARAM_FORMAT), 1 TSRMLS_CC);
-    if (Z_TYPE_P(type) == IS_BOOL && Z_BVAL_P(type)) {
+    type = my_zend_read_property(tars_map_ce, getThis(), ZEND_STRL(MAP_PROP_PARAM_FORMAT), 1 TSRMLS_CC);
+    if (MY_Z_TYPE_P(type) == IS_TRUE) {
         format = 1;
     }
 
@@ -1689,14 +2065,14 @@ PHP_METHOD(tars_map, pushBack) {
         // 增加计数
         ZVAL_ADDREF(value);
 
-        zend_hash_next_index_insert(Z_ARRVAL_P(array), (void **)&value, sizeof(zval *), NULL);
+        my_zend_hash_next_index_insert(Z_ARRVAL_P(array), (void **) &value, sizeof(zval *), NULL);
     } else {
         array = value;
     }
 
     ret = map_converter(getThis(), array, 0);
 
-    if(format) zval_ptr_dtor(&array);
+    if(format) my_zval_ptr_dtor(&array);
 
     if (ret != TARS_SUCCESS) return CONVERT_EXCEPTION(ret, "Map");
 
@@ -1710,7 +2086,7 @@ PHP_METHOD(tars_map, pushBack) {
 PHP_METHOD(tars_struct, __construct) {
 
     char * class_name;
-    int class_len;
+    zend_size_t class_len;
     zval * fields = NULL; // 所有字段信息列表
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sa",&class_name, &class_len ,&fields ) == FAILURE) {

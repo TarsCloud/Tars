@@ -63,8 +63,8 @@ public class ServerService {
             adapterConf.setServerName(serverConf.getServerName());
             adapterConf.setNodeName(serverConf.getNodeName());
 
-            adapterConf.setEndpoint(String.format("%s -h %s -t 60000 -p %s",
-                    servant.getPortType(), servant.getBindIp(), servant.getPort()));
+            adapterConf.setEndpoint(String.format("%s -h %s -t 60000 -p %s -e %s",
+                    servant.getPortType(), servant.getBindIp(), servant.getPort(), servant.getAuth() == null ? 0 : servant.getAuth()));
 
             adapterConf.setServant(String.format("%s.%s.%s",
                     adapterConf.getApplication(), adapterConf.getServerName(), servant.getObjName()));

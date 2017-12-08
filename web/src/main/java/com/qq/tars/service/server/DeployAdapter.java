@@ -37,7 +37,7 @@ public class DeployAdapter {
     @Max(65535)
     private Integer port;
 
-    @Value(values = {"tcp", "udp"})
+    @Value(values = {"tcp", "udp", "ssl"})
     private String portType;
 
     @Value(values = {"tars", "not_tars"})
@@ -58,6 +58,10 @@ public class DeployAdapter {
     @NotNull
     @Min(0)
     private Integer queuetimeout;
+
+    @Min(0)
+    @Max(1)
+    private Integer auth;
 
     public String getObjName() {
         return objName;
@@ -129,5 +133,13 @@ public class DeployAdapter {
 
     public void setQueuetimeout(Integer queuetimeout) {
         this.queuetimeout = queuetimeout;
+    }
+
+    public Integer getAuth() {
+        return auth;
+    }
+
+    public void setAuth(Integer e) {
+        this.auth = e;
     }
 }

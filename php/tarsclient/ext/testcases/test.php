@@ -296,7 +296,8 @@ class TarsTest extends PHPUnit_Framework_TestCase
         }
         $respBuf = $decodeRet['sBuffer'];
 
-        $out = \TUPAPI::getVector("vec",new \TARS_VECTOR(\TARS::STRING),$respBuf);
+        $m = new \TARS_VECTOR(\TARS::STRING);
+        $out = \TUPAPI::getVector("vec", $m, $respBuf);
 
         $this->assertEquals($shorts,$out);
     }
@@ -321,17 +322,18 @@ class TarsTest extends PHPUnit_Framework_TestCase
         }
         $respBuf = $decodeRet['sBuffer'];
 
-        $out = \TUPAPI::getVector("vec",new \TARS_VECTOR(\TARS::STRING),$respBuf);
+        $v = new \TARS_VECTOR(\TARS::STRING);
+        $out = \TUPAPI::getVector("vec", $v,$respBuf);
 
         $this->assertEquals([],$out);
     }
 
     public function testSimpleMap()
     {
-        $strings = [["test1"=>1],["test2"=>2]];
+        $strings = ["test1"=>1,"test2"=>2];
         $map = new \TARS_MAP(\TARS::STRING,\TARS::INT64);
-        foreach ($strings as $string) {
-            $map->pushBack($string);
+        foreach ($strings as $key => $value) {
+            $map->pushBack([$key => $value]);
         }
 
         $buf = \TUPAPI::putMap("map",$map);
@@ -346,9 +348,12 @@ class TarsTest extends PHPUnit_Framework_TestCase
 
         $respBuf = $decodeRet['sBuffer'];
 
-        $out = \TUPAPI::getMap("map",new \TARS_MAP(\TARS::STRING,\TARS::INT64),$respBuf);
+        $m = new \TARS_MAP(\TARS::STRING,\TARS::INT64);
+        $out = \TUPAPI::getMap("map", $m, $respBuf);
 
-        var_dump($out);
+        $okData = ["test1" => 1, "test2" => 2];
+
+        $this->assertEquals($okData,$out);
     }
 
     public function testEmptyMap()
@@ -368,7 +373,8 @@ class TarsTest extends PHPUnit_Framework_TestCase
 
         $respBuf = $decodeRet['sBuffer'];
 
-        $out = \TUPAPI::getMap("map",new \TARS_MAP(\TARS::STRING,\TARS::INT64),$respBuf);
+        $m = new \TARS_MAP(\TARS::STRING,\TARS::INT64);
+        $out = \TUPAPI::getMap("map", $m, $respBuf);
 
         $this->assertEquals([],$out);
     }
@@ -432,9 +438,23 @@ class TarsTest extends PHPUnit_Framework_TestCase
 
         $respBuf = $decodeRet['sBuffer'];
 
-        $out = \TUPAPI::getVector("vec",new \TARS_VECTOR(new SimpleStruct()),$respBuf);
+        $v = new \TARS_VECTOR(new SimpleStruct());
+        $out = \TUPAPI::getVector("vec", $v,$respBuf);
 
-        var_dump($out);
+        $okData = [
+            [
+                'id' => 1,
+                'count' => 2,
+                'page' => 1,
+            ],
+            [
+                'id' => 2,
+                'count' => 4,
+                'page' => 1,
+            ],
+        ];
+
+        $this->assertEquals($okData,$out);
     }
 
     public function testComplicateMap()
@@ -467,9 +487,25 @@ class TarsTest extends PHPUnit_Framework_TestCase
 
         $respBuf = $decodeRet['sBuffer'];
 
-        $out = \TUPAPI::getMap("map",new \TARS_MAP(\TARS::STRING,new SimpleStruct()),$respBuf);
+        $m = new \TARS_MAP(\TARS::STRING,new SimpleStruct());
+        $out = \TUPAPI::getMap("map", $m,$respBuf);
 
-        var_dump($out);
+        $okData = [
+            'test1' =>
+                [
+                    'id' => 1,
+                    'count' => 2,
+                    'page' => 1,
+                ],
+            'test2' =>
+                [
+                    'id' => 2,
+                    'count' => 4,
+                    'page' => 1,
+                ],
+        ];
+
+        $this->assertEquals($okData,$out);
     }
 
     public function testComplicateStruct()

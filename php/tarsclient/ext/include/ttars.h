@@ -89,6 +89,7 @@ typedef union vector_ctx {
 	JString * str;
 } vector_ctx;
 
+#if PHP_MAJOR_VERSION < 7
 typedef struct {
 	zend_object std;
 	zend_uchar t;
@@ -99,6 +100,20 @@ typedef struct {
 	zend_object std;
 	JMapWrapper * ctx;
 } map_wrapper ;
+#else
+typedef struct {
+	zend_uchar t;
+	vector_ctx * ctx;
+	HashTable *props;
+	zend_object std;
+} vector_wrapper ;
+
+typedef struct {
+	JMapWrapper * ctx;
+	HashTable *props;
+	zend_object std;
+} map_wrapper ;
+#endif
 
 int bool_packer(zval * , TarsOutputStream *, uint8_t, void *);
 int char_packer(zval * , TarsOutputStream *, uint8_t, void *);
@@ -178,6 +193,21 @@ int map_converter(zval * , zval * , int);
 int struct_packer_wrapper(TarsOutputStream * out, void * struct_ptr);
 int struct_unpacker_wrapper(TarsInputStream * is, zval * this_ptr, void ** zv);
 int _map_to_array (zval * this_ptr, JMapWrapper * container, void **zv);
+
+#if PHP_MAJOR_VERSION < 7
+#define Z_VECTOR_WRAPPER_P(zv) (vector_wrapper * ) zend_object_store_get_object(zv)
+#define Z_MAP_WRAPPER_P(zv) (map_wrapper * ) zend_object_store_get_object(zv)
+#else
+#define Z_VECTOR_WRAPPER_P(zv) vector_wrapper_fetch_object(Z_OBJ_P(zv))
+static inline vector_wrapper *vector_wrapper_fetch_object(zend_object *obj) /* {{{ */ {
+	return (vector_wrapper *)((char*)obj - XtOffsetOf(vector_wrapper, std));
+}
+
+#define Z_MAP_WRAPPER_P(zv) map_wrapper_fetch_object(Z_OBJ_P(zv))
+static inline map_wrapper *map_wrapper_fetch_object(zend_object *obj) /* {{{ */ {
+	return (map_wrapper *)((char*)obj - XtOffsetOf(map_wrapper, std));
+}
+#endif
 
 PHP_METHOD(tars, __construct);
 PHP_METHOD(tars_vector, __construct);
