@@ -46,7 +46,7 @@ servant标签通过name指定servant名称，ref指定对应的bean名，通过i
 
 ```xml
 <context:component-scan base-package="com.qq.tars.test"/>
-<tars:servant interface="com.qq.test.GreeterServant" ref="greeterServantImp"/>
+<tars:servant name="HelloObj" interface="com.qq.test.GreeterServant" ref="greeterServantImp"/>
 ```
 
 ### Listener配置
