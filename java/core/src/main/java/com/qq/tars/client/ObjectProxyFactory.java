@@ -110,6 +110,7 @@ class ObjectProxyFactory {
         cfg.setModuleName(communicatorConfig.getModuleName());
         cfg.setStat(communicatorConfig.getStat());
         cfg.setCharsetName(communicatorConfig.getCharsetName());
+        cfg.setConnections(communicatorConfig.getConnections());
         return cfg;
     }
 
