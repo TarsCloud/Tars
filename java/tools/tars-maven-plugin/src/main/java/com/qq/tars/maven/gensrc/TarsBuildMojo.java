@@ -1,13 +1,13 @@
 /**
  * Tencent is pleased to support the open source community by making Tars available.
- *
+ * <p>
  * Copyright (C) 2016 THL A29 Limited, a Tencent company. All rights reserved.
- *
+ * <p>
  * Licensed under the BSD 3-Clause License (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- *
+ * <p>
  * https://opensource.org/licenses/BSD-3-Clause
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed
  * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the
@@ -147,6 +147,7 @@ public class TarsBuildMojo extends AbstractMojo implements Contextualizable {
     // -----------------------------------------------------------------------
     // Plexus Implementation
     // -----------------------------------------------------------------------
+
     /**
      * {@inheritDoc}
      */
@@ -265,7 +266,7 @@ public class TarsBuildMojo extends AbstractMojo implements Contextualizable {
         final Set<Artifact> artifacts = new HashSet<Artifact>();
         final DependencyNode rootNode = dependencyTreeBuilder.buildDependencyTree(coreProject, localRepository, artifactFactory, artifactMetadataSource, artifactFilter, artifactCollector);
 
-        for (final Iterator<?> iterator = rootNode.getChildren().iterator(); iterator.hasNext();) {
+        for (final Iterator<?> iterator = rootNode.getChildren().iterator(); iterator.hasNext(); ) {
             final DependencyNode child = (DependencyNode) iterator.next();
             collect(child, artifacts);
         }
@@ -286,12 +287,12 @@ public class TarsBuildMojo extends AbstractMojo implements Contextualizable {
 
     /**
      * extract specified artifact. 
-     *  
+     *
      * @param destination destination folder 
-     * @param artifactFile 
-     * @throws NoSuchArchiverException 
-     * @throws ArchiverException 
-     * @throws MojoExecutionException 
+     * @param artifactFile
+     * @throws NoSuchArchiverException
+     * @throws ArchiverException
+     * @throws MojoExecutionException
      */
     private void unArchiveArtifact(final File destination, final File artifactFile) throws MojoExecutionException, IOException {
         try {
@@ -378,9 +379,9 @@ public class TarsBuildMojo extends AbstractMojo implements Contextualizable {
         FileWriter out = null;
         try {
 
-            File servicesXMLFile = new File(war, "WEB-INF" + File.separator + "servants.xml");
+            File servicesXMLFile = new File(war, "WEB-INF" + File.separator + "classes" + File.separator + "servants.xml");
             if (!servicesXMLFile.exists()) {
-                throw new MojoExecutionException("failed to find WEB-INF/servants.xml, " + " servants will be disabled");
+                throw new MojoExecutionException("failed to find WEB-INF/classes/servants.xml, " + " servants will be disabled");
             }
 
             XMLConfigFile cfg = new XMLConfigFile();
