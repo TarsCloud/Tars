@@ -152,7 +152,6 @@ public class Platform {
 
         //增加classes的路径
         classpathBuffer.append(StringUtils.replace("./apps/ROOT/WEB-INF/classes", "/", getSeparator()));
-        classpathBuffer.append(getPathSeparator());
 
         for (ClasspathElement classpathElement : classpath) {
             if (classpathBuffer.length() > 0) {
