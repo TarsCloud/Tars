@@ -1,4 +1,4 @@
-修正版用法:
+1.3.0 java 修正版用法:
 pom文件增加:
 
 ```
@@ -9,7 +9,7 @@ pom文件增加:
   </pluginRepository>
 </pluginRepositories>
 ```
-然后plugin改为:
+然后maven tars-maven-plugin plugin改为:
 ```
 <groupId>com.github.brooklet.Tars</groupId>
 <artifactId>tars-maven-plugin</artifactId>
