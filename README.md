@@ -1,3 +1,16 @@
+用法:
+  pom文件增加:
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </pluginRepository>
+    </pluginRepositories>
+   然后plugin改为:
+  <groupId>com.github.brooklet.Tars</groupId>
+    <artifactId>tars-maven-plugin</artifactId>
+    <version>1.0.3.1</version>
+
 [Click me switch to English version](README.en.md)
 
 # Tars
