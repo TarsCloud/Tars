@@ -127,6 +127,9 @@
                 AND set_group=#{setGroup}
             </if>
         </if>
+        <if test="!enableSet">
+          AND enable_set='N'
+        </if>
     </select>
 
     <select id="queryInactiveServerConf" resultType="ServerConf">
