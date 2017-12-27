@@ -32,8 +32,8 @@ export PROTOBUF_HOME=`pwd`
 插件的编译
 
 ```shell
-git clone git@github.com:scguoi/pb-tars-service-generate-plugin.git
-cd pb-tars-service-generate-plugin
+git clone git@github.com:Tencent/Tars.git
+cd Tars/plugins/java-protobuf-plugin
 export CXXFLAGS="-I$PROTOBUF_HOME/src" LDFLAGS="-L$PROTOBUF_HOME/src/.libs"
 ./gradlew java_pluginExecutable
 ```

@@ -238,7 +238,7 @@ namespace JavaTarsPrxGenerator
                         p->Print(";\n");
                         p->Print(
                                 *vars,
-                                "void async_$lower_method_name$(@TarsCallback GreeterPrxCallback callback, $input_type$ request)");
+                                "void async_$lower_method_name$(@TarsCallback $service_name$PrxCallback callback, $input_type$ request)");
                     }
                     break;
                 case ASYNC_CALL:
