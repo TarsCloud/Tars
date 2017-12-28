@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PWD_DIR=`pwd`
-MachineIp=10.186.62.0
+MachineIp="ifconfig eth0 | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}'"
 MachineName='hostname'
 
 ##安装glibc-devel
@@ -153,7 +153,7 @@ cd -
 ##安装核心基础服务
 mkdir -p /usr/local/app/tars/
 cd ../cpp/build/
-cp build/framework.tgz /usr/local/app/tars/
+cp framework.tgz /usr/local/app/tars/
 cd /usr/local/app/tars
 tar xzfv framework.tgz
 
