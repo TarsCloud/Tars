@@ -20,7 +20,7 @@ cd wang70937
 git clone https://github.com/wang70937/tars.git
 
 ##copy files
-cd build
+cd tars/build
 cp install-ubuntu2.sh ${PWD_DIR}/tars/build
 cp settings.xml ${PWD_DIR}/tars/build
 cp -r conf ${PWD_DIR}/tars/build
