@@ -112,6 +112,7 @@ cd -
 echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf
 ldconfig
 
+source /etc/profile
 
 ##安装java语言框架
 cd ../java/
