@@ -27,4 +27,4 @@ cp -r conf ${PWD_DIR}/tars/build
 
 ##
 cd ${PWD_DIR}/tars/build
-
+chmod u+x install-ubuntu2.sh
