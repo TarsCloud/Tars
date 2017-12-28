@@ -93,7 +93,9 @@ cp ./conf/my.cnf /usr/local/mysql/
 ##启动mysql
 #service mysql start
 #chkconfig mysql on
-/etc/init.d/mysql start
+#/etc/init.d/mysql start
+systemctl enable mysql.service
+systemctl start mysql.service 
 
 ##添加mysql的bin路径
 echo "PATH=\$PATH:/usr/local/mysql/bin" >> /etc/profile
