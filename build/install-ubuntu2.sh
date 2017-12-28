@@ -31,8 +31,8 @@ java -version
 ##安装maven
 tar zxvf apache-maven-3.3.9-bin.tar.gz
 ##替换阿里云maven
-rm -rf ./apache-maven-3.3.9/conf/setting.xml
-mv setting.xml ./apache-maven-3.3.9/conf
+rm -rf ./apache-maven-3.3.9/conf/settings.xml
+mv settings.xml ./apache-maven-3.3.9/conf
 
 echo "export MAVEN_HOME=${PWD_DIR}/apache-maven-3.3.9/" >> /etc/profile
 echo "export PATH=\$PATH:\$MAVEN_HOME/bin" >> /etc/profile
@@ -56,9 +56,9 @@ ln -s /usr/local/resin-4.0.49 /usr/local/resin
 ##安装rapidjson
 apt install -y git
 
-##git clone https://github.com/Tencent/rapidjson.git
+git clone https://github.com/Tencent/rapidjson.git
 
-##cp -r ./rapidjson ../cpp/thirdparty/
+cp -r ./rapidjson ../cpp/thirdparty/
 
 ##安装mysql
 
