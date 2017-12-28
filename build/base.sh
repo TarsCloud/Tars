@@ -21,11 +21,10 @@ git clone https://github.com/wang70937/tars.git
 
 ##copy files
 cd build
-cp install-ubuntu2.sh ../tars/build/
-cp settings.xml ../tars/build/
-cp -r conf ../tars/build/
+cp install-ubuntu2.sh ${PWD_DIR}/tars/build
+cp settings.xml ${PWD_DIR}/tars/build
+cp -r conf ${PWD_DIR}/tars/build
 
 ##
-cd ../../tars/build
+cd ${PWD_DIR}/tars/build
 
-rz
