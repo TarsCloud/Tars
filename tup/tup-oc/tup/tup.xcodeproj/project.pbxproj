@@ -1,0 +1,1678 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		3CB475C4152AA45F00F145B4 /* tup.Framework */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 3CB475C5152AA45F00F145B4 /* Build configuration list for PBXAggregateTarget "tup.Framework" */;
+			buildPhases = (
+				3CB475CA152AA46900F145B4 /* Build Framework */,
+			);
+			dependencies = (
+				3CB475CC152AA47100F145B4 /* PBXTargetDependency */,
+			);
+			name = tup.Framework;
+			productName = tup.Framework;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		3C3C445815748F37000538C8 /* MttAdsContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C434615748F37000538C8 /* MttAdsContent.m */; };
+		3C3C445915748F37000538C8 /* MttAdsReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C434815748F37000538C8 /* MttAdsReq.m */; };
+		3C3C445A15748F37000538C8 /* MttAdsRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C434A15748F37000538C8 /* MttAdsRsp.m */; };
+		3C3C445B15748F37000538C8 /* MttBrokerContentInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C434C15748F37000538C8 /* MttBrokerContentInfo.m */; };
+		3C3C445C15748F37000538C8 /* MttBrokerDisplayInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C434E15748F37000538C8 /* MttBrokerDisplayInfo.m */; };
+		3C3C445D15748F37000538C8 /* MttBrokerFragRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C435015748F37000538C8 /* MttBrokerFragRequest.m */; };
+		3C3C445E15748F37000538C8 /* MttBrokerFragResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C435215748F37000538C8 /* MttBrokerFragResponse.m */; };
+		3C3C445F15748F37000538C8 /* MttBrokerJSPDInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C435415748F37000538C8 /* MttBrokerJSPDInfo.m */; };
+		3C3C446015748F37000538C8 /* MttBrokerJSRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C435615748F37000538C8 /* MttBrokerJSRequest.m */; };
+		3C3C446115748F37000538C8 /* MttBrokerPageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C435815748F37000538C8 /* MttBrokerPageRequest.m */; };
+		3C3C446215748F37000538C8 /* MttBrokerPicParam.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C435A15748F37000538C8 /* MttBrokerPicParam.m */; };
+		3C3C446315748F37000538C8 /* MttBrokerPicRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C435C15748F37000538C8 /* MttBrokerPicRequest.m */; };
+		3C3C446415748F37000538C8 /* MttBrokerPushRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C435E15748F37000538C8 /* MttBrokerPushRequest.m */; };
+		3C3C446515748F37000538C8 /* MttBrokerPushResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C436015748F37000538C8 /* MttBrokerPushResponse.m */; };
+		3C3C446615748F37000538C8 /* MttBrokerRequestParam.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C436315748F37000538C8 /* MttBrokerRequestParam.m */; };
+		3C3C446715748F37000538C8 /* MttBrokerSecurityRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C436515748F37000538C8 /* MttBrokerSecurityRequest.m */; };
+		3C3C446815748F37000538C8 /* MttBrokerSecurityResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C436715748F37000538C8 /* MttBrokerSecurityResponse.m */; };
+		3C3C446915748F37000538C8 /* MttBrokerSimplifiedPushRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C436915748F37000538C8 /* MttBrokerSimplifiedPushRequest.m */; };
+		3C3C446A15748F37000538C8 /* MttBrokerSimplifiedPushResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C436B15748F37000538C8 /* MttBrokerSimplifiedPushResponse.m */; };
+		3C3C446B15748F37000538C8 /* MttBrokerSimplifiedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C436D15748F37000538C8 /* MttBrokerSimplifiedRequest.m */; };
+		3C3C446C15748F37000538C8 /* MttBrokerTransferResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C436F15748F37000538C8 /* MttBrokerTransferResponse.m */; };
+		3C3C446D15748F37000538C8 /* MttBrokerUploadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C437115748F37000538C8 /* MttBrokerUploadRequest.m */; };
+		3C3C446E15748F37000538C8 /* MttBrokerUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C437315748F37000538C8 /* MttBrokerUserInfo.m */; };
+		3C3C446F15748F37000538C8 /* MttBrokerTups.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C437515748F37000538C8 /* MttBrokerTups.m */; };
+		3C3C447015748F37000538C8 /* MttBrowserReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C437715748F37000538C8 /* MttBrowserReq.m */; };
+		3C3C447115748F37000538C8 /* MttBrowserRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C437915748F37000538C8 /* MttBrowserRsp.m */; };
+		3C3C447215748F37000538C8 /* MttCheckPluginReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C437C15748F37000538C8 /* MttCheckPluginReq.m */; };
+		3C3C447315748F37000538C8 /* MttCityListReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C437E15748F37000538C8 /* MttCityListReq.m */; };
+		3C3C447415748F37000538C8 /* MttCityListRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C438015748F37000538C8 /* MttCityListRsp.m */; };
+		3C3C447515748F37000538C8 /* MttConfigReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C438215748F37000538C8 /* MttConfigReq.m */; };
+		3C3C447615748F37000538C8 /* MttConfigRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C438415748F37000538C8 /* MttConfigRsp.m */; };
+		3C3C447715748F37000538C8 /* MttConfInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C438615748F37000538C8 /* MttConfInfo.m */; };
+		3C3C447815748F37000538C8 /* MttConfirm.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C438815748F37000538C8 /* MttConfirm.m */; };
+		3C3C447915748F37000538C8 /* MttConfRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C438A15748F37000538C8 /* MttConfRsp.m */; };
+		3C3C447A15748F37000538C8 /* MttDNSReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C438E15748F37000538C8 /* MttDNSReq.m */; };
+		3C3C447B15748F37000538C8 /* MttDNSRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C439015748F37000538C8 /* MttDNSRsp.m */; };
+		3C3C447C15748F37000538C8 /* MttDomainRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C439215748F37000538C8 /* MttDomainRsp.m */; };
+		3C3C447D15748F37000538C8 /* MttDomainRspNew.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C439415748F37000538C8 /* MttDomainRspNew.m */; };
+		3C3C447E15748F37000538C8 /* MttDynamicReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C439615748F37000538C8 /* MttDynamicReq.m */; };
+		3C3C447F15748F37000538C8 /* MttDynamicRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C439815748F37000538C8 /* MttDynamicRsp.m */; };
+		3C3C448015748F37000538C8 /* MttETPV.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43A315748F37000538C8 /* MttETPV.m */; };
+		3C3C448115748F37000538C8 /* MttExtDomain.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43A715748F37000538C8 /* MttExtDomain.m */; };
+		3C3C448215748F37000538C8 /* MttFKINFO.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43A915748F37000538C8 /* MttFKINFO.m */; };
+		3C3C448315748F37000538C8 /* MttHotListReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43AB15748F37000538C8 /* MttHotListReq.m */; };
+		3C3C448415748F37000538C8 /* MttHotListRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43AD15748F37000538C8 /* MttHotListRsp.m */; };
+		3C3C448515748F37000538C8 /* MttHotWordInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43AF15748F37000538C8 /* MttHotWordInfo.m */; };
+		3C3C448615748F37000538C8 /* MttHotWordsReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43B115748F37000538C8 /* MttHotWordsReq.m */; };
+		3C3C448715748F37000538C8 /* MttHotWordsRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43B315748F37000538C8 /* MttHotWordsRsp.m */; };
+		3C3C448815748F37000538C8 /* MttIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43B515748F37000538C8 /* MttIcon.m */; };
+		3C3C448915748F37000538C8 /* MttIconInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43B715748F37000538C8 /* MttIconInfo.m */; };
+		3C3C448A15748F37000538C8 /* MttIconRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43B915748F37000538C8 /* MttIconRsp.m */; };
+		3C3C448B15748F37000538C8 /* MttImageReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43BC15748F37000538C8 /* MttImageReq.m */; };
+		3C3C448C15748F37000538C8 /* MttImageRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43BE15748F37000538C8 /* MttImageRsp.m */; };
+		3C3C448D15748F37000538C8 /* MttImgReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43C015748F37000538C8 /* MttImgReq.m */; };
+		3C3C448E15748F37000538C8 /* MttImgRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43C215748F37000538C8 /* MttImgRsp.m */; };
+		3C3C448F15748F37000538C8 /* MttIPListReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43C415748F37000538C8 /* MttIPListReq.m */; };
+		3C3C449015748F37000538C8 /* MttIPListRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43C615748F37000538C8 /* MttIPListRsp.m */; };
+		3C3C449115748F37000538C8 /* MttItemReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43C815748F37000538C8 /* MttItemReq.m */; };
+		3C3C449215748F37000538C8 /* MttItemRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43CA15748F37000538C8 /* MttItemRsp.m */; };
+		3C3C449315748F37000538C8 /* MttKeywordRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43CC15748F37000538C8 /* MttKeywordRsp.m */; };
+		3C3C449415748F37000538C8 /* MttLoginReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43CE15748F37000538C8 /* MttLoginReq.m */; };
+		3C3C449515748F37000538C8 /* MttLoginRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43D015748F37000538C8 /* MttLoginRsp.m */; };
+		3C3C449615748F37000538C8 /* MttLPageReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43D215748F37000538C8 /* MttLPageReq.m */; };
+		3C3C449715748F37000538C8 /* MttLPageRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43D415748F37000538C8 /* MttLPageRsp.m */; };
+		3C3C449815748F37000538C8 /* MttNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43D815748F37000538C8 /* MttNavigation.m */; };
+		3C3C449915748F37000538C8 /* MttNaviRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43DA15748F37000538C8 /* MttNaviRsp.m */; };
+		3C3C449A15748F37000538C8 /* MttPageBrowserReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43DC15748F37000538C8 /* MttPageBrowserReq.m */; };
+		3C3C449B15748F37000538C8 /* MttPageBrowserRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43DE15748F37000538C8 /* MttPageBrowserRsp.m */; };
+		3C3C449C15748F37000538C8 /* MttPageConfigReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43E015748F37000538C8 /* MttPageConfigReq.m */; };
+		3C3C449D15748F37000538C8 /* MttPageConfigRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43E215748F37000538C8 /* MttPageConfigRsp.m */; };
+		3C3C449E15748F37000538C8 /* MttPageReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43E415748F37000538C8 /* MttPageReq.m */; };
+		3C3C449F15748F37000538C8 /* MttPageRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43E615748F37000538C8 /* MttPageRsp.m */; };
+		3C3C44A015748F37000538C8 /* MttPerformanceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43E815748F37000538C8 /* MttPerformanceInfo.m */; };
+		3C3C44A115748F37000538C8 /* MttPicInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43EA15748F37000538C8 /* MttPicInfo.m */; };
+		3C3C44A215748F37000538C8 /* MttPicRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43EC15748F37000538C8 /* MttPicRsp.m */; };
+		3C3C44A315748F37000538C8 /* MttPing.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43EE15748F37000538C8 /* MttPing.m */; };
+		3C3C44A415748F37000538C8 /* MttPluginBootResp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43F015748F37000538C8 /* MttPluginBootResp.m */; };
+		3C3C44A515748F37000538C8 /* MttPluginInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43F215748F37000538C8 /* MttPluginInfo.m */; };
+		3C3C44A615748F37000538C8 /* MttPluginInfoNew.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43F415748F37000538C8 /* MttPluginInfoNew.m */; };
+		3C3C44A715748F37000538C8 /* MttPluginRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43F615748F37000538C8 /* MttPluginRsp.m */; };
+		3C3C44A815748F37000538C8 /* MttPluginRspNew.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43F815748F37000538C8 /* MttPluginRspNew.m */; };
+		3C3C44A915748F37000538C8 /* MttPluginVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43FA15748F37000538C8 /* MttPluginVersion.m */; };
+		3C3C44AA15748F37000538C8 /* MttPushAppReqList.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43FC15748F37000538C8 /* MttPushAppReqList.m */; };
+		3C3C44AB15748F37000538C8 /* MttPushPortionFresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C43FE15748F37000538C8 /* MttPushPortionFresh.m */; };
+		3C3C44AC15748F37000538C8 /* MttPushRespnoseContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C440015748F37000538C8 /* MttPushRespnoseContent.m */; };
+		3C3C44AD15748F37000538C8 /* MttPushSysNotify.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C440215748F37000538C8 /* MttPushSysNotify.m */; };
+		3C3C44AE15748F37000538C8 /* MttRefuse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C440415748F37000538C8 /* MttRefuse.m */; };
+		3C3C44AF15748F37000538C8 /* MttRelayPageReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C440615748F37000538C8 /* MttRelayPageReq.m */; };
+		3C3C44B015748F37000538C8 /* MttRelayPageRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C440815748F37000538C8 /* MttRelayPageRsp.m */; };
+		3C3C44B115748F37000538C8 /* MttReply.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C440A15748F37000538C8 /* MttReply.m */; };
+		3C3C44B215748F37000538C8 /* MttRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C440C15748F37000538C8 /* MttRequest.m */; };
+		3C3C44B315748F37000538C8 /* MttRequestFragment.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C440E15748F37000538C8 /* MttRequestFragment.m */; };
+		3C3C44B415748F37000538C8 /* MttSearchInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C441015748F37000538C8 /* MttSearchInfo.m */; };
+		3C3C44B515748F37000538C8 /* MttSearchReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C441215748F37000538C8 /* MttSearchReq.m */; };
+		3C3C44B615748F37000538C8 /* MttSearchRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C441415748F37000538C8 /* MttSearchRsp.m */; };
+		3C3C44B715748F37000538C8 /* MttSearchTypeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C441615748F37000538C8 /* MttSearchTypeInfo.m */; };
+		3C3C44B815748F37000538C8 /* MttSearchTypeReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C441815748F37000538C8 /* MttSearchTypeReq.m */; };
+		3C3C44B915748F37000538C8 /* MttSearchTypeRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C441A15748F37000538C8 /* MttSearchTypeRsp.m */; };
+		3C3C44BA15748F37000538C8 /* MttSoftAnalyseInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C441D15748F37000538C8 /* MttSoftAnalyseInfo.m */; };
+		3C3C44BB15748F37000538C8 /* MttSplashReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C442015748F37000538C8 /* MttSplashReq.m */; };
+		3C3C44BC15748F37000538C8 /* MttSplashRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C442215748F37000538C8 /* MttSplashRsp.m */; };
+		3C3C44BD15748F37000538C8 /* MttStaticConfigReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C442415748F37000538C8 /* MttStaticConfigReq.m */; };
+		3C3C44BE15748F37000538C8 /* MttSTImagePolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C442715748F37000538C8 /* MttSTImagePolicy.m */; };
+		3C3C44BF15748F37000538C8 /* MttSTJSInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C442915748F37000538C8 /* MttSTJSInfo.m */; };
+		3C3C44C015748F37000538C8 /* MttSTJSPDInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C442B15748F37000538C8 /* MttSTJSPDInfo.m */; };
+		3C3C44C115748F37000538C8 /* MttSTOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C442D15748F37000538C8 /* MttSTOperator.m */; };
+		3C3C44C215748F37000538C8 /* MttSTOperatorRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C442F15748F37000538C8 /* MttSTOperatorRsp.m */; };
+		3C3C44C315748F37000538C8 /* MttSTPV.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C443115748F37000538C8 /* MttSTPV.m */; };
+		3C3C44C415748F37000538C8 /* MttSTSingleMD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C443315748F37000538C8 /* MttSTSingleMD5.m */; };
+		3C3C44C515748F37000538C8 /* MttSTSpeedStatis.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C443515748F37000538C8 /* MttSTSpeedStatis.m */; };
+		3C3C44C615748F37000538C8 /* MttSTStat.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C443715748F37000538C8 /* MttSTStat.m */; };
+		3C3C44C715748F37000538C8 /* MttSTTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C443915748F37000538C8 /* MttSTTime.m */; };
+		3C3C44C815748F37000538C8 /* MttSTTotal.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C443B15748F37000538C8 /* MttSTTotal.m */; };
+		3C3C44C915748F37000538C8 /* MttThirdUse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C443D15748F37000538C8 /* MttThirdUse.m */; };
+		3C3C44CA15748F37000538C8 /* MttTipPushReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C443F15748F37000538C8 /* MttTipPushReq.m */; };
+		3C3C44CB15748F37000538C8 /* MttTipPushRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C444115748F37000538C8 /* MttTipPushRsp.m */; };
+		3C3C44CC15748F37000538C8 /* MttUpdateRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C444315748F37000538C8 /* MttUpdateRsp.m */; };
+		3C3C44CD15748F37000538C8 /* MttURLPV.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C444515748F37000538C8 /* MttURLPV.m */; };
+		3C3C44CE15748F37000538C8 /* MttUserBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C444715748F37000538C8 /* MttUserBase.m */; };
+		3C3C44CF15748F37000538C8 /* MttVerifyReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C444915748F37000538C8 /* MttVerifyReq.m */; };
+		3C3C44D015748F37000538C8 /* MttVerifyRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C444B15748F37000538C8 /* MttVerifyRsp.m */; };
+		3C3C44D115748F37000538C8 /* MttVerifyRspExt.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C444D15748F37000538C8 /* MttVerifyRspExt.m */; };
+		3C3C44D215748F37000538C8 /* MttWeatherInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C444F15748F37000538C8 /* MttWeatherInfo.m */; };
+		3C3C44D315748F37000538C8 /* MttWeatherInfo4Mini.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C445115748F37000538C8 /* MttWeatherInfo4Mini.m */; };
+		3C3C44D415748F37000538C8 /* MttWeatherReq.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C445315748F37000538C8 /* MttWeatherReq.m */; };
+		3C3C44D515748F37000538C8 /* MttWeatherRsp.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C445515748F37000538C8 /* MttWeatherRsp.m */; };
+		3C3C44D615748F37000538C8 /* MttWeatherRsp4Mini.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C3C445715748F37000538C8 /* MttWeatherRsp4Mini.m */; };
+		3C4347F8155CE1E100892E0A /* ASICacheDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C4347F3155CE1E100892E0A /* ASICacheDelegate.h */; };
+		3C4347F9155CE1E100892E0A /* ASIHTTPRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C4347F4155CE1E100892E0A /* ASIHTTPRequest.h */; };
+		3C4347FA155CE1E100892E0A /* ASIHTTPRequestConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C4347F5155CE1E100892E0A /* ASIHTTPRequestConfig.h */; };
+		3C4347FB155CE1E100892E0A /* ASIHTTPRequestDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C4347F6155CE1E100892E0A /* ASIHTTPRequestDelegate.h */; };
+		3C4347FC155CE1E100892E0A /* ASIProgressDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C4347F7155CE1E100892E0A /* ASIProgressDelegate.h */; };
+		3CAFA00D153D4D58000624F5 /* UniAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CAFA00B153D4D58000624F5 /* UniAttribute.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CAFA00E153D4D58000624F5 /* UniAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CAFA00C153D4D58000624F5 /* UniAttribute.m */; };
+		3CB470FF15885F680055EDB9 /* tup-Debug.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CB470FE15885F680055EDB9 /* tup-Debug.h */; };
+		3CB4710F15887A5B0055EDB9 /* TarsEnumHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CB4710D15887A5B0055EDB9 /* TarsEnumHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CB4711015887A5B0055EDB9 /* TarsEnumHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4710E15887A5B0055EDB9 /* TarsEnumHelper.m */; };
+		3CB4712E15888E3A0055EDB9 /* MttAcceptEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4711815888E370055EDB9 /* MttAcceptEncoding.m */; };
+		3CB4712F15888E3A0055EDB9 /* MttBrokerReqType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4711915888E370055EDB9 /* MttBrokerReqType.m */; };
+		3CB4713015888E3A0055EDB9 /* MttBrowserVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4711A15888E370055EDB9 /* MttBrowserVersion.m */; };
+		3CB4713115888E3A0055EDB9 /* MttContentEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4711B15888E370055EDB9 /* MttContentEncoding.m */; };
+		3CB4713215888E3A0055EDB9 /* MttDirectPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4711C15888E370055EDB9 /* MttDirectPolicy.m */; };
+		3CB4713315888E3A0055EDB9 /* MttEDomainType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4711D15888E370055EDB9 /* MttEDomainType.m */; };
+		3CB4713415888E3A0055EDB9 /* MttEEntryType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4711E15888E370055EDB9 /* MttEEntryType.m */; };
+		3CB4713515888E3A0055EDB9 /* MttEFASTKEY.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4711F15888E370055EDB9 /* MttEFASTKEY.m */; };
+		3CB4713615888E3A0055EDB9 /* MttEHotWordType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712015888E370055EDB9 /* MttEHotWordType.m */; };
+		3CB4713715888E3A0055EDB9 /* MttELanguageType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712115888E380055EDB9 /* MttELanguageType.m */; };
+		3CB4713815888E3A0055EDB9 /* MttEPushServerType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712215888E380055EDB9 /* MttEPushServerType.m */; };
+		3CB4713915888E3A0055EDB9 /* MttERelayProtoVer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712315888E380055EDB9 /* MttERelayProtoVer.m */; };
+		3CB4713A15888E3A0055EDB9 /* MttErrorCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712415888E380055EDB9 /* MttErrorCode.m */; };
+		3CB4713B15888E3A0055EDB9 /* MttEServerVer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712515888E380055EDB9 /* MttEServerVer.m */; };
+		3CB4713C15888E3A0055EDB9 /* MttEUSESTAT.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712615888E380055EDB9 /* MttEUSESTAT.m */; };
+		3CB4713D15888E3A0055EDB9 /* MttEWaitPushType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712715888E380055EDB9 /* MttEWaitPushType.m */; };
+		3CB4713E15888E3A0055EDB9 /* MttImageQuality.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712815888E380055EDB9 /* MttImageQuality.m */; };
+		3CB4713F15888E3A0055EDB9 /* MttMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712915888E380055EDB9 /* MttMethod.m */; };
+		3CB4714015888E3A0055EDB9 /* MttMTTContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712A15888E380055EDB9 /* MttMTTContentType.m */; };
+		3CB4714115888E3A0055EDB9 /* MttSecurityCheckType.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712B15888E390055EDB9 /* MttSecurityCheckType.m */; };
+		3CB4714215888E3A0055EDB9 /* MttSpecialValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712C15888E3A0055EDB9 /* MttSpecialValue.m */; };
+		3CB4714315888E3A0055EDB9 /* MttStatValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB4712D15888E3A0055EDB9 /* MttStatValue.m */; };
+		3CB475D1152AA54E00F145B4 /* TupAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1A3AB15246B080083BBCE /* TupAgent.m */; };
+		3CB475D2152AA54E00F145B4 /* TupService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1A3AD15246B080083BBCE /* TupService.m */; };
+		3CB475F0152AA56B00F145B4 /* TupAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC1A3AA15246B080083BBCE /* TupAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CB475F1152AA56B00F145B4 /* TupService.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC1A3AC15246B080083BBCE /* TupService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CBFB495153523CA0088DDBC /* TupHttpRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CBFB493153523CA0088DDBC /* TupHttpRequest.h */; };
+		3CBFB496153523CA0088DDBC /* TupHttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CBFB494153523CA0088DDBC /* TupHttpRequest.m */; };
+		3CBFB49915352E200088DDBC /* TupAgentDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CBFB49815352E200088DDBC /* TupAgentDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CC191B6152455910083BBCE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC191B5152455910083BBCE /* Foundation.framework */; };
+		3CC191C4152455910083BBCE /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC191C3152455910083BBCE /* SenTestingKit.framework */; };
+		3CC191C7152455910083BBCE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC191B5152455910083BBCE /* Foundation.framework */; };
+		3CC191CA152455910083BBCE /* libtup.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CC191B2152455910083BBCE /* libtup.a */; };
+		3CC191D0152455910083BBCE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CC191CE152455910083BBCE /* InfoPlist.strings */; };
+		3CC191D3152455910083BBCE /* tupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC191D2152455910083BBCE /* tupTests.m */; };
+		3CC1925115245C9F0083BBCE /* tup.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC191BA152455910083BBCE /* tup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CC1A30E152466AA0083BBCE /* TarsInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC1A300152466AA0083BBCE /* TarsInputStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CC1A30F152466AA0083BBCE /* TarsInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1A301152466AA0083BBCE /* TarsInputStream.m */; };
+		3CC1A310152466AA0083BBCE /* TarsObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC1A302152466AA0083BBCE /* TarsObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CC1A311152466AA0083BBCE /* TarsObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1A303152466AA0083BBCE /* TarsObject.m */; };
+		3CC1A312152466AA0083BBCE /* TarsObjectV2.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC1A304152466AA0083BBCE /* TarsObjectV2.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CC1A313152466AA0083BBCE /* TarsObjectV2.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1A305152466AA0083BBCE /* TarsObjectV2.m */; };
+		3CC1A314152466AA0083BBCE /* TarsOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC1A306152466AA0083BBCE /* TarsOutputStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CC1A315152466AA0083BBCE /* TarsOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1A307152466AA0083BBCE /* TarsOutputStream.m */; };
+		3CC1A316152466AA0083BBCE /* TarsStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC1A308152466AA0083BBCE /* TarsStream.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CC1A317152466AA0083BBCE /* TarsStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1A309152466AA0083BBCE /* TarsStream.m */; };
+		3CC1A318152466AA0083BBCE /* RequestF.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC1A30A152466AA0083BBCE /* RequestF.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CC1A319152466AA0083BBCE /* RequestF.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1A30B152466AA0083BBCE /* RequestF.mm */; };
+		3CC1A31A152466AA0083BBCE /* UniPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CC1A30C152466AA0083BBCE /* UniPacket.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3CC1A31B152466AA0083BBCE /* UniPacket.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1A30D152466AA0083BBCE /* UniPacket.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3CB475CB152AA47100F145B4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3CC191A9152455910083BBCE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3CC191B1152455910083BBCE;
+			remoteInfo = tup.Serializable;
+		};
+		3CC191C8152455910083BBCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3CC191A9152455910083BBCE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3CC191B1152455910083BBCE;
+			remoteInfo = tup;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3C3C434415748F37000538C8 /* MttAcceptEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttAcceptEncoding.h; path = Protocol/Mtt/MttAcceptEncoding.h; sourceTree = "<group>"; };
+		3C3C434515748F37000538C8 /* MttAdsContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttAdsContent.h; path = Protocol/Mtt/MttAdsContent.h; sourceTree = "<group>"; };
+		3C3C434615748F37000538C8 /* MttAdsContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttAdsContent.m; path = Protocol/Mtt/MttAdsContent.m; sourceTree = "<group>"; };
+		3C3C434715748F37000538C8 /* MttAdsReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttAdsReq.h; path = Protocol/Mtt/MttAdsReq.h; sourceTree = "<group>"; };
+		3C3C434815748F37000538C8 /* MttAdsReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttAdsReq.m; path = Protocol/Mtt/MttAdsReq.m; sourceTree = "<group>"; };
+		3C3C434915748F37000538C8 /* MttAdsRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttAdsRsp.h; path = Protocol/Mtt/MttAdsRsp.h; sourceTree = "<group>"; };
+		3C3C434A15748F37000538C8 /* MttAdsRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttAdsRsp.m; path = Protocol/Mtt/MttAdsRsp.m; sourceTree = "<group>"; };
+		3C3C434B15748F37000538C8 /* MttBrokerContentInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerContentInfo.h; path = Protocol/Mtt/MttBrokerContentInfo.h; sourceTree = "<group>"; };
+		3C3C434C15748F37000538C8 /* MttBrokerContentInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerContentInfo.m; path = Protocol/Mtt/MttBrokerContentInfo.m; sourceTree = "<group>"; };
+		3C3C434D15748F37000538C8 /* MttBrokerDisplayInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerDisplayInfo.h; path = Protocol/Mtt/MttBrokerDisplayInfo.h; sourceTree = "<group>"; };
+		3C3C434E15748F37000538C8 /* MttBrokerDisplayInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerDisplayInfo.m; path = Protocol/Mtt/MttBrokerDisplayInfo.m; sourceTree = "<group>"; };
+		3C3C434F15748F37000538C8 /* MttBrokerFragRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerFragRequest.h; path = Protocol/Mtt/MttBrokerFragRequest.h; sourceTree = "<group>"; };
+		3C3C435015748F37000538C8 /* MttBrokerFragRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerFragRequest.m; path = Protocol/Mtt/MttBrokerFragRequest.m; sourceTree = "<group>"; };
+		3C3C435115748F37000538C8 /* MttBrokerFragResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerFragResponse.h; path = Protocol/Mtt/MttBrokerFragResponse.h; sourceTree = "<group>"; };
+		3C3C435215748F37000538C8 /* MttBrokerFragResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerFragResponse.m; path = Protocol/Mtt/MttBrokerFragResponse.m; sourceTree = "<group>"; };
+		3C3C435315748F37000538C8 /* MttBrokerJSPDInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerJSPDInfo.h; path = Protocol/Mtt/MttBrokerJSPDInfo.h; sourceTree = "<group>"; };
+		3C3C435415748F37000538C8 /* MttBrokerJSPDInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerJSPDInfo.m; path = Protocol/Mtt/MttBrokerJSPDInfo.m; sourceTree = "<group>"; };
+		3C3C435515748F37000538C8 /* MttBrokerJSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerJSRequest.h; path = Protocol/Mtt/MttBrokerJSRequest.h; sourceTree = "<group>"; };
+		3C3C435615748F37000538C8 /* MttBrokerJSRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerJSRequest.m; path = Protocol/Mtt/MttBrokerJSRequest.m; sourceTree = "<group>"; };
+		3C3C435715748F37000538C8 /* MttBrokerPageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerPageRequest.h; path = Protocol/Mtt/MttBrokerPageRequest.h; sourceTree = "<group>"; };
+		3C3C435815748F37000538C8 /* MttBrokerPageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerPageRequest.m; path = Protocol/Mtt/MttBrokerPageRequest.m; sourceTree = "<group>"; };
+		3C3C435915748F37000538C8 /* MttBrokerPicParam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerPicParam.h; path = Protocol/Mtt/MttBrokerPicParam.h; sourceTree = "<group>"; };
+		3C3C435A15748F37000538C8 /* MttBrokerPicParam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerPicParam.m; path = Protocol/Mtt/MttBrokerPicParam.m; sourceTree = "<group>"; };
+		3C3C435B15748F37000538C8 /* MttBrokerPicRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerPicRequest.h; path = Protocol/Mtt/MttBrokerPicRequest.h; sourceTree = "<group>"; };
+		3C3C435C15748F37000538C8 /* MttBrokerPicRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerPicRequest.m; path = Protocol/Mtt/MttBrokerPicRequest.m; sourceTree = "<group>"; };
+		3C3C435D15748F37000538C8 /* MttBrokerPushRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerPushRequest.h; path = Protocol/Mtt/MttBrokerPushRequest.h; sourceTree = "<group>"; };
+		3C3C435E15748F37000538C8 /* MttBrokerPushRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerPushRequest.m; path = Protocol/Mtt/MttBrokerPushRequest.m; sourceTree = "<group>"; };
+		3C3C435F15748F37000538C8 /* MttBrokerPushResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerPushResponse.h; path = Protocol/Mtt/MttBrokerPushResponse.h; sourceTree = "<group>"; };
+		3C3C436015748F37000538C8 /* MttBrokerPushResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerPushResponse.m; path = Protocol/Mtt/MttBrokerPushResponse.m; sourceTree = "<group>"; };
+		3C3C436115748F37000538C8 /* MttBrokerReqType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerReqType.h; path = Protocol/Mtt/MttBrokerReqType.h; sourceTree = "<group>"; };
+		3C3C436215748F37000538C8 /* MttBrokerRequestParam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerRequestParam.h; path = Protocol/Mtt/MttBrokerRequestParam.h; sourceTree = "<group>"; };
+		3C3C436315748F37000538C8 /* MttBrokerRequestParam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerRequestParam.m; path = Protocol/Mtt/MttBrokerRequestParam.m; sourceTree = "<group>"; };
+		3C3C436415748F37000538C8 /* MttBrokerSecurityRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerSecurityRequest.h; path = Protocol/Mtt/MttBrokerSecurityRequest.h; sourceTree = "<group>"; };
+		3C3C436515748F37000538C8 /* MttBrokerSecurityRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerSecurityRequest.m; path = Protocol/Mtt/MttBrokerSecurityRequest.m; sourceTree = "<group>"; };
+		3C3C436615748F37000538C8 /* MttBrokerSecurityResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerSecurityResponse.h; path = Protocol/Mtt/MttBrokerSecurityResponse.h; sourceTree = "<group>"; };
+		3C3C436715748F37000538C8 /* MttBrokerSecurityResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerSecurityResponse.m; path = Protocol/Mtt/MttBrokerSecurityResponse.m; sourceTree = "<group>"; };
+		3C3C436815748F37000538C8 /* MttBrokerSimplifiedPushRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerSimplifiedPushRequest.h; path = Protocol/Mtt/MttBrokerSimplifiedPushRequest.h; sourceTree = "<group>"; };
+		3C3C436915748F37000538C8 /* MttBrokerSimplifiedPushRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerSimplifiedPushRequest.m; path = Protocol/Mtt/MttBrokerSimplifiedPushRequest.m; sourceTree = "<group>"; };
+		3C3C436A15748F37000538C8 /* MttBrokerSimplifiedPushResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerSimplifiedPushResponse.h; path = Protocol/Mtt/MttBrokerSimplifiedPushResponse.h; sourceTree = "<group>"; };
+		3C3C436B15748F37000538C8 /* MttBrokerSimplifiedPushResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerSimplifiedPushResponse.m; path = Protocol/Mtt/MttBrokerSimplifiedPushResponse.m; sourceTree = "<group>"; };
+		3C3C436C15748F37000538C8 /* MttBrokerSimplifiedRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerSimplifiedRequest.h; path = Protocol/Mtt/MttBrokerSimplifiedRequest.h; sourceTree = "<group>"; };
+		3C3C436D15748F37000538C8 /* MttBrokerSimplifiedRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerSimplifiedRequest.m; path = Protocol/Mtt/MttBrokerSimplifiedRequest.m; sourceTree = "<group>"; };
+		3C3C436E15748F37000538C8 /* MttBrokerTransferResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerTransferResponse.h; path = Protocol/Mtt/MttBrokerTransferResponse.h; sourceTree = "<group>"; };
+		3C3C436F15748F37000538C8 /* MttBrokerTransferResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerTransferResponse.m; path = Protocol/Mtt/MttBrokerTransferResponse.m; sourceTree = "<group>"; };
+		3C3C437015748F37000538C8 /* MttBrokerUploadRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerUploadRequest.h; path = Protocol/Mtt/MttBrokerUploadRequest.h; sourceTree = "<group>"; };
+		3C3C437115748F37000538C8 /* MttBrokerUploadRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerUploadRequest.m; path = Protocol/Mtt/MttBrokerUploadRequest.m; sourceTree = "<group>"; };
+		3C3C437215748F37000538C8 /* MttBrokerUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerUserInfo.h; path = Protocol/Mtt/MttBrokerUserInfo.h; sourceTree = "<group>"; };
+		3C3C437315748F37000538C8 /* MttBrokerUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerUserInfo.m; path = Protocol/Mtt/MttBrokerUserInfo.m; sourceTree = "<group>"; };
+		3C3C437415748F37000538C8 /* MttBrokerTups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrokerTups.h; path = Protocol/Mtt/MttBrokerTups.h; sourceTree = "<group>"; };
+		3C3C437515748F37000538C8 /* MttBrokerTups.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerTups.m; path = Protocol/Mtt/MttBrokerTups.m; sourceTree = "<group>"; };
+		3C3C437615748F37000538C8 /* MttBrowserReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrowserReq.h; path = Protocol/Mtt/MttBrowserReq.h; sourceTree = "<group>"; };
+		3C3C437715748F37000538C8 /* MttBrowserReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrowserReq.m; path = Protocol/Mtt/MttBrowserReq.m; sourceTree = "<group>"; };
+		3C3C437815748F37000538C8 /* MttBrowserRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrowserRsp.h; path = Protocol/Mtt/MttBrowserRsp.h; sourceTree = "<group>"; };
+		3C3C437915748F37000538C8 /* MttBrowserRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrowserRsp.m; path = Protocol/Mtt/MttBrowserRsp.m; sourceTree = "<group>"; };
+		3C3C437A15748F37000538C8 /* MttBrowserVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttBrowserVersion.h; path = Protocol/Mtt/MttBrowserVersion.h; sourceTree = "<group>"; };
+		3C3C437B15748F37000538C8 /* MttCheckPluginReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttCheckPluginReq.h; path = Protocol/Mtt/MttCheckPluginReq.h; sourceTree = "<group>"; };
+		3C3C437C15748F37000538C8 /* MttCheckPluginReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttCheckPluginReq.m; path = Protocol/Mtt/MttCheckPluginReq.m; sourceTree = "<group>"; };
+		3C3C437D15748F37000538C8 /* MttCityListReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttCityListReq.h; path = Protocol/Mtt/MttCityListReq.h; sourceTree = "<group>"; };
+		3C3C437E15748F37000538C8 /* MttCityListReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttCityListReq.m; path = Protocol/Mtt/MttCityListReq.m; sourceTree = "<group>"; };
+		3C3C437F15748F37000538C8 /* MttCityListRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttCityListRsp.h; path = Protocol/Mtt/MttCityListRsp.h; sourceTree = "<group>"; };
+		3C3C438015748F37000538C8 /* MttCityListRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttCityListRsp.m; path = Protocol/Mtt/MttCityListRsp.m; sourceTree = "<group>"; };
+		3C3C438115748F37000538C8 /* MttConfigReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttConfigReq.h; path = Protocol/Mtt/MttConfigReq.h; sourceTree = "<group>"; };
+		3C3C438215748F37000538C8 /* MttConfigReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttConfigReq.m; path = Protocol/Mtt/MttConfigReq.m; sourceTree = "<group>"; };
+		3C3C438315748F37000538C8 /* MttConfigRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttConfigRsp.h; path = Protocol/Mtt/MttConfigRsp.h; sourceTree = "<group>"; };
+		3C3C438415748F37000538C8 /* MttConfigRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttConfigRsp.m; path = Protocol/Mtt/MttConfigRsp.m; sourceTree = "<group>"; };
+		3C3C438515748F37000538C8 /* MttConfInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttConfInfo.h; path = Protocol/Mtt/MttConfInfo.h; sourceTree = "<group>"; };
+		3C3C438615748F37000538C8 /* MttConfInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttConfInfo.m; path = Protocol/Mtt/MttConfInfo.m; sourceTree = "<group>"; };
+		3C3C438715748F37000538C8 /* MttConfirm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttConfirm.h; path = Protocol/Mtt/MttConfirm.h; sourceTree = "<group>"; };
+		3C3C438815748F37000538C8 /* MttConfirm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttConfirm.m; path = Protocol/Mtt/MttConfirm.m; sourceTree = "<group>"; };
+		3C3C438915748F37000538C8 /* MttConfRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttConfRsp.h; path = Protocol/Mtt/MttConfRsp.h; sourceTree = "<group>"; };
+		3C3C438A15748F37000538C8 /* MttConfRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttConfRsp.m; path = Protocol/Mtt/MttConfRsp.m; sourceTree = "<group>"; };
+		3C3C438B15748F37000538C8 /* MttContentEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttContentEncoding.h; path = Protocol/Mtt/MttContentEncoding.h; sourceTree = "<group>"; };
+		3C3C438C15748F37000538C8 /* MttDirectPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttDirectPolicy.h; path = Protocol/Mtt/MttDirectPolicy.h; sourceTree = "<group>"; };
+		3C3C438D15748F37000538C8 /* MttDNSReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttDNSReq.h; path = Protocol/Mtt/MttDNSReq.h; sourceTree = "<group>"; };
+		3C3C438E15748F37000538C8 /* MttDNSReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttDNSReq.m; path = Protocol/Mtt/MttDNSReq.m; sourceTree = "<group>"; };
+		3C3C438F15748F37000538C8 /* MttDNSRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttDNSRsp.h; path = Protocol/Mtt/MttDNSRsp.h; sourceTree = "<group>"; };
+		3C3C439015748F37000538C8 /* MttDNSRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttDNSRsp.m; path = Protocol/Mtt/MttDNSRsp.m; sourceTree = "<group>"; };
+		3C3C439115748F37000538C8 /* MttDomainRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttDomainRsp.h; path = Protocol/Mtt/MttDomainRsp.h; sourceTree = "<group>"; };
+		3C3C439215748F37000538C8 /* MttDomainRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttDomainRsp.m; path = Protocol/Mtt/MttDomainRsp.m; sourceTree = "<group>"; };
+		3C3C439315748F37000538C8 /* MttDomainRspNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttDomainRspNew.h; path = Protocol/Mtt/MttDomainRspNew.h; sourceTree = "<group>"; };
+		3C3C439415748F37000538C8 /* MttDomainRspNew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttDomainRspNew.m; path = Protocol/Mtt/MttDomainRspNew.m; sourceTree = "<group>"; };
+		3C3C439515748F37000538C8 /* MttDynamicReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttDynamicReq.h; path = Protocol/Mtt/MttDynamicReq.h; sourceTree = "<group>"; };
+		3C3C439615748F37000538C8 /* MttDynamicReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttDynamicReq.m; path = Protocol/Mtt/MttDynamicReq.m; sourceTree = "<group>"; };
+		3C3C439715748F37000538C8 /* MttDynamicRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttDynamicRsp.h; path = Protocol/Mtt/MttDynamicRsp.h; sourceTree = "<group>"; };
+		3C3C439815748F37000538C8 /* MttDynamicRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttDynamicRsp.m; path = Protocol/Mtt/MttDynamicRsp.m; sourceTree = "<group>"; };
+		3C3C439915748F37000538C8 /* MttEDomainType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttEDomainType.h; path = Protocol/Mtt/MttEDomainType.h; sourceTree = "<group>"; };
+		3C3C439A15748F37000538C8 /* MttEEntryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttEEntryType.h; path = Protocol/Mtt/MttEEntryType.h; sourceTree = "<group>"; };
+		3C3C439B15748F37000538C8 /* MttEFASTKEY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttEFASTKEY.h; path = Protocol/Mtt/MttEFASTKEY.h; sourceTree = "<group>"; };
+		3C3C439C15748F37000538C8 /* MttEHotWordType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttEHotWordType.h; path = Protocol/Mtt/MttEHotWordType.h; sourceTree = "<group>"; };
+		3C3C439D15748F37000538C8 /* MttELanguageType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttELanguageType.h; path = Protocol/Mtt/MttELanguageType.h; sourceTree = "<group>"; };
+		3C3C439E15748F37000538C8 /* MttEPushServerType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttEPushServerType.h; path = Protocol/Mtt/MttEPushServerType.h; sourceTree = "<group>"; };
+		3C3C439F15748F37000538C8 /* MttERelayProtoVer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttERelayProtoVer.h; path = Protocol/Mtt/MttERelayProtoVer.h; sourceTree = "<group>"; };
+		3C3C43A015748F37000538C8 /* MttErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttErrorCode.h; path = Protocol/Mtt/MttErrorCode.h; sourceTree = "<group>"; };
+		3C3C43A115748F37000538C8 /* MttEServerVer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttEServerVer.h; path = Protocol/Mtt/MttEServerVer.h; sourceTree = "<group>"; };
+		3C3C43A215748F37000538C8 /* MttETPV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttETPV.h; path = Protocol/Mtt/MttETPV.h; sourceTree = "<group>"; };
+		3C3C43A315748F37000538C8 /* MttETPV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttETPV.m; path = Protocol/Mtt/MttETPV.m; sourceTree = "<group>"; };
+		3C3C43A415748F37000538C8 /* MttEUSESTAT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttEUSESTAT.h; path = Protocol/Mtt/MttEUSESTAT.h; sourceTree = "<group>"; };
+		3C3C43A515748F37000538C8 /* MttEWaitPushType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttEWaitPushType.h; path = Protocol/Mtt/MttEWaitPushType.h; sourceTree = "<group>"; };
+		3C3C43A615748F37000538C8 /* MttExtDomain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttExtDomain.h; path = Protocol/Mtt/MttExtDomain.h; sourceTree = "<group>"; };
+		3C3C43A715748F37000538C8 /* MttExtDomain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttExtDomain.m; path = Protocol/Mtt/MttExtDomain.m; sourceTree = "<group>"; };
+		3C3C43A815748F37000538C8 /* MttFKINFO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttFKINFO.h; path = Protocol/Mtt/MttFKINFO.h; sourceTree = "<group>"; };
+		3C3C43A915748F37000538C8 /* MttFKINFO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttFKINFO.m; path = Protocol/Mtt/MttFKINFO.m; sourceTree = "<group>"; };
+		3C3C43AA15748F37000538C8 /* MttHotListReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttHotListReq.h; path = Protocol/Mtt/MttHotListReq.h; sourceTree = "<group>"; };
+		3C3C43AB15748F37000538C8 /* MttHotListReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttHotListReq.m; path = Protocol/Mtt/MttHotListReq.m; sourceTree = "<group>"; };
+		3C3C43AC15748F37000538C8 /* MttHotListRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttHotListRsp.h; path = Protocol/Mtt/MttHotListRsp.h; sourceTree = "<group>"; };
+		3C3C43AD15748F37000538C8 /* MttHotListRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttHotListRsp.m; path = Protocol/Mtt/MttHotListRsp.m; sourceTree = "<group>"; };
+		3C3C43AE15748F37000538C8 /* MttHotWordInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttHotWordInfo.h; path = Protocol/Mtt/MttHotWordInfo.h; sourceTree = "<group>"; };
+		3C3C43AF15748F37000538C8 /* MttHotWordInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttHotWordInfo.m; path = Protocol/Mtt/MttHotWordInfo.m; sourceTree = "<group>"; };
+		3C3C43B015748F37000538C8 /* MttHotWordsReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttHotWordsReq.h; path = Protocol/Mtt/MttHotWordsReq.h; sourceTree = "<group>"; };
+		3C3C43B115748F37000538C8 /* MttHotWordsReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttHotWordsReq.m; path = Protocol/Mtt/MttHotWordsReq.m; sourceTree = "<group>"; };
+		3C3C43B215748F37000538C8 /* MttHotWordsRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttHotWordsRsp.h; path = Protocol/Mtt/MttHotWordsRsp.h; sourceTree = "<group>"; };
+		3C3C43B315748F37000538C8 /* MttHotWordsRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttHotWordsRsp.m; path = Protocol/Mtt/MttHotWordsRsp.m; sourceTree = "<group>"; };
+		3C3C43B415748F37000538C8 /* MttIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttIcon.h; path = Protocol/Mtt/MttIcon.h; sourceTree = "<group>"; };
+		3C3C43B515748F37000538C8 /* MttIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttIcon.m; path = Protocol/Mtt/MttIcon.m; sourceTree = "<group>"; };
+		3C3C43B615748F37000538C8 /* MttIconInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttIconInfo.h; path = Protocol/Mtt/MttIconInfo.h; sourceTree = "<group>"; };
+		3C3C43B715748F37000538C8 /* MttIconInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttIconInfo.m; path = Protocol/Mtt/MttIconInfo.m; sourceTree = "<group>"; };
+		3C3C43B815748F37000538C8 /* MttIconRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttIconRsp.h; path = Protocol/Mtt/MttIconRsp.h; sourceTree = "<group>"; };
+		3C3C43B915748F37000538C8 /* MttIconRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttIconRsp.m; path = Protocol/Mtt/MttIconRsp.m; sourceTree = "<group>"; };
+		3C3C43BA15748F37000538C8 /* MttImageQuality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttImageQuality.h; path = Protocol/Mtt/MttImageQuality.h; sourceTree = "<group>"; };
+		3C3C43BB15748F37000538C8 /* MttImageReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttImageReq.h; path = Protocol/Mtt/MttImageReq.h; sourceTree = "<group>"; };
+		3C3C43BC15748F37000538C8 /* MttImageReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttImageReq.m; path = Protocol/Mtt/MttImageReq.m; sourceTree = "<group>"; };
+		3C3C43BD15748F37000538C8 /* MttImageRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttImageRsp.h; path = Protocol/Mtt/MttImageRsp.h; sourceTree = "<group>"; };
+		3C3C43BE15748F37000538C8 /* MttImageRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttImageRsp.m; path = Protocol/Mtt/MttImageRsp.m; sourceTree = "<group>"; };
+		3C3C43BF15748F37000538C8 /* MttImgReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttImgReq.h; path = Protocol/Mtt/MttImgReq.h; sourceTree = "<group>"; };
+		3C3C43C015748F37000538C8 /* MttImgReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttImgReq.m; path = Protocol/Mtt/MttImgReq.m; sourceTree = "<group>"; };
+		3C3C43C115748F37000538C8 /* MttImgRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttImgRsp.h; path = Protocol/Mtt/MttImgRsp.h; sourceTree = "<group>"; };
+		3C3C43C215748F37000538C8 /* MttImgRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttImgRsp.m; path = Protocol/Mtt/MttImgRsp.m; sourceTree = "<group>"; };
+		3C3C43C315748F37000538C8 /* MttIPListReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttIPListReq.h; path = Protocol/Mtt/MttIPListReq.h; sourceTree = "<group>"; };
+		3C3C43C415748F37000538C8 /* MttIPListReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttIPListReq.m; path = Protocol/Mtt/MttIPListReq.m; sourceTree = "<group>"; };
+		3C3C43C515748F37000538C8 /* MttIPListRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttIPListRsp.h; path = Protocol/Mtt/MttIPListRsp.h; sourceTree = "<group>"; };
+		3C3C43C615748F37000538C8 /* MttIPListRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttIPListRsp.m; path = Protocol/Mtt/MttIPListRsp.m; sourceTree = "<group>"; };
+		3C3C43C715748F37000538C8 /* MttItemReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttItemReq.h; path = Protocol/Mtt/MttItemReq.h; sourceTree = "<group>"; };
+		3C3C43C815748F37000538C8 /* MttItemReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttItemReq.m; path = Protocol/Mtt/MttItemReq.m; sourceTree = "<group>"; };
+		3C3C43C915748F37000538C8 /* MttItemRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttItemRsp.h; path = Protocol/Mtt/MttItemRsp.h; sourceTree = "<group>"; };
+		3C3C43CA15748F37000538C8 /* MttItemRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttItemRsp.m; path = Protocol/Mtt/MttItemRsp.m; sourceTree = "<group>"; };
+		3C3C43CB15748F37000538C8 /* MttKeywordRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttKeywordRsp.h; path = Protocol/Mtt/MttKeywordRsp.h; sourceTree = "<group>"; };
+		3C3C43CC15748F37000538C8 /* MttKeywordRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttKeywordRsp.m; path = Protocol/Mtt/MttKeywordRsp.m; sourceTree = "<group>"; };
+		3C3C43CD15748F37000538C8 /* MttLoginReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttLoginReq.h; path = Protocol/Mtt/MttLoginReq.h; sourceTree = "<group>"; };
+		3C3C43CE15748F37000538C8 /* MttLoginReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttLoginReq.m; path = Protocol/Mtt/MttLoginReq.m; sourceTree = "<group>"; };
+		3C3C43CF15748F37000538C8 /* MttLoginRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttLoginRsp.h; path = Protocol/Mtt/MttLoginRsp.h; sourceTree = "<group>"; };
+		3C3C43D015748F37000538C8 /* MttLoginRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttLoginRsp.m; path = Protocol/Mtt/MttLoginRsp.m; sourceTree = "<group>"; };
+		3C3C43D115748F37000538C8 /* MttLPageReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttLPageReq.h; path = Protocol/Mtt/MttLPageReq.h; sourceTree = "<group>"; };
+		3C3C43D215748F37000538C8 /* MttLPageReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttLPageReq.m; path = Protocol/Mtt/MttLPageReq.m; sourceTree = "<group>"; };
+		3C3C43D315748F37000538C8 /* MttLPageRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttLPageRsp.h; path = Protocol/Mtt/MttLPageRsp.h; sourceTree = "<group>"; };
+		3C3C43D415748F37000538C8 /* MttLPageRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttLPageRsp.m; path = Protocol/Mtt/MttLPageRsp.m; sourceTree = "<group>"; };
+		3C3C43D515748F37000538C8 /* MttMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttMethod.h; path = Protocol/Mtt/MttMethod.h; sourceTree = "<group>"; };
+		3C3C43D615748F37000538C8 /* MttMTTContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttMTTContentType.h; path = Protocol/Mtt/MttMTTContentType.h; sourceTree = "<group>"; };
+		3C3C43D715748F37000538C8 /* MttNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttNavigation.h; path = Protocol/Mtt/MttNavigation.h; sourceTree = "<group>"; };
+		3C3C43D815748F37000538C8 /* MttNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttNavigation.m; path = Protocol/Mtt/MttNavigation.m; sourceTree = "<group>"; };
+		3C3C43D915748F37000538C8 /* MttNaviRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttNaviRsp.h; path = Protocol/Mtt/MttNaviRsp.h; sourceTree = "<group>"; };
+		3C3C43DA15748F37000538C8 /* MttNaviRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttNaviRsp.m; path = Protocol/Mtt/MttNaviRsp.m; sourceTree = "<group>"; };
+		3C3C43DB15748F37000538C8 /* MttPageBrowserReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPageBrowserReq.h; path = Protocol/Mtt/MttPageBrowserReq.h; sourceTree = "<group>"; };
+		3C3C43DC15748F37000538C8 /* MttPageBrowserReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPageBrowserReq.m; path = Protocol/Mtt/MttPageBrowserReq.m; sourceTree = "<group>"; };
+		3C3C43DD15748F37000538C8 /* MttPageBrowserRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPageBrowserRsp.h; path = Protocol/Mtt/MttPageBrowserRsp.h; sourceTree = "<group>"; };
+		3C3C43DE15748F37000538C8 /* MttPageBrowserRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPageBrowserRsp.m; path = Protocol/Mtt/MttPageBrowserRsp.m; sourceTree = "<group>"; };
+		3C3C43DF15748F37000538C8 /* MttPageConfigReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPageConfigReq.h; path = Protocol/Mtt/MttPageConfigReq.h; sourceTree = "<group>"; };
+		3C3C43E015748F37000538C8 /* MttPageConfigReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPageConfigReq.m; path = Protocol/Mtt/MttPageConfigReq.m; sourceTree = "<group>"; };
+		3C3C43E115748F37000538C8 /* MttPageConfigRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPageConfigRsp.h; path = Protocol/Mtt/MttPageConfigRsp.h; sourceTree = "<group>"; };
+		3C3C43E215748F37000538C8 /* MttPageConfigRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPageConfigRsp.m; path = Protocol/Mtt/MttPageConfigRsp.m; sourceTree = "<group>"; };
+		3C3C43E315748F37000538C8 /* MttPageReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPageReq.h; path = Protocol/Mtt/MttPageReq.h; sourceTree = "<group>"; };
+		3C3C43E415748F37000538C8 /* MttPageReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPageReq.m; path = Protocol/Mtt/MttPageReq.m; sourceTree = "<group>"; };
+		3C3C43E515748F37000538C8 /* MttPageRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPageRsp.h; path = Protocol/Mtt/MttPageRsp.h; sourceTree = "<group>"; };
+		3C3C43E615748F37000538C8 /* MttPageRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPageRsp.m; path = Protocol/Mtt/MttPageRsp.m; sourceTree = "<group>"; };
+		3C3C43E715748F37000538C8 /* MttPerformanceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPerformanceInfo.h; path = Protocol/Mtt/MttPerformanceInfo.h; sourceTree = "<group>"; };
+		3C3C43E815748F37000538C8 /* MttPerformanceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPerformanceInfo.m; path = Protocol/Mtt/MttPerformanceInfo.m; sourceTree = "<group>"; };
+		3C3C43E915748F37000538C8 /* MttPicInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPicInfo.h; path = Protocol/Mtt/MttPicInfo.h; sourceTree = "<group>"; };
+		3C3C43EA15748F37000538C8 /* MttPicInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPicInfo.m; path = Protocol/Mtt/MttPicInfo.m; sourceTree = "<group>"; };
+		3C3C43EB15748F37000538C8 /* MttPicRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPicRsp.h; path = Protocol/Mtt/MttPicRsp.h; sourceTree = "<group>"; };
+		3C3C43EC15748F37000538C8 /* MttPicRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPicRsp.m; path = Protocol/Mtt/MttPicRsp.m; sourceTree = "<group>"; };
+		3C3C43ED15748F37000538C8 /* MttPing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPing.h; path = Protocol/Mtt/MttPing.h; sourceTree = "<group>"; };
+		3C3C43EE15748F37000538C8 /* MttPing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPing.m; path = Protocol/Mtt/MttPing.m; sourceTree = "<group>"; };
+		3C3C43EF15748F37000538C8 /* MttPluginBootResp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPluginBootResp.h; path = Protocol/Mtt/MttPluginBootResp.h; sourceTree = "<group>"; };
+		3C3C43F015748F37000538C8 /* MttPluginBootResp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPluginBootResp.m; path = Protocol/Mtt/MttPluginBootResp.m; sourceTree = "<group>"; };
+		3C3C43F115748F37000538C8 /* MttPluginInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPluginInfo.h; path = Protocol/Mtt/MttPluginInfo.h; sourceTree = "<group>"; };
+		3C3C43F215748F37000538C8 /* MttPluginInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPluginInfo.m; path = Protocol/Mtt/MttPluginInfo.m; sourceTree = "<group>"; };
+		3C3C43F315748F37000538C8 /* MttPluginInfoNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPluginInfoNew.h; path = Protocol/Mtt/MttPluginInfoNew.h; sourceTree = "<group>"; };
+		3C3C43F415748F37000538C8 /* MttPluginInfoNew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPluginInfoNew.m; path = Protocol/Mtt/MttPluginInfoNew.m; sourceTree = "<group>"; };
+		3C3C43F515748F37000538C8 /* MttPluginRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPluginRsp.h; path = Protocol/Mtt/MttPluginRsp.h; sourceTree = "<group>"; };
+		3C3C43F615748F37000538C8 /* MttPluginRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPluginRsp.m; path = Protocol/Mtt/MttPluginRsp.m; sourceTree = "<group>"; };
+		3C3C43F715748F37000538C8 /* MttPluginRspNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPluginRspNew.h; path = Protocol/Mtt/MttPluginRspNew.h; sourceTree = "<group>"; };
+		3C3C43F815748F37000538C8 /* MttPluginRspNew.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPluginRspNew.m; path = Protocol/Mtt/MttPluginRspNew.m; sourceTree = "<group>"; };
+		3C3C43F915748F37000538C8 /* MttPluginVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPluginVersion.h; path = Protocol/Mtt/MttPluginVersion.h; sourceTree = "<group>"; };
+		3C3C43FA15748F37000538C8 /* MttPluginVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPluginVersion.m; path = Protocol/Mtt/MttPluginVersion.m; sourceTree = "<group>"; };
+		3C3C43FB15748F37000538C8 /* MttPushAppReqList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPushAppReqList.h; path = Protocol/Mtt/MttPushAppReqList.h; sourceTree = "<group>"; };
+		3C3C43FC15748F37000538C8 /* MttPushAppReqList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPushAppReqList.m; path = Protocol/Mtt/MttPushAppReqList.m; sourceTree = "<group>"; };
+		3C3C43FD15748F37000538C8 /* MttPushPortionFresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPushPortionFresh.h; path = Protocol/Mtt/MttPushPortionFresh.h; sourceTree = "<group>"; };
+		3C3C43FE15748F37000538C8 /* MttPushPortionFresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPushPortionFresh.m; path = Protocol/Mtt/MttPushPortionFresh.m; sourceTree = "<group>"; };
+		3C3C43FF15748F37000538C8 /* MttPushRespnoseContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPushRespnoseContent.h; path = Protocol/Mtt/MttPushRespnoseContent.h; sourceTree = "<group>"; };
+		3C3C440015748F37000538C8 /* MttPushRespnoseContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPushRespnoseContent.m; path = Protocol/Mtt/MttPushRespnoseContent.m; sourceTree = "<group>"; };
+		3C3C440115748F37000538C8 /* MttPushSysNotify.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttPushSysNotify.h; path = Protocol/Mtt/MttPushSysNotify.h; sourceTree = "<group>"; };
+		3C3C440215748F37000538C8 /* MttPushSysNotify.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttPushSysNotify.m; path = Protocol/Mtt/MttPushSysNotify.m; sourceTree = "<group>"; };
+		3C3C440315748F37000538C8 /* MttRefuse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttRefuse.h; path = Protocol/Mtt/MttRefuse.h; sourceTree = "<group>"; };
+		3C3C440415748F37000538C8 /* MttRefuse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttRefuse.m; path = Protocol/Mtt/MttRefuse.m; sourceTree = "<group>"; };
+		3C3C440515748F37000538C8 /* MttRelayPageReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttRelayPageReq.h; path = Protocol/Mtt/MttRelayPageReq.h; sourceTree = "<group>"; };
+		3C3C440615748F37000538C8 /* MttRelayPageReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttRelayPageReq.m; path = Protocol/Mtt/MttRelayPageReq.m; sourceTree = "<group>"; };
+		3C3C440715748F37000538C8 /* MttRelayPageRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttRelayPageRsp.h; path = Protocol/Mtt/MttRelayPageRsp.h; sourceTree = "<group>"; };
+		3C3C440815748F37000538C8 /* MttRelayPageRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttRelayPageRsp.m; path = Protocol/Mtt/MttRelayPageRsp.m; sourceTree = "<group>"; };
+		3C3C440915748F37000538C8 /* MttReply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttReply.h; path = Protocol/Mtt/MttReply.h; sourceTree = "<group>"; };
+		3C3C440A15748F37000538C8 /* MttReply.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttReply.m; path = Protocol/Mtt/MttReply.m; sourceTree = "<group>"; };
+		3C3C440B15748F37000538C8 /* MttRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttRequest.h; path = Protocol/Mtt/MttRequest.h; sourceTree = "<group>"; };
+		3C3C440C15748F37000538C8 /* MttRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttRequest.m; path = Protocol/Mtt/MttRequest.m; sourceTree = "<group>"; };
+		3C3C440D15748F37000538C8 /* MttRequestFragment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttRequestFragment.h; path = Protocol/Mtt/MttRequestFragment.h; sourceTree = "<group>"; };
+		3C3C440E15748F37000538C8 /* MttRequestFragment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttRequestFragment.m; path = Protocol/Mtt/MttRequestFragment.m; sourceTree = "<group>"; };
+		3C3C440F15748F37000538C8 /* MttSearchInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSearchInfo.h; path = Protocol/Mtt/MttSearchInfo.h; sourceTree = "<group>"; };
+		3C3C441015748F37000538C8 /* MttSearchInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSearchInfo.m; path = Protocol/Mtt/MttSearchInfo.m; sourceTree = "<group>"; };
+		3C3C441115748F37000538C8 /* MttSearchReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSearchReq.h; path = Protocol/Mtt/MttSearchReq.h; sourceTree = "<group>"; };
+		3C3C441215748F37000538C8 /* MttSearchReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSearchReq.m; path = Protocol/Mtt/MttSearchReq.m; sourceTree = "<group>"; };
+		3C3C441315748F37000538C8 /* MttSearchRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSearchRsp.h; path = Protocol/Mtt/MttSearchRsp.h; sourceTree = "<group>"; };
+		3C3C441415748F37000538C8 /* MttSearchRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSearchRsp.m; path = Protocol/Mtt/MttSearchRsp.m; sourceTree = "<group>"; };
+		3C3C441515748F37000538C8 /* MttSearchTypeInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSearchTypeInfo.h; path = Protocol/Mtt/MttSearchTypeInfo.h; sourceTree = "<group>"; };
+		3C3C441615748F37000538C8 /* MttSearchTypeInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSearchTypeInfo.m; path = Protocol/Mtt/MttSearchTypeInfo.m; sourceTree = "<group>"; };
+		3C3C441715748F37000538C8 /* MttSearchTypeReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSearchTypeReq.h; path = Protocol/Mtt/MttSearchTypeReq.h; sourceTree = "<group>"; };
+		3C3C441815748F37000538C8 /* MttSearchTypeReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSearchTypeReq.m; path = Protocol/Mtt/MttSearchTypeReq.m; sourceTree = "<group>"; };
+		3C3C441915748F37000538C8 /* MttSearchTypeRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSearchTypeRsp.h; path = Protocol/Mtt/MttSearchTypeRsp.h; sourceTree = "<group>"; };
+		3C3C441A15748F37000538C8 /* MttSearchTypeRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSearchTypeRsp.m; path = Protocol/Mtt/MttSearchTypeRsp.m; sourceTree = "<group>"; };
+		3C3C441B15748F37000538C8 /* MttSecurityCheckType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSecurityCheckType.h; path = Protocol/Mtt/MttSecurityCheckType.h; sourceTree = "<group>"; };
+		3C3C441C15748F37000538C8 /* MttSoftAnalyseInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSoftAnalyseInfo.h; path = Protocol/Mtt/MttSoftAnalyseInfo.h; sourceTree = "<group>"; };
+		3C3C441D15748F37000538C8 /* MttSoftAnalyseInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSoftAnalyseInfo.m; path = Protocol/Mtt/MttSoftAnalyseInfo.m; sourceTree = "<group>"; };
+		3C3C441E15748F37000538C8 /* MttSpecialValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSpecialValue.h; path = Protocol/Mtt/MttSpecialValue.h; sourceTree = "<group>"; };
+		3C3C441F15748F37000538C8 /* MttSplashReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSplashReq.h; path = Protocol/Mtt/MttSplashReq.h; sourceTree = "<group>"; };
+		3C3C442015748F37000538C8 /* MttSplashReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSplashReq.m; path = Protocol/Mtt/MttSplashReq.m; sourceTree = "<group>"; };
+		3C3C442115748F37000538C8 /* MttSplashRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSplashRsp.h; path = Protocol/Mtt/MttSplashRsp.h; sourceTree = "<group>"; };
+		3C3C442215748F37000538C8 /* MttSplashRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSplashRsp.m; path = Protocol/Mtt/MttSplashRsp.m; sourceTree = "<group>"; };
+		3C3C442315748F37000538C8 /* MttStaticConfigReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttStaticConfigReq.h; path = Protocol/Mtt/MttStaticConfigReq.h; sourceTree = "<group>"; };
+		3C3C442415748F37000538C8 /* MttStaticConfigReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttStaticConfigReq.m; path = Protocol/Mtt/MttStaticConfigReq.m; sourceTree = "<group>"; };
+		3C3C442515748F37000538C8 /* MttStatValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttStatValue.h; path = Protocol/Mtt/MttStatValue.h; sourceTree = "<group>"; };
+		3C3C442615748F37000538C8 /* MttSTImagePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTImagePolicy.h; path = Protocol/Mtt/MttSTImagePolicy.h; sourceTree = "<group>"; };
+		3C3C442715748F37000538C8 /* MttSTImagePolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTImagePolicy.m; path = Protocol/Mtt/MttSTImagePolicy.m; sourceTree = "<group>"; };
+		3C3C442815748F37000538C8 /* MttSTJSInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTJSInfo.h; path = Protocol/Mtt/MttSTJSInfo.h; sourceTree = "<group>"; };
+		3C3C442915748F37000538C8 /* MttSTJSInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTJSInfo.m; path = Protocol/Mtt/MttSTJSInfo.m; sourceTree = "<group>"; };
+		3C3C442A15748F37000538C8 /* MttSTJSPDInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTJSPDInfo.h; path = Protocol/Mtt/MttSTJSPDInfo.h; sourceTree = "<group>"; };
+		3C3C442B15748F37000538C8 /* MttSTJSPDInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTJSPDInfo.m; path = Protocol/Mtt/MttSTJSPDInfo.m; sourceTree = "<group>"; };
+		3C3C442C15748F37000538C8 /* MttSTOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTOperator.h; path = Protocol/Mtt/MttSTOperator.h; sourceTree = "<group>"; };
+		3C3C442D15748F37000538C8 /* MttSTOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTOperator.m; path = Protocol/Mtt/MttSTOperator.m; sourceTree = "<group>"; };
+		3C3C442E15748F37000538C8 /* MttSTOperatorRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTOperatorRsp.h; path = Protocol/Mtt/MttSTOperatorRsp.h; sourceTree = "<group>"; };
+		3C3C442F15748F37000538C8 /* MttSTOperatorRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTOperatorRsp.m; path = Protocol/Mtt/MttSTOperatorRsp.m; sourceTree = "<group>"; };
+		3C3C443015748F37000538C8 /* MttSTPV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTPV.h; path = Protocol/Mtt/MttSTPV.h; sourceTree = "<group>"; };
+		3C3C443115748F37000538C8 /* MttSTPV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTPV.m; path = Protocol/Mtt/MttSTPV.m; sourceTree = "<group>"; };
+		3C3C443215748F37000538C8 /* MttSTSingleMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTSingleMD5.h; path = Protocol/Mtt/MttSTSingleMD5.h; sourceTree = "<group>"; };
+		3C3C443315748F37000538C8 /* MttSTSingleMD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTSingleMD5.m; path = Protocol/Mtt/MttSTSingleMD5.m; sourceTree = "<group>"; };
+		3C3C443415748F37000538C8 /* MttSTSpeedStatis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTSpeedStatis.h; path = Protocol/Mtt/MttSTSpeedStatis.h; sourceTree = "<group>"; };
+		3C3C443515748F37000538C8 /* MttSTSpeedStatis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTSpeedStatis.m; path = Protocol/Mtt/MttSTSpeedStatis.m; sourceTree = "<group>"; };
+		3C3C443615748F37000538C8 /* MttSTStat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTStat.h; path = Protocol/Mtt/MttSTStat.h; sourceTree = "<group>"; };
+		3C3C443715748F37000538C8 /* MttSTStat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTStat.m; path = Protocol/Mtt/MttSTStat.m; sourceTree = "<group>"; };
+		3C3C443815748F37000538C8 /* MttSTTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTTime.h; path = Protocol/Mtt/MttSTTime.h; sourceTree = "<group>"; };
+		3C3C443915748F37000538C8 /* MttSTTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTTime.m; path = Protocol/Mtt/MttSTTime.m; sourceTree = "<group>"; };
+		3C3C443A15748F37000538C8 /* MttSTTotal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttSTTotal.h; path = Protocol/Mtt/MttSTTotal.h; sourceTree = "<group>"; };
+		3C3C443B15748F37000538C8 /* MttSTTotal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSTTotal.m; path = Protocol/Mtt/MttSTTotal.m; sourceTree = "<group>"; };
+		3C3C443C15748F37000538C8 /* MttThirdUse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttThirdUse.h; path = Protocol/Mtt/MttThirdUse.h; sourceTree = "<group>"; };
+		3C3C443D15748F37000538C8 /* MttThirdUse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttThirdUse.m; path = Protocol/Mtt/MttThirdUse.m; sourceTree = "<group>"; };
+		3C3C443E15748F37000538C8 /* MttTipPushReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttTipPushReq.h; path = Protocol/Mtt/MttTipPushReq.h; sourceTree = "<group>"; };
+		3C3C443F15748F37000538C8 /* MttTipPushReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttTipPushReq.m; path = Protocol/Mtt/MttTipPushReq.m; sourceTree = "<group>"; };
+		3C3C444015748F37000538C8 /* MttTipPushRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttTipPushRsp.h; path = Protocol/Mtt/MttTipPushRsp.h; sourceTree = "<group>"; };
+		3C3C444115748F37000538C8 /* MttTipPushRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttTipPushRsp.m; path = Protocol/Mtt/MttTipPushRsp.m; sourceTree = "<group>"; };
+		3C3C444215748F37000538C8 /* MttUpdateRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttUpdateRsp.h; path = Protocol/Mtt/MttUpdateRsp.h; sourceTree = "<group>"; };
+		3C3C444315748F37000538C8 /* MttUpdateRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttUpdateRsp.m; path = Protocol/Mtt/MttUpdateRsp.m; sourceTree = "<group>"; };
+		3C3C444415748F37000538C8 /* MttURLPV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttURLPV.h; path = Protocol/Mtt/MttURLPV.h; sourceTree = "<group>"; };
+		3C3C444515748F37000538C8 /* MttURLPV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttURLPV.m; path = Protocol/Mtt/MttURLPV.m; sourceTree = "<group>"; };
+		3C3C444615748F37000538C8 /* MttUserBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttUserBase.h; path = Protocol/Mtt/MttUserBase.h; sourceTree = "<group>"; };
+		3C3C444715748F37000538C8 /* MttUserBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttUserBase.m; path = Protocol/Mtt/MttUserBase.m; sourceTree = "<group>"; };
+		3C3C444815748F37000538C8 /* MttVerifyReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttVerifyReq.h; path = Protocol/Mtt/MttVerifyReq.h; sourceTree = "<group>"; };
+		3C3C444915748F37000538C8 /* MttVerifyReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttVerifyReq.m; path = Protocol/Mtt/MttVerifyReq.m; sourceTree = "<group>"; };
+		3C3C444A15748F37000538C8 /* MttVerifyRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttVerifyRsp.h; path = Protocol/Mtt/MttVerifyRsp.h; sourceTree = "<group>"; };
+		3C3C444B15748F37000538C8 /* MttVerifyRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttVerifyRsp.m; path = Protocol/Mtt/MttVerifyRsp.m; sourceTree = "<group>"; };
+		3C3C444C15748F37000538C8 /* MttVerifyRspExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttVerifyRspExt.h; path = Protocol/Mtt/MttVerifyRspExt.h; sourceTree = "<group>"; };
+		3C3C444D15748F37000538C8 /* MttVerifyRspExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttVerifyRspExt.m; path = Protocol/Mtt/MttVerifyRspExt.m; sourceTree = "<group>"; };
+		3C3C444E15748F37000538C8 /* MttWeatherInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttWeatherInfo.h; path = Protocol/Mtt/MttWeatherInfo.h; sourceTree = "<group>"; };
+		3C3C444F15748F37000538C8 /* MttWeatherInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttWeatherInfo.m; path = Protocol/Mtt/MttWeatherInfo.m; sourceTree = "<group>"; };
+		3C3C445015748F37000538C8 /* MttWeatherInfo4Mini.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttWeatherInfo4Mini.h; path = Protocol/Mtt/MttWeatherInfo4Mini.h; sourceTree = "<group>"; };
+		3C3C445115748F37000538C8 /* MttWeatherInfo4Mini.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttWeatherInfo4Mini.m; path = Protocol/Mtt/MttWeatherInfo4Mini.m; sourceTree = "<group>"; };
+		3C3C445215748F37000538C8 /* MttWeatherReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttWeatherReq.h; path = Protocol/Mtt/MttWeatherReq.h; sourceTree = "<group>"; };
+		3C3C445315748F37000538C8 /* MttWeatherReq.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttWeatherReq.m; path = Protocol/Mtt/MttWeatherReq.m; sourceTree = "<group>"; };
+		3C3C445415748F37000538C8 /* MttWeatherRsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttWeatherRsp.h; path = Protocol/Mtt/MttWeatherRsp.h; sourceTree = "<group>"; };
+		3C3C445515748F37000538C8 /* MttWeatherRsp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttWeatherRsp.m; path = Protocol/Mtt/MttWeatherRsp.m; sourceTree = "<group>"; };
+		3C3C445615748F37000538C8 /* MttWeatherRsp4Mini.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MttWeatherRsp4Mini.h; path = Protocol/Mtt/MttWeatherRsp4Mini.h; sourceTree = "<group>"; };
+		3C3C445715748F37000538C8 /* MttWeatherRsp4Mini.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttWeatherRsp4Mini.m; path = Protocol/Mtt/MttWeatherRsp4Mini.m; sourceTree = "<group>"; };
+		3C4347F3155CE1E100892E0A /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASICacheDelegate.h; sourceTree = "<group>"; };
+		3C4347F4155CE1E100892E0A /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequest.h; sourceTree = "<group>"; };
+		3C4347F5155CE1E100892E0A /* ASIHTTPRequestConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestConfig.h; sourceTree = "<group>"; };
+		3C4347F6155CE1E100892E0A /* ASIHTTPRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIHTTPRequestDelegate.h; sourceTree = "<group>"; };
+		3C4347F7155CE1E100892E0A /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
+		3CAFA00B153D4D58000624F5 /* UniAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UniAttribute.h; path = Serializable/UniAttribute.h; sourceTree = "<group>"; };
+		3CAFA00C153D4D58000624F5 /* UniAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UniAttribute.m; path = Serializable/UniAttribute.m; sourceTree = "<group>"; };
+		3CB470FE15885F680055EDB9 /* tup-Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "tup-Debug.h"; sourceTree = "<group>"; };
+		3CB4710D15887A5B0055EDB9 /* TarsEnumHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TarsEnumHelper.h; path = Serializable/TarsEnumHelper.h; sourceTree = "<group>"; };
+		3CB4710E15887A5B0055EDB9 /* TarsEnumHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TarsEnumHelper.m; path = Serializable/TarsEnumHelper.m; sourceTree = "<group>"; };
+		3CB4711815888E370055EDB9 /* MttAcceptEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttAcceptEncoding.m; path = Protocol/Mtt/MttAcceptEncoding.m; sourceTree = "<group>"; };
+		3CB4711915888E370055EDB9 /* MttBrokerReqType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrokerReqType.m; path = Protocol/Mtt/MttBrokerReqType.m; sourceTree = "<group>"; };
+		3CB4711A15888E370055EDB9 /* MttBrowserVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttBrowserVersion.m; path = Protocol/Mtt/MttBrowserVersion.m; sourceTree = "<group>"; };
+		3CB4711B15888E370055EDB9 /* MttContentEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttContentEncoding.m; path = Protocol/Mtt/MttContentEncoding.m; sourceTree = "<group>"; };
+		3CB4711C15888E370055EDB9 /* MttDirectPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttDirectPolicy.m; path = Protocol/Mtt/MttDirectPolicy.m; sourceTree = "<group>"; };
+		3CB4711D15888E370055EDB9 /* MttEDomainType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttEDomainType.m; path = Protocol/Mtt/MttEDomainType.m; sourceTree = "<group>"; };
+		3CB4711E15888E370055EDB9 /* MttEEntryType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttEEntryType.m; path = Protocol/Mtt/MttEEntryType.m; sourceTree = "<group>"; };
+		3CB4711F15888E370055EDB9 /* MttEFASTKEY.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttEFASTKEY.m; path = Protocol/Mtt/MttEFASTKEY.m; sourceTree = "<group>"; };
+		3CB4712015888E370055EDB9 /* MttEHotWordType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttEHotWordType.m; path = Protocol/Mtt/MttEHotWordType.m; sourceTree = "<group>"; };
+		3CB4712115888E380055EDB9 /* MttELanguageType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttELanguageType.m; path = Protocol/Mtt/MttELanguageType.m; sourceTree = "<group>"; };
+		3CB4712215888E380055EDB9 /* MttEPushServerType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttEPushServerType.m; path = Protocol/Mtt/MttEPushServerType.m; sourceTree = "<group>"; };
+		3CB4712315888E380055EDB9 /* MttERelayProtoVer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttERelayProtoVer.m; path = Protocol/Mtt/MttERelayProtoVer.m; sourceTree = "<group>"; };
+		3CB4712415888E380055EDB9 /* MttErrorCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttErrorCode.m; path = Protocol/Mtt/MttErrorCode.m; sourceTree = "<group>"; };
+		3CB4712515888E380055EDB9 /* MttEServerVer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttEServerVer.m; path = Protocol/Mtt/MttEServerVer.m; sourceTree = "<group>"; };
+		3CB4712615888E380055EDB9 /* MttEUSESTAT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttEUSESTAT.m; path = Protocol/Mtt/MttEUSESTAT.m; sourceTree = "<group>"; };
+		3CB4712715888E380055EDB9 /* MttEWaitPushType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttEWaitPushType.m; path = Protocol/Mtt/MttEWaitPushType.m; sourceTree = "<group>"; };
+		3CB4712815888E380055EDB9 /* MttImageQuality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttImageQuality.m; path = Protocol/Mtt/MttImageQuality.m; sourceTree = "<group>"; };
+		3CB4712915888E380055EDB9 /* MttMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttMethod.m; path = Protocol/Mtt/MttMethod.m; sourceTree = "<group>"; };
+		3CB4712A15888E380055EDB9 /* MttMTTContentType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttMTTContentType.m; path = Protocol/Mtt/MttMTTContentType.m; sourceTree = "<group>"; };
+		3CB4712B15888E390055EDB9 /* MttSecurityCheckType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSecurityCheckType.m; path = Protocol/Mtt/MttSecurityCheckType.m; sourceTree = "<group>"; };
+		3CB4712C15888E3A0055EDB9 /* MttSpecialValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttSpecialValue.m; path = Protocol/Mtt/MttSpecialValue.m; sourceTree = "<group>"; };
+		3CB4712D15888E3A0055EDB9 /* MttStatValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MttStatValue.m; path = Protocol/Mtt/MttStatValue.m; sourceTree = "<group>"; };
+		3CBFB493153523CA0088DDBC /* TupHttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TupHttpRequest.h; path = RMIModel/TupHttpRequest.h; sourceTree = "<group>"; };
+		3CBFB494153523CA0088DDBC /* TupHttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TupHttpRequest.m; path = RMIModel/TupHttpRequest.m; sourceTree = "<group>"; };
+		3CBFB49815352E200088DDBC /* TupAgentDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TupAgentDelegate.h; path = RMIModel/TupAgentDelegate.h; sourceTree = "<group>"; };
+		3CC191B2152455910083BBCE /* libtup.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtup.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CC191B5152455910083BBCE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3CC191B9152455910083BBCE /* tup-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "tup-Prefix.pch"; sourceTree = "<group>"; };
+		3CC191BA152455910083BBCE /* tup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tup.h; sourceTree = "<group>"; };
+		3CC191C2152455910083BBCE /* tupTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tupTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CC191C3152455910083BBCE /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		3CC191CD152455910083BBCE /* tupTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "tupTests-Info.plist"; sourceTree = "<group>"; };
+		3CC191CF152455910083BBCE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3CC191D1152455910083BBCE /* tupTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tupTests.h; sourceTree = "<group>"; };
+		3CC191D2152455910083BBCE /* tupTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = tupTests.m; sourceTree = "<group>"; };
+		3CC1A300152466AA0083BBCE /* TarsInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TarsInputStream.h; path = Serializable/TarsInputStream.h; sourceTree = "<group>"; };
+		3CC1A301152466AA0083BBCE /* TarsInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TarsInputStream.m; path = Serializable/TarsInputStream.m; sourceTree = "<group>"; };
+		3CC1A302152466AA0083BBCE /* TarsObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TarsObject.h; path = Serializable/TarsObject.h; sourceTree = "<group>"; };
+		3CC1A303152466AA0083BBCE /* TarsObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TarsObject.m; path = Serializable/TarsObject.m; sourceTree = "<group>"; };
+		3CC1A304152466AA0083BBCE /* TarsObjectV2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TarsObjectV2.h; path = Serializable/TarsObjectV2.h; sourceTree = "<group>"; };
+		3CC1A305152466AA0083BBCE /* TarsObjectV2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TarsObjectV2.m; path = Serializable/TarsObjectV2.m; sourceTree = "<group>"; };
+		3CC1A306152466AA0083BBCE /* TarsOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TarsOutputStream.h; path = Serializable/TarsOutputStream.h; sourceTree = "<group>"; };
+		3CC1A307152466AA0083BBCE /* TarsOutputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TarsOutputStream.m; path = Serializable/TarsOutputStream.m; sourceTree = "<group>"; };
+		3CC1A308152466AA0083BBCE /* TarsStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TarsStream.h; path = Serializable/TarsStream.h; sourceTree = "<group>"; };
+		3CC1A309152466AA0083BBCE /* TarsStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TarsStream.m; path = Serializable/TarsStream.m; sourceTree = "<group>"; };
+		3CC1A30A152466AA0083BBCE /* RequestF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RequestF.h; path = Serializable/RequestF.h; sourceTree = "<group>"; };
+		3CC1A30B152466AA0083BBCE /* RequestF.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RequestF.mm; path = Serializable/RequestF.mm; sourceTree = "<group>"; };
+		3CC1A30C152466AA0083BBCE /* UniPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UniPacket.h; path = Serializable/UniPacket.h; sourceTree = "<group>"; };
+		3CC1A30D152466AA0083BBCE /* UniPacket.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = UniPacket.mm; path = Serializable/UniPacket.mm; sourceTree = "<group>"; };
+		3CC1A3AA15246B080083BBCE /* TupAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TupAgent.h; path = RMIModel/TupAgent.h; sourceTree = "<group>"; };
+		3CC1A3AB15246B080083BBCE /* TupAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TupAgent.m; path = RMIModel/TupAgent.m; sourceTree = "<group>"; };
+		3CC1A3AC15246B080083BBCE /* TupService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TupService.h; path = RMIModel/TupService.h; sourceTree = "<group>"; };
+		3CC1A3AD15246B080083BBCE /* TupService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TupService.m; path = RMIModel/TupService.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3CC191AF152455910083BBCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3CC191B6152455910083BBCE /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3CC191BE152455910083BBCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3CC191C4152455910083BBCE /* SenTestingKit.framework in Frameworks */,
+				3CC191C7152455910083BBCE /* Foundation.framework in Frameworks */,
+				3CC191CA152455910083BBCE /* libtup.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3C3C434215748EBA000538C8 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				3C3C434315748ECB000538C8 /* Mtt */,
+			);
+			name = Protocol;
+			sourceTree = "<group>";
+		};
+		3C3C434315748ECB000538C8 /* Mtt */ = {
+			isa = PBXGroup;
+			children = (
+				3C3C434415748F37000538C8 /* MttAcceptEncoding.h */,
+				3CB4711815888E370055EDB9 /* MttAcceptEncoding.m */,
+				3C3C434515748F37000538C8 /* MttAdsContent.h */,
+				3C3C434615748F37000538C8 /* MttAdsContent.m */,
+				3C3C434715748F37000538C8 /* MttAdsReq.h */,
+				3C3C434815748F37000538C8 /* MttAdsReq.m */,
+				3C3C434915748F37000538C8 /* MttAdsRsp.h */,
+				3C3C434A15748F37000538C8 /* MttAdsRsp.m */,
+				3C3C434B15748F37000538C8 /* MttBrokerContentInfo.h */,
+				3C3C434C15748F37000538C8 /* MttBrokerContentInfo.m */,
+				3C3C434D15748F37000538C8 /* MttBrokerDisplayInfo.h */,
+				3C3C434E15748F37000538C8 /* MttBrokerDisplayInfo.m */,
+				3C3C434F15748F37000538C8 /* MttBrokerFragRequest.h */,
+				3C3C435015748F37000538C8 /* MttBrokerFragRequest.m */,
+				3C3C435115748F37000538C8 /* MttBrokerFragResponse.h */,
+				3C3C435215748F37000538C8 /* MttBrokerFragResponse.m */,
+				3C3C435315748F37000538C8 /* MttBrokerJSPDInfo.h */,
+				3C3C435415748F37000538C8 /* MttBrokerJSPDInfo.m */,
+				3C3C435515748F37000538C8 /* MttBrokerJSRequest.h */,
+				3C3C435615748F37000538C8 /* MttBrokerJSRequest.m */,
+				3C3C435715748F37000538C8 /* MttBrokerPageRequest.h */,
+				3C3C435815748F37000538C8 /* MttBrokerPageRequest.m */,
+				3C3C435915748F37000538C8 /* MttBrokerPicParam.h */,
+				3C3C435A15748F37000538C8 /* MttBrokerPicParam.m */,
+				3C3C435B15748F37000538C8 /* MttBrokerPicRequest.h */,
+				3C3C435C15748F37000538C8 /* MttBrokerPicRequest.m */,
+				3C3C435D15748F37000538C8 /* MttBrokerPushRequest.h */,
+				3C3C435E15748F37000538C8 /* MttBrokerPushRequest.m */,
+				3C3C435F15748F37000538C8 /* MttBrokerPushResponse.h */,
+				3C3C436015748F37000538C8 /* MttBrokerPushResponse.m */,
+				3C3C436115748F37000538C8 /* MttBrokerReqType.h */,
+				3CB4711915888E370055EDB9 /* MttBrokerReqType.m */,
+				3C3C436215748F37000538C8 /* MttBrokerRequestParam.h */,
+				3C3C436315748F37000538C8 /* MttBrokerRequestParam.m */,
+				3C3C436415748F37000538C8 /* MttBrokerSecurityRequest.h */,
+				3C3C436515748F37000538C8 /* MttBrokerSecurityRequest.m */,
+				3C3C436615748F37000538C8 /* MttBrokerSecurityResponse.h */,
+				3C3C436715748F37000538C8 /* MttBrokerSecurityResponse.m */,
+				3C3C436815748F37000538C8 /* MttBrokerSimplifiedPushRequest.h */,
+				3C3C436915748F37000538C8 /* MttBrokerSimplifiedPushRequest.m */,
+				3C3C436A15748F37000538C8 /* MttBrokerSimplifiedPushResponse.h */,
+				3C3C436B15748F37000538C8 /* MttBrokerSimplifiedPushResponse.m */,
+				3C3C436C15748F37000538C8 /* MttBrokerSimplifiedRequest.h */,
+				3C3C436D15748F37000538C8 /* MttBrokerSimplifiedRequest.m */,
+				3C3C436E15748F37000538C8 /* MttBrokerTransferResponse.h */,
+				3C3C436F15748F37000538C8 /* MttBrokerTransferResponse.m */,
+				3C3C437015748F37000538C8 /* MttBrokerUploadRequest.h */,
+				3C3C437115748F37000538C8 /* MttBrokerUploadRequest.m */,
+				3C3C437215748F37000538C8 /* MttBrokerUserInfo.h */,
+				3C3C437315748F37000538C8 /* MttBrokerUserInfo.m */,
+				3C3C437415748F37000538C8 /* MttBrokerTups.h */,
+				3C3C437515748F37000538C8 /* MttBrokerTups.m */,
+				3C3C437615748F37000538C8 /* MttBrowserReq.h */,
+				3C3C437715748F37000538C8 /* MttBrowserReq.m */,
+				3C3C437815748F37000538C8 /* MttBrowserRsp.h */,
+				3C3C437915748F37000538C8 /* MttBrowserRsp.m */,
+				3C3C437A15748F37000538C8 /* MttBrowserVersion.h */,
+				3CB4711A15888E370055EDB9 /* MttBrowserVersion.m */,
+				3C3C437B15748F37000538C8 /* MttCheckPluginReq.h */,
+				3C3C437C15748F37000538C8 /* MttCheckPluginReq.m */,
+				3C3C437D15748F37000538C8 /* MttCityListReq.h */,
+				3C3C437E15748F37000538C8 /* MttCityListReq.m */,
+				3C3C437F15748F37000538C8 /* MttCityListRsp.h */,
+				3C3C438015748F37000538C8 /* MttCityListRsp.m */,
+				3C3C438115748F37000538C8 /* MttConfigReq.h */,
+				3C3C438215748F37000538C8 /* MttConfigReq.m */,
+				3C3C438315748F37000538C8 /* MttConfigRsp.h */,
+				3C3C438415748F37000538C8 /* MttConfigRsp.m */,
+				3C3C438515748F37000538C8 /* MttConfInfo.h */,
+				3C3C438615748F37000538C8 /* MttConfInfo.m */,
+				3C3C438715748F37000538C8 /* MttConfirm.h */,
+				3C3C438815748F37000538C8 /* MttConfirm.m */,
+				3C3C438915748F37000538C8 /* MttConfRsp.h */,
+				3C3C438A15748F37000538C8 /* MttConfRsp.m */,
+				3C3C438B15748F37000538C8 /* MttContentEncoding.h */,
+				3CB4711B15888E370055EDB9 /* MttContentEncoding.m */,
+				3C3C438C15748F37000538C8 /* MttDirectPolicy.h */,
+				3CB4711C15888E370055EDB9 /* MttDirectPolicy.m */,
+				3C3C438D15748F37000538C8 /* MttDNSReq.h */,
+				3C3C438E15748F37000538C8 /* MttDNSReq.m */,
+				3C3C438F15748F37000538C8 /* MttDNSRsp.h */,
+				3C3C439015748F37000538C8 /* MttDNSRsp.m */,
+				3C3C439115748F37000538C8 /* MttDomainRsp.h */,
+				3C3C439215748F37000538C8 /* MttDomainRsp.m */,
+				3C3C439315748F37000538C8 /* MttDomainRspNew.h */,
+				3C3C439415748F37000538C8 /* MttDomainRspNew.m */,
+				3C3C439515748F37000538C8 /* MttDynamicReq.h */,
+				3C3C439615748F37000538C8 /* MttDynamicReq.m */,
+				3C3C439715748F37000538C8 /* MttDynamicRsp.h */,
+				3C3C439815748F37000538C8 /* MttDynamicRsp.m */,
+				3C3C439915748F37000538C8 /* MttEDomainType.h */,
+				3CB4711D15888E370055EDB9 /* MttEDomainType.m */,
+				3C3C439A15748F37000538C8 /* MttEEntryType.h */,
+				3CB4711E15888E370055EDB9 /* MttEEntryType.m */,
+				3C3C439B15748F37000538C8 /* MttEFASTKEY.h */,
+				3CB4711F15888E370055EDB9 /* MttEFASTKEY.m */,
+				3C3C439C15748F37000538C8 /* MttEHotWordType.h */,
+				3CB4712015888E370055EDB9 /* MttEHotWordType.m */,
+				3C3C439D15748F37000538C8 /* MttELanguageType.h */,
+				3CB4712115888E380055EDB9 /* MttELanguageType.m */,
+				3C3C439E15748F37000538C8 /* MttEPushServerType.h */,
+				3CB4712215888E380055EDB9 /* MttEPushServerType.m */,
+				3C3C439F15748F37000538C8 /* MttERelayProtoVer.h */,
+				3CB4712315888E380055EDB9 /* MttERelayProtoVer.m */,
+				3C3C43A015748F37000538C8 /* MttErrorCode.h */,
+				3CB4712415888E380055EDB9 /* MttErrorCode.m */,
+				3C3C43A115748F37000538C8 /* MttEServerVer.h */,
+				3CB4712515888E380055EDB9 /* MttEServerVer.m */,
+				3C3C43A215748F37000538C8 /* MttETPV.h */,
+				3C3C43A315748F37000538C8 /* MttETPV.m */,
+				3C3C43A415748F37000538C8 /* MttEUSESTAT.h */,
+				3CB4712615888E380055EDB9 /* MttEUSESTAT.m */,
+				3C3C43A515748F37000538C8 /* MttEWaitPushType.h */,
+				3CB4712715888E380055EDB9 /* MttEWaitPushType.m */,
+				3C3C43A615748F37000538C8 /* MttExtDomain.h */,
+				3C3C43A715748F37000538C8 /* MttExtDomain.m */,
+				3C3C43A815748F37000538C8 /* MttFKINFO.h */,
+				3C3C43A915748F37000538C8 /* MttFKINFO.m */,
+				3C3C43AA15748F37000538C8 /* MttHotListReq.h */,
+				3C3C43AB15748F37000538C8 /* MttHotListReq.m */,
+				3C3C43AC15748F37000538C8 /* MttHotListRsp.h */,
+				3C3C43AD15748F37000538C8 /* MttHotListRsp.m */,
+				3C3C43AE15748F37000538C8 /* MttHotWordInfo.h */,
+				3C3C43AF15748F37000538C8 /* MttHotWordInfo.m */,
+				3C3C43B015748F37000538C8 /* MttHotWordsReq.h */,
+				3C3C43B115748F37000538C8 /* MttHotWordsReq.m */,
+				3C3C43B215748F37000538C8 /* MttHotWordsRsp.h */,
+				3C3C43B315748F37000538C8 /* MttHotWordsRsp.m */,
+				3C3C43B415748F37000538C8 /* MttIcon.h */,
+				3C3C43B515748F37000538C8 /* MttIcon.m */,
+				3C3C43B615748F37000538C8 /* MttIconInfo.h */,
+				3C3C43B715748F37000538C8 /* MttIconInfo.m */,
+				3C3C43B815748F37000538C8 /* MttIconRsp.h */,
+				3C3C43B915748F37000538C8 /* MttIconRsp.m */,
+				3C3C43BA15748F37000538C8 /* MttImageQuality.h */,
+				3CB4712815888E380055EDB9 /* MttImageQuality.m */,
+				3C3C43BB15748F37000538C8 /* MttImageReq.h */,
+				3C3C43BC15748F37000538C8 /* MttImageReq.m */,
+				3C3C43BD15748F37000538C8 /* MttImageRsp.h */,
+				3C3C43BE15748F37000538C8 /* MttImageRsp.m */,
+				3C3C43BF15748F37000538C8 /* MttImgReq.h */,
+				3C3C43C015748F37000538C8 /* MttImgReq.m */,
+				3C3C43C115748F37000538C8 /* MttImgRsp.h */,
+				3C3C43C215748F37000538C8 /* MttImgRsp.m */,
+				3C3C43C315748F37000538C8 /* MttIPListReq.h */,
+				3C3C43C415748F37000538C8 /* MttIPListReq.m */,
+				3C3C43C515748F37000538C8 /* MttIPListRsp.h */,
+				3C3C43C615748F37000538C8 /* MttIPListRsp.m */,
+				3C3C43C715748F37000538C8 /* MttItemReq.h */,
+				3C3C43C815748F37000538C8 /* MttItemReq.m */,
+				3C3C43C915748F37000538C8 /* MttItemRsp.h */,
+				3C3C43CA15748F37000538C8 /* MttItemRsp.m */,
+				3C3C43CB15748F37000538C8 /* MttKeywordRsp.h */,
+				3C3C43CC15748F37000538C8 /* MttKeywordRsp.m */,
+				3C3C43CD15748F37000538C8 /* MttLoginReq.h */,
+				3C3C43CE15748F37000538C8 /* MttLoginReq.m */,
+				3C3C43CF15748F37000538C8 /* MttLoginRsp.h */,
+				3C3C43D015748F37000538C8 /* MttLoginRsp.m */,
+				3C3C43D115748F37000538C8 /* MttLPageReq.h */,
+				3C3C43D215748F37000538C8 /* MttLPageReq.m */,
+				3C3C43D315748F37000538C8 /* MttLPageRsp.h */,
+				3C3C43D415748F37000538C8 /* MttLPageRsp.m */,
+				3C3C43D515748F37000538C8 /* MttMethod.h */,
+				3CB4712915888E380055EDB9 /* MttMethod.m */,
+				3C3C43D615748F37000538C8 /* MttMTTContentType.h */,
+				3CB4712A15888E380055EDB9 /* MttMTTContentType.m */,
+				3C3C43D715748F37000538C8 /* MttNavigation.h */,
+				3C3C43D815748F37000538C8 /* MttNavigation.m */,
+				3C3C43D915748F37000538C8 /* MttNaviRsp.h */,
+				3C3C43DA15748F37000538C8 /* MttNaviRsp.m */,
+				3C3C43DB15748F37000538C8 /* MttPageBrowserReq.h */,
+				3C3C43DC15748F37000538C8 /* MttPageBrowserReq.m */,
+				3C3C43DD15748F37000538C8 /* MttPageBrowserRsp.h */,
+				3C3C43DE15748F37000538C8 /* MttPageBrowserRsp.m */,
+				3C3C43DF15748F37000538C8 /* MttPageConfigReq.h */,
+				3C3C43E015748F37000538C8 /* MttPageConfigReq.m */,
+				3C3C43E115748F37000538C8 /* MttPageConfigRsp.h */,
+				3C3C43E215748F37000538C8 /* MttPageConfigRsp.m */,
+				3C3C43E315748F37000538C8 /* MttPageReq.h */,
+				3C3C43E415748F37000538C8 /* MttPageReq.m */,
+				3C3C43E515748F37000538C8 /* MttPageRsp.h */,
+				3C3C43E615748F37000538C8 /* MttPageRsp.m */,
+				3C3C43E715748F37000538C8 /* MttPerformanceInfo.h */,
+				3C3C43E815748F37000538C8 /* MttPerformanceInfo.m */,
+				3C3C43E915748F37000538C8 /* MttPicInfo.h */,
+				3C3C43EA15748F37000538C8 /* MttPicInfo.m */,
+				3C3C43EB15748F37000538C8 /* MttPicRsp.h */,
+				3C3C43EC15748F37000538C8 /* MttPicRsp.m */,
+				3C3C43ED15748F37000538C8 /* MttPing.h */,
+				3C3C43EE15748F37000538C8 /* MttPing.m */,
+				3C3C43EF15748F37000538C8 /* MttPluginBootResp.h */,
+				3C3C43F015748F37000538C8 /* MttPluginBootResp.m */,
+				3C3C43F115748F37000538C8 /* MttPluginInfo.h */,
+				3C3C43F215748F37000538C8 /* MttPluginInfo.m */,
+				3C3C43F315748F37000538C8 /* MttPluginInfoNew.h */,
+				3C3C43F415748F37000538C8 /* MttPluginInfoNew.m */,
+				3C3C43F515748F37000538C8 /* MttPluginRsp.h */,
+				3C3C43F615748F37000538C8 /* MttPluginRsp.m */,
+				3C3C43F715748F37000538C8 /* MttPluginRspNew.h */,
+				3C3C43F815748F37000538C8 /* MttPluginRspNew.m */,
+				3C3C43F915748F37000538C8 /* MttPluginVersion.h */,
+				3C3C43FA15748F37000538C8 /* MttPluginVersion.m */,
+				3C3C43FB15748F37000538C8 /* MttPushAppReqList.h */,
+				3C3C43FC15748F37000538C8 /* MttPushAppReqList.m */,
+				3C3C43FD15748F37000538C8 /* MttPushPortionFresh.h */,
+				3C3C43FE15748F37000538C8 /* MttPushPortionFresh.m */,
+				3C3C43FF15748F37000538C8 /* MttPushRespnoseContent.h */,
+				3C3C440015748F37000538C8 /* MttPushRespnoseContent.m */,
+				3C3C440115748F37000538C8 /* MttPushSysNotify.h */,
+				3C3C440215748F37000538C8 /* MttPushSysNotify.m */,
+				3C3C440315748F37000538C8 /* MttRefuse.h */,
+				3C3C440415748F37000538C8 /* MttRefuse.m */,
+				3C3C440515748F37000538C8 /* MttRelayPageReq.h */,
+				3C3C440615748F37000538C8 /* MttRelayPageReq.m */,
+				3C3C440715748F37000538C8 /* MttRelayPageRsp.h */,
+				3C3C440815748F37000538C8 /* MttRelayPageRsp.m */,
+				3C3C440915748F37000538C8 /* MttReply.h */,
+				3C3C440A15748F37000538C8 /* MttReply.m */,
+				3C3C440B15748F37000538C8 /* MttRequest.h */,
+				3C3C440C15748F37000538C8 /* MttRequest.m */,
+				3C3C440D15748F37000538C8 /* MttRequestFragment.h */,
+				3C3C440E15748F37000538C8 /* MttRequestFragment.m */,
+				3C3C440F15748F37000538C8 /* MttSearchInfo.h */,
+				3C3C441015748F37000538C8 /* MttSearchInfo.m */,
+				3C3C441115748F37000538C8 /* MttSearchReq.h */,
+				3C3C441215748F37000538C8 /* MttSearchReq.m */,
+				3C3C441315748F37000538C8 /* MttSearchRsp.h */,
+				3C3C441415748F37000538C8 /* MttSearchRsp.m */,
+				3C3C441515748F37000538C8 /* MttSearchTypeInfo.h */,
+				3C3C441615748F37000538C8 /* MttSearchTypeInfo.m */,
+				3C3C441715748F37000538C8 /* MttSearchTypeReq.h */,
+				3C3C441815748F37000538C8 /* MttSearchTypeReq.m */,
+				3C3C441915748F37000538C8 /* MttSearchTypeRsp.h */,
+				3C3C441A15748F37000538C8 /* MttSearchTypeRsp.m */,
+				3C3C441B15748F37000538C8 /* MttSecurityCheckType.h */,
+				3CB4712B15888E390055EDB9 /* MttSecurityCheckType.m */,
+				3C3C441C15748F37000538C8 /* MttSoftAnalyseInfo.h */,
+				3C3C441D15748F37000538C8 /* MttSoftAnalyseInfo.m */,
+				3C3C441E15748F37000538C8 /* MttSpecialValue.h */,
+				3CB4712C15888E3A0055EDB9 /* MttSpecialValue.m */,
+				3C3C441F15748F37000538C8 /* MttSplashReq.h */,
+				3C3C442015748F37000538C8 /* MttSplashReq.m */,
+				3C3C442115748F37000538C8 /* MttSplashRsp.h */,
+				3C3C442215748F37000538C8 /* MttSplashRsp.m */,
+				3C3C442315748F37000538C8 /* MttStaticConfigReq.h */,
+				3C3C442415748F37000538C8 /* MttStaticConfigReq.m */,
+				3C3C442515748F37000538C8 /* MttStatValue.h */,
+				3CB4712D15888E3A0055EDB9 /* MttStatValue.m */,
+				3C3C442615748F37000538C8 /* MttSTImagePolicy.h */,
+				3C3C442715748F37000538C8 /* MttSTImagePolicy.m */,
+				3C3C442815748F37000538C8 /* MttSTJSInfo.h */,
+				3C3C442915748F37000538C8 /* MttSTJSInfo.m */,
+				3C3C442A15748F37000538C8 /* MttSTJSPDInfo.h */,
+				3C3C442B15748F37000538C8 /* MttSTJSPDInfo.m */,
+				3C3C442C15748F37000538C8 /* MttSTOperator.h */,
+				3C3C442D15748F37000538C8 /* MttSTOperator.m */,
+				3C3C442E15748F37000538C8 /* MttSTOperatorRsp.h */,
+				3C3C442F15748F37000538C8 /* MttSTOperatorRsp.m */,
+				3C3C443015748F37000538C8 /* MttSTPV.h */,
+				3C3C443115748F37000538C8 /* MttSTPV.m */,
+				3C3C443215748F37000538C8 /* MttSTSingleMD5.h */,
+				3C3C443315748F37000538C8 /* MttSTSingleMD5.m */,
+				3C3C443415748F37000538C8 /* MttSTSpeedStatis.h */,
+				3C3C443515748F37000538C8 /* MttSTSpeedStatis.m */,
+				3C3C443615748F37000538C8 /* MttSTStat.h */,
+				3C3C443715748F37000538C8 /* MttSTStat.m */,
+				3C3C443815748F37000538C8 /* MttSTTime.h */,
+				3C3C443915748F37000538C8 /* MttSTTime.m */,
+				3C3C443A15748F37000538C8 /* MttSTTotal.h */,
+				3C3C443B15748F37000538C8 /* MttSTTotal.m */,
+				3C3C443C15748F37000538C8 /* MttThirdUse.h */,
+				3C3C443D15748F37000538C8 /* MttThirdUse.m */,
+				3C3C443E15748F37000538C8 /* MttTipPushReq.h */,
+				3C3C443F15748F37000538C8 /* MttTipPushReq.m */,
+				3C3C444015748F37000538C8 /* MttTipPushRsp.h */,
+				3C3C444115748F37000538C8 /* MttTipPushRsp.m */,
+				3C3C444215748F37000538C8 /* MttUpdateRsp.h */,
+				3C3C444315748F37000538C8 /* MttUpdateRsp.m */,
+				3C3C444415748F37000538C8 /* MttURLPV.h */,
+				3C3C444515748F37000538C8 /* MttURLPV.m */,
+				3C3C444615748F37000538C8 /* MttUserBase.h */,
+				3C3C444715748F37000538C8 /* MttUserBase.m */,
+				3C3C444815748F37000538C8 /* MttVerifyReq.h */,
+				3C3C444915748F37000538C8 /* MttVerifyReq.m */,
+				3C3C444A15748F37000538C8 /* MttVerifyRsp.h */,
+				3C3C444B15748F37000538C8 /* MttVerifyRsp.m */,
+				3C3C444C15748F37000538C8 /* MttVerifyRspExt.h */,
+				3C3C444D15748F37000538C8 /* MttVerifyRspExt.m */,
+				3C3C444E15748F37000538C8 /* MttWeatherInfo.h */,
+				3C3C444F15748F37000538C8 /* MttWeatherInfo.m */,
+				3C3C445015748F37000538C8 /* MttWeatherInfo4Mini.h */,
+				3C3C445115748F37000538C8 /* MttWeatherInfo4Mini.m */,
+				3C3C445215748F37000538C8 /* MttWeatherReq.h */,
+				3C3C445315748F37000538C8 /* MttWeatherReq.m */,
+				3C3C445415748F37000538C8 /* MttWeatherRsp.h */,
+				3C3C445515748F37000538C8 /* MttWeatherRsp.m */,
+				3C3C445615748F37000538C8 /* MttWeatherRsp4Mini.h */,
+				3C3C445715748F37000538C8 /* MttWeatherRsp4Mini.m */,
+			);
+			name = Mtt;
+			sourceTree = "<group>";
+		};
+		3CC191A7152455910083BBCE = {
+			isa = PBXGroup;
+			children = (
+				3CC191B7152455910083BBCE /* tup */,
+				3CC191CB152455910083BBCE /* tupTests */,
+				3CC192091524573A0083BBCE /* Dependencies */,
+				3CC191B4152455910083BBCE /* Frameworks */,
+				3CC191B3152455910083BBCE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3CC191B3152455910083BBCE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3CC191B2152455910083BBCE /* libtup.a */,
+				3CC191C2152455910083BBCE /* tupTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3CC191B4152455910083BBCE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3CC191B5152455910083BBCE /* Foundation.framework */,
+				3CC191C3152455910083BBCE /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3CC191B7152455910083BBCE /* tup */ = {
+			isa = PBXGroup;
+			children = (
+				3CC191BA152455910083BBCE /* tup.h */,
+				3CC1920C152458D10083BBCE /* Serializable */,
+				3CC1A390152469030083BBCE /* RMIModel */,
+				3CC191B8152455910083BBCE /* Supporting Files */,
+			);
+			path = tup;
+			sourceTree = "<group>";
+		};
+		3CC191B8152455910083BBCE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3CB470FE15885F680055EDB9 /* tup-Debug.h */,
+				3CC191B9152455910083BBCE /* tup-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3CC191CB152455910083BBCE /* tupTests */ = {
+			isa = PBXGroup;
+			children = (
+				3CC191D1152455910083BBCE /* tupTests.h */,
+				3CC191D2152455910083BBCE /* tupTests.m */,
+				3C3C434215748EBA000538C8 /* Protocol */,
+				3CC191CC152455910083BBCE /* Supporting Files */,
+			);
+			path = tupTests;
+			sourceTree = "<group>";
+		};
+		3CC191CC152455910083BBCE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3CC191CD152455910083BBCE /* tupTests-Info.plist */,
+				3CC191CE152455910083BBCE /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3CC192091524573A0083BBCE /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				3CC1A3BD15246ED20083BBCE /* ASIHttpRequest */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		3CC1920C152458D10083BBCE /* Serializable */ = {
+			isa = PBXGroup;
+			children = (
+				3CC1A302152466AA0083BBCE /* TarsObject.h */,
+				3CC1A303152466AA0083BBCE /* TarsObject.m */,
+				3CC1A304152466AA0083BBCE /* TarsObjectV2.h */,
+				3CC1A305152466AA0083BBCE /* TarsObjectV2.m */,
+				3CB4710D15887A5B0055EDB9 /* TarsEnumHelper.h */,
+				3CB4710E15887A5B0055EDB9 /* TarsEnumHelper.m */,
+				3CC1A308152466AA0083BBCE /* TarsStream.h */,
+				3CC1A309152466AA0083BBCE /* TarsStream.m */,
+				3CC1A300152466AA0083BBCE /* TarsInputStream.h */,
+				3CC1A301152466AA0083BBCE /* TarsInputStream.m */,
+				3CC1A306152466AA0083BBCE /* TarsOutputStream.h */,
+				3CC1A307152466AA0083BBCE /* TarsOutputStream.m */,
+				3CC1A30A152466AA0083BBCE /* RequestF.h */,
+				3CC1A30B152466AA0083BBCE /* RequestF.mm */,
+				3CAFA00B153D4D58000624F5 /* UniAttribute.h */,
+				3CAFA00C153D4D58000624F5 /* UniAttribute.m */,
+				3CC1A30C152466AA0083BBCE /* UniPacket.h */,
+				3CC1A30D152466AA0083BBCE /* UniPacket.mm */,
+			);
+			name = Serializable;
+			sourceTree = "<group>";
+		};
+		3CC1A390152469030083BBCE /* RMIModel */ = {
+			isa = PBXGroup;
+			children = (
+				3CBFB49815352E200088DDBC /* TupAgentDelegate.h */,
+				3CC1A3AA15246B080083BBCE /* TupAgent.h */,
+				3CC1A3AB15246B080083BBCE /* TupAgent.m */,
+				3CC1A3AC15246B080083BBCE /* TupService.h */,
+				3CC1A3AD15246B080083BBCE /* TupService.m */,
+				3CBFB493153523CA0088DDBC /* TupHttpRequest.h */,
+				3CBFB494153523CA0088DDBC /* TupHttpRequest.m */,
+			);
+			name = RMIModel;
+			sourceTree = "<group>";
+		};
+		3CC1A3BD15246ED20083BBCE /* ASIHttpRequest */ = {
+			isa = PBXGroup;
+			children = (
+				3C4347F3155CE1E100892E0A /* ASICacheDelegate.h */,
+				3C4347F4155CE1E100892E0A /* ASIHTTPRequest.h */,
+				3C4347F5155CE1E100892E0A /* ASIHTTPRequestConfig.h */,
+				3C4347F6155CE1E100892E0A /* ASIHTTPRequestDelegate.h */,
+				3C4347F7155CE1E100892E0A /* ASIProgressDelegate.h */,
+			);
+			name = ASIHttpRequest;
+			path = Dependencies/ASIHttpRequest;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3CC191B0152455910083BBCE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3CAFA00D153D4D58000624F5 /* UniAttribute.h in Headers */,
+				3CBFB49915352E200088DDBC /* TupAgentDelegate.h in Headers */,
+				3CC1925115245C9F0083BBCE /* tup.h in Headers */,
+				3CC1A310152466AA0083BBCE /* TarsObject.h in Headers */,
+				3CC1A312152466AA0083BBCE /* TarsObjectV2.h in Headers */,
+				3CB4710F15887A5B0055EDB9 /* TarsEnumHelper.h in Headers */,
+				3CC1A316152466AA0083BBCE /* TarsStream.h in Headers */,
+				3CC1A30E152466AA0083BBCE /* TarsInputStream.h in Headers */,
+				3CC1A314152466AA0083BBCE /* TarsOutputStream.h in Headers */,
+				3CC1A318152466AA0083BBCE /* RequestF.h in Headers */,
+				3CC1A31A152466AA0083BBCE /* UniPacket.h in Headers */,
+				3CB475F0152AA56B00F145B4 /* TupAgent.h in Headers */,
+				3CB475F1152AA56B00F145B4 /* TupService.h in Headers */,
+				3CBFB495153523CA0088DDBC /* TupHttpRequest.h in Headers */,
+				3C4347F8155CE1E100892E0A /* ASICacheDelegate.h in Headers */,
+				3C4347F9155CE1E100892E0A /* ASIHTTPRequest.h in Headers */,
+				3C4347FA155CE1E100892E0A /* ASIHTTPRequestConfig.h in Headers */,
+				3C4347FB155CE1E100892E0A /* ASIHTTPRequestDelegate.h in Headers */,
+				3C4347FC155CE1E100892E0A /* ASIProgressDelegate.h in Headers */,
+				3CB470FF15885F680055EDB9 /* tup-Debug.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3CC191B1152455910083BBCE /* tup */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3CC191D6152455910083BBCE /* Build configuration list for PBXNativeTarget "tup" */;
+			buildPhases = (
+				3CC191AE152455910083BBCE /* Sources */,
+				3CC191AF152455910083BBCE /* Frameworks */,
+				3CC191B0152455910083BBCE /* Headers */,
+				3CB475B8152AA35B00F145B4 /* Prepare Framework */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tup;
+			productName = tup;
+			productReference = 3CC191B2152455910083BBCE /* libtup.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		3CC191C1152455910083BBCE /* tupTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3CC191D9152455910083BBCE /* Build configuration list for PBXNativeTarget "tupTests" */;
+			buildPhases = (
+				3CC191BD152455910083BBCE /* Sources */,
+				3CC191BE152455910083BBCE /* Frameworks */,
+				3CC191BF152455910083BBCE /* Resources */,
+				3CC191C0152455910083BBCE /* Run Script */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3CC191C9152455910083BBCE /* PBXTargetDependency */,
+			);
+			name = tupTests;
+			productName = tupTests;
+			productReference = 3CC191C2152455910083BBCE /* tupTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3CC191A9152455910083BBCE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = Tencent;
+			};
+			buildConfigurationList = 3CC191AC152455910083BBCE /* Build configuration list for PBXProject "tup" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				English,
+				zh_CN,
+				zh_TW,
+			);
+			mainGroup = 3CC191A7152455910083BBCE;
+			productRefGroup = 3CC191B3152455910083BBCE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3CC191B1152455910083BBCE /* tup */,
+				3CC191C1152455910083BBCE /* tupTests */,
+				3CB475C4152AA45F00F145B4 /* tup.Framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3CC191BF152455910083BBCE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3CC191D0152455910083BBCE /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3CB475B8152AA35B00F145B4 /* Prepare Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Prepare Framework";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Headers\"\n\n# Link the \"Current\" version to \"${FRAMEWORK_VERSION}\"\nln -sfh ${FRAMEWORK_VERSION} \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\nln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\nln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\ncp -a \"${BUILT_PRODUCTS_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Headers\"\n";
+		};
+		3CB475CA152AA46900F145B4 /* Build Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Framework";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=${PROJECT_NAME}\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}.a\"\nSF_WRAPPER_NAME=\"${SF_TARGET_NAME}.framework\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nSF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nSF_OTHER_PLATFORM=iphonesimulator\nelse\nSF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\nSF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\necho \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\n# Build the other platform.\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nlipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/${FRAMEWORK_VERSION}/${SF_TARGET_NAME}\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/${FRAMEWORK_VERSION}/${SF_TARGET_NAME}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/${FRAMEWORK_VERSION}/${SF_TARGET_NAME}\"\n";
+		};
+		3CC191C0152455910083BBCE /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3CC191AE152455910083BBCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3CB475D1152AA54E00F145B4 /* TupAgent.m in Sources */,
+				3CB475D2152AA54E00F145B4 /* TupService.m in Sources */,
+				3CC1A311152466AA0083BBCE /* TarsObject.m in Sources */,
+				3CC1A313152466AA0083BBCE /* TarsObjectV2.m in Sources */,
+				3CC1A317152466AA0083BBCE /* TarsStream.m in Sources */,
+				3CC1A30F152466AA0083BBCE /* TarsInputStream.m in Sources */,
+				3CC1A315152466AA0083BBCE /* TarsOutputStream.m in Sources */,
+				3CC1A319152466AA0083BBCE /* RequestF.mm in Sources */,
+				3CC1A31B152466AA0083BBCE /* UniPacket.mm in Sources */,
+				3CBFB496153523CA0088DDBC /* TupHttpRequest.m in Sources */,
+				3CAFA00E153D4D58000624F5 /* UniAttribute.m in Sources */,
+				3CB4711015887A5B0055EDB9 /* TarsEnumHelper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3CC191BD152455910083BBCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3CC191D3152455910083BBCE /* tupTests.m in Sources */,
+				3C3C445815748F37000538C8 /* MttAdsContent.m in Sources */,
+				3C3C445915748F37000538C8 /* MttAdsReq.m in Sources */,
+				3C3C445A15748F37000538C8 /* MttAdsRsp.m in Sources */,
+				3C3C445B15748F37000538C8 /* MttBrokerContentInfo.m in Sources */,
+				3C3C445C15748F37000538C8 /* MttBrokerDisplayInfo.m in Sources */,
+				3C3C445D15748F37000538C8 /* MttBrokerFragRequest.m in Sources */,
+				3C3C445E15748F37000538C8 /* MttBrokerFragResponse.m in Sources */,
+				3C3C445F15748F37000538C8 /* MttBrokerJSPDInfo.m in Sources */,
+				3C3C446015748F37000538C8 /* MttBrokerJSRequest.m in Sources */,
+				3C3C446115748F37000538C8 /* MttBrokerPageRequest.m in Sources */,
+				3C3C446215748F37000538C8 /* MttBrokerPicParam.m in Sources */,
+				3C3C446315748F37000538C8 /* MttBrokerPicRequest.m in Sources */,
+				3C3C446415748F37000538C8 /* MttBrokerPushRequest.m in Sources */,
+				3C3C446515748F37000538C8 /* MttBrokerPushResponse.m in Sources */,
+				3C3C446615748F37000538C8 /* MttBrokerRequestParam.m in Sources */,
+				3C3C446715748F37000538C8 /* MttBrokerSecurityRequest.m in Sources */,
+				3C3C446815748F37000538C8 /* MttBrokerSecurityResponse.m in Sources */,
+				3C3C446915748F37000538C8 /* MttBrokerSimplifiedPushRequest.m in Sources */,
+				3C3C446A15748F37000538C8 /* MttBrokerSimplifiedPushResponse.m in Sources */,
+				3C3C446B15748F37000538C8 /* MttBrokerSimplifiedRequest.m in Sources */,
+				3C3C446C15748F37000538C8 /* MttBrokerTransferResponse.m in Sources */,
+				3C3C446D15748F37000538C8 /* MttBrokerUploadRequest.m in Sources */,
+				3C3C446E15748F37000538C8 /* MttBrokerUserInfo.m in Sources */,
+				3C3C446F15748F37000538C8 /* MttBrokerTups.m in Sources */,
+				3C3C447015748F37000538C8 /* MttBrowserReq.m in Sources */,
+				3C3C447115748F37000538C8 /* MttBrowserRsp.m in Sources */,
+				3C3C447215748F37000538C8 /* MttCheckPluginReq.m in Sources */,
+				3C3C447315748F37000538C8 /* MttCityListReq.m in Sources */,
+				3C3C447415748F37000538C8 /* MttCityListRsp.m in Sources */,
+				3C3C447515748F37000538C8 /* MttConfigReq.m in Sources */,
+				3C3C447615748F37000538C8 /* MttConfigRsp.m in Sources */,
+				3C3C447715748F37000538C8 /* MttConfInfo.m in Sources */,
+				3C3C447815748F37000538C8 /* MttConfirm.m in Sources */,
+				3C3C447915748F37000538C8 /* MttConfRsp.m in Sources */,
+				3C3C447A15748F37000538C8 /* MttDNSReq.m in Sources */,
+				3C3C447B15748F37000538C8 /* MttDNSRsp.m in Sources */,
+				3C3C447C15748F37000538C8 /* MttDomainRsp.m in Sources */,
+				3C3C447D15748F37000538C8 /* MttDomainRspNew.m in Sources */,
+				3C3C447E15748F37000538C8 /* MttDynamicReq.m in Sources */,
+				3C3C447F15748F37000538C8 /* MttDynamicRsp.m in Sources */,
+				3C3C448015748F37000538C8 /* MttETPV.m in Sources */,
+				3C3C448115748F37000538C8 /* MttExtDomain.m in Sources */,
+				3C3C448215748F37000538C8 /* MttFKINFO.m in Sources */,
+				3C3C448315748F37000538C8 /* MttHotListReq.m in Sources */,
+				3C3C448415748F37000538C8 /* MttHotListRsp.m in Sources */,
+				3C3C448515748F37000538C8 /* MttHotWordInfo.m in Sources */,
+				3C3C448615748F37000538C8 /* MttHotWordsReq.m in Sources */,
+				3C3C448715748F37000538C8 /* MttHotWordsRsp.m in Sources */,
+				3C3C448815748F37000538C8 /* MttIcon.m in Sources */,
+				3C3C448915748F37000538C8 /* MttIconInfo.m in Sources */,
+				3C3C448A15748F37000538C8 /* MttIconRsp.m in Sources */,
+				3C3C448B15748F37000538C8 /* MttImageReq.m in Sources */,
+				3C3C448C15748F37000538C8 /* MttImageRsp.m in Sources */,
+				3C3C448D15748F37000538C8 /* MttImgReq.m in Sources */,
+				3C3C448E15748F37000538C8 /* MttImgRsp.m in Sources */,
+				3C3C448F15748F37000538C8 /* MttIPListReq.m in Sources */,
+				3C3C449015748F37000538C8 /* MttIPListRsp.m in Sources */,
+				3C3C449115748F37000538C8 /* MttItemReq.m in Sources */,
+				3C3C449215748F37000538C8 /* MttItemRsp.m in Sources */,
+				3C3C449315748F37000538C8 /* MttKeywordRsp.m in Sources */,
+				3C3C449415748F37000538C8 /* MttLoginReq.m in Sources */,
+				3C3C449515748F37000538C8 /* MttLoginRsp.m in Sources */,
+				3C3C449615748F37000538C8 /* MttLPageReq.m in Sources */,
+				3C3C449715748F37000538C8 /* MttLPageRsp.m in Sources */,
+				3C3C449815748F37000538C8 /* MttNavigation.m in Sources */,
+				3C3C449915748F37000538C8 /* MttNaviRsp.m in Sources */,
+				3C3C449A15748F37000538C8 /* MttPageBrowserReq.m in Sources */,
+				3C3C449B15748F37000538C8 /* MttPageBrowserRsp.m in Sources */,
+				3C3C449C15748F37000538C8 /* MttPageConfigReq.m in Sources */,
+				3C3C449D15748F37000538C8 /* MttPageConfigRsp.m in Sources */,
+				3C3C449E15748F37000538C8 /* MttPageReq.m in Sources */,
+				3C3C449F15748F37000538C8 /* MttPageRsp.m in Sources */,
+				3C3C44A015748F37000538C8 /* MttPerformanceInfo.m in Sources */,
+				3C3C44A115748F37000538C8 /* MttPicInfo.m in Sources */,
+				3C3C44A215748F37000538C8 /* MttPicRsp.m in Sources */,
+				3C3C44A315748F37000538C8 /* MttPing.m in Sources */,
+				3C3C44A415748F37000538C8 /* MttPluginBootResp.m in Sources */,
+				3C3C44A515748F37000538C8 /* MttPluginInfo.m in Sources */,
+				3C3C44A615748F37000538C8 /* MttPluginInfoNew.m in Sources */,
+				3C3C44A715748F37000538C8 /* MttPluginRsp.m in Sources */,
+				3C3C44A815748F37000538C8 /* MttPluginRspNew.m in Sources */,
+				3C3C44A915748F37000538C8 /* MttPluginVersion.m in Sources */,
+				3C3C44AA15748F37000538C8 /* MttPushAppReqList.m in Sources */,
+				3C3C44AB15748F37000538C8 /* MttPushPortionFresh.m in Sources */,
+				3C3C44AC15748F37000538C8 /* MttPushRespnoseContent.m in Sources */,
+				3C3C44AD15748F37000538C8 /* MttPushSysNotify.m in Sources */,
+				3C3C44AE15748F37000538C8 /* MttRefuse.m in Sources */,
+				3C3C44AF15748F37000538C8 /* MttRelayPageReq.m in Sources */,
+				3C3C44B015748F37000538C8 /* MttRelayPageRsp.m in Sources */,
+				3C3C44B115748F37000538C8 /* MttReply.m in Sources */,
+				3C3C44B215748F37000538C8 /* MttRequest.m in Sources */,
+				3C3C44B315748F37000538C8 /* MttRequestFragment.m in Sources */,
+				3C3C44B415748F37000538C8 /* MttSearchInfo.m in Sources */,
+				3C3C44B515748F37000538C8 /* MttSearchReq.m in Sources */,
+				3C3C44B615748F37000538C8 /* MttSearchRsp.m in Sources */,
+				3C3C44B715748F37000538C8 /* MttSearchTypeInfo.m in Sources */,
+				3C3C44B815748F37000538C8 /* MttSearchTypeReq.m in Sources */,
+				3C3C44B915748F37000538C8 /* MttSearchTypeRsp.m in Sources */,
+				3C3C44BA15748F37000538C8 /* MttSoftAnalyseInfo.m in Sources */,
+				3C3C44BB15748F37000538C8 /* MttSplashReq.m in Sources */,
+				3C3C44BC15748F37000538C8 /* MttSplashRsp.m in Sources */,
+				3C3C44BD15748F37000538C8 /* MttStaticConfigReq.m in Sources */,
+				3C3C44BE15748F37000538C8 /* MttSTImagePolicy.m in Sources */,
+				3C3C44BF15748F37000538C8 /* MttSTJSInfo.m in Sources */,
+				3C3C44C015748F37000538C8 /* MttSTJSPDInfo.m in Sources */,
+				3C3C44C115748F37000538C8 /* MttSTOperator.m in Sources */,
+				3C3C44C215748F37000538C8 /* MttSTOperatorRsp.m in Sources */,
+				3C3C44C315748F37000538C8 /* MttSTPV.m in Sources */,
+				3C3C44C415748F37000538C8 /* MttSTSingleMD5.m in Sources */,
+				3C3C44C515748F37000538C8 /* MttSTSpeedStatis.m in Sources */,
+				3C3C44C615748F37000538C8 /* MttSTStat.m in Sources */,
+				3C3C44C715748F37000538C8 /* MttSTTime.m in Sources */,
+				3C3C44C815748F37000538C8 /* MttSTTotal.m in Sources */,
+				3C3C44C915748F37000538C8 /* MttThirdUse.m in Sources */,
+				3C3C44CA15748F37000538C8 /* MttTipPushReq.m in Sources */,
+				3C3C44CB15748F37000538C8 /* MttTipPushRsp.m in Sources */,
+				3C3C44CC15748F37000538C8 /* MttUpdateRsp.m in Sources */,
+				3C3C44CD15748F37000538C8 /* MttURLPV.m in Sources */,
+				3C3C44CE15748F37000538C8 /* MttUserBase.m in Sources */,
+				3C3C44CF15748F37000538C8 /* MttVerifyReq.m in Sources */,
+				3C3C44D015748F37000538C8 /* MttVerifyRsp.m in Sources */,
+				3C3C44D115748F37000538C8 /* MttVerifyRspExt.m in Sources */,
+				3C3C44D215748F37000538C8 /* MttWeatherInfo.m in Sources */,
+				3C3C44D315748F37000538C8 /* MttWeatherInfo4Mini.m in Sources */,
+				3C3C44D415748F37000538C8 /* MttWeatherReq.m in Sources */,
+				3C3C44D515748F37000538C8 /* MttWeatherRsp.m in Sources */,
+				3C3C44D615748F37000538C8 /* MttWeatherRsp4Mini.m in Sources */,
+				3CB4712E15888E3A0055EDB9 /* MttAcceptEncoding.m in Sources */,
+				3CB4712F15888E3A0055EDB9 /* MttBrokerReqType.m in Sources */,
+				3CB4713015888E3A0055EDB9 /* MttBrowserVersion.m in Sources */,
+				3CB4713115888E3A0055EDB9 /* MttContentEncoding.m in Sources */,
+				3CB4713215888E3A0055EDB9 /* MttDirectPolicy.m in Sources */,
+				3CB4713315888E3A0055EDB9 /* MttEDomainType.m in Sources */,
+				3CB4713415888E3A0055EDB9 /* MttEEntryType.m in Sources */,
+				3CB4713515888E3A0055EDB9 /* MttEFASTKEY.m in Sources */,
+				3CB4713615888E3A0055EDB9 /* MttEHotWordType.m in Sources */,
+				3CB4713715888E3A0055EDB9 /* MttELanguageType.m in Sources */,
+				3CB4713815888E3A0055EDB9 /* MttEPushServerType.m in Sources */,
+				3CB4713915888E3A0055EDB9 /* MttERelayProtoVer.m in Sources */,
+				3CB4713A15888E3A0055EDB9 /* MttErrorCode.m in Sources */,
+				3CB4713B15888E3A0055EDB9 /* MttEServerVer.m in Sources */,
+				3CB4713C15888E3A0055EDB9 /* MttEUSESTAT.m in Sources */,
+				3CB4713D15888E3A0055EDB9 /* MttEWaitPushType.m in Sources */,
+				3CB4713E15888E3A0055EDB9 /* MttImageQuality.m in Sources */,
+				3CB4713F15888E3A0055EDB9 /* MttMethod.m in Sources */,
+				3CB4714015888E3A0055EDB9 /* MttMTTContentType.m in Sources */,
+				3CB4714115888E3A0055EDB9 /* MttSecurityCheckType.m in Sources */,
+				3CB4714215888E3A0055EDB9 /* MttSpecialValue.m in Sources */,
+				3CB4714315888E3A0055EDB9 /* MttStatValue.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3CB475CC152AA47100F145B4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3CC191B1152455910083BBCE /* tup */;
+			targetProxy = 3CB475CB152AA47100F145B4 /* PBXContainerItemProxy */;
+		};
+		3CC191C9152455910083BBCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3CC191B1152455910083BBCE /* tup */;
+			targetProxy = 3CC191C8152455910083BBCE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		3CC191CE152455910083BBCE /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3CC191CF152455910083BBCE /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		3CB47578152A9D5E00F145B4 /* DailyBuild */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = DailyBuild;
+		};
+		3CB47579152A9D5E00F145B4 /* DailyBuild */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DSTROOT = /tmp/tup.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tup/tup-Prefix.pch";
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = debugging;
+			};
+			name = DailyBuild;
+		};
+		3CB4757C152A9D5E00F145B4 /* DailyBuild */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tup/tup-Prefix.pch";
+				INFOPLIST_FILE = "tupTests/tupTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = DailyBuild;
+		};
+		3CB4757D152A9D6800F145B4 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Distribution;
+		};
+		3CB4757E152A9D6800F145B4 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DSTROOT = /tmp/tup.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tup/tup-Prefix.pch";
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = debugging;
+			};
+			name = Distribution;
+		};
+		3CB47581152A9D6800F145B4 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tup/tup-Prefix.pch";
+				INFOPLIST_FILE = "tupTests/tupTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Distribution;
+		};
+		3CB475C6152AA45F00F145B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3CB475C7152AA45F00F145B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		3CB475C8152AA45F00F145B4 /* DailyBuild */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = DailyBuild;
+		};
+		3CB475C9152AA45F00F145B4 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Distribution;
+		};
+		3CC191D4152455910083BBCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3CC191D5152455910083BBCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3CC191D7152455910083BBCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DSTROOT = /tmp/tup.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tup/tup-Prefix.pch";
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = debugging;
+			};
+			name = Debug;
+		};
+		3CC191D8152455910083BBCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DSTROOT = /tmp/tup.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tup/tup-Prefix.pch";
+				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRIP_STYLE = debugging;
+			};
+			name = Release;
+		};
+		3CC191DA152455910083BBCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tup/tup-Prefix.pch";
+				INFOPLIST_FILE = "tupTests/tupTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		3CC191DB152455910083BBCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "tup/tup-Prefix.pch";
+				INFOPLIST_FILE = "tupTests/tupTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3CB475C5152AA45F00F145B4 /* Build configuration list for PBXAggregateTarget "tup.Framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3CB475C6152AA45F00F145B4 /* Debug */,
+				3CB475C7152AA45F00F145B4 /* Release */,
+				3CB475C8152AA45F00F145B4 /* DailyBuild */,
+				3CB475C9152AA45F00F145B4 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3CC191AC152455910083BBCE /* Build configuration list for PBXProject "tup" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3CC191D4152455910083BBCE /* Debug */,
+				3CC191D5152455910083BBCE /* Release */,
+				3CB47578152A9D5E00F145B4 /* DailyBuild */,
+				3CB4757D152A9D6800F145B4 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3CC191D6152455910083BBCE /* Build configuration list for PBXNativeTarget "tup" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3CC191D7152455910083BBCE /* Debug */,
+				3CC191D8152455910083BBCE /* Release */,
+				3CB47579152A9D5E00F145B4 /* DailyBuild */,
+				3CB4757E152A9D6800F145B4 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3CC191D9152455910083BBCE /* Build configuration list for PBXNativeTarget "tupTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3CC191DA152455910083BBCE /* Debug */,
+				3CC191DB152455910083BBCE /* Release */,
+				3CB4757C152A9D5E00F145B4 /* DailyBuild */,
+				3CB47581152A9D6800F145B4 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3CC191A9152455910083BBCE /* Project object */;
+}

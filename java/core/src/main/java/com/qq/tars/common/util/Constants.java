@@ -56,6 +56,7 @@ public interface Constants {
 
     String TARS_PROTOCOL = "tars";
     String HTTP_PROTOCOL = "http";
+    String PROTO_PROTOCOL = "protobuff";
     String TARS_AT = "@";
     String TARS_API = "api";
     String TARS_JCE_VERSION = "version";
@@ -71,8 +72,14 @@ public interface Constants {
     String TARS_CLIENT_CHARSETNAME = "charsetName";
 
     String TARS_HASH = "tars_hash";
+    String TARS_CONSISTENT_HASH = "taf_consistent_hash";
 
     String TARS_TUP_CLIENT = "tup_client";
     String TARS_ONE_WAY_CLIENT = "one_way_client";
     String TARS_NOT_CLIENT = "not_tars_client";
+    String TARS_CLIENT_ENABLEAUTH = "enableAuth";
+
+    String TARS_CLIENT_WEIGHT_TYPE = "weightType";
+    String TARS_CLIENT_WEIGHT = "weight";
+    String TARS_CLIENT_GRAYFLAG = "taf.framework.GrayFlag";
 }

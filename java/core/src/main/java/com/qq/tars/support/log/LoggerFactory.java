@@ -38,6 +38,8 @@ public class LoggerFactory {
     private static volatile boolean isNone = false;
 
     protected static String defaultLogRoot;
+    
+    protected static String dyeingLogRoot;
 
     protected static Level defaultLogLevel = Level.INFO;
 
@@ -190,6 +192,11 @@ public class LoggerFactory {
             System.out.println("INFO tars-log | set tars-log defaultRoot=" + defaultLogRoot);
         } else {
             System.out.println("ERROR tars-log | config error, set tars-log defaultRoot=" + defaultLogRoot);
+        }
+        dyeingLogRoot = defaultLogRoot + "/tars_dyeing/";
+        File logRoot = new File(dyeingLogRoot);
+        if (!logRoot.exists()) {
+        	logRoot.mkdir();
         }
     }
 

@@ -22,3 +22,9 @@
 /java/examples/stress-server/.project
 /java/examples/stress-server/.settings
 /java/examples/stress-server/target
+/java/.project
+/java/.settings/org.eclipse.m2e.core.prefs
+/java/examples/.project
+/java/examples/.settings/org.eclipse.m2e.core.prefs
+/java/tools/.project
+/java/tools/.settings/org.eclipse.m2e.core.prefs

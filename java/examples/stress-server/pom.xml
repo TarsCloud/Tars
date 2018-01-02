@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>qq-cloud-central</groupId>
 		<artifactId>tars-parent</artifactId>
-		<version>1.0.1</version>
+		<version>1.0.3</version>
 	</parent>
 	<artifactId>tars-stress-server</artifactId>
 	<name>${project.artifactId}</name>
@@ -32,7 +32,7 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-					<encoding>UTF8</encoding>
+					<encoding>UTF-8</encoding>
 				</configuration>
 				<dependencies>
 					<dependency>

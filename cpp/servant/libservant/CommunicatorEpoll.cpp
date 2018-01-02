@@ -225,6 +225,20 @@ void CommunicatorEpoll::handleOutputImp(Transceiver * pTransceiver)
     //检查连接是否有错误
     if(pTransceiver->isConnecting())
     {
+        int iVal = 0;
+        socklen_t iLen = static_cast<socklen_t>(sizeof(int));
+        if (::getsockopt(pTransceiver->fd(), SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&iVal), &iLen) == -1 || iVal)
+        {
+            pTransceiver->close();
+            pTransceiver->getAdapterProxy()->addConnExc(true);
+            TLOGERROR("[TARS][CommunicatorEpoll::handleOutputImp] connect error "
+                    << pTransceiver->getAdapterProxy()->endpoint().desc()
+                    << "," << pTransceiver->getAdapterProxy()->getObjProxy()->name()
+                    << ",_connExcCnt=" << pTransceiver->getAdapterProxy()->ConnExcCnt()
+                    << "," << strerror(iVal) << endl);
+            return;
+        }
+
         pTransceiver->setConnected();
     }
 

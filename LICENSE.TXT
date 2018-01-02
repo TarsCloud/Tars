@@ -1,27 +1,27 @@
-Tencent is pleased to support the open source community by making Tars available. 
- 
-Copyright (C) 2016THL A29 Limited, a Tencent company.  All rights reserved.
+Tencent is pleased to support the open source community by making Tars available.
 
+Copyright (C) 2016 THL A29 Limited, a Tencent company.  All rights reserved.
 If you have downloaded a copy of the Tars binary from Tencent, please note that the Tars binary is licensed under the BSD 3-Clause License.
 
-If you have downloaded a copy of the Tars source code from Tencent, please note that Tarssource code is licensed under the BSD 3-Clause License, except for the third-party components listed below which are subject to different license terms.  Your integration ofTars into your own projects may require compliance with the BSD 3-ClauseLicense, as well as the other licenses applicable to the third-party components included within Tars.
+If you have downloaded a copy of the Tars source code from Tencent, please note that Tars source code is licensed under the BSD 3-Clause License, except for the third-party components listed below which are subject to different license terms.  Your integration of Tars into your own projects may require compliance with the BSD 3-Clause License, as well as the other licenses applicable to the third-party components included within Tars.
 
-A copy of theBSD 3-Clause License is included in this file.
+A copy of the BSD 3-Clause License is included in this file.
 
 Other dependencies and licenses:
---------------------------------------------------------------------
-
-Open Source Software Licensed Under the Apache License, Version 2.0:
---------------------------------------------------------------------
-1. Apache Tomcat7.0.42
+Open Source Software Licensed Under the Apache License, Version 2.0: 
+----------------------------------------------------------------------------------------
+1. Apache Tomcat  7.0.42
 Copyright 1999-2013 The Apache Software Foundation
 
-2. bootstrap-datepicker1.7.0
+2. bootstrap-datepicker  1.7.0
 Copyright 2012 Sebastien MALOT
+
+3. grpc-java
+Copyright 2015 Google Inc.
 
 
 Terms of the Apache License, Version 2.0:
---------------------------------------------------------------------
+---------------------------------------------------
 
 Apache License
 
@@ -76,7 +76,6 @@ You may add Your own copyright statement to Your modifications and may provide a
 7. Disclaimer of Warranty. Unless required by applicable law or agreed to in writing, Licensor provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing the Work and assume any risks associated with Your exercise of permissions under this License.
 
 8. Limitation of Liability. In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising as a result of this License or out of the use or inability to use the Work (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if such Contributor has been advised of the possibility of such damages.
-
 9. Accepting Warranty or Additional Liability. While redistributing the Work or Derivative Works thereof, You may choose to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or rights consistent with this License. However, in accepting such obligations, You may act only on Your own behalf and on Your sole responsibility, not on behalf of any other Contributor, and only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against, such Contributor by reason of your accepting any such warranty or additional liability.
 
 END OF TERMS AND CONDITIONS
@@ -93,14 +92,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+See the License for the specific language governing permissions and limitations under the License.
 
---------------------------------------------------------------------
 
-Open Source Software Licensed Under the Boost Software License, Version 1.0:The below software in this distribution may have been modified by THL A29 Limited ("Tencent Modifications"). All Tencent Modifications are Copyright (C) 2016 THL A29 Limited.
---------------------------------------------------------------------
-1. Boost1.53.0:
+
+Open Source Software Licensed Under the Boost Software License, Version 1.0: The below software in this distribution may have been modified by THL A29 Limited ("Tencent Modifications"). All Tencent Modifications are Copyright (C) 2016 THL A29 Limited.
+----------------------------------------------------------------------------------------
+1. Boost 1.53.0:
 
 (1) fcontext.hpp
 Copyright Oliver Kowalke 2009
@@ -124,11 +122,11 @@ Copyright Oliver Kowalke 2009
 Copyright Oliver Kowalke 2009
 
 (8) tuple_basic.hpp
-Copyright (C) 1999, 2000 JaakkoJarvi (jaakko.jarvi@cs.utu.fi)
+Copyright (C) 1999, 2000 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
 
 
 Terms of the Boost Software License, Version 1.0:
---------------------------------------------------------------------
+---------------------------------------------------
 Boost Software License - Version 1.0 - August 17th, 2003
 	
 Permission is hereby granted, free of charge, to any person or organization obtaining a copy of the software and accompanying documentation covered by this license (the "Software") to use, reproduce, display, distribute, execute, and transmit the Software, and to prepare derivative works of the Software, and to permit third-parties to whom the Software is furnished to do so, all subject to the following:
@@ -137,54 +135,55 @@ The copyright notices in the Software and this entire statement, including the a
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
---------------------------------------------------------------------
 
 Open Source Software Licensed Under the MIT License:
---------------------------------------------------------------------
-1. jquery1.9.1
+----------------------------------------------------------------------------------------
+1. jquery 1.9.1
 Copyright 2012 jQuery Foundation and other contributors
 http://jquery.com/
 
-2. zTree3.5.26
-copyright (c) <2011><hunter.z>
+2. zTree  3.5.26
+copyright (c) <2011> < hunter.z >
 
 3. bootstrap  3.3.0
 Copyright (c) 2011-2014 Twitter, Inc
 
-4. bootstrap-table1.11.0
+4. bootstrap-table  1.11.0
 Copyright (c) 2012-2016 Zhixin Wen <wenzhixin2010@gmail.com>
 
 5. Chart.js
 Copyright (c) 2013-2016 Nick Downie
 
-The below software (6&7) in this distribution may have been modified by THL A29 Limited ("Tencent Modifications"). All Tencent Modifications are Copyright (C) 2016 THL A29 Limited.
+6. mkdirp  0.5.0
+Copyright 2010 James Halliday (mail@substack.net)
 
-6. loki0.1.7
-Copyright (c) Andrei Alexandrescu, Jean-Francois Bastien, Guillaume Chatelet, Lukas Fittl, FedorPikus, Peter KÃ¼mmel, Rich Sposato
+The below software (7&8) in this distribution may have been modified by THL A29 Limited ("Tencent Modifications"). All Tencent Modifications are Copyright (C) 2016 THL A29 Limited.
 
-7. smhasher  0.150.1
+7. loki 0.1.7
+Copyright (c) Andrei Alexandrescu, Jean-Francois Bastien, Guillaume Chatelet, Lukas Fittl, Fedor Pikus, Peter K¨¹mmel, Rich Sposato
+
+8. smhasher  0.150.1
 Copyright (c) 2011 Austin Appleby (Murmur3 routine)
 Copyright (c) 2011 Patrick Hensley (Python wrapper, packaging)
 
 
 Terms of the MIT License:
---------------------------------------------------------------------
+---------------------------------------------------
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
---------------------------------------------------------------------
 
 Open Source Software Licensed Under the BSD 3-Clause License:
 The below software in this distribution may have been modified by THL A29 Limited ("Tencent Modifications"). All Tencent Modifications are Copyright (C) 2016 THL A29 Limited.
---------------------------------------------------------------------
-1. gperftools2.0
+----------------------------------------------------------------------------------------
+1. gperftools  2.0
 Copyright (c) 2005, Google Inc.
 All rights reserved.
 
-2. Chrominum56.0.2884.2
+2. Chrominum 56.0.2884.2
 
 (1) bind.h
 Copyright (c) 2011 The Chromium Authors. All rights reserved.
@@ -209,5 +208,5 @@ Redistribution and use in source and binary forms, with or without modification,
 *  Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 *  Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 *  Neither the name of [copyright holder] nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+

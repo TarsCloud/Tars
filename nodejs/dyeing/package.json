@@ -1,0 +1,22 @@
+{
+  "name": "@tars/dyeing",
+  "version": "1.0.0",
+  "description": "TARS 染色基础模块",
+  "author": {
+    "name": "Superzheng",
+    "email": "superzheng@tencent.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tars-node/dyeing.git"
+  },
+  "homepage": "https://github.com/tars-node/dyeing",
+  "bugs": {
+    "url": "https://github.com/tars-node/dyeing/issues"
+  },
+  "keywords": [
+    "dyeing",
+    "tars"
+  ],
+  "license" : "BSD-3-Clause"
+}

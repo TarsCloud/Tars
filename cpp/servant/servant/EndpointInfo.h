@@ -31,7 +31,7 @@ namespace tars
 class EndpointInfo
 {
 public:
-    enum EType { TCP = 1, UDP = 2, };
+    enum EType { UDP = 0, TCP = 1, SSL = 2};
 
     /**
      * 构造函数
@@ -44,7 +44,7 @@ public:
      * @param port
      * @param type
      */
-    EndpointInfo(const string& host, uint16_t port, EndpointInfo::EType type, int32_t grid, const string & setDivision, int qos, int weight = -1, unsigned int weighttype = 0);
+    EndpointInfo(const string& host, uint16_t port, EndpointInfo::EType type, int32_t grid, const string & setDivision, int qos, int weight = -1, unsigned int weighttype = 0, int authType = 0);
 
     /**
      * 地址的字符串描述,不带set信息
@@ -143,6 +143,11 @@ public:
     */
     const string& setDivision() const;
 
+    /*
+     * 获取认证类型
+     */
+    int authType() const  { return _authType; }
+
     /**
      * 等于
      * @param r
@@ -239,6 +244,11 @@ private:
      * 地址的字符串描述
      */
     string                 _desc;
+
+    /**
+     *  认证类型
+     */
+    int                    _authType;
 };
 /////////////////////////////////////////////////////////////////////////////
 }

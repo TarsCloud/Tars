@@ -31,7 +31,12 @@ public class ConfigurationManager {
         return instance;
     }
 
+    @Deprecated
     public ServerConfig getserverConfig() {
+        return serverConfig;
+    }
+
+    public ServerConfig getServerConfig() {
         return serverConfig;
     }
 

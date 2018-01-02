@@ -96,7 +96,10 @@ inline ServerCommand::ExeStatus CommandStart::canExecute(string& sResult)
         return DIS_EXECUTABLE;
     }
 
-    if (TC_File::isAbsolute(_exeFile) == true && !TC_File::isFileExistEx(_exeFile) && _serverObjectPtr->getStartScript().empty())
+    if (TC_File::isAbsolute(_exeFile) &&
+        !TC_File::isFileExistEx(_exeFile) &&
+        _serverObjectPtr->getStartScript().empty() &&
+        _serverObjectPtr->getServerType() != "tars_nodejs")
     {
         _serverObjectPtr->setPatched(false);
         sResult      = "The server exe patch " + _exeFile + " is not exist.";
@@ -257,7 +260,18 @@ inline bool CommandStart::startNormal(string& sResult)
 
         osStartStcript << _exeFile << " " << TC_Common::tostr(vOptions) << endl;
     }
+    else if (_serverObjectPtr->getServerType() == "tars_nodejs") 
+    { 
+        vOptions.push_back(sExePath + "/tars_nodejs/node-agent/bin/node-agent");
+        string s = sExePath + "/src/ -c " + sConfigFile; 
+        vector<string> v = TC_Common::sepstr<string>(s," \t"); 
+        vOptions.insert(vOptions.end(), v.begin(), v.end());
 
+        //对于tars_nodejs类型需要修改下_exeFile
+        _exeFile = sExePath+"/tars_nodejs/node";
+
+        osStartStcript<<sExePath+"/tars_nodejs/node" <<" "<<TC_Common::tostr(vOptions)<<" &"<< endl;
+    }
     else
     {
         //c++服务

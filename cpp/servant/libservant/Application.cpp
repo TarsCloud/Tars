@@ -24,9 +24,15 @@
 #include "servant/BaseF.h"
 #include "servant/AppCache.h"
 #include "servant/NotifyObserver.h"
+#include "servant/AuthLogic.h"
 
 #include <signal.h>
 #include <sys/resource.h>
+
+#if TARS_SSL
+#include "util/tc_sslmgr.h"
+#endif
+
 
 namespace tars
 {
@@ -580,6 +586,9 @@ void Application::main(int argc, char *argv[])
 {
     try
     {
+#if TARS_SSL
+        SSLManager::GlobalInit();
+#endif
         TC_Common::ignorePipe();
 
         //解析配置文件
@@ -768,6 +777,26 @@ void Application::initializeClient()
 
     //输出
     outClient(cout);
+#if TARS_SSL
+    try {
+        string path = _conf.get("/tars/application/clientssl/<path>", "./");
+        if (path.empty() || path[path.length() - 1] != '/')
+            path += "/";
+
+        string ca = path + _conf.get("/tars/application/clientssl/<ca>");
+        string cert = path + _conf.get("/tars/application/clientssl/<cert>");
+        if (cert == path) cert.clear();
+        string key = path + _conf.get("/tars/application/clientssl/<key>");
+        if (key == path) key.clear();
+
+        if (!SSLManager::getInstance()->AddCtx("client", ca, cert, key, false))
+            cout << "failed add client cert " << ca << endl;
+        else
+            cout << "succ add client cert " << ca << endl;
+    }
+    catch(...) {
+    }
+#endif
 }
 
 void Application::outClient(ostream &os)
@@ -890,6 +919,15 @@ void Application::initializeServer()
 
     _epollServer = new TC_EpollServer(iNetThreadNum);
 
+	//网络线程的内存池配置
+    {
+        size_t minBlockSize = TC_Common::strto<size_t>(toDefault(_conf.get("/tars/application/server<poolminblocksize>"), "1024")); // 1KB
+        size_t maxBlockSize = TC_Common::strto<size_t>(toDefault(_conf.get("/tars/application/server<poolmaxblocksize>"), "8388608")); // 8MB
+        size_t maxBytes = TC_Common::strto<size_t>(toDefault(_conf.get("/tars/application/server<poolmaxbytes>"), "67108864")); // 64MB
+        _epollServer->setNetThreadBufferPoolInfo(minBlockSize, maxBlockSize, maxBytes);
+    }
+
+
     //初始化服务是否对空链接进行超时检查
     bool bEnable = (_conf.get("/tars/application/server<emptyconcheck>","0")=="1")?true:false;
 
@@ -991,6 +1029,26 @@ void Application::initializeServer()
 
         _epollServer->_pReportRspQueue = p.get();
     }
+
+#if TARS_SSL
+    try {
+        string path = _conf.get("/tars/application/serverssl/<path>", "./");
+        if (path.empty() || path[path.length() - 1] != '/')
+            path += "/";
+
+        string ca = path + _conf.get("/tars/application/serverssl/<ca>");
+        if (ca == path) ca.clear();
+        string cert = path + _conf.get("/tars/application/serverssl/<cert>");
+        string key = path + _conf.get("/tars/application/serverssl/<key>");
+        bool verifyClient = (_conf.get("/tars/application/serverssl/<verifyclient>", "0") == "0") ? false : true;
+
+        if (!SSLManager::getInstance()->AddCtx("server", ca, cert, key, verifyClient))
+            cout << "failed add server cert " << ca << endl;
+        else
+            cout << "succ add server cert " << ca << ", verifyClient " << verifyClient << endl;
+    } catch(...) {
+    }
+#endif
 }
 
 void Application::outServer(ostream &os)
@@ -1046,6 +1104,17 @@ void Application::bindAdapter(vector<TC_EpollServer::BindAdapterPtr>& adapters)
             ServantHelperManager::getInstance()->setAdapterServant(adapterName[i], servant);
 
             TC_EpollServer::BindAdapterPtr bindAdapter = new TC_EpollServer::BindAdapter(_epollServer.get());
+               
+            // 设置该obj的鉴权账号密码，只要一组就够了
+            {    
+                std::string accKey = _conf.get("/tars/application/server/" + adapterName[i] + "<accesskey>"); 
+                std::string secretKey = _conf.get("/tars/application/server/" + adapterName[i] + "<secretkey>"); 
+
+                if (!accKey.empty()) 
+                    bindAdapter->setAkSk(accKey, secretKey); 
+
+                bindAdapter->setAuthProcessWrapper(&tars::processAuth); 
+            }  
 
             string sLastPath = "/tars/application/server/" + adapterName[i];
 

@@ -335,8 +335,8 @@ inline int CommandPatch::execute(string &sResult)
         string sServerName      = _patchRequest.groupname.empty()?_patchRequest.servername:_patchRequest.groupname;
         string sLocalTgzPath    = _localTgzBasePath + "/" + _patchRequest.appname + "." + sServerName;
 
-        string sShortFile       =  "";
-        string sRemoteTgzPath   = "";
+        string sShortFile;
+        string sRemoteTgzPath;
 
         if(_patchRequest.ostype != "")
         {
@@ -401,7 +401,19 @@ inline int CommandPatch::execute(string &sResult)
         }
 
         //解压
-        string cmd = "tar xzfv " + sLocalTgzFile + " -C " + sLocalExtractPach;
+        string cmd,sLocalTgzFile_bak;
+		if (_serverObjectPtr->getServerType() == "tars_java") //如果是tars_java，使用war 方法
+
+        {
+            sLocalTgzFile_bak=TC_Common::replace(sLocalTgzFile,".tgz",".war");
+            cmd +=" mv "+sLocalTgzFile+" "+sLocalTgzFile_bak+";";
+            cmd += "unzip -oq  " + sLocalTgzFile_bak+ " -d "+ sLocalExtractPach+"/"+sServerName;
+        }
+		else
+		{
+			cmd = "tar xzfv " + sLocalTgzFile + " -C " + sLocalExtractPach;
+		}	
+      //  string cmd = "tar xzfv " + sLocalTgzFile + " -C " + sLocalExtractPach;
         if(iRet == 0)
         {
             system(cmd.c_str());
@@ -411,7 +423,7 @@ inline int CommandPatch::execute(string &sResult)
              */
             vector<string> files;
             tars::TC_File::listDirectory(sLocalExtractPach, files, true);
-            if(files.size() == 0)
+            if(files.empty())
             {
                 sResult = cmd + ",error!";
                 NODE_LOG("patchPro")->error() <<FILE_FUN<<sResult<< endl;
@@ -438,10 +450,30 @@ inline int CommandPatch::execute(string &sResult)
             }
         }
 
+        //对于tars_nodejs需要先删除exepath下的文件
+        if (iRet == 0) 
+        { 
+            if (_serverObjectPtr->getServerType() == "tars_nodejs") 
+            { 
+                if(TC_File::removeFile(_serverObjectPtr->getExePath(),true) != 0 || !TC_File::makeDirRecursive(_serverObjectPtr->getExePath())) 
+                { 
+                    iRet = -8; //iRetCode = EM_ITEM_PERMISSION;
+                    NODE_LOG("patchPro")->error() <<FILE_FUN<<"|deal path fail:"<<_serverObjectPtr->getExePath()<<"|"<<strerror(errno)<<endl; 
+                } 
+            } 
+        }
+
         if(iRet == 0)
         {
-            //如果出错，这里会抛异常
-            TC_File::copyFile(sLocalExtractPach + "/" + sServerName, _serverObjectPtr->getExePath(), true);
+            if (_serverObjectPtr->getServerType() == "tars_nodejs") 
+            { 
+                TC_File::copyFile(sLocalExtractPach + "/" + sServerName+ "/" + sServerName, _serverObjectPtr->getExePath(), true); 
+            }
+            else 
+            { 
+                //如果出错，这里会抛异常
+                TC_File::copyFile(sLocalExtractPach + "/" + sServerName, _serverObjectPtr->getExePath(), true); 
+            }
 
             //设置发布状态到主控
             iRet = updatePatchResult(sResult);
@@ -472,7 +504,7 @@ inline int CommandPatch::execute(string &sResult)
     }
 
     //这里要求前端判断发布成功的必备条件是bSucc=true
-    _serverObjectPtr->setPatchResult(sResult, iRet==0?true:false);
+    _serverObjectPtr->setPatchResult(sResult, iRet == 0);
 
     //设置发布结果,如果是发布异常了这里也设置，主要是设置进度为100%,方便前端判断
     _serverObjectPtr->setPatched(true);

@@ -314,7 +314,15 @@ vector<ServerDescriptor> CDbHandle::getServers(const string& app, const string& 
                 TC_Config tParent, tProfile;
                 tParent.parseString(mapProfile[res[i]["template_name"]]);
                 tProfile.parseString(server.profile);
+
                 int iDefaultAsyncThreadNum = 3;
+
+                if("tars_nodejs" == server.serverType) 
+                { 
+                    //tars_nodejs类型的业务需要设置这个值为0
+                    iDefaultAsyncThreadNum = 0; 
+                }
+
                 int iConfigAsyncThreadNum = TC_Common::strto<int>(TC_Common::trim(res[i]["async_thread_num"]));
                 iDefaultAsyncThreadNum = iConfigAsyncThreadNum > iDefaultAsyncThreadNum ? iConfigAsyncThreadNum : iDefaultAsyncThreadNum;
                 server.asyncThreadNum = TC_Common::strto<int>(tProfile.get("/tars/application/client<asyncthread>", TC_Common::tostr(iDefaultAsyncThreadNum)));
@@ -1167,7 +1175,22 @@ int CDbHandle::loadObjectIdCache(const bool bRecoverProtect, const int iRecoverP
                 epf.host        = ep.getHost();
                 epf.port        = ep.getPort();
                 epf.timeout     = ep.getTimeout();
-                epf.istcp       = ep.isTcp();
+
+                // 现在支持三种类型：0 UDP, 1 TCP, 2 SSL
+                // 所以istcp字段作为int类型使用
+                if (!ep.isTcp()) 
+                { 
+                    epf.istcp = EndpointInfo::UDP; 
+                } 
+                else 
+                { 
+                    if (ep.isSSL()) 
+                        epf.istcp = EndpointInfo::SSL; 
+                    else 
+                        epf.istcp = EndpointInfo::TCP; 
+                }
+
+                epf.authType    = ep.getAuthType();
                 epf.grouprealid = getGroupId(epf.host);
                 string ip_group_name = res[i]["ip_group_name"];
                 epf.grouprealid = ip_group_name.empty() ? getGroupId(epf.host) : getGroupIdByName(ip_group_name);

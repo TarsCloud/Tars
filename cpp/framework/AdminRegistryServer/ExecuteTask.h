@@ -98,13 +98,17 @@ protected:
     void doTask(TaskItemReq req, size_t index);
 };
 
-class ExecuteTask : public TC_Singleton<ExecuteTask>, public TC_ThreadLock
+class ExecuteTask : public TC_Singleton<ExecuteTask>, public TC_ThreadLock, public TC_Thread
 {
 public:
 
     ExecuteTask();
 
     ~ExecuteTask();
+
+    virtual void run();
+
+    void terminate();
 
     /**
      * 添加任务请求

@@ -14,6 +14,12 @@ endif ()
 
 add_library(tarsutil ${DIR_SRCS})
 
+if(${TARS_SSL} EQUAL 1)
+    target_link_libraries(tarsutil; crypto; ssl)
+else()
+    target_link_libraries(tarsutil)
+endif()
+
 install(TARGETS tarsutil
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)

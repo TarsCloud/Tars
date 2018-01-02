@@ -14,6 +14,8 @@ tars_cpp_develop_specification.md      |Tars C++开发规范
 tars_cpp_user_guide.md      |Tars C++用户指南
 tars_cpp_faq.md             |Tars C++ FAQ
 tars_cpp_http_demo.md       |Tars C++ Http服务示例
+tars_auth.md                |Tars鉴权功能
 tars_java_quickstart.md     |Tars Java快速入门
 tars_java_user_guide.md     |Tars Java用户指南
 tars_java_faq.md            |Tars Java FAQ
+tars_java_spring.md         |Tars Java spring支持

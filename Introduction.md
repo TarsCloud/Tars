@@ -1,3 +1,5 @@
+[Click me switch to English version](Introduction.en.md)
+
 # 目录
 > * [1.介绍](#main-chapter-1)
 > * [2.设计思路](#main-chapter-2)

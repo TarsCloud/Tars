@@ -15,7 +15,8 @@
  */
 
 $.ajaxSetup({
-    contentType : 'application/json'
+    contentType : 'application/json',
+    cache       :   false
 });
 /**
  * 静态表格插件

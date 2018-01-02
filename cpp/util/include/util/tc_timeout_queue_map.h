@@ -205,7 +205,7 @@ public:
      *
      * @return size_t
      */
-    size_t size() const { return _data.size(); }
+    size_t size() const { return _dataSize; }
 private:
     void delFromTimeout(uint16_t id);
     void delFromData(uint16_t id);

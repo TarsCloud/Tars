@@ -304,14 +304,14 @@ bool Activator::doScript(const string& strServerId, const string& strScript, str
     }
     //strResult = "";
 
-    char c;
+    int c;
     time_t tNow = TNOW;
     while (TNOW - 2 < tNow)
     {
         usleep(200000);
-        while ((c = (char)fgetc(fp)) != EOF)
+        while ((c = fgetc(fp)) != EOF)
         {
-            strResult += c;
+            strResult += (char)c;
         }
         if (sRealEndMark == "" || strResult.find(sRealEndMark) != string::npos)
         {

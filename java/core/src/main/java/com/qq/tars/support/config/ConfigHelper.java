@@ -115,8 +115,8 @@ public class ConfigHelper {
 
     private String getRemoteFile(String fileName, boolean appConfigOnly) {
         Holder<String> config = new Holder<String>();
-        ConfigPrx configPrx = comm.stringToProxy(ConfigPrx.class, ConfigurationManager.getInstance().getserverConfig().getConfig());
-        ConfigInfo configInfo = new ConfigInfo(app, appConfigOnly ? "" : serverName, fileName, appConfigOnly, ConfigurationManager.getInstance().getserverConfig().getLocalIP(), ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig().getSetDivision());
+        ConfigPrx configPrx = comm.stringToProxy(ConfigPrx.class, ConfigurationManager.getInstance().getServerConfig().getConfig());
+        ConfigInfo configInfo = new ConfigInfo(app, appConfigOnly ? "" : serverName, fileName, appConfigOnly, ConfigurationManager.getInstance().getServerConfig().getLocalIP(), ConfigurationManager.getInstance().getServerConfig().getCommunicatorConfig().getSetDivision());
         int ret = configPrx.loadConfigByInfo(configInfo, config);
         String stream = config.value;
         if (ret != 0 || stream == null || stream.length() == 0) {

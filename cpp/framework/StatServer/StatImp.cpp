@@ -215,15 +215,6 @@ int StatImp::addHashMap(const StatMicMsgHead &head, const StatMicMsgBody &body )
 ///////////////////////////////////////////////////////////
 string StatImp::getSlaveName(const string& sSlaveName)
 {
-    string::size_type pos =  sSlaveName.find(".");
-    if(pos != string::npos)
-    {
-        pos = sSlaveName.find(".",pos+1);
-        if(pos != string::npos)
-        {
-            return sSlaveName.substr(0,pos);
-        }
-    }
     return  sSlaveName;
 }
 

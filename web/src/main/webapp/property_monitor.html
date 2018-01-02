@@ -141,7 +141,14 @@
     if(gData.level==1){
         $('body').html('<div class="alert alert-info mt10">特性监控需要具体到服务，请您先在左侧业务树选择服务。</div>');
     }else{
-        $('#master_name').val(gData.application + '.' + gData.server_name);
+
+        var a=[];
+        $.each(params,function (index,n) {
+            a.push(n.substring(1));
+        });
+        var slaveName = ([gData.application,gData.server_name].join('.')+'.'+[gData.set_name,gData.set_area,gData.set_group].join('')).replace(/\.$/,'');
+
+        $('#master_name').val(slaveName);
 
 
         $('#the_date').val(myDate.getFullYear()+'/'+format(myDate.getMonth()+1)+'/'+format(myDate.getDate()));

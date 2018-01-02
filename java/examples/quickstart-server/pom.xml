@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>qq-cloud-central</groupId>
 		<artifactId>tars-parent</artifactId>
-		<version>1.0.1</version>
+		<version>1.0.3</version>
 	</parent>
 	<artifactId>tars-quickstart-server</artifactId>
 	<name>${project.artifactId}</name>
@@ -17,7 +17,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>qq-cloud-central</groupId>
-			<artifactId>tars-server</artifactId>
+			<artifactId>tars-core</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 		</dependency>

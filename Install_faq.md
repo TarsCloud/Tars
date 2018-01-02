@@ -1,3 +1,5 @@
+[Click me switch to English version](Install_faq.en.md)
+
 ## 1. 部署ip不能为127.0.0.1，原因如下：
 
 第一，每个服务一般都有一个或者多个对外服务的obj，obj要对外提供访问，不能用127.0.0.1;
@@ -100,8 +102,14 @@ make framework-tar这个命令打包的是tars核心基础服务，核心基础�
 
 ![tars](docs/question_images/registry_web_empty.png)
 
+## 18 发布失败，发现上传tars java的war包大小有问题
 
+检查一下部署web的机器是否安装了unzip 
 
+## 19 发布大的tgz 包没有反应
+
+修改 src/main/resources/conf-spring/spring-context-mvc.xml   
+中的maxUploadSize 大小，然后重启resein就ok了
 
 
 

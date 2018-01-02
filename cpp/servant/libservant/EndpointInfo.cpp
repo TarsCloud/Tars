@@ -26,12 +26,13 @@ EndpointInfo::EndpointInfo()
 , _type(TCP)
 , _weight(-1)
 , _weighttype(0)
+, _authType(0)
 {
     _setDivision.clear();
     memset(&_addr,0,sizeof(struct sockaddr_in));
 }
 
-EndpointInfo::EndpointInfo(const string& host, uint16_t port, EndpointInfo::EType type, int32_t grid, const string & setDivision, int qos, int weight, unsigned int weighttype)
+EndpointInfo::EndpointInfo(const string& host, uint16_t port, EndpointInfo::EType type, int32_t grid, const string & setDivision, int qos, int weight, unsigned int weighttype, int authType)
 : _host(host)
 , _port(port)
 , _grid(grid)
@@ -40,6 +41,7 @@ EndpointInfo::EndpointInfo(const string& host, uint16_t port, EndpointInfo::ETyp
 , _setDivision(setDivision)
 , _weight(weight)
 , _weighttype(weighttype)
+, _authType(authType)
 {
     try
     {
@@ -74,8 +76,9 @@ string EndpointInfo::createCompareDesc()
     ostringstream os;
     if (_type == EndpointInfo::UDP) { os << "udp:"; }
     if (_type == EndpointInfo::TCP) { os << "tcp:"; }
+    if (_type == EndpointInfo::SSL) { os << "ssl:"; }
     os << _grid << ":" << _host << ":" << _port
-       << ":" << _setDivision << ":" << _qos << ":" << _weight << ":" << _weighttype;
+       << ":" << _setDivision << ":" << _qos << ":" << _weight << ":" << _weighttype << ":" << _authType;
 
     return os.str();
 }
@@ -83,7 +86,14 @@ string EndpointInfo::createCompareDesc()
 string EndpointInfo::createDesc() const
 {
     ostringstream os;
-    os << (type() == EndpointInfo::TCP?"tcp":(type() == EndpointInfo::UDP?"udp":""));
+
+    if (_type == EndpointInfo::TCP)
+        os << "tcp";
+    else if (_type == EndpointInfo::UDP)
+        os << "udp";
+    else
+        os << "ssl";
+
     os << " -h " << host();
     os << " -p " << port();
     if(0 != _grid)
@@ -96,6 +106,8 @@ string EndpointInfo::createDesc() const
 
     if(0 != _qos)
         os << " -q " << _qos;
+    if(0 != _authType)
+		os << " -e " << _authType;
 
     return os.str();
 }

@@ -19,10 +19,13 @@ package com.qq.tars.client.rpc.tars;
 import com.qq.tars.client.ServantProxyConfig;
 import com.qq.tars.client.util.ClientLogger;
 import com.qq.tars.common.util.Constants;
+import com.qq.tars.common.util.DyeingSwitch;
+import com.qq.tars.context.DistributedContextManager;
 import com.qq.tars.net.client.Callback;
 import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.rpc.exc.ServerException;
 import com.qq.tars.rpc.exc.TarsException;
+import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
 import com.qq.tars.support.stat.InvokeStatHelper;
 
@@ -34,11 +37,12 @@ public class TarsCallbackWrapper implements Callback<TarsServantResponse> {
     private final String remoteIp;
     private final int remotePort;
     private final long bornTime;
+    private final TarsServantRequest request;
 
     private final Callback<TarsServantResponse> callback;
 
     public TarsCallbackWrapper(ServantProxyConfig config, String methodName, String remoteIp, int remotePort,
-                              long bornTime, Callback<TarsServantResponse> callback) {
+                              long bornTime, TarsServantRequest request, Callback<TarsServantResponse> callback) {
         this.callback = callback;
         this.config = config;
         this.objName = config.getSimpleObjectName();
@@ -47,11 +51,13 @@ public class TarsCallbackWrapper implements Callback<TarsServantResponse> {
         this.remoteIp = remoteIp;
         this.remotePort = remotePort;
         this.bornTime = bornTime;
+        this.request = request;
     }
 
     public void onCompleted(TarsServantResponse response) {
         int ret = Constants.INVOKE_STATUS_SUCC;
         try {
+        	beforeCallback();
             if (response.getCause() != null) {
                 throw new TarsException(response.getCause());
             }
@@ -66,6 +72,7 @@ public class TarsCallbackWrapper implements Callback<TarsServantResponse> {
             ClientLogger.getLogger().error("error occurred on callback completed", ex);
             onException(ex);
         } finally {
+        	afterCallback();
             InvokeStatHelper.getInstance().addProxyStat(objName).addInvokeTime(config.getModuleName(), objName, config.getSetDivision(), methodName, remoteIp, remotePort, ret, System.currentTimeMillis() - bornTime);
         }
     }
@@ -83,13 +90,30 @@ public class TarsCallbackWrapper implements Callback<TarsServantResponse> {
     public void onExpired() {
         int ret = Constants.INVOKE_STATUS_TIMEOUT;
         try {
+        	beforeCallback();
             if (callback != null) {
                 this.callback.onExpired();
             }
         } catch (Throwable ex) {
             ClientLogger.getLogger().error("error occurred on callback expired", ex);
         } finally {
+        	afterCallback();
             InvokeStatHelper.getInstance().addProxyStat(objName).addInvokeTime(config.getModuleName(), objName, config.getSetDivision(), methodName, remoteIp, remotePort, ret, System.currentTimeMillis() - bornTime);
         }
+    }
+    
+    private void beforeCallback() {
+    	if (isDyeingReq()) {
+    		DyeingSwitch.enableUnactiveDyeing(request.getStatus().get(DyeingSwitch.STATUS_DYED_KEY), request.getStatus().get(DyeingSwitch.STATUS_DYED_FILENAME));
+    	}
+    	
+    }
+    
+    private void afterCallback() {
+    	DistributedContextManager.releaseDistributedContext();
+    }
+    
+    private boolean isDyeingReq() {
+    	return ((request.getMessageType() & TarsHelper.MESSAGETYPEDYED) == TarsHelper.MESSAGETYPEDYED) ? true : false;
     }
 }

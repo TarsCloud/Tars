@@ -2,6 +2,8 @@
 # -------------------------------------------------------------------------------
 
 TARS_PATH    :=/usr/local/tars/cpp
+# !!如果业务要使用OPENSSL，那么请在业务makefile中添加定义 TARS_SSL := 1
+# # # !!必须放在include /usr/local/tars/makefile.tars之前，因为本文件要引用TARS_SSL！
 
 #-------------------------------------------------------------------------------
 
@@ -32,6 +34,14 @@ LIB_DIR         += ${MYSQL_LIB_DIR}
 
 INCLUDE         += -I${TARS_PATH}/include -I./ ${MYSQL_INC}
 LIB             += -L${TARS_PATH}/lib -ltarsservant -ltarsparse -ltarsutil -lpthread ${LIB_DIR}
+
+ifneq ($(TARS_SSL), 0)
+ifneq ($(TARS_SSL), )
+	#业务编译
+	CFLAGS += -DTARS_SSL=1
+	LIB += -lssl -lcrypto
+endif
+endif
 
 #-----------------------------------------------------------------------------
 
@@ -148,7 +158,8 @@ clean:
 	rm -vf $(LOCAL_OBJ) $(TARS_H) $(TARGET) $(TARGETS) ${CLEANFILE} .*.d.tmp gmon.out
 
 cleanall:
-	rm -vf $(LOCAL_OBJ) $(TARS_H) $(TARGET) $(TARGETS) $(DEP_FILE) ${CLEANFILE} *.o .*.d.tmp .*.d gmon.out *.tgz
+	rm -vf $(LOCAL_OBJ) $(TARS_H) $(TARGET) $(TARGETS) $(DEP_FILE) ${CLEANFILE} *.o .*.d.tmp .*.d gmon.out
+	rm -vf $(TARGET)*.tgz
 
 HELP += $(HELP_CLEAN)
 HELP += $(HELP_CLEANALL)
