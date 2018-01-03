@@ -178,7 +178,7 @@ sed -i "s/registry2.tars.com/10.135.24.205/g" `grep registry2.tars.com -rl ./src
 
 
 mvn clean package
-#cp ./target/tars.war /usr/local/resin/webapps/
+##cp ./target/tars.war /usr/local/resin/webapps/
 cp ./target/tars.war /var/resin/webapps/
 
 cd -
