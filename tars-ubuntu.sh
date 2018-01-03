@@ -3,12 +3,13 @@
 PWD_DIR=/home/ubuntu/tars/build
 MachineIp=10.135.24.205
 ##"ifconfig eth0 | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}'"
-MachineName='hostname'
+MachineName=VM-24-205-ubuntu
 
 ##git
 apt install -y git lrzsz
 
 ##clone code
+mkdir /home/ubuntu
 cd /home/ubuntu
 git clone https://github.com/tencent/tars.git
 
@@ -48,7 +49,6 @@ mvn -v
 wget http://caucho.com/download/debian/dists/trusty/multiverse/binary-amd64/resin-pro_4.0.54-amd64.deb
 dpkg -i resin-pro_4.0.54-amd64.deb
 cd /home/ubuntu/tars/build
-#ln -s /usr/local/resin-4.0.55 /usr/local/resin
 
 ##安装rapidjson
 git clone https://github.com/Tencent/rapidjson.git
@@ -93,8 +93,7 @@ cp ./conf/my.cnf /usr/local/mysql/
 #/etc/init.d/mysql start
 systemctl enable mysql.service
 systemctl start mysql.service
-#systemctl stop mysql.service
-#systemctl start mysql.service
+
 
 ##添加mysql的bin路径
 echo "PATH=\$PATH:/usr/local/mysql/bin" >> /etc/profile
@@ -114,8 +113,6 @@ ldconfig
 cd /home/ubuntu/tars/build/
 ##替换阿里云maven
 #sed -i "s?http://my.repository.com/repo/path?http://maven.aliyun.com/nexus/content/groups/public?g"  ./apache-maven-3.3.9/conf/settings.xml
-
-#source /etc/profile
 
 ##安装java语言框架
 cd ../java/
