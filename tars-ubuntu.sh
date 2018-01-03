@@ -191,3 +191,7 @@ cp ./conf/resin.xml /etc/resin/
 #/usr/local/resin/bin/resin.sh start
 /usr/local/share/resin-4.0.54/bin/resinctl stop
 /usr/local/share/resin-4.0.54/bin/resinctl start
+
+#解决上传tgz文件失败问题
+cd /usr/local/app/patchs
+chmod 777 tars.upload
