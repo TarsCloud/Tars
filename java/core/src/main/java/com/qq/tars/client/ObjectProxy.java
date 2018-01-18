@@ -122,8 +122,10 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
     }
 
     public void destroy() {
-        statReportFuture.cancel(false);
-        queryRefreshFuture.cancel(false);
+        if (statReportFuture != null)
+            statReportFuture.cancel(false);
+        if (queryRefreshFuture != null)
+            queryRefreshFuture.cancel(false);
         protocolInvoker.destroy();
     }
 
