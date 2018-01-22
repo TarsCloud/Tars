@@ -136,7 +136,6 @@ public abstract class ServantProtocolInvoker<T> implements ProtocolInvoker<T> {
                 try {
                     allInvoker.remove(invoker);
                     invoker.destroy();
-                    this.selectorManager.stop();
                 } catch (Throwable t) {
                     ClientLogger.getLogger().error("error occurred on destroy invoker|" + invoker, t);
                 }
