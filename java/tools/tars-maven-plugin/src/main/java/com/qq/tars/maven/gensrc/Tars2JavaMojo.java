@@ -666,7 +666,10 @@ public class Tars2JavaMojo extends AbstractMojo {
 
             boolean isEnum = nsMap != null ? isEnum(jt, nsMap) : false;
             if (isEnum) {
-                return "int";
+                if (!usePrimitiveWrapper)
+                    return "int";
+                else
+                    return "java.lang.Integer";
             }
             if (ct.namespace() == null) {
                 return ct.typeName();
