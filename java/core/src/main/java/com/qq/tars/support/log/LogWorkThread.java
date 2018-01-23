@@ -30,7 +30,7 @@ final class LogWorkThread implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.interrupted()) {
             try {
                 Thread.sleep(500);
 
@@ -43,6 +43,8 @@ final class LogWorkThread implements Runnable {
                         }
                     }
                 }
+            } catch (InterruptedException e) {
+                break;
             } catch (Exception e) {
                 e.printStackTrace();
             }
