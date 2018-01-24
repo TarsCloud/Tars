@@ -31,6 +31,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.qq.tars.common.util.Constants;
+import com.qq.tars.common.util.concurrent.TaskThreadFactory;
 
 public final class ScheduledExecutorManager implements ScheduledExecutorService {
 
@@ -40,6 +41,7 @@ public final class ScheduledExecutorManager implements ScheduledExecutorService 
     private final Lock lock = new ReentrantLock();
 
     private ScheduledExecutorManager() {
+        this.taskExecutor.setThreadFactory(new TaskThreadFactory("tars-schedule-executor-"));
     }
 
     public static ScheduledExecutorManager getInstance() {

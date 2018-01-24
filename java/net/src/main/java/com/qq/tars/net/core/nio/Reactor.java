@@ -84,7 +84,7 @@ public final class Reactor extends Thread {
 
     public void run() {
         try {
-            for (;;) {
+            while (!Thread.interrupted()) {
                 selector.select();
                 processRegister();
                 Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
@@ -112,6 +112,12 @@ public final class Reactor extends Thread {
         } catch (Throwable e) {
             crashed = true;
             e.printStackTrace();
+        } finally {
+            try {
+                selector.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

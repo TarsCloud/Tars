@@ -429,6 +429,10 @@ int RequestDecoder::decode()
 {
     
      _req.Parse(_input.c_str());
+	 if (_req.HasParseError()) {
+		 TLOGERROR("Decode error:"<<_req.GetParseError()<<"|"<<_input);
+		 return -1;
+	 }
 
     try
     {

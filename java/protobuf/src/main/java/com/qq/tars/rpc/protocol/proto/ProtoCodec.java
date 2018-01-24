@@ -48,6 +48,9 @@ public class ProtoCodec extends TarsCodec {
     @Override
     protected byte[] encodeRequestParams(TarsServantRequest request, String charsetName) throws ProtocolException {
         Object[] parameter = request.getMethodParameters();
+        if (TarsHelper.isCallback(request.getMethodInfo().getParametersList().get(0).getAnnotations())) {
+            return ((GeneratedMessage) parameter[1]).toByteArray();
+        }
         return ((GeneratedMessage) parameter[0]).toByteArray();
     }
 
