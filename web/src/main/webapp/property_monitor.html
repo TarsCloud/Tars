@@ -193,6 +193,33 @@
 
     Chart.defaults.global.responsive=false;
     var ctx1 = document.getElementById("chart1"),chart1;
+
+    chart1 = newChart(ctx1,'特征值');
+
+    function newChart(tar,label) {
+        return new Chart(tar,{
+            type:'line',
+            data:{
+                labels:[],
+                datasets:[
+                    {data:[],borderColor:'rgba(249,103,104,1)',label:'当日'+label},
+                    {data:[],borderColor:'rgba(69,190,137,1)',label:'对比日'+label}
+                ]
+            },
+            options:{
+                title:{text:label,display:true}
+            }
+        });
+    }
+
+    function addData(chart, label, data) {
+        chart.data.labels = label;
+        $.each(chart.data.datasets,function (index,n) {
+            n.data = data[index];
+        });
+        chart.update();
+    }
+
     function showChart(data){
         var arrLabel = [],
             theValue = [],
@@ -202,27 +229,7 @@
             theValue.push(n.the_value);
             preValue.push(n.pre_value);
         });
-        if(typeof chart1=='object'){
-            chart1.data.datasets=[
-                {data:theValue,borderColor:'rgba(249,103,104,1)',label:'当日特征值'},
-                {data:preValue,borderColor:'rgba(69,190,137,1)',label:'对比日特征值'}
-            ];
-            chart1.update();
-        }else{
-            chart1 = new Chart(ctx1,{
-                type:'line',
-                data:{
-                    labels:arrLabel,
-                    datasets:[
-                        {data:theValue,borderColor:'rgba(249,103,104,1)',label:'当日总流量'},
-                        {data:preValue,borderColor:'rgba(69,190,137,1)',label:'对比日总流量'}
-                    ]
-                },
-                options:{
-                    title:{text:'当日总流量',display:true}
-                }
-            });
-        }
+        addData(chart1,arrLabel,[theValue,preValue]);
     }
 
     // 渲染工具条
