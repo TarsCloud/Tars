@@ -1,0 +1,21 @@
+{
+  "name": "@tars/utils",
+  "version": "1.0.0",
+  "description": "TARS 框架辅助工具集合",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tars-node/utils.git"
+  },
+  "keywords": [
+    "tars",
+    "utils"
+  ],
+  "author": {
+    "name": "Superzheng",
+    "email": "superzheng@tencent.com"
+  },
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "bluebird": "^3.4.6"
+  }
+}

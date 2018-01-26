@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://tars.tencent.com/schema/tars"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://tars.tencent.com/schema/tars">
+
+    <xsd:annotation>
+        <xsd:documentation>
+            <![CDATA[ Namespace for tars services provided by tars framework. ]]>
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="servant">
+        <xsd:complexType>
+            <xsd:attribute name="name" type="xsd:string" use="required">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[ The Obj name. ]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="interface" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[ The interface class name. ]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="ref" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[ The servant bean name. ]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="protocol" type="xsd:string"/>
+            <xsd:attribute name="src" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="listener">
+        <xsd:complexType>
+            <xsd:attribute name="ref" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[ The listener bean name. ]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

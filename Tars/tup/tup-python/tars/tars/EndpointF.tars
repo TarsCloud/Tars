@@ -1,0 +1,25 @@
+
+module register
+{
+    /**
+     * ¶Ë¿ÚÐÅÏ¢
+     */
+    struct EndpointF
+    {
+        0 require string host;
+        1 require int port;
+        2 require int timeout;
+        3 require int istcp;
+        4 require int grid;
+        5 optional int groupworkid;
+        6 optional int grouprealid;
+        7 optional string setId;
+        8 optional int qos;
+        9 optional int bakFlag;
+        11 optional int weight;
+        12 optional int weightType;
+    };
+    key[EndpointF, host, port, timeout, istcp, grid, qos, weight, weightType];
+};
+
+

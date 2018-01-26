@@ -1,0 +1,63 @@
+/**
+ * Tencent is pleased to support the open source community by making Tars available.
+ *
+ * Copyright (C) 2016THL A29 Limited, a Tencent company. All rights reserved.
+ *
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use this file except 
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed 
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ */
+
+module tars
+{
+    struct LogInfo
+    {
+        //业务名称
+        0 require string appname;
+        //服务名称
+        1 require string servername;
+        //日志文件名称
+        2 require string sFilename;
+        //时间格式
+        3 require string sFormat;
+        //set分组名称
+        4 optional string setdivision;
+        // 日志文件名是否带.log后缀
+        5 optional bool     bHasSufix=true;
+        // 是否允许框架在日志文件名上增加业务相关的标识
+        6 optional bool  bHasAppNamePrefix=true;
+        // 框架内部的日期和时间部分是否加上[]符号
+        7 optional bool  bHasSquareBracket=false;
+        // 日志文件名中用户自定义字符与日期字符间的连接符，默认是"_"
+        8 optional string sConcatStr="_";
+        // 日志内容项之间的分隔符，默认是"|"
+        9 optional string sSepar="|";
+        //按天/小时/分钟输出日志时的记录类型,例如,按一天:day或者1day;按两小时:2hour;按10分钟:10minute
+        10 optional string sLogType = "";
+    };
+    interface Log
+    {
+        /**
+        * 记录远程日志
+        * @param app, 应用名称
+        * @param server, 服务名称
+        * @param file, 文件名称
+        * @param format, 日志时间格式(%Y%m%d)
+        * @param buffer, 日志内容
+        */
+        void logger(string app, string server, string file, string format, vector<string> buffer);
+
+       /**
+        * 记录远程日志
+        * @param info, LogInfo
+        * @param buffer, 日志内容
+        */
+        void loggerbyInfo(LogInfo info, vector<string> buffer);
+    };
+};

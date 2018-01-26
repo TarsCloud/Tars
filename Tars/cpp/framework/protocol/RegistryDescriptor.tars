@@ -1,0 +1,78 @@
+/**
+ * Tencent is pleased to support the open source community by making Tars available.
+ *
+ * Copyright (C) 2016THL A29 Limited, a Tencent company. All rights reserved.
+ *
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use this file except 
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed 
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ */
+
+#include "EndpointF.tars"
+
+module tars
+{
+    struct AdapterDescriptor
+    {
+        0 require string adapterName;
+        1 require string threadNum;
+        2 require string endpoint;
+        3 require int maxConnections;
+        4 require string allowIp;
+        5 require string servant;
+        6 require int queuecap;
+        7 require int queuetimeout;
+        8 require int grid;   //该字段已弃用，为平滑升级而保留定义
+        9 optional string protocol;
+        10 optional string handlegroup;
+        11 optional int shmkey  = 0;     //该字段用作共享内存key
+        12 optional int shmcap  = 0;    //该字段用作共享内存大小
+    };
+
+    struct ServerDescriptor
+    {
+        0 require string application;
+        1 require string serverName;
+        2 require string nodeName;
+        3 require string basePath;
+        4 require string exePath;
+        5 require string settingState;
+        6 require string presentState;
+        7 require string profile;
+        8 require string patchVersion;
+        9 require string patchTime;
+        10 require string patchUser;
+        11 require map<string, AdapterDescriptor> adapters;
+        12 optional string serverType;
+        13 optional string startScript;
+        14 optional string stopScript;
+        15 optional string monitorScript;
+        16 optional int configCenterPort;
+        17 optional int asyncThreadNum;
+        18 optional string setId;
+        19 optional string sJmx_port;  //tarsjava服务专用
+    };
+
+    struct ObjectName
+    {
+        0 require string ObjectId;
+    };
+
+    //在1.5.5版本中除去了(2 require vector<int> vActiveEpGroupId和3 require vector<int> vInactiveEpGroupId)
+    struct ObjectItem
+    {
+        0 require vector<EndpointF> vActiveEndpoints;
+        1 require vector<EndpointF> vInactiveEndpoints;
+    };
+    //主控idc分组信息结构，用来缓存信息
+    struct ServerGroupRule
+    {
+        0 require vector< map<string,string> >  vGroupRuleInfo;
+    };
+};

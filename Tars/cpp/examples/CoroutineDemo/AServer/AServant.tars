@@ -1,0 +1,14 @@
+
+module Test
+{
+
+interface AServant
+{
+    int test();
+    
+    int testInt(int iIn,out int iOut);
+    
+    int testStr(string sIn, out string sOut);
+};
+
+}; 
