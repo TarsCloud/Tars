@@ -1,5 +1,0 @@
-set(OUT_DEPENDS_LIST)
-
-complice_tars(OUT_DEPENDS_LIST)
-
-add_custom_target(FRAMEWORK-PROTOCOL ALL DEPENDS ${OUT_DEPENDS_LIST})
