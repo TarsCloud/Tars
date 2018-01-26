@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>tars-parent</artifactId>
+        <groupId>qq-cloud-central</groupId>
+        <version>1.0.3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>tars-protobuf</artifactId>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>qq-cloud-central</groupId>
+            <artifactId>tars-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,10 @@
+
+module DemoApp
+{
+
+interface DemoServant
+{
+    int test();
+};
+
+}; 

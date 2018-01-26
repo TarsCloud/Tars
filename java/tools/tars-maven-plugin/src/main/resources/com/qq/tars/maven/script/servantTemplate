@@ -1,0 +1,13 @@
+	<$APP$.$SERVER$.$SERVANTNAME$Adapter>
+		allow
+		endpoint=tcp -h $LOCALIP$ -p $PORT$ -t 60000
+		handlegroup=$APP$.$SERVER$.$SERVANTNAME$Adapter
+		maxconns=200000
+		protocol=$PROTOCOL$
+		queuecap=10000
+		queuetimeout=60000
+		servant=$APP$.$SERVER$.$SERVANTNAME$
+		shmcap=0
+		shmkey=0
+		threads=5
+	</$APP$.$SERVER$.$SERVANTNAME$Adapter>

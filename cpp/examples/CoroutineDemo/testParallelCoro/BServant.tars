@@ -1,0 +1,15 @@
+
+module Test
+{
+	
+interface BServant
+{
+    int test();
+    
+    int testCoroSerial(string sIn, out string sOut);
+    
+    int testCoroParallel(string sIn, out string sOut);
+
+};
+
+}; 

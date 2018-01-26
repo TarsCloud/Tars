@@ -1,0 +1,24 @@
+//
+// Prefix header for all source files of the 'tup' target in the 'tup' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
+#import "tup-Debug.h"
+/**
+ * 辅助配置项，用于通过代码自动生成工具生成的代码
+ * 如果此特性开启，则使用默认的getter和setter方法，假设Tars中定义的结构成员名为prop1，则可以通
+ * 过self.prop1来访问getter和setter方法，如果此特性关闭，则需要使用self.tars_prop1来访问
+ * getter和setter方法。
+ */
+#ifndef TARSV2_DEFAULT_GETTER_AND_SETTER
+#define TARSV2_DEFAULT_GETTER_AND_SETTER                 1
+#endif /*TARSV2_DEFAULT_GETTER_AND_SETTER*/
+/**
+ * 辅助配置项，用于通过代码自动生成工具生成的代码
+ * 如果定义此宏，将使枚举类型对应的实现ETOS和STOE的支持类生效，默认是关闭的
+ */
+#ifndef TARSV2_ENUM_ETOS_AND_STOE_SUPPORTED
+#define TARSV2_ENUM_ETOS_AND_STOE_SUPPORTED              0
+#endif /*TARSV2_DEFAULT_GETTER_AND_SETTER*/

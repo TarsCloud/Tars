@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<servants>
+	<servant name="StressObj">
+		<home-api>com.qq.tars.stress.server.test.StressServant</home-api>
+		<home-class>com.qq.tars.stress.server.test.impl.StressServantImpl</home-class>
+	</servant>
+</servants>

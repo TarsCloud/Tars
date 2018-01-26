@@ -1,0 +1,15 @@
+option java_generic_services = true;
+option java_package = "com.iflytek.grpc.flight.dto";
+
+message QueryFlightRequest{
+  required string name=1;
+  required string password=2;
+  required string departureCity=3;
+  required string destinationCity=4;
+};
+
+message QueryFlightResponse{
+  required int32 errcode=1;
+  required string errmsg=2;
+  required string flightsInfo=3;
+};
