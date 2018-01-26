@@ -1613,7 +1613,7 @@ void TC_EpollServer::NetThread::bind(const TC_Endpoint &ep, TC_Socket &s)
 
     if(ep.isTcp() && !ep.isUnixLocal())
     {
-        s.listen(1024);
+        s.listen(ep.getBacklog());
         s.setKeepAlive();
         s.setTcpNoDelay();
         //不要设置close wait否则http服务回包主动关闭连接会有问题

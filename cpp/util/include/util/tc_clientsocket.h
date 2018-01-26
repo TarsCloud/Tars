@@ -69,9 +69,9 @@ public:
      * @param timeout, 超时时间, 毫秒
      * @param type, SOCK_STREAM或SOCK_DGRAM
      */
-    TC_Endpoint(const string& host, int port, int timeout, int type = 1, int grid = 0, int qos = 0, int weight = -1, unsigned int weighttype = 0, int authType = 0)
+    TC_Endpoint(const string& host, int port, int timeout, int type = 1, int grid = 0, int qos = 0, int weight = -1, unsigned int weighttype = 0, int authType = 0, int backlog = 1024)
     {
-        init(host, port, timeout, type, grid, qos, weight, weighttype, authType);
+        init(host, port, timeout, type, grid, qos, weight, weighttype, authType, backlog);
     }
 
     /**
@@ -98,6 +98,7 @@ public:
         _weight = l._weight;
         _weighttype = l._weighttype;
         _authType = l._authType;
+        _backlog = l._backlog;
     }
 
     /**
@@ -119,6 +120,7 @@ public:
             _weight = l._weight;
             _weighttype = l._weighttype;
             _authType = l._authType;
+            _backlog = l._backlog;
         }
 
         return *this;
@@ -132,7 +134,7 @@ public:
      */
     bool operator == (const TC_Endpoint& l)
     {
-        return (_host == l._host && _port == l._port && _timeout == l._timeout && _type == l._type && _grid == l._grid && _qos == l._qos && _weight == l._weight && _weighttype == l._weighttype && _authType == l._authType);
+        return (_host == l._host && _port == l._port && _timeout == l._timeout && _type == l._type && _grid == l._grid && _qos == l._qos && _weight == l._weight && _weighttype == l._weighttype && _authType == l._authType && _backlog == l._backlog);
     }
 
     /**
@@ -266,6 +268,16 @@ public:
     void setAuthType(int type)          { _authType = type; }
 
     /**
+     * @brief 设置backlog的大小
+     */
+    void setBacklog(int backlog)        {_backlog = backlog;}
+
+    /**
+     * @brief 获取backlog
+     */
+    int getBacklog() const        { return _backlog;}
+
+    /**
      * @brief 字符串描述
      *
      * @return string
@@ -286,6 +298,7 @@ public:
         if (_weight != -1) os << " -w " << _weight;
         if (_weighttype != 0) os << " -v " << _weighttype;
 		if (_authType != 0) os << " -e " << _authType;
+        if (_backlog != 1024) os << " -b " << _backlog;
         return os.str();
     }
 
@@ -310,7 +323,7 @@ public:
     void parse(const string &desc);
 
 private:
-    void init(const string& host, int port, int timeout, int istcp, int grid, int qos, int weight, unsigned int weighttype, int authType);
+    void init(const string& host, int port, int timeout, int istcp, int grid, int qos, int weight, unsigned int weighttype, int authType, int backlog);
 
 protected:
     /**
@@ -356,6 +369,11 @@ protected:
      *  鉴权类型
      */
     int         _authType;
+
+    /**
+     * listen时的backlog参数
+     */
+    int         _backlog;
 };
 
 /*************************************TC_ClientSocket**************************************/

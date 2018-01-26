@@ -35,7 +35,7 @@ TC_Endpoint::TC_Endpoint()
     _authType = 0;
 }
 
-void TC_Endpoint::init(const string& host, int port, int timeout, int type, int grid, int qos, int weight, unsigned int weighttype, int authType)
+void TC_Endpoint::init(const string& host, int port, int timeout, int type, int grid, int qos, int weight, unsigned int weighttype, int authType, int backlog)
 {
     _host = host;
     _port = port;
@@ -59,6 +59,7 @@ void TC_Endpoint::init(const string& host, int port, int timeout, int type, int 
     }
 
     _authType = authType;
+    _backlog = backlog;
 }
 
 void TC_Endpoint::parse(const string &str)
@@ -68,6 +69,7 @@ void TC_Endpoint::parse(const string &str)
     _weight = -1;
     _weighttype = 0;
     _authType = 0;
+    _backlog = 1024;
 
     const string delim = " \t\n\r";
 
@@ -211,6 +213,15 @@ void TC_Endpoint::parse(const string &str)
                 if (!(p >> const_cast<int&>(_authType)) || !p.eof() || _authType < 0 || _authType > 1)
                 {
                     throw TC_EndpointParse_Exception("TC_Endpoint::parse -e error : " + str);
+                }
+                break;
+            }
+            case 'b':
+            {
+                istringstream p(argument);
+                if(!(p >> const_cast<int&>(_backlog)) || !p.eof() || _backlog < 0 || _backlog > 65535)
+                {
+                    throw TC_EndpointParse_Exception("TC_Endpoint::parse -b error : " + str);
                 }
                 break;
             }
