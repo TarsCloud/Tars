@@ -1663,26 +1663,6 @@ void TC_HttpRequest::setPostRequest(const string &sUrl, const char *sBuffer, siz
 
 string TC_HttpRequest::encode()
 {
-//    assert(_requestType == REQUEST_GET || _requestType == REQUEST_POST || !_originRequest.empty());
-
-    /*ostringstream os;
-
-    if(_requestType == REQUEST_GET)
-    {
-        encode(REQUEST_GET, os);
-    }
-    else if(_requestType == REQUEST_POST)
-    {
-        setContentLength(_content.length());
-        encode(REQUEST_POST, os);
-        os << _content;
-    }
-    else if(_requestType == REQUEST_OPTIONS)
-    {
-        encode(REQUEST_OPTIONS, os);
-    }
-
-    return os.str();*/
     string sRet;
 
     if(_requestType == REQUEST_GET)
@@ -1756,8 +1736,6 @@ string TC_HttpRequest::encode()
 
 void TC_HttpRequest::encode(vector<char> &buffer)
 {
-//    assert(_requestType == REQUEST_GET || _requestType == REQUEST_POST || !_originRequest.empty());
-
     buffer.clear();
 
     string s = encode();
@@ -1774,7 +1752,7 @@ bool TC_HttpRequest::decode(const char *sBuffer, size_t iLength)
 {
     assert(sBuffer != NULL);
 
-    if(strncasecmp(sBuffer, "GET " ,4) !=0 && strncasecmp(sBuffer, "POST " ,5) !=0 && strncasecmp(sBuffer, "OPTIONS " ,8) !=0 && strncasecmp(sBuffer, "HEAD " ,5))
+    if(strncasecmp(sBuffer, "GET " ,4) !=0 && strncasecmp(sBuffer, "POST " ,5) !=0 && strncasecmp(sBuffer, "OPTIONS " ,8) !=0 && strncasecmp(sBuffer, "HEAD " ,5) != 0 && strncasecmp(sBuffer, "DELETE ", 7) != 0 && strncasecmp(sBuffer, "PUT ", 4) != 0)
     {
         throw runtime_error("[TC_HttpRequest::checkRequest] protocol not support, only support GET HEAD POST and OPTIONS ");
     }
