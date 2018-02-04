@@ -19,6 +19,7 @@ package com.qq.tars.net.client.ticket;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.qq.tars.net.client.Callback;
@@ -29,23 +30,35 @@ public class TicketManager {
 
     private static ConcurrentHashMap<Integer, Ticket<?>> tickets = new ConcurrentHashMap<Integer, Ticket<?>>();
 
+    private static ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
     static {
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
+        executor.scheduleAtFixedRate(new Runnable() {
 
             long currentTime = -1;
 
             public void run() {
-                Collection<Ticket<?>> values = tickets.values();
-                currentTime = System.currentTimeMillis();
-                for (Ticket<?> t : values) {
-                    if ((currentTime - t.startTime) > t.timeout) {
-                        removeTicket(t.getTicketNumber());
-                        t.expired();
+                try {
+                    while (!Thread.interrupted()) {
+                        Collection<Ticket<?>> values = tickets.values();
+                        currentTime = System.currentTimeMillis();
+                        for (Ticket<?> t : values) {
+                            if ((currentTime - t.startTime) > t.timeout) {
+                                removeTicket(t.getTicketNumber());
+                                t.expired();
+                            }
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
         }, 500, 500, TimeUnit.MILLISECONDS);
+    }
+
+    public static void shutdown() {
+        executor.shutdownNow();
     }
 
     @SuppressWarnings("unchecked")

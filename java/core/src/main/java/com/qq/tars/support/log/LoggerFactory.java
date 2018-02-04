@@ -39,6 +39,8 @@ public class LoggerFactory {
 
     protected static String defaultLogRoot;
 
+    protected static String dyeingLogRoot;
+
     protected static Level defaultLogLevel = Level.INFO;
 
     private static final String DEFAULT_LOG = "_default";
@@ -52,6 +54,12 @@ public class LoggerFactory {
     private volatile static Communicator communicator = null;
 
     private static final ConcurrentHashMap<String, Logger> loggerMap = new ConcurrentHashMap<String, Logger>(128);
+
+    private static Thread th;
+
+    private static Thread thRemote;
+
+    private static Thread threadAll;
 
     static {
         loadLogConfCache();
@@ -122,14 +130,26 @@ public class LoggerFactory {
 
     private static void start() {
         try {
-            Thread th = new Thread(new LogWorkThread(LogType.LOCAL), "LocalLogThread");
+            th = new Thread(new LogWorkThread(LogType.LOCAL), "LocalJ4logThread");
             th.start();
-            Thread thRemote = new Thread(new LogWorkThread(LogType.REMOTE), "RemoteLogThread");
+            thRemote = new Thread(new LogWorkThread(LogType.REMOTE), "RemoteJ4logThread");
             thRemote.start();
-            Thread threadAll = new Thread(new LogWorkThread(LogType.ALL), "AllLogThread");
+            threadAll = new Thread(new LogWorkThread(LogType.ALL), "AllJ4logThread");
             threadAll.start();
         } catch (Exception e) {
             System.out.println("FATAL tars-log | init failed:" + e.getMessage());
+            e.printStackTrace(System.out);
+        }
+
+    }
+
+    public static void stop() {
+        try {
+            th.interrupt();
+            thRemote.interrupt();
+            threadAll.interrupt();
+        } catch (Exception e) {
+            System.out.println("FATAL j4log | init failed:" + e.getMessage());
             e.printStackTrace(System.out);
         }
 
@@ -190,6 +210,11 @@ public class LoggerFactory {
             System.out.println("INFO tars-log | set tars-log defaultRoot=" + defaultLogRoot);
         } else {
             System.out.println("ERROR tars-log | config error, set tars-log defaultRoot=" + defaultLogRoot);
+        }
+        dyeingLogRoot = defaultLogRoot + "/tars_dyeing/";
+        File logRoot = new File(dyeingLogRoot);
+        if (!logRoot.exists()) {
+            logRoot.mkdir();
         }
     }
 

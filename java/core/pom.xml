@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>qq-cloud-central</groupId>
 		<artifactId>tars-parent</artifactId>
-		<version>1.0.1</version>
+		<version>1.0.3</version>
 	</parent>
 	<artifactId>tars-core</artifactId>
 	<name>${project.artifactId}</name>
@@ -22,6 +22,11 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>qq-cloud-central</groupId>
+			<artifactId>tars-context</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -33,8 +33,8 @@ public class TARSStatMonitorCondition {
     public TARSStatMonitorCondition(HttpServletRequest request) {
         thedate = StringUtils.trimToNull(request.getParameter("thedate"));
         predate = StringUtils.trimToNull(request.getParameter("predate"));
-        theshowtime = StringUtils.trimToNull(request.getParameter("theshowtime"));
-        preshowtime = StringUtils.trimToNull(request.getParameter("preshowtime"));
+        theshowtime = StringUtils.trimToNull(request.getParameter("startshowtime"));
+        preshowtime = StringUtils.trimToNull(request.getParameter("endshowtime"));
 
         masterName = StringUtils.trimToNull(request.getParameter("master_name"));
         slaveName = StringUtils.trimToNull(request.getParameter("slave_name"));

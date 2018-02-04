@@ -16,6 +16,8 @@
 
 package com.qq.tars.client;
 
+import java.lang.reflect.Proxy;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -24,7 +26,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.qq.tars.client.support.ClientPoolManager;
 import com.qq.tars.client.util.ClientLogger;
+import com.qq.tars.common.support.ScheduledExecutorManager;
 import com.qq.tars.common.util.StringUtils;
+import com.qq.tars.net.client.ticket.Ticket;
+import com.qq.tars.net.client.ticket.TicketManager;
 import com.qq.tars.rpc.common.LoadBalance;
 import com.qq.tars.rpc.common.ProtocolInvoker;
 import com.qq.tars.rpc.exc.CommunicatorConfigException;
@@ -60,13 +65,13 @@ public final class Communicator {
         return stringToProxy(clazz, servantProxyConfig, null);
     }
 
-    public <T> T stringToProxy(Class<T> clazz, ServantProxyConfig servantProxyConfig, LoadBalance loadBalance) throws CommunicatorConfigException {
+    public <T> T stringToProxy(Class<T> clazz, ServantProxyConfig servantProxyConfig, LoadBalance<T> loadBalance) throws CommunicatorConfigException {
         return stringToProxy(clazz, servantProxyConfig.getObjectName(), servantProxyConfig, loadBalance, null);
     }
 
     @SuppressWarnings("unchecked")
     private <T> T stringToProxy(Class<T> clazz, String objName, ServantProxyConfig servantProxyConfig,
-                                LoadBalance loadBalance, ProtocolInvoker<T> protocolInvoker) throws CommunicatorConfigException {
+                                LoadBalance<T> loadBalance, ProtocolInvoker<T> protocolInvoker) throws CommunicatorConfigException {
         if (!inited.get()) {
             throw new CommunicatorConfigException("communicator uninitialized!");
         }
@@ -76,6 +81,16 @@ public final class Communicator {
     @Deprecated
     public void initialize(CommunicatorConfig config) throws CommunicatorConfigException {
         this.initCommunicator(config);
+    }
+
+    public void shutdown() {
+        this.threadPoolExecutor.shutdownNow();
+        ScheduledExecutorManager.getInstance().shutdownNow();
+        TicketManager.shutdown();
+        for (Iterator<Object> it = servantProxyFactory.getProxyIterator(); it.hasNext(); ) {
+            Object proxy = it.next();
+            ((ObjectProxy) Proxy.getInvocationHandler(proxy)).destroy();
+        }
     }
 
     private void initCommunicator(CommunicatorConfig config) throws CommunicatorConfigException {

@@ -78,6 +78,7 @@ void TarsRemoteNotify::notify(NOTIFYLEVEL level, const string &sMessage)
         if(_notifyPrx)
         {
             ReportInfo info;
+           // info.eType     = 0;
             info.sApp      = _app;
             info.sServer   = _serverName;
             info.sSet      = _setName;

@@ -18,13 +18,16 @@ package com.qq.tars.server.core;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.reflect.Constructor;
+import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.qq.tars.common.support.ClassLoaderManager;
-import com.qq.tars.server.apps.AppContext;
+import com.qq.tars.rpc.exc.TarsException;
+import com.qq.tars.server.apps.AppContextImpl;
+import com.qq.tars.server.apps.XmlAppContext;
 import com.qq.tars.server.config.ConfigurationManager;
 
-@Deprecated
 public class AppContainer implements Container {
 
     AppContext defaultApp = null;
@@ -32,7 +35,7 @@ public class AppContainer implements Container {
     private final ConcurrentHashMap<String, AppContext> contexts = new ConcurrentHashMap<String, AppContext>();
 
     public void start() throws Exception {
-        loadApps();
+        loadApp();
         defaultApp = contexts.get("");
         System.out.println("[SERVER] The container started successfully.");
     }
@@ -42,10 +45,32 @@ public class AppContainer implements Container {
         System.out.println("[SERVER] The container stopped successfully.");
     }
 
+    private void loadApp() throws Exception {
+        String root = ConfigurationManager.getInstance().getServerConfig().getBasePath();
+        File path = new File(root);
+        AppContext context = null;
+
+        URL servantXML = getClass().getClassLoader().getResource("servants.xml");
+        if (servantXML != null) {
+            context = new XmlAppContext(new File(servantXML.toURI()));
+        } else if (getClass().getClassLoader().getResource("servants-spring.xml") != null){
+            System.out.println("[SERVER] find servants-spring.xml, use Spring mode.");
+            Class clazz = Class.forName("com.qq.tars.server.apps.SpringAppContext");
+            Constructor constructor = clazz.getConstructor(File.class);
+            context = (AppContext) constructor.newInstance(path);
+        } else {
+            System.out.println("[SERVER] servants profile does not exist, start failed.");
+            throw new TarsException("servants profile does not exist");
+        }
+
+        contexts.put("", context);
+    }
+
+    @Deprecated
     public void loadApps() throws Exception {
-        String root = ConfigurationManager.getInstance().getserverConfig().getBasePath();
+        String root = ConfigurationManager.getInstance().getServerConfig().getBasePath();
         File dirs = new File(root + "/apps");
-        final ClassLoaderManager protocolManager = ClassLoaderManager.getInstance();
+        final ClassLoaderManager manager = ClassLoaderManager.getInstance();
 
         dirs.listFiles(new FileFilter() {
 
@@ -55,9 +80,9 @@ public class AppContainer implements Container {
                     name = "";
                 }
                 if (path.isDirectory()) {
-                    AppContext context = new AppContext(name, path);
+                    AppContextImpl context = new AppContextImpl(name, path);
                     contexts.put(name, context);
-                    protocolManager.registerClassLoader(name, context.getAppContextClassLoader());
+                    manager.registerClassLoader(name, context.getAppContextClassLoader());
                 }
                 return false;
             }
@@ -88,6 +113,8 @@ public class AppContainer implements Container {
     }
 
     public void stopApps() throws Exception {
-
+        for (AppContext appContext : contexts.values()) {
+            appContext.stop();
+        }
     }
 }

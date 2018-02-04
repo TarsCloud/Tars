@@ -164,7 +164,13 @@
     if(gData.level==1){
         $('body').html('<div class="alert alert-info mt10">服务监控需要具体到服务，请您先在左侧业务树选择服务。</div>');
     }else{
-        $('#slave_name').val(gData.application+'.'+ gData.server_name);
+        var a=[];
+        $.each(params,function (index,n) {
+            a.push(n.substring(1));
+        });
+        var slaveName = ([gData.application,gData.server_name].join('.')+'.'+[gData.set_name,gData.set_area,gData.set_group].join('')).replace(/\.$/,'');
+
+        $('#slave_name').val(slaveName);
 
         $('#the_date').val(myDate.getFullYear()+'/'+format(myDate.getMonth()+1)+'/'+format(myDate.getDate()));
         $('#pre_date').val(preDate.getFullYear()+'/'+format(preDate.getMonth()+1)+'/'+format(preDate.getDate()));
@@ -213,6 +219,36 @@
             ctx3 = document.getElementById("chart3"),
             ctx4 = document.getElementById("chart4"),
             chart1,chart2,chart3,chart4;
+
+    chart1 = newChart(ctx1,'总流量');
+    chart2 = newChart(ctx2,'平均耗时');
+    chart3 = newChart(ctx3,'异常率');
+    chart4 = newChart(ctx4,'超时率');
+
+    function newChart(tar,label) {
+        return new Chart(tar,{
+            type:'line',
+            data:{
+                labels:[],
+                datasets:[
+                    {data:[],borderColor:'rgba(249,103,104,1)',label:'当日'+label},
+                    {data:[],borderColor:'rgba(69,190,137,1)',label:'对比日'+label}
+                ]
+            },
+            options:{
+                title:{text:label,display:true}
+            }
+        });
+    }
+
+    function addData(chart, label, data) {
+        chart.data.labels = label;
+        $.each(chart.data.datasets,function (index,n) {
+            n.data = data[index];
+        });
+        chart.update();
+    }
+
     function showChart(data){
         var arrLabel = [],
                 theTotalCount = [],
@@ -234,82 +270,11 @@
             theFailRate.push(n.the_fail_rate);
             preFailRate.push(n.pre_fail_rate);
         });
-        if(typeof chart1=='object' && typeof chart2=='object' && typeof chart3=='object' && typeof chart4=='object'){
-            chart1.data.datasets=[
-                {data:theTotalCount,borderColor:'rgba(249,103,104,1)',label:'当日总流量'},
-                {data:preTotalCount,borderColor:'rgba(69,190,137,1)',label:'对比日总流量'}
-            ];
-            chart2.data.datasets=[
-                {data:theAvgTime,borderColor:'rgba(249,103,104,1)',label:'当日平均耗时'},
-                {data:preAvgTime,borderColor:'rgba(69,190,137,1)',label:'对比日平均耗时'}
-            ];
-            chart3.data.datasets=[
-                {data:theFailRate,borderColor:'rgba(249,103,104,1)',label:'当日异常率'},
-                {data:preFailRate,borderColor:'rgba(69,190,137,1)',label:'对比日异常率'}
-            ];
-            chart4.data.datasets=[
-                {data:theTimeoutRate,borderColor:'rgba(249,103,104,1)',label:'当日超时率'},
-                {data:preTimeoutRate,borderColor:'rgba(69,190,137,1)',label:'对比日超时率'}
-            ];
-            chart1.update();
-            chart2.update();
-            chart3.update();
-            chart4.update();
-        }else{
-            chart1 = new Chart(ctx1,{
-                type:'line',
-                data:{
-                    labels:arrLabel,
-                    datasets:[
-                        {data:theTotalCount,borderColor:'rgba(249,103,104,1)',label:'当日总流量'},
-                        {data:preTotalCount,borderColor:'rgba(69,190,137,1)',label:'对比日总流量'}
-                    ]
-                },
-                options:{
-                    title:{text:'当日总流量',display:true}
-                }
-            });
-            chart2 = new Chart(ctx2,{
-                type:'line',
-                data:{
-                    labels:arrLabel,
-                    datasets:[
-                        {data:theAvgTime,borderColor:'rgba(249,103,104,1)',label:'当日平均耗时'},
-                        {data:preAvgTime,borderColor:'rgba(69,190,137,1)',label:'对比日平均耗时'}
-                    ]
-                },
-                options:{
-                    title:{text:'平均耗时(ms)',display:true}
-                }
-            });
-            chart3 = new Chart(ctx3,{
-                type:'line',
-                data:{
-                    labels:arrLabel,
-                    datasets:[
-                        {data:theFailRate,borderColor:'rgba(249,103,104,1)',label:'当日异常率'},
-                        {data:preFailRate,borderColor:'rgba(69,190,137,1)',label:'对比日异常率'}
-                    ]
-                },
-                options:{
-                    title:{text:'异常率',display:true}
-                }
-            });
-            chart4 = new Chart(ctx4,{
-                type:'line',
-                data:{
-                    labels:arrLabel,
-                    datasets:[
-                        {data:theTimeoutRate,borderColor:'rgba(249,103,104,1)',label:'当日超时率'},
-                        {data:preTimeoutRate,borderColor:'rgba(69,190,137,1)',label:'对比日超时率'}
-                    ]
-                },
-                options:{
-                    title:{text:'超时率',display:true}
-                }
-            });
-        }
 
+        addData(chart1,arrLabel,[theTotalCount,preTotalCount]);
+        addData(chart2,arrLabel,[theAvgTime,preAvgTime]);
+        addData(chart3,arrLabel,[theFailRate,preFailRate]);
+        addData(chart4,arrLabel,[theTimeoutRate,preTimeoutRate]);
     }
 
     // 渲染工具条

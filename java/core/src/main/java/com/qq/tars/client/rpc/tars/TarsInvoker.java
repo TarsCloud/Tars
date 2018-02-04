@@ -17,6 +17,7 @@
 package com.qq.tars.client.rpc.tars;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,9 @@ import com.qq.tars.client.rpc.ServantClient;
 import com.qq.tars.client.rpc.ServantInvokeContext;
 import com.qq.tars.client.rpc.ServantInvoker;
 import com.qq.tars.common.util.Constants;
+import com.qq.tars.common.util.DyeingSwitch;
+import com.qq.tars.context.DistributedContext;
+import com.qq.tars.context.DistributedContextManager;
 import com.qq.tars.net.client.Callback;
 import com.qq.tars.protocol.tars.support.TarsMethodInfo;
 import com.qq.tars.protocol.tars.support.TarsMethodParameterInfo;
@@ -95,6 +99,18 @@ public class TarsInvoker<T> extends ServantInvoker<T> {
         request.setMethodInfo(AnalystManager.getInstance().getMethodMap(objName).get(method));
         request.setMethodParameters(args);
         request.setContext(context);
+        DistributedContext distributedContext = DistributedContextManager.getDistributedContext();
+        Boolean bDyeing = distributedContext.get(DyeingSwitch.BDYEING);        
+        if (bDyeing != null && bDyeing == true) {
+        	request.setMessageType(request.getMessageType() | TarsHelper.MESSAGETYPEDYED);
+        	HashMap<String, String> status = new HashMap<String, String>();
+        	String routeKey = distributedContext.get(DyeingSwitch.DYEINGKEY);
+        	String fileName = distributedContext.get(DyeingSwitch.FILENAME);
+        	status.put(DyeingSwitch.STATUS_DYED_KEY, routeKey == null ? "" : routeKey);
+        	status.put(DyeingSwitch.STATUS_DYED_FILENAME, fileName == null ? "" : fileName);
+        	request.setStatus(status);
+        	
+        }
         return client.invokeWithSync(request);
     }
 
@@ -125,7 +141,20 @@ public class TarsInvoker<T> extends ServantInvoker<T> {
         if (callback == null) {
             request.setPacketType(TarsHelper.ONEWAY);
         }
-        client.invokeWithAsync(request, new TarsCallbackWrapper(config, request.getFunctionName(), getUrl().getHost(), getUrl().getPort(), request.getBornTime(), callback));
+        
+        DistributedContext distributedContext = DistributedContextManager.getDistributedContext();
+        Boolean bDyeing = distributedContext.get(DyeingSwitch.BDYEING);        
+        if (bDyeing != null && bDyeing == true) {
+        	request.setMessageType(request.getMessageType() | TarsHelper.MESSAGETYPEDYED);
+        	HashMap<String, String> status = new HashMap<String, String>();
+        	String routeKey = distributedContext.get(DyeingSwitch.DYEINGKEY);
+        	String fileName = distributedContext.get(DyeingSwitch.FILENAME);
+        	status.put(DyeingSwitch.STATUS_DYED_KEY, routeKey == null ? "" : routeKey);
+        	status.put(DyeingSwitch.STATUS_DYED_FILENAME, fileName == null ? "" : fileName);
+        	request.setStatus(status);
+        	
+        }
+        client.invokeWithAsync(request, new TarsCallbackWrapper(config, request.getFunctionName(), getUrl().getHost(), getUrl().getPort(), request.getBornTime(), request, callback));
     }
 
     private boolean isHashInvoke(Map<String, String> context) {

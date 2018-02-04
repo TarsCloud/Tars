@@ -62,6 +62,7 @@ public abstract class ServantProtocolInvoker<T> implements ProtocolInvoker<T> {
 
     public void destroy() {
         destroy(allInvoker);
+        this.selectorManager.stop();
     }
 
     public void refresh() {

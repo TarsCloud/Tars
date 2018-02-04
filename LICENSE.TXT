@@ -16,6 +16,9 @@ Copyright 1999-2013 The Apache Software Foundation
 2. bootstrap-datepicker  1.7.0
 Copyright 2012 Sebastien MALOT
 
+3. grpc-java
+Copyright 2015 Google Inc.
+
 
 Terms of the Apache License, Version 2.0:
 ---------------------------------------------------

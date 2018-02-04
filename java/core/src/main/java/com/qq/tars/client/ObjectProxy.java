@@ -26,10 +26,7 @@ import com.qq.tars.client.support.ServantCacheManager;
 import com.qq.tars.client.util.ClientLogger;
 import com.qq.tars.common.support.ScheduledExecutorManager;
 import com.qq.tars.common.util.StringUtils;
-import com.qq.tars.rpc.common.InvokeContext;
-import com.qq.tars.rpc.common.Invoker;
-import com.qq.tars.rpc.common.LoadBalance;
-import com.qq.tars.rpc.common.ProtocolInvoker;
+import com.qq.tars.rpc.common.*;
 import com.qq.tars.rpc.common.exc.NoInvokerException;
 import com.qq.tars.rpc.exc.ClientException;
 import com.qq.tars.rpc.exc.NoConnectionException;
@@ -49,6 +46,8 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
     private ProtocolInvoker<T> protocolInvoker;
     private ScheduledFuture<?> statReportFuture;
     private ScheduledFuture<?> queryRefreshFuture;
+
+    private final Object refreshLock = new Object();
 
     private final Random random = new Random(System.currentTimeMillis() / 1000);
 
@@ -89,9 +88,10 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
                 return null;
             }
 
-            Invoker<T> invoker = loadBalancer.select(protocolInvoker.getInvokers(), context);
+            Invoker invoker = loadBalancer.select(context);
             return invoker.invoke(context);
         } catch (Throwable e) {
+            e.printStackTrace();
             if (ClientLogger.getLogger().isDebugEnabled()) {
                 ClientLogger.getLogger().debug(servantProxyConfig.getSimpleObjectName() + " error occurred on invoke|" + e.getLocalizedMessage(), e);
             }
@@ -100,6 +100,10 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
             }
             throw new ClientException(servantProxyConfig.getSimpleObjectName(), e.getLocalizedMessage(), e);
         }
+    }
+
+    public Url selectUrl() {
+        return loadBalancer.select(null).getUrl();
     }
 
     public Class<T> getApi() {
@@ -111,14 +115,19 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
     }
 
     public void refresh() {
-        registryStatReproter();
-        registryServantNodeRefresher();
-        protocolInvoker.refresh();
+        synchronized (refreshLock) {
+            registryStatReproter();
+            registryServantNodeRefresher();
+            protocolInvoker.refresh();
+            loadBalancer.refresh(protocolInvoker.getInvokers());
+        }
     }
 
     public void destroy() {
-        statReportFuture.cancel(false);
-        queryRefreshFuture.cancel(false);
+        if (statReportFuture != null)
+            statReportFuture.cancel(false);
+        if (queryRefreshFuture != null)
+            queryRefreshFuture.cancel(false);
         protocolInvoker.destroy();
     }
 
@@ -127,6 +136,8 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
     }
 
     private void initialize() {
+        loadBalancer.refresh(protocolInvoker.getInvokers());
+
         if (StringUtils.isNotEmpty(this.servantProxyConfig.getLocator()) && !StringUtils.isEmpty(this.servantProxyConfig.getStat())) {
             this.registryStatReproter();
         }

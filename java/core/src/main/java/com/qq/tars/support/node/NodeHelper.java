@@ -49,7 +49,7 @@ public class NodeHelper {
             if (communicator == null) {
                 return;
             }
-            String node = ConfigurationManager.getInstance().getserverConfig().getNode();
+            String node = ConfigurationManager.getInstance().getServerConfig().getNode();
             if (StringUtils.isEmpty(node)) {
                 return;
             }
@@ -65,7 +65,7 @@ public class NodeHelper {
             if (communicator == null) {
                 return;
             }
-            String node = ConfigurationManager.getInstance().getserverConfig().getNode();
+            String node = ConfigurationManager.getInstance().getServerConfig().getNode();
             if (StringUtils.isEmpty(node)) {
                 return;
             }

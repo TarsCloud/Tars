@@ -23,11 +23,20 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.qq.tars.common.util.DyeingSwitch;
+import com.qq.tars.context.DistributedContext;
+import com.qq.tars.context.DistributedContextManager;
+import com.qq.tars.server.config.ConfigurationManager;
+import com.qq.tars.server.config.ServerConfig;
 import com.qq.tars.support.log.prx.LogInfo;
 import com.qq.tars.support.log.prx.LogPrx;
 import com.qq.tars.support.log.util.Utils;
@@ -90,6 +99,8 @@ public class Logger {
     protected Level level = null;
 
     protected final LinkedBlockingQueue<LogItem> logQueue = new LinkedBlockingQueue<LogItem>(50000);
+    
+    protected final ConcurrentHashMap<String, LinkedBlockingQueue<LogItem>> dyeLogQueue = new ConcurrentHashMap<String, LinkedBlockingQueue<LogItem>>();
 
     Logger(String name) {
         this(name, Level.INFO, null, null);
@@ -212,13 +223,36 @@ public class Logger {
         if (str == null) {
             str = "";
         }
+        
+        boolean dyeFlag = false;
+        String dyeFileName = null;
+        String dyeServantName = null; 
+        DistributedContext distributedContext = DistributedContextManager.getDistributedContext();
+        if (null != distributedContext.get(DyeingSwitch.BDYEING)) {
+        	dyeFlag = distributedContext.get(DyeingSwitch.BDYEING);
+        	dyeFileName = distributedContext.get(DyeingSwitch.FILENAME);
+        	ServerConfig config = ConfigurationManager.getInstance().getServerConfig();
+        	dyeServantName = config == null ? "no Tars" : config.getServerName();
+        }
 
         if (isNeedLocal() && this.logPath == null) {
             putLogToDefault(level, str, th);
             return;
         }
 
-        boolean result = getQueue().offer(new LogItem(level, str, th));
+        LogItem logItem = new LogItem(level, str, dyeFlag, dyeFileName, dyeServantName, th);
+        boolean result = getQueue().offer(logItem);
+        
+        if (dyeFlag == true) {
+	        LinkedBlockingQueue<LogItem> subItems = dyeLogQueue.get(dyeFileName);
+	        if (subItems == null) {
+	        	subItems = new LinkedBlockingQueue<LogItem>();
+	        	dyeLogQueue.putIfAbsent(dyeFileName, subItems);
+	        	subItems = dyeLogQueue.get(dyeFileName);
+	        }
+	        subItems.offer(logItem);
+        }
+        
         if (!result) { 
             putLogToDefault(level, str, th);
             if (isNeedRemote()) {
@@ -242,11 +276,126 @@ public class Logger {
 
         if (LogType.LOCAL.value == this.logType.value) {
             writeAllToLocal(logPath);
+            writeDyeToLocal(false);
         } else if (LogType.REMOTE.value == this.logType.value) {
             writeRemoteLog();
+            writeDyeToRemote();
         } else {
             writeLocalAndRemoteLog();
+            writeDyeLocalAndRemoteLog();
         }
+    }
+    
+    private void writeDyeToLocal(boolean isLost) {
+    	if (dyeLogQueue == null || dyeLogQueue.isEmpty()) {
+    		return;
+    	}
+    	BufferedWriter bw = null;
+    	FileLock lock = null;
+    	Iterator<Map.Entry<String, LinkedBlockingQueue<LogItem>>> iterator = dyeLogQueue.entrySet().iterator();
+    	while (iterator.hasNext()) {
+    		Map.Entry<String, LinkedBlockingQueue<LogItem>> entry = iterator.next();
+	    	try {
+	    		if (!entry.getValue().isEmpty()) {
+	    			String fileName = isLost == true ? entry.getKey() + "_dyeing.lost." : entry.getKey() + "_dyeing.";
+	    			FileOutputStream outputStream = new FileOutputStream(LoggerFactory.dyeingLogRoot + fileName + 
+	    		                                            Utils.getDateSimpleInfo(System.currentTimeMillis()), true);
+	    			do {
+	    				lock = outputStream.getChannel().tryLock();
+	    			} while (lock == null);
+	    			
+	    			bw = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+	    			LogItem item = null;
+	    			while ((item = entry.getValue().poll()) != null) {
+	    				bw.write(item.toDyeingString());
+	    			}
+	    		}
+	    	} catch (IOException ex) {
+	    		
+	    	} finally {
+	    		if (lock != null) {
+	    			try {
+	    				lock.release();
+	    				lock = null;
+	    			} catch (IOException e) {
+	    			}
+	    		}
+	            if (bw != null) {
+	                try {
+	                    bw.close();
+	                } catch (IOException e) {
+	                }
+	            }
+	    	}
+    	}  	
+    }
+    
+    private void writeDyeToRemote() {
+    	if (dyeLogQueue == null || dyeLogQueue.isEmpty()) {
+    		return;
+    	}
+    	
+    	LogPrx proxy = LoggerFactory.getLoggerPrxHelper();
+    	if (proxy == null) {
+    		writeDyeToLocal(true);
+    		return;
+    	}
+    	Iterator<Map.Entry<String, LinkedBlockingQueue<LogItem>>> iterator = dyeLogQueue.entrySet().iterator();
+    	while (iterator.hasNext()) {
+    		Map.Entry<String, LinkedBlockingQueue<LogItem>> entry = iterator.next();
+    		
+    		if (proxy != null) {
+    			boolean succ = false;
+    			LogInfo logInfo = getDyeingInfo(entry.getKey());
+    			while (!entry.getValue().isEmpty()) {
+    				ArrayList<String> logs = new ArrayList<String>();
+    				getDyeingLogsBySize(entry.getKey(), logs);
+    				try {
+    					proxy.loggerbyInfo(logInfo, logs);
+    					succ = true;
+    				} catch (Exception e) {
+    					succ = false;
+    				} finally {
+    					if (succ == false) {
+    						writeDyeToLocal(logs, LoggerFactory.dyeingLogRoot + entry.getKey() + "_dyeing.lost");
+    					}
+    				}
+    			}
+    		}
+    	}   	
+    }
+    
+    private void writeDyeLocalAndRemoteLog() {
+    	if (dyeLogQueue == null || dyeLogQueue.isEmpty()) {
+    		return;
+    	}
+    	
+    	LogPrx proxy = LoggerFactory.getLoggerPrxHelper();
+    	if (proxy == null) {
+    		writeDyeToLocal(false);
+    		return;
+    	}
+    	Iterator<Map.Entry<String, LinkedBlockingQueue<LogItem>>> iterator = dyeLogQueue.entrySet().iterator();
+    	while (iterator.hasNext()) {
+    		Map.Entry<String, LinkedBlockingQueue<LogItem>> entry = iterator.next();
+    	    boolean succ = false;
+			LogInfo logInfo = getDyeingInfo(entry.getKey());
+			while (!entry.getValue().isEmpty()) {
+				ArrayList<String> logs = new ArrayList<String>();
+				getDyeingLogsBySize(entry.getKey(), logs);
+				try {
+					writeDyeToLocal(logs, LoggerFactory.dyeingLogRoot + entry.getKey() + "_dyeing");
+					proxy.loggerbyInfo(logInfo, logs);
+					succ = true;
+				} catch (Exception e) {
+					succ = false;
+				} finally {
+					if (!succ) {
+						writeDyeToLocal(false);
+					}
+				}
+    		}
+    	}
     }
 
     private void writeAllToLocal(String file) {
@@ -324,6 +473,54 @@ public class Logger {
         }
         return loginfo;
     }
+    
+    private LogInfo getDyeingInfo(String name) {
+    	LogInfo loginfo = null;
+    	if (dyeLogQueue.get(name) != null && !dyeLogQueue.get(name).isEmpty()) {
+    		loginfo = new LogInfo();
+    		loginfo.setAppname("tars_dyeing");
+    		loginfo.setServername("dyeing");
+    		loginfo.setSFilename(name + "_dyeing");
+    		loginfo.setSFormat("%Y%m%d%H");
+    	}
+    	return loginfo;
+    }
+    
+    private void writeDyeToLocal(ArrayList<String> content, String file) {
+        Writer bw = null;
+        FileLock lock = null;
+        try {
+            FileOutputStream os = null;
+            try {
+                os = new FileOutputStream(file + "." + Utils.getDateSimpleInfo(System.currentTimeMillis()), true);
+                do {
+                	lock = os.getChannel().tryLock();
+                } while (null == lock);
+                
+                bw = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                for (String s : content) {
+                    bw.write(s);
+                }
+                bw.flush();
+                return;
+            } catch (Exception e) {
+            }
+        } finally {
+        	if (lock != null) {
+        		try {
+        			lock.release();
+        			lock = null;
+        		} catch (IOException e) {
+        		}
+        	}
+            if (bw != null) {
+                try {
+                    bw.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
 
     private void writeRemoteLog() {
         if (isReachedFailedThreshold()) {
@@ -376,6 +573,21 @@ public class Logger {
             logContent = getQueue().poll().toString();
             logs.add(logContent);
 
+            try {
+                size += logContent.getBytes("UTF-8").length;
+            } catch (UnsupportedEncodingException e) {
+            }
+        }
+    }
+    
+    private void getDyeingLogsBySize(String fileName, ArrayList<String> logs) {
+        int size = 0;
+        String logContent;
+        LinkedBlockingQueue<LogItem> subItems = dyeLogQueue.get(fileName);
+        while (size < MAX_BATCH_SIZE && subItems != null && !subItems.isEmpty()) {
+        	LogItem item = subItems.poll();
+            logContent = item.toDyeingString();
+            logs.add(logContent);
             try {
                 size += logContent.getBytes("UTF-8").length;
             } catch (UnsupportedEncodingException e) {

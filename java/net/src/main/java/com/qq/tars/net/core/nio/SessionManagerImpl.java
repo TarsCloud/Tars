@@ -90,7 +90,7 @@ public class SessionManagerImpl extends SessionManager {
                                 String s = "The session has timed out. [from ip: " + session.getRemoteIp() + " port: " + session.getRemotePort() + "]";
                                 System.out.println(s);
                                 session.asyncClose();
-                                unregisterSession(session);
+//                                unregisterSession(session);
                             }
                         }
 

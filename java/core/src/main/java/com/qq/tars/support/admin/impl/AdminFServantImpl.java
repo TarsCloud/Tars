@@ -19,6 +19,7 @@ package com.qq.tars.support.admin.impl;
 import java.util.Map.Entry;
 
 import com.qq.tars.client.CommunicatorConfig;
+import com.qq.tars.common.util.DyeingKeyCache;
 import com.qq.tars.common.util.StringUtils;
 import com.qq.tars.server.ServerVersion;
 import com.qq.tars.server.config.ConfigurationManager;
@@ -46,13 +47,15 @@ public class AdminFServantImpl implements AdminFServant {
     private static final String CMD_VIEW_CONN = "tars.connection";
 
     private static final String CMD_VIEW_STATUS = "tars.viewstatus";
+    
+    private static final String CMD_SET_DYEING = "tars.setdyeing";
 
     private static final String ADATER_CONN = "[adater:%sAdapter] [connections:%d]\n";
 
     @Override
     public void shutdown() {
         try {
-            System.out.println(ConfigurationManager.getInstance().getserverConfig().getApplication() + "." + ConfigurationManager.getInstance().getserverConfig().getServerName() + " is stopped.");
+            System.out.println(ConfigurationManager.getInstance().getServerConfig().getApplication() + "." + ConfigurationManager.getInstance().getServerConfig().getServerName() + " is stopped.");
             NotifyHelper.getInstance().syncReport("[alarm] server is stopped.");
         } catch (Exception e) {
             OmLogger.record("shutdown error", e);
@@ -65,6 +68,9 @@ public class AdminFServantImpl implements AdminFServant {
     public String notify(String command) {
         String params = "";
         String comm = command;
+        if (command == null) {
+        	return "command is null";
+        }
         int i = command.indexOf(" ");
         if (i != -1) {
             comm = command.substring(0, i);
@@ -86,6 +92,8 @@ public class AdminFServantImpl implements AdminFServant {
             result.append(loadLocator() + "\n");
         } else if (CMD_VIEW_VERSION.equals(comm)) {
             result.append(reportServerVersion() + "\n");
+        } else if (CMD_SET_DYEING.equals(comm)) {
+        	result.append(loadDyeing(params) + "\n");
         } else {
             final CommandHandler handler = CustemCommandHelper.getInstance().getCommandHandler(comm);
             final String cmdName = comm;
@@ -133,7 +141,7 @@ public class AdminFServantImpl implements AdminFServant {
         String adminConnInfo = String.format(ADATER_CONN, "Admin", 128);
         builder.append(adminConnInfo);
 
-        for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getserverConfig().getServantAdapterConfMap().entrySet()) {
+        for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getServerConfig().getServantAdapterConfMap().entrySet()) {
             if (OmConstants.AdminServant.equals(adapterConfigEntry.getKey())) {
                 continue;
             }
@@ -160,7 +168,7 @@ public class AdminFServantImpl implements AdminFServant {
 
         builder.append("name \t AdminAdapter\n");
         builder.append("servant \t AdminObj\n");
-        builder.append("endpoint \t tcp -h 127.0.0.1 -p " + ConfigurationManager.getInstance().getserverConfig().getLocalPort() + " -t 3000" + "\n");
+        builder.append("endpoint \t tcp -h 127.0.0.1 -p " + ConfigurationManager.getInstance().getServerConfig().getLocalPort() + " -t 3000" + "\n");
         builder.append("maxconns \t 128\n");
         builder.append("queuecap \t 128\n");
         builder.append("queuetimeout \t 3000\n");
@@ -171,7 +179,7 @@ public class AdminFServantImpl implements AdminFServant {
 
         builder.append("--------------------------------------------------\n");
 
-        for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getserverConfig().getServantAdapterConfMap().entrySet()) {
+        for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getServerConfig().getServantAdapterConfMap().entrySet()) {
             if (OmConstants.AdminServant.equals(adapterConfigEntry.getKey())) {
                 continue;
             }
@@ -196,7 +204,7 @@ public class AdminFServantImpl implements AdminFServant {
 
     private String makeServerConfigInfo() {
         StringBuilder builder = new StringBuilder(1024);
-        ServerConfig serverConfig = ConfigurationManager.getInstance().getserverConfig();
+        ServerConfig serverConfig = ConfigurationManager.getInstance().getServerConfig();
         builder.append("[server config]:\n");
         builder.append("Application \t" + serverConfig.getApplication() + "\n");
         builder.append("ServerName \t" + serverConfig.getServerName() + "\n");
@@ -216,7 +224,7 @@ public class AdminFServantImpl implements AdminFServant {
 
     private String makeProxyConfigInfo() {
         StringBuilder builder = new StringBuilder(1024);
-        CommunicatorConfig commConfig = ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig();
+        CommunicatorConfig commConfig = ConfigurationManager.getInstance().getServerConfig().getCommunicatorConfig();
         builder.append("[proxy config]:\n");
         builder.append("locator \t" + commConfig.getLocator() + "\n");
         builder.append("sync-invoke-timeout \t" + commConfig.getSyncInvokeTimeout() + "\n");
@@ -257,6 +265,9 @@ public class AdminFServantImpl implements AdminFServant {
     }
 
     private String loadConfig(String params) {
+		if (params == null) {
+			return "invalid params";
+		}
         String fileName = params.trim();
         if (StringUtils.isEmpty(fileName)) {
             return "invalid params.";
@@ -276,5 +287,26 @@ public class AdminFServantImpl implements AdminFServant {
 
         return result;
     }
+    
+    private String loadDyeing(String params) {
+		String result = null;
+		if (params == null) {
+			return "invalid params";
+		}
+		String[] paramArray = params.split(" ");
+		if (paramArray.length < 2) {
+			return "invalid params";
+		}
+		try {
+			String routeKey = paramArray[0];
+			String servantName = paramArray[1];
+			String interfaceName = (paramArray.length >= 3) ? paramArray[2] : "DyeingAllFunctionsFromInterface";
+			DyeingKeyCache.getInstance().set(servantName, interfaceName, routeKey);
+			result = "execute success";
+		} catch (Exception e) {
+			result = "execute exception: " + e.getMessage();
+		}
+		return result;
+	}
 
 }

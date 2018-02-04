@@ -24,8 +24,4 @@ public abstract class ServantResponse extends Response {
     public ServantResponse(Session session) {
         super(session);
     }
-
-//    public int getRequestSequenceId() {
-//        return getTicketNumber();
-//    }
 }

@@ -43,7 +43,7 @@ public final class AnalystManager {
         cache.putIfAbsent(objName, TarsHelper.getMethodInfo(api, objName));
     }
 
-    public Map<String, TarsMethodInfo> getMethodMap(String contextName, String objName) {
+    public Map<String, TarsMethodInfo> getMethodMapByName(String objName) {
         return context_cache.get(objName);
     }
 

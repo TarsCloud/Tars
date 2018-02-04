@@ -128,61 +128,58 @@ template<> struct Class<std::string> { static std::string name() { return "strin
 template<typename T> struct Class<std::vector<T> > { static std::string name() { return std::string("list<") + Class<T>::name() + ">"; } };
 template<typename T, typename U> struct Class<std::map<T, U> > { static std::string name() { return std::string("map<") + Class<T>::name() + "," + Class<U>::name() + ">"; } };
 
-namespace tars
+    // is_convertible
+template<int N> struct type_of_size { char elements[N]; };
+
+typedef type_of_size<1>     yes_type;
+typedef type_of_size<2>     no_type;
+
+namespace meta_detail
 {
-        // is_convertible
-        template<int N> struct type_of_size { char elements[N]; };
+struct any_conversion
+{
+    template <typename T> any_conversion(const volatile T&);
+    template <typename T> any_conversion(T&);
+};
 
-        typedef type_of_size<1>     yes_type;
-        typedef type_of_size<2>     no_type;
-
-        namespace meta_detail
-        {
-        struct any_conversion
-        {
-            template <typename T> any_conversion(const volatile T&);
-            template <typename T> any_conversion(T&);
-        };
-
-        template <typename T> struct conversion_checker
-        {
-            static no_type _m_check(any_conversion ...);
-            static yes_type _m_check(T, int);
-        };
-        }
-
-        template<typename From, typename To>
-        class is_convertible
-        {
-            static From _m_from;
-        public:
-            enum { value = sizeof( meta_detail::conversion_checker<To>::_m_check(_m_from, 0) ) == sizeof(yes_type) };
-        };
-
-        template<typename T>
-        struct type2type { typedef T type; };
-
-        template<typename T, typename U>
-        struct is_same_type
-        {
-            enum { value = is_convertible< type2type<T>, type2type<U> >::value };
-        };
-
-        // enable_if
-        template<bool B, class T = void> struct enable_if_c { typedef T type; };
-
-        template<class T> struct enable_if_c<false, T> {};
-
-        template<class Cond, class T = void>
-        struct enable_if : public enable_if_c<Cond::value, T> {};
-
-        template<bool B, class T = void> struct disable_if_c { typedef T type; };
-
-        template<class T> struct disable_if_c<true, T> {};
-
-        template<class Cond, class T = void>
-        struct disable_if : public disable_if_c<Cond::value, T> {};
+template <typename T> struct conversion_checker
+{
+    static no_type _m_check(any_conversion ...);
+    static yes_type _m_check(T, int);
+};
 }
+
+template<typename From, typename To>
+class is_convertible
+{
+    static From _m_from;
+public:
+    enum { value = sizeof( meta_detail::conversion_checker<To>::_m_check(_m_from, 0) ) == sizeof(yes_type) };
+};
+
+template<typename T>
+struct type2type { typedef T type; };
+
+template<typename T, typename U>
+struct is_same_type
+{
+    enum { value = is_convertible< type2type<T>, type2type<U> >::value };
+};
+
+// enable_if
+template<bool B, class T = void> struct enable_if_c { typedef T type; };
+
+template<class T> struct enable_if_c<false, T> {};
+
+template<class Cond, class T = void>
+struct enable_if : public enable_if_c<Cond::value, T> {};
+
+template<bool B, class T = void> struct disable_if_c { typedef T type; };
+
+template<class T> struct disable_if_c<true, T> {};
+
+template<class Cond, class T = void>
+struct disable_if : public disable_if_c<Cond::value, T> {};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -221,5 +218,5 @@ inline void tars_copy_struct(std::map<K1, V1>& a, const std::map<K2, V2>& b, typ
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-}
+} // end namespace tars
 #endif

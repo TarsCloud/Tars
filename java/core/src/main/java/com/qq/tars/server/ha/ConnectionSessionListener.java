@@ -36,8 +36,6 @@ public class ConnectionSessionListener implements SessionListener {
 
     @Override
     public synchronized void onSessionCreated(SessionEvent se) {
-        System.out.println("onSessionCreated: " + connStat.get());
-
         if (connStat.get() >= MaxConnCount) {
             try {
                 System.out.println("reached the max connection threshold, close the session.");
@@ -47,14 +45,13 @@ public class ConnectionSessionListener implements SessionListener {
             return;
         }
 
-        connStat.incrementAndGet();
+        System.out.println("onSessionCreated: " + connStat.incrementAndGet());
     }
 
     @Override
     public synchronized void onSessionDestoryed(SessionEvent se) {
-        System.out.println("onSessionDestoryed: " + connStat.get());
-        if (se.getSession() != null && se.getSession().getStatus() == SessionStatus.SERVER_CONNECTED && connStat.get() > 0) {
-            connStat.decrementAndGet();
+        if ((se.getSession() == null || se.getSession().getStatus() == SessionStatus.CLOSED) && connStat.get() > 0) {
+            System.out.println("onSessionDestoryed: " + connStat.decrementAndGet());
         }
     }
 }

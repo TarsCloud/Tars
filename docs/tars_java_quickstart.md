@@ -11,131 +11,141 @@
 
 ### 环境依赖 
 
-- JDK1.6或以上版本
+- JDK1.8或以上版本
 - Maven 2.2.1或以上版本
 
 ### 构建工程 
 
 通过IDE或者maven创建一个maven web项目，
 这里以eclipse为例，File -> New -> Project -> Maven Project -> maven-archetype-webapp，再输入groupId、artifactId，生成完成之后可以通过eclipse进行导入，目录结构如下
-    
-	hello_server_project
-	|___src
-	|	|___main
-	|		|___java
-	|		|___resource
-	|		|___scripts
-	|		|___webapp
-	|___test
-	|___target
-	|___pom.xml
-
+```
+├── pom.xml
+└── src
+   ├── main
+   │   ├── java
+   │   │   └── tars
+   │   │       └── test
+   │   │          ├── HelloServant.java
+   │   │          └── HelloServantImpl.java
+   │   ├── resources
+   │   │   └── servants.xml
+   │   └── webapp
+   └── test
+       ├── java
+       │   └── tars
+       │       └── test
+       │           └── TarsTest.java
+       └── resources
+```
 
 ### 依赖配置
 在构建项目中pom.xml中添加依赖jar包
 
 - 框架依赖配置
-
-    	<dependency>
-			<groupId>qq-cloud-central</groupId>
-			<artifactId>tars-server</artifactId>
-			<version>1.0.1</version>
-			<type>jar</type>
-		</dependency>
-
+```xml
+<dependency>
+	<groupId>qq-cloud-central</groupId>
+     	<artifactId>tars-server</artifactId>
+     	<version>1.0.3</version>
+     	<type>jar</type>
+</dependency>
+```
 - 插件依赖配置
-
-		<plugin>
-			<groupId>qq-cloud-central</groupId>
-			<artifactId>tars-maven-plugin</artifactId>
-			<version>1.0.1</version>
-			<configuration>
-				<tars2JavaConfig>
-					<tarsFiles>
-						<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-					</tarsFiles>
-					<tarsFileCharset>UTF-8</tarsFileCharset>
-					<servant>true</servant>
-					<srcPath>${basedir}/src/main/java</srcPath>
-					<charset>UTF-8</charset>
-					<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
-				</tars2JavaConfig>
-			</configuration>
-		</plugin>
-
+```xml
+<plugin>
+	<groupId>qq-cloud-central</groupId>
+   	<artifactId>tars-maven-plugin</artifactId>
+   	<version>1.0.3</version>
+  	<configuration>
+   		<tars2JavaConfig>
+  			<tarsFiles>
+   				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+   			</tarsFiles>
+  			<tarsFileCharset>UTF-8</tarsFileCharset>
+   			<servant>true</servant>
+  			<srcPath>${basedir}/src/main/java</srcPath>
+  			<charset>UTF-8</charset>
+   			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
+  		</tars2JavaConfig>
+   	</configuration>
+</plugin>
+```
 ## 服务开发 <a id="main-chapter-2"></a>
 
 ### 接口文件定义
 
 接口文件定义是通过Tars接口描述语言来定义，在src/main/resources目录下建立hello.tars文件，内容如下
-    	
-	module TestApp 
+```
+module TestApp 
+{
+	interface Hello
 	{
-		interface Hello
-		{
-		    string hello(int no, string name);
-		};
+	    string hello(int no, string name);
 	};
-
+};
+```
 ### 接口文件编译
 
 提供插件编译生成java代码，在tars-maven-plugin添加生成java文件配置
-
-	<plugin>
-		<groupId>qq-cloud-central</groupId>
-		<artifactId>tars-maven-plugin</artifactId>
-		<version>1.0.1</version>
-		<configuration>
-			<tars2JavaConfig>
-				<!-- tars文件位置 -->
-				<tarsFiles>
-					<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-				</tarsFiles>
-				<!-- 源文件编码 -->
-				<tarsFileCharset>UTF-8</tarsFileCharset>
-				<!-- 生成服务端代码 -->
-				<servant>true</servant>
-				<!-- 生成源代码编码 -->
-				<charset>UTF-8</charset>
-				<!-- 生成的源代码目录 -->
-				<srcPath>${basedir}/src/main/java</srcPath>
-				<!-- 生成源代码包前缀 -->
-				<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
-			</tars2JavaConfig>
-		</configuration>
-	</plugin>
-
+```xml
+<plugin>
+	<groupId>qq-cloud-central</groupId>
+	<artifactId>tars-maven-plugin</artifactId>
+	<version>1.0.3</version>
+	<configuration>
+		<tars2JavaConfig>
+			<!-- tars文件位置 -->
+			<tarsFiles>
+				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+			</tarsFiles>
+			<!-- 源文件编码 -->
+			<tarsFileCharset>UTF-8</tarsFileCharset>
+			<!-- 生成服务端代码 -->
+			<servant>true</servant>
+			<!-- 生成源代码编码 -->
+			<charset>UTF-8</charset>
+			<!-- 生成的源代码目录 -->
+			<srcPath>${basedir}/src/main/java</srcPath>
+			<!-- 生成源代码包前缀 -->
+			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
+		</tars2JavaConfig>
+	</configuration>
+</plugin>
+```
 在工程根目录下执行mvn tars:tars2java
-			
-	@Servant
-	public interface HelloServant {
+```java
+@Servant
+public interface HelloServant {
 
-		public String hello(int no, String name);
-	}	
-
+	public String hello(int no, String name);
+}	
+```
 ### 服务接口实现
 
 新创建一个HelloServantImpl.java文件，实现HelloServant.java接口
-
-	public class HelloServantImpl implements HelloServant {
+```java
+public class HelloServantImpl implements HelloServant {
 
     @Override
     public String hello(int no, String name) {
         return String.format("hello no=%s, name=%s, time=%s", no, name, System.currentTimeMillis());
-	}
-
+    }
+}
+```
 
 ### 服务暴露配置
 
-在WEB-INF下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下
-			
-	<?xml version="1.0" encoding="UTF-8"?>
-	<servants>
-		<servant name="HelloObj">
-			<home-api>com.qq.tars.quickstart.server.testapp.HelloServant</home-api>
-			<home-class>com.qq.tars.quickstart.server.testapp.impl.HelloServantImpl</home-class>
-		</servant>
-	</servants>
+在resources下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下
+```xml		
+<?xml version="1.0" encoding="UTF-8"?>
+<servants>
+	<servant name="HelloObj">
+		<home-api>com.qq.tars.quickstart.server.testapp.HelloServant</home-api>
+		<home-class>com.qq.tars.quickstart.server.testapp.impl.HelloServantImpl</home-class>
+	</servant>
+</servants>
+```
+说明：除了此方法之外，还可以采用spring模式来配置服务，详情见tars_java_spring.md。
 
 ### 服务编译打包
 
@@ -145,91 +155,91 @@
 
 - 构建客户端工程项目
 - 添加依赖
-    	
-		<dependency>
-			<groupId>qq-cloud-central</groupId>
-			<artifactId>tars-client</artifactId>
-			<version>1.0.1</version>
-			<type>jar</type>
-		</dependency>    
-
+```xml
+<dependency>
+	<groupId>qq-cloud-central</groupId>
+   	<artifactId>tars-client</artifactId>
+   	<version>1.0.3</version>
+   	<type>jar</type>
+</dependency>    
+```
 - 添加插件
-		
-		<plugin>
-			<groupId>qq-cloud-central</groupId>
-			<artifactId>tars-maven-plugin</artifactId>
-			<version>1.0.1</version>
-			<configuration>
-				<tars2JavaConfig>
-					<!-- tars文件位置 -->
-					<tarsFiles>
-						<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-					</tarsFiles>
-					<!-- 源文件编码 -->
-					<tarsFileCharset>UTF-8</tarsFileCharset>
-					<!-- 生成代码，PS：客户端调用，这里需要设置为false -->
-					<servant>false</servant>
-					<!-- 生成源代码编码 -->
-					<charset>UTF-8</charset>
-					<!-- 生成的源代码目录 -->
-					<srcPath>${basedir}/src/main/java</srcPath>
-					<!-- 生成源代码包前缀 -->
-					<packagePrefixName>com.qq.tars.quickstart.client.</packagePrefixName>
-				</tars2JavaConfig>
-			</configuration>
-		</plugin>
-
+```xml	
+<plugin>
+   	<groupId>qq-cloud-central</groupId>
+   	<artifactId>tars-maven-plugin</artifactId>
+   	<version>1.0.3</version>
+   	<configuration>
+   		<tars2JavaConfig>
+   			<!-- tars文件位置 -->
+   			<tarsFiles>
+   				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+   			</tarsFiles>
+   			<!-- 源文件编码 -->
+   			<tarsFileCharset>UTF-8</tarsFileCharset>
+   			<!-- 生成代码，PS：客户端调用，这里需要设置为false -->
+   			<servant>false</servant>
+   			<!-- 生成源代码编码 -->
+   			<charset>UTF-8</charset>
+   			<!-- 生成的源代码目录 -->
+   			<srcPath>${basedir}/src/main/java</srcPath>
+   			<!-- 生成源代码包前缀 -->
+   			<packagePrefixName>com.qq.tars.quickstart.client.</packagePrefixName>
+   		</tars2JavaConfig>
+   	</configuration>
+</plugin>
+```
 - 根据服务tars接口文件生成代码
-
-	    @Servant
-		public interface HelloPrx {
-	
-			public String hello(int no, String name);
-		
-			public String hello(int no, String name, @TarsContext java.util.Map<String, String> ctx);
-		
-			public void async_hello(@TarsCallback HelloPrxCallback callback, int no, String name);
-		
-			public void async_hello(@TarsCallback HelloPrxCallback callback, int no, String name, @TarsContext java.util.Map<String, String> ctx);
-		}
-
+```java
+@Servant
+public interface HelloPrx {
+      
+	public String hello(int no, String name);
+      
+      	public String hello(int no, String name, @TarsContext java.util.Map<String, String> ctx);
+      
+      	public void async_hello(@TarsCallback HelloPrxCallback callback, int no, String name);
+      
+      	public void async_hello(@TarsCallback HelloPrxCallback callback, int no, String name, @TarsContext java.util.Map<String, String> ctx);
+}
+```
 - 同步调用
-
-        public static void main(String[] args) {
-			CommunicatorConfig cfg = new CommunicatorConfig();
-			//构建通信器
-	        Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
-			//通过通信器，生成代理对象
-	        HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj");
-	        String ret = proxy.hello(1000, "HelloWorld");
-	        System.out.println(ret);
-    	}
-
+```java
+public static void main(String[] args) {
+	CommunicatorConfig cfg = new CommunicatorConfig();
+        //构建通信器
+        Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
+        //通过通信器，生成代理对象
+        HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj");
+        String ret = proxy.hello(1000, "HelloWorld");
+        System.out.println(ret);
+}
+```
 - 异步调用
-
-        public static void main(String[] args) {
-			CommunicatorConfig cfg = new CommunicatorConfig();
-			//构建通信器
-	        Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
-			//通过通信器，生成代理对象
-	        HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj");
-			proxy.async_hello(new HelloPrxCallback() {
-				
-				@Override
-				public void callback_expired() {
-				}
-				
-				@Override
-				public void callback_exception(Throwable ex) {
-				}
-				
-				@Override
-				public void callback_hello(String ret) {
-					System.out.println(ret);
-				}
-			}, 1000, "HelloWorld");
-    	}
-
+```java
+public static void main(String[] args) {
+	CommunicatorConfig cfg = new CommunicatorConfig();
+        //构建通信器
+        Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
+        //通过通信器，生成代理对象
+        HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj");
+        proxy.async_hello(new HelloPrxCallback() {
+        		
+        	@Override
+        	public void callback_expired() {
+        	}
+        		
+        	@Override
+        	public void callback_exception(Throwable ex) {
+        	}
+        		
+        	@Override
+        	public void callback_hello(String ret) {
+        		System.out.println(ret);
+        	}
+        }, 1000, "HelloWorld");
+}
+```
 
 ## 管理系统 <a id="main-chapter-3"></a>
 
@@ -274,20 +284,20 @@
 ![tars](images/tars_java_quickstart_bushu1.png)
 
 -	“应用”指你的服务程序归在哪一个应用下，例如：“TestApp”。
--	“服务名称”指你的服务程序的标识名字，例如：“HelloServer”。
--	“服务类型”指你的服务程序用什么语言写的，例如：java的选择“tars_java”。
--	“模版“ 指你的服务程序在启动时，设置的配置文件的名称，默认用”tars.tarsjavadefault“即可。
--	“节点“ 指服务部署的机器IP。
--	“Set分组“ 指设置服务的Set分组信息，Set信息包括3部分：Set名、Set地区、Set组名。
--	“OBJ名称“ 指Servant的名称。
--	“OBJ绑定IP“ 指服务绑定的机器IP，一般与节点一样。
--	“端口“ 指OBJ要绑定的端口。
--	“端口类型“ 指使用TCP还是UDP。
--	“协议“ 指应用层使用的通信协议，Tars框架默认使用tars协议。
--	“线程数“ 指业务处理线程的数目。
--	“最大连接数“ 指支持的最大连接数。
--	“队列最大长度“ 指请求接收队列的大小。
--	“队列超时时间“ 指请求接收队列的超时时间。
+  -“服务名称”指你的服务程序的标识名字，例如：“HelloServer”。
+  -“服务类型”指你的服务程序用什么语言写的，例如：java的选择“tars_java”。
+  -“模版“ 指你的服务程序在启动时，设置的配置文件的名称，默认用”tars.tarsjavadefault“即可。
+  -“节点“ 指服务部署的机器IP。
+  -“Set分组“ 指设置服务的Set分组信息，Set信息包括3部分：Set名、Set地区、Set组名。
+  -“OBJ名称“ 指Servant的名称。
+  -“OBJ绑定IP“ 指服务绑定的机器IP，一般与节点一样。
+  -“端口“ 指OBJ要绑定的端口。
+  -“端口类型“ 指使用TCP还是UDP。
+  -“协议“ 指应用层使用的通信协议，Tars框架默认使用tars协议。
+  -“线程数“ 指业务处理线程的数目。
+  -“最大连接数“ 指支持的最大连接数。
+  -“队列最大长度“ 指请求接收队列的大小。
+  -“队列超时时间“ 指请求接收队列的超时时间。
 
 点击“提交“，成功后，菜单数下的TestApp应用将出现HelloServer名称，同时将在右侧看到你新增的服务程序信息，如下图：
 
@@ -310,6 +320,6 @@
  点击“发布”，服务开始发布，发布成功后，出现下面的界面，如下图：
 
  ![tars](images/tars_java_quickstart_patchresult.png)
- 
+
 若失败的话，可能是命名问题，上传问题，以及其他环境问题。
 

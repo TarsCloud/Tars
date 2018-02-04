@@ -22,6 +22,7 @@ import com.qq.tars.net.core.Session;
 import com.qq.tars.protocol.tars.TarsInputStream;
 import com.qq.tars.protocol.tars.support.TarsMethodInfo;
 import com.qq.tars.protocol.util.TarsHelper;
+import com.qq.tars.rpc.protocol.Codec;
 import com.qq.tars.rpc.protocol.ServantRequest;
 
 public class TarsServantRequest extends ServantRequest implements java.io.Serializable {
@@ -56,7 +57,8 @@ public class TarsServantRequest extends ServantRequest implements java.io.Serial
     }
 
     public void init() {
-        TarsCodecHelper.decodeRequestBody(this);
+        ((TarsCodec) this.session.getProtocolFactory().getDecoder()).decodeRequestBody(this);
+//        TarsCodecHelper.decodeRequestBody(this);
     }
 
     public TarsInputStream getInputStream() {
