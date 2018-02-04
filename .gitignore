@@ -22,3 +22,5 @@
 /java/examples/stress-server/.project
 /java/examples/stress-server/.settings
 /java/examples/stress-server/target
+
+/php/.idea/*

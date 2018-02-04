@@ -233,7 +233,7 @@ class SimpleStruct extends \TARS_Struct {
 
 3. 在composer.json中指定require类库:
 ```
-    "phptars/tars-assistant" : "0.1.7"
+    "phptars/tars-assistant" : "x.x.x"
 ```
 
 4. 执行composer install命令安装类库,此时会出现vendor目录
@@ -243,10 +243,16 @@ class SimpleStruct extends \TARS_Struct {
 <?php
 
     require_once "./vendor/autoload.php";
-
+    // 直接指定服务ip
     $ip = "";// taf服务ip
     $port = 0;// taf服务端口
     $servant = new App\Server\Servant\servant($ip,$port);
+    
+    // 指定主控ip和端口,无需再指定服务的地址
+    $_SERVER['LOCATOR_IP'] = "127.0.0.1";
+    $_SERVER['LOCATOR_PORT'] = 17890;
+    $servant = new App\Server\Servant\servant();
+    
 
     $in1 = "test";
 

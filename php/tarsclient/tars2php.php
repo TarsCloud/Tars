@@ -1473,14 +1473,14 @@ class InterfaceParser {
 
         if($returnInfo['type'] !== 'void') {
             if(Utils::isVector($returnInfo['type']) || Utils::isMap($returnInfo['type'])) {
-                $bodyMiddle .= $this->tripleTab."return \$this->_tafAssistant->".$returnUnpack."(\"\","
+                $bodyMiddle .= $this->tripleTab."return \$this->_tarsAssistant->".$returnUnpack."(\"\","
                     .$this->getExtType($returnInfo['wholeType'],$valueName).");".$this->doubleReturn.
                     $this->doubleTab."}".$this->returnSymbol;
 
             }
             else if(Utils::isStruct($returnInfo['type'],$this->preStructs)) {
                 $bodyMiddle .= $this->tripleTab."\$returnVal = new $valueName();".$this->returnSymbol;
-                $bodyMiddle .= $this->tripleTab."\$this->_tafAssistant->".$returnUnpack."(\"\",\$returnVal);".$this->returnSymbol;
+                $bodyMiddle .= $this->tripleTab."\$this->_tarsAssistant->".$returnUnpack."(\"\",\$returnVal);".$this->returnSymbol;
                 $bodyMiddle .= $this->tripleTab."return \$returnVal;".$this->doubleReturn.
                     $this->doubleTab."}".$this->returnSymbol;
 
@@ -1491,7 +1491,7 @@ class InterfaceParser {
                 }
             }
             else {
-                $bodyMiddle .= $this->tripleTab."return \$this->_tafAssistant->".$returnUnpack."(\"\");".$this->doubleReturn.
+                $bodyMiddle .= $this->tripleTab."return \$this->_tarsAssistant->".$returnUnpack."(\"\");".$this->doubleReturn.
                     $this->doubleTab."}".$this->returnSymbol;
 
             }

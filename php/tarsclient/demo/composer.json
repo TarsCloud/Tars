@@ -8,7 +8,12 @@
     }
   ],
   "require": {
-    "php": "<=7.1.10",
-    "phptars/tars-assistant" : "0.1.7"
+    "php": ">=5.3",
+    "phptars/tars-assistant" : "0.2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "App/"
+    }
   }
 }
