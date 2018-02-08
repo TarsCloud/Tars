@@ -171,7 +171,7 @@ class Utils {
      * 判断是不是tag
      */
     public static function isTag($word) {
-        if(!empty(strval($word)) && intval($word) == 0) {
+        if(!is_numeric($word)) {
             return false;
         }
         else return true;
@@ -256,6 +256,13 @@ class Utils {
         }
         return $mathName;
 
+    }
+
+    public static function isReturn($char) {
+        if($char == "\n" || $char == '\r' || bin2hex($char) == '0a' || bin2hex($char) == '0b' ||
+            bin2hex($char) == '0c' || bin2hex($char) == '0d')
+            return true;
+        else return false;
     }
 }
 
@@ -375,14 +382,16 @@ class FileConverter
             $enumFlag = strpos($line,"enum");
             if($enumFlag !== false) {
                 $name = Utils::pregMatchByName("enum",$line);
-                $this->preEnums[] = $name;
+                if(!empty($name)) {
+                    $this->preEnums[] = $name;
 
-                // 增加命名空间以备不时之需
-                if(!empty($currentModule))
-                    $this->preNamespaceEnums[] = $currentModule."::".$name;
+                    // 增加命名空间以备不时之需
+                    if(!empty($currentModule))
+                        $this->preNamespaceEnums[] = $currentModule."::".$name;
 
-                while(($lastChar = fgetc($fp)) != '}') {
-                    continue;
+                    while(($lastChar = fgetc($fp)) != '}') {
+                        continue;
+                    }
                 }
             }
 
@@ -392,10 +401,13 @@ class FileConverter
             if ($structFlag !== false) {
                 $name = Utils::pregMatchByName("struct",$line);
 
-                $this->preStructs[] = $name;
-                // 增加命名空间以备不时之需
-                if(!empty($currentModule))
-                    $this->preNamespaceStructs[] = $currentModule."::".$name;
+                if(!empty($name)) {
+                    $this->preStructs[] = $name;
+                    // 增加命名空间以备不时之需
+                    if(!empty($currentModule))
+                        $this->preNamespaceStructs[] = $currentModule."::".$name;
+                }
+
             }
         }
         fclose($fp);
@@ -728,8 +740,7 @@ class InterfaceParser {
                 $char =fgetc($this->fp);
 
                 // 有可能是换行
-                if($char == '{' || Utils::isSpace($char) || $char == '\n' || $char == '\r'
-                    || $char == '\x0B') {
+                if($char == '{' || Utils::isReturn($char)) {
                     continue;
                 }
                 // 遇到了注释会用贪婪算法全部处理完,同时填充到struct的类里面去
@@ -769,7 +780,7 @@ class InterfaceParser {
                     }
                     $this->state = 'end';
                 }
-                else if($char == "\n"){
+                else if(Utils::isReturn($char)){
                     continue;
                 }
                 else if($char == ')') {
@@ -783,6 +794,14 @@ class InterfaceParser {
                 else $line .= $char;
             }
             else if($this->state == 'lineEnd') {
+                $char =fgetc($this->fp);
+                if($char == '}'){
+                    // 需要贪心的读到"\n"为止
+                    while(($lastChar=fgetc($this->fp)) != "\n") {
+                        continue;
+                    }
+                    $this->state = 'end';
+                }
                 break;
             }
             else if($this->state == 'end') {
@@ -811,14 +830,15 @@ class InterfaceParser {
         }
 
         // 有必要先分成三个部分,返回类型、接口名、参数列表
-        $tokens = preg_split('/\s+/', $line,2);
-
-        $returnType = $tokens[0];
+        $tokens = preg_split('/\(/',$line,2);
+        $mix = $tokens[0];
         $rest = $tokens[1];
-        $tokens1 = preg_split('/\(/',$rest,2);
 
-        $funcName = $tokens1[0];
-        $rest = $tokens1[1];
+        $pices = preg_split('/\s+/', $mix);
+
+        $funcName = $pices[count($pices) - 1];
+
+        $returnType = implode("",array_slice($pices,0,count($pices) - 1));
 
         $this->state = 'init';
         $word = '';
@@ -927,7 +947,7 @@ class InterfaceParser {
                     $state = 'indentifier';
                     $word .= $char;
                 }
-                else if($char == '\n') {
+                else if(Utils::isReturn($char)) {
                     break;
                 }
                 else if($char == '>') {
@@ -1608,7 +1628,7 @@ class StructParser {
             $lineString .= $nextChar;
             while (1) {
                 $tmpChar = fgetc($this->fp);
-                if($tmpChar == "\n") {
+                if(Utils::isReturn($tmpChar)) {
 
                     $this->state = 'lineEnd';
                     break;
@@ -1626,7 +1646,7 @@ class StructParser {
                 if($tmpChar === false) {
                     Utils::abnormalExit('error','注释换行错误,请检查');
                 }
-                else if($tmpChar === "\n") {
+                else if(Utils::isReturn($tmpChar)) {
 
                 }
                 else if(($tmpChar) === '*') {
@@ -1856,6 +1876,13 @@ class StructParser {
                 else $word .= $char;
             }
             else if($this->state == 'lineEnd') {
+                if($char == '}'){
+                    // 需要贪心的读到"\n"为止
+                    while(($lastChar=fgetc($this->fp)) != "\n") {
+                        continue;
+                    }
+                    $this->state = 'end';
+                }
                 break;
             }
             else if($this->state == 'end') {
@@ -1910,7 +1937,7 @@ class StructParser {
                     $state = 'indentifier';
                     $word .= $char;
                 }
-                else if($char == '\n') {
+                else if(Utils::isReturn($char)) {
                     break;
                 }
                 else if($char == '>') {
