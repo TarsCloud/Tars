@@ -374,7 +374,7 @@ class FileConverter
             }
 
             // 如果空行，或者是注释，就直接略过
-            if (!$line || trim($line)[0] === '/' || trim($line)[0] === '*' || trim($line) === '{') {
+            if (!$line || trim($line) == '' || trim($line)[0] === '/' || trim($line)[0] === '*' || trim($line) === '{') {
                 continue;
             }
 
@@ -434,7 +434,7 @@ class FileConverter
             }
 
             // 如果空行，或者是注释，就直接略过
-            if (!$line || trim($line)[0] === '/' || trim($line)[0] === '*') {
+            if (!$line || trim($line) == '' || trim($line)[0] === '/' || trim($line)[0] === '*') {
                 continue;
             }
             // 正则匹配,发现是在consts中
@@ -492,7 +492,7 @@ class IncludeParser {
         }
         while (($line = fgets($fp, 1024)) !== false) {
             // 如果空行，或者是注释，就直接略过
-            if (!$line || trim($line)[0] === '/' || trim($line)[0] === '*') {
+            if (!$line || trim($line) == ''|| trim($line)[0] === '/' || trim($line)[0] === '*') {
                 continue;
             }
 
@@ -539,7 +539,7 @@ class IncludeParser {
         }
         while (($line = fgets($fp, 1024)) !== false) {
             // 如果空行，或者是注释，就直接略过
-            if (!$line || trim($line)[0] === '/' || trim($line)[0] === '*') {
+            if (!$line || trim($line) == '' || trim($line)[0] === '/' || trim($line)[0] === '*') {
                 continue;
             }
 
