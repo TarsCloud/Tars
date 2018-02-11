@@ -91,12 +91,12 @@ static zval* my_zend_read_property(zend_class_entry *class_ptr, zval *obj, char 
 #define MY_ZVAL_STRINGL(z, s, l, dup)         ZVAL_STRINGL(z, s, l)
 #define MY_Z_TYPE_P                                Z_TYPE_P
 #define MY_Z_TYPE_PP(s)                            MY_Z_TYPE_P(*s)
-static inline int my_zend_hash_add(HashTable *ht, char *k, int len, void *pData, int datasize, void **pDest)
+static inline int my_zend_hash_add(HashTable *ht, char *k, long len, void *pData, int datasize, void **pDest)
 {
     zval **real_p = pData;
     return zend_hash_str_add(ht, k, len - 1, *real_p) ? SUCCESS : FAILURE;
 }
-static inline int my_zend_hash_index_update(HashTable *ht, int key, void *pData, int datasize, void **pDest)
+static inline int my_zend_hash_index_update(HashTable *ht, long key, void *pData, int datasize, void **pDest)
 {
     zval **real_p = pData;
     return zend_hash_index_update(ht, key, *real_p) ? SUCCESS : FAILURE;
