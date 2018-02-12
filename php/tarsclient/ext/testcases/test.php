@@ -274,6 +274,29 @@ class TarsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($string,$out);
     }
 
+    public function testStringFromInt()
+    {
+        $string  = 222;
+
+        $buf = \TUPAPI::putString("string",$string);
+
+        $encodeBufs['string'] = $buf;
+
+        $requestBuf = \TUPAPI::encode($this->iVersion,$this->iRequestId,$this->servantName,
+            $this->funcName,$this->cPacketType,$this->iMessageType,$this->iTimeout,
+            $this->contexts,$this->statuses,$encodeBufs);
+
+        $decodeRet = \TUPAPI::decode($requestBuf);
+        if($decodeRet['status'] !== 0) {
+
+        }
+        $respBuf = $decodeRet['sBuffer'];
+
+        $out = \TUPAPI::getString("string",$respBuf);
+
+        $this->assertEquals((string)$string,$out);
+    }
+
     public function testSimpleVector()
     {
         $shorts = ["test1","test2"];
@@ -352,6 +375,34 @@ class TarsTest extends PHPUnit_Framework_TestCase
         $out = \TUPAPI::getMap("map", $m, $respBuf);
 
         $okData = ["test1" => 1, "test2" => 2];
+
+        $this->assertEquals($okData,$out);
+    }
+
+    public function testSimpleMapIntToString()
+    {
+        $strings = [["test1"=>1],["test2"=>2]];
+        $map = new \TARS_MAP(\TARS::STRING,\TARS::STRING);
+        foreach ($strings as $string) {
+            $map->pushBack($string);
+        }
+
+        $buf = \TUPAPI::putMap("map",$map);
+
+        $encodeBufs['map'] = $buf;
+
+        $requestBuf = \TUPAPI::encode($this->iVersion,$this->iRequestId,$this->servantName,
+            $this->funcName,$this->cPacketType,$this->iMessageType,$this->iTimeout,
+            $this->contexts,$this->statuses,$encodeBufs);
+
+        $decodeRet = \TUPAPI::decode($requestBuf);
+
+        $respBuf = $decodeRet['sBuffer'];
+
+        $map = new \TARS_MAP(\TARS::STRING,\TARS::STRING);
+        $out = \TUPAPI::getMap("map", $map,$respBuf);
+
+        $okData = ["test1" => "1", "test2" => "2"];
 
         $this->assertEquals($okData,$out);
     }

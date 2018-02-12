@@ -21,7 +21,7 @@ class NestedStruct extends \TARS_Struct {
 	protected static $fields = array(
 		self::NESTEDSTRUCT => array(
 			'name'=>'nestedStruct',
-			'required'=>true,
+			'required'=>1,
 			'type'=>\TARS::STRUCT,
 			),
 		self::STRUCTLIST => array(
@@ -36,7 +36,7 @@ class NestedStruct extends \TARS_Struct {
 			),
 		self::EXT => array(
 			'name'=>'ext',
-			'required'=>false,
+			'required'=>0,
 			'type'=>\TARS::MAP,
 			),
         self::VECSTRING => array(

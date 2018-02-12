@@ -186,6 +186,7 @@ PHP_MINFO_FUNCTION(phptars)
 {
     php_info_print_table_start();
     php_info_print_table_header(2, "phptars support", "enabled");
+    php_info_print_table_row(2, "phptars version", PHP_TARS_VERSION);
     php_info_print_table_end();
 
 }
