@@ -1227,7 +1227,8 @@ int struct_unpacker_wrapper(TarsInputStream * is, zval * this_ptr,void ** zv) {
             if (ret != TARS_SUCCESS) { \
                 goto do_clean ; \
             } \
-            ZVAL_COPY(*item, tmp); \
+            **item = *tmp; \
+            zval_copy_ctor(*item); \
         } \
     } \
 /* }}} */
@@ -1314,7 +1315,7 @@ int vector_converter(zval * this_ptr, zval * value, int depth) {
     zval itemTmp;
 
     ZEND_HASH_FOREACH_KEY_VAL(ht, num_key, zkey, item) {
-        if (zkey) {
+        if (item) {
             ZVAL_COPY(&itemTmp, item);
 
             if (IS_JSTRING(obj->t)) {
@@ -1322,7 +1323,7 @@ int vector_converter(zval * this_ptr, zval * value, int depth) {
                 if (ret != TARS_SUCCESS) goto do_clean;
 
                 // 将单个字符拼成字符串串
-                smart_str_appendc(&js_str, c);
+                smart_string_appendc(&js_str, c);
             }
                 // todo 这里针对struct的逻辑
                 // 增加对结构体的单独处理
@@ -1513,14 +1514,11 @@ int map_converter(zval * this_ptr, zval * zv, int depth) {
         } else {
             // 参数是以二维数组的方式传即 数组中的键key对应的值是map的第一个元素, 键value对应的值是map的第二个元素
             // 取一条记录
-            if (!item) {
-                continue;
-            }
 
             // 检查参数是否正确
             if (Z_TYPE_P(item) != IS_ARRAY ||
-                (key = (zval *) zend_hash_str_find(Z_ARRVAL_P(item), ZEND_STRS(MAP_FIRST_KEY)) == NULL) ||
-                (value = (zval *) zend_hash_str_find(Z_ARRVAL_P(item), ZEND_STRS(MAP_SECOND_KEY)) == NULL)) {
+                ((key = (zval *) zend_hash_str_find(Z_ARRVAL_P(item), ZEND_STRL(MAP_FIRST_KEY))) == NULL) ||
+                ((value = (zval *) zend_hash_str_find(Z_ARRVAL_P(item), ZEND_STRL(MAP_SECOND_KEY))) == NULL)) {
                 ret = ERR_DATA_FORMAT_ERROR;
                 goto do_clean;
             }
@@ -2074,7 +2072,11 @@ PHP_METHOD(tars_map, pushBack) {
         array_init(array);
 
         // 增加计数
-        ZVAL_ADDREF(value);
+#if PHP_MAJOR_VERSION <7
+        Z_ADDREF_P(value);
+#else
+        Z_TRY_ADDREF_P(value);
+#endif
 
         my_zend_hash_next_index_insert(Z_ARRVAL_P(array), (void **) &value, sizeof(zval *), NULL);
     } else {

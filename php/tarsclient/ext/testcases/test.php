@@ -287,7 +287,7 @@ class TarsTest extends PHPUnit_Framework_TestCase
             $this->contexts,$this->statuses,$encodeBufs);
 
         $decodeRet = \TUPAPI::decode($requestBuf);
-        if($decodeRet['status'] !== 0) {
+        if($decodeRet['code'] !== 0) {
 
         }
         $respBuf = $decodeRet['sBuffer'];
@@ -428,6 +428,66 @@ class TarsTest extends PHPUnit_Framework_TestCase
         $out = \TUPAPI::getMap("map", $m, $respBuf);
 
         $this->assertEquals([],$out);
+    }
+
+    public function testVectorInMap()
+    {
+        $shorts = ["test1","test2"];
+        $vector = new \TARS_VECTOR(\TARS::STRING);
+        foreach ($shorts as $short) {
+            $vector->pushBack($short);
+        }
+
+        $map = new \TARS_MAP(\TARS::STRING, new \TARS_VECTOR(\TARS::STRING));
+        $map->pushBack(["testMap" => $vector]);
+
+        $buf = \TUPAPI::putMap("map",$map);
+
+        $encodeBufs['map'] = $buf;
+
+        $requestBuf = \TUPAPI::encode($this->iVersion,$this->iRequestId,$this->servantName,
+            $this->funcName,$this->cPacketType,$this->iMessageType,$this->iTimeout,
+            $this->contexts,$this->statuses,$encodeBufs);
+
+        $decodeRet = \TUPAPI::decode($requestBuf);
+
+
+        $respBuf = $decodeRet['sBuffer'];
+
+        $map = new \TARS_MAP(\TARS::STRING, new \TARS_VECTOR(\TARS::STRING));
+        $out = \TUPAPI::getMap("map", $map, $respBuf);
+
+        $rightData = ['testMap' => ['test1', 'test2']];
+
+        $this->assertEquals($rightData,$out);
+    }
+
+    public function testVectorInMap2()
+    {
+        $shorts = ["test1","test2"];
+
+        $map = new \TARS_MAP(\TARS::STRING, new \TARS_VECTOR(\TARS::STRING), 1);
+        $map->pushBack(['key' => 'testMap', 'value' => $shorts]);
+
+        $buf = \TUPAPI::putMap("map",$map);
+
+        $encodeBufs['map'] = $buf;
+
+        $requestBuf = \TUPAPI::encode($this->iVersion,$this->iRequestId,$this->servantName,
+            $this->funcName,$this->cPacketType,$this->iMessageType,$this->iTimeout,
+            $this->contexts,$this->statuses,$encodeBufs);
+
+        $decodeRet = \TUPAPI::decode($requestBuf);
+
+
+        $respBuf = $decodeRet['sBuffer'];
+
+        $map = new \TARS_MAP(\TARS::STRING, new \TARS_VECTOR(\TARS::STRING));
+        $out = \TUPAPI::getMap("map", $map, $respBuf);
+
+        $rightData = ['testMap' => ['test1', 'test2']];
+
+        $this->assertEquals($rightData,$out);
     }
 
     public function testSimpleStruct()
