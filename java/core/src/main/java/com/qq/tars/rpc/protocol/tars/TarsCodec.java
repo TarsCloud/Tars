@@ -81,11 +81,11 @@ public class TarsCodec extends Codec {
                 jos.write(response.getRequest().getFunctionName(), 6);
                 jos.write(encodeWupResult(response, charsetName), 7);
                 jos.write(response.getTimeout(), 8);
-                if (response.getStatus() != null) {
-                    jos.write(response.getStatus(), 9);
-                }
                 if (response.getContext() != null) {
-                    jos.write(response.getContext(), 10);
+                    jos.write(response.getContext(), 9);
+                }
+                if (response.getStatus() != null) {
+                    jos.write(response.getStatus(), 10);
                 }
             } else {
                 response.setRet(TarsHelper.SERVERENCODEERR);
