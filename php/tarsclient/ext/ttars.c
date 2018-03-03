@@ -15,18 +15,6 @@
 #include "./include/php_tupapi.h"
 #include "./include/ttars.h"
 
-#include <zend_smart_str.h>
-
-#define ZVAL_ADDREF Z_ADDREF
-
-#if PHP_MAJOR_VERSION > 6
-#define Z_BVAL(zval) ((zend_bool)(zval).value.lval)
-#endif
-
-#if PHP_MAJOR_VERSION < 5
-#define ZVAL_COPY ZVAL_COPY_VALUE
-#endif
-
 /* {{{ static variable
  */
 static zend_object_handlers vector_wrapper_handlers;
@@ -543,7 +531,6 @@ int struct_packer_wrapper(TarsOutputStream * o, void * struct_ptr) {
                     zval copyval = *val;
                     zval_copy_ctor(&copyval);
                     convert_to_boolean(&copyval);
-
                     is_required = (Z_TYPE_P(val) == IS_TRUE ? true : false);
                     zval_dtor(&copyval);
                 }
@@ -1160,7 +1147,6 @@ int struct_unpacker_wrapper(TarsInputStream * is, zval * this_ptr,void ** zv) {
                     zval copyval = *val;
                     zval_copy_ctor(&copyval);
                     convert_to_boolean(&copyval);
-
                     is_required = (Z_TYPE_P(val) == IS_TRUE ? true : false);
                     zval_dtor(&copyval);
                 }

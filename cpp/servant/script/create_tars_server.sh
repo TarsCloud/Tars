@@ -10,7 +10,7 @@ APP=$1
 SERVER=$2
 SERVANT=$3
 
-if [ "$SERVER" == "$SERVANT" ]
+if [ "$SERVER" = "$SERVANT" ]
 then
 	echo "Error!(ServerName == ServantName)"
 	exit -1
@@ -44,8 +44,8 @@ do
 	mv $FILE.tmp $FILE
 done
 
-rename "DemoServer" "$SERVER" $SRC_FILE
-rename "DemoServant" "$SERVANT" $SRC_FILE
+rename "s/DemoServer/$SERVER/" $SRC_FILE
+rename "s/DemoServant/$SERVANT/" $SRC_FILE
 
 cd ../../
 
