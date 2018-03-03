@@ -75,8 +75,12 @@ public class TCPSession extends Session {
         if (this.status == SessionStatus.CLOSED) return;
 
         this.status = SessionStatus.CLOSED;
-        if (channel != null) channel.close();
-        if (key != null) key.cancel();
+        try {
+            if (channel != null) channel.close();
+            if (key != null) key.cancel();
+        }catch(IOException e){
+            /*ignore IOException ,when client first clost connection,it cannot be fast unregisterSession*/
+        }
 
         this.key = null;
         this.channel = null;

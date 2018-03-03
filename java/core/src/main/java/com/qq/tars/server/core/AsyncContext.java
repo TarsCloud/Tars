@@ -63,6 +63,10 @@ public final class AsyncContext {
     public <T> void setAttribute(String name, T value) {
         this.context.setAttribute(name, value);
     }
+    
+    public Context getContext() {
+        return this.context;
+    }
 
     public void writeException(Throwable ex) throws IOException {
         TarsServantResponse response = this.context.response();

@@ -38,19 +38,13 @@ public class TicketManager {
             long currentTime = -1;
 
             public void run() {
-                try {
-                    while (!Thread.interrupted()) {
-                        Collection<Ticket<?>> values = tickets.values();
-                        currentTime = System.currentTimeMillis();
-                        for (Ticket<?> t : values) {
-                            if ((currentTime - t.startTime) > t.timeout) {
-                                removeTicket(t.getTicketNumber());
-                                t.expired();
-                            }
-                        }
+                Collection<Ticket<?>> values = tickets.values();
+                currentTime = System.currentTimeMillis();
+                for (Ticket<?> t : values) {
+                    if ((currentTime - t.startTime) > t.timeout) {
+                        removeTicket(t.getTicketNumber());
+                        t.expired();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
 
