@@ -37,8 +37,7 @@ import java.util.Map;
 
 public class SpringAppContext extends BaseAppContext {
     private ApplicationContext applicationContext = null;
-    public SpringAppContext(File path) {
-        super(path);
+    public SpringAppContext() {
         try {
             initFromConfigFile();
             injectAdminServant();

@@ -34,7 +34,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class BaseAppContext implements AppContext {
-    protected File path = null;
     boolean ready = true;
 
     ConcurrentHashMap<String, ServantHomeSkeleton> skeletonMap = new ConcurrentHashMap<String, ServantHomeSkeleton>();
@@ -44,8 +43,7 @@ public abstract class BaseAppContext implements AppContext {
 
     Set<AppContextListener> listeners = new HashSet<AppContextListener>(4);
 
-    BaseAppContext(File path) {
-        this.path = path;
+    BaseAppContext() {
     }
 
     void injectAdminServant() {
