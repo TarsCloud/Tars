@@ -44,8 +44,16 @@ do
 	mv $FILE.tmp $FILE
 done
 
-rename "s/DemoServer/$SERVER/" $SRC_FILE
-rename "s/DemoServant/$SERVANT/" $SRC_FILE
+OS_NAME=$(cat /etc/os-release | grep '^NAME=' | sed 's/NAME="//' | sed 's/ .*$//')
+
+if [ "$OS_NAME" != "CentOS" ];
+then
+        rename "s/DemoServer/$SERVER/" $SRC_FILE
+        rename "s/DemoServant/$SERVANT/" $SRC_FILE
+else
+        rename "DemoServer" "$SERVER" $SRC_FILE
+        rename "DemoServant" "$SERVANT" $SRC_FILE
+fi
 
 cd ../../
 
