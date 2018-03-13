@@ -36,8 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class XmlAppContext extends BaseAppContext {
-    public XmlAppContext(File path) {
-        super(path);
+    public XmlAppContext() {
         try {
             initFromConfigFile();
             injectAdminServant();
@@ -51,20 +50,16 @@ public class XmlAppContext extends BaseAppContext {
     }
 
     private void initFromConfigFile() throws Exception {
-        if (path.exists()) {
-            XMLConfigFile cfg = new XMLConfigFile();
-            cfg.parse(new FileInputStream(path));
-            XMLConfigElement root = cfg.getRootElement();
-            ArrayList<XMLConfigElement> elements = root.getChildList();
+        XMLConfigFile cfg = new XMLConfigFile();
+        cfg.parse(getClass().getClassLoader().getResource("servants.xml").openStream());
+        XMLConfigElement root = cfg.getRootElement();
+        ArrayList<XMLConfigElement> elements = root.getChildList();
 
-            loadInitParams(root.getChildListByName("context-param"));
+        loadInitParams(root.getChildListByName("context-param"));
 
-            loadAppContextListeners(elements);
+        loadAppContextListeners(elements);
 
-            loadAppServants(elements);
-        } else {
-            System.err.println("servants.xml is not exists");
-        }
+        loadAppServants(elements);
     }
 
     private void loadInitParams(ArrayList<XMLConfigElement> list) {
