@@ -7,10 +7,11 @@ if [ $# -lt 1 ]; then
 fi
 
 BASEPATH=$(cd `dirname $0`; pwd)
+N_CPU=`grep processor /proc/cpuinfo | wc -l`
 
 case $ARGS in
     all)
-	cd $BASEPATH; cp CMakeLists.txt ../; cmake ..;  make
+	cd $BASEPATH; cp CMakeLists.txt ../; cmake ..;  make -j $N_CPU
         ;;
     cleanall)
         cd $BASEPATH; make clean; rm -rf CMakeFiles/ CMakeCache.txt Makefile util/ tools/ servant/ framework/ test/ cmake_install.cmake *.tgz install_manifest.txt
