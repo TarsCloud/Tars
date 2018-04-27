@@ -3,6 +3,9 @@
 PWD_DIR=`pwd`
 MachineIp=
 MachineName=
+MysqlIncludePath=
+MysqlLibPath=
+
 
 ##安装glibc-devel
 
@@ -60,17 +63,27 @@ git clone https://github.com/Tencent/rapidjson.git
 
 cp -r ./rapidjson ../cpp/thirdparty/
 
-##安装mysql
-
+## 安装mysql
 yum install -y ncurses-devel
 yum install -y zlib-devel
-tar zxvf mysql-5.6.26.tar.gz
-cd mysql-5.6.26
-cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.26 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DMYSQL_USER=mysql -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci
-make
-make install
-ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
-cd -
+
+if [   ! -n "$MysqlIncludePath"  ] 
+  then
+	tar zxvf mysql-5.6.26.tar.gz
+	cd mysql-5.6.26
+	cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.26 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DMYSQL_USER=mysql -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci
+	make
+	make install
+	ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
+	cd -
+  else
+  	## 根据mysql 库路径 配置 设置cpp/build/CMakeLists.txt
+  	sed -i "s@/usr/local/mysql/include@${MysqlIncludePath}@g" ../cpp/build/CMakeLists.txt
+  	sed -i "s@/usr/local/mysql/lib@${MysqlLibPath}@g" ../cpp/build/CMakeLists.txt
+
+fi
+
+
 
 yum install -y perl
 cd /usr/local/mysql
