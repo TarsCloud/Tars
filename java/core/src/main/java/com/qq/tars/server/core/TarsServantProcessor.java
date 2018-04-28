@@ -52,7 +52,7 @@ public class TarsServantProcessor extends Processor {
 
     @Override
     public Response process(Request req, Session session) {
-        AppContainer container = null;
+//        AppContainer container = null;
         TarsServantRequest request = null;
         TarsServantResponse response = null;
         ServantHomeSkeleton skeleton = null;
@@ -78,11 +78,11 @@ public class TarsServantProcessor extends Processor {
                 throw new TarsException("Wait too long, server busy.");
             }
 
-            container = ContainerManager.getContainer(AppContainer.class);
+//            container = ContainerManager.getContainer(AppContainer.class);
             Context<?, ?> context = ContextManager.registerContext(request, response);
             context.setAttribute(Context.INTERNAL_START_TIME, startTime);
             context.setAttribute(Context.INTERNAL_CLIENT_IP, session.getRemoteIp());
-            context.setAttribute(Context.INTERNAL_APP_NAME, container.getDefaultAppContext().name());
+//            context.setAttribute(Context.INTERNAL_APP_NAME, container.getDefaultAppContext().name());
             context.setAttribute(Context.INTERNAL_SERVICE_NAME, request.getServantName());
             context.setAttribute(Context.INTERNAL_METHOD_NAME, request.getFunctionName());
             context.setAttribute(Context.INTERNAL_SESSION_DATA, session);
@@ -91,7 +91,7 @@ public class TarsServantProcessor extends Processor {
             distributedContext.put(DyeingSwitch.REQ, request);
             distributedContext.put(DyeingSwitch.RES, response);
 
-            appContext = container.getDefaultAppContext();
+            appContext = AppContextManager.getInstance().getAppContext();
             if (appContext == null) throw new RuntimeException("failed to find the application named:[ROOT]");
 
 //            Thread.currentThread().setContextClassLoader(appContext.getAppContextClassLoader());
@@ -102,6 +102,7 @@ public class TarsServantProcessor extends Processor {
             value = skeleton.invoke(request.getMethodInfo().getMethod(), request.getMethodParameters());
             response.setResult(value);
         } catch (Throwable cause) {
+            cause.printStackTrace();
             System.out.println("ERROR: " + cause.getMessage());
 
             if (response.isAsyncMode()) {

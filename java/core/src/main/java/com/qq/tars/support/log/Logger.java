@@ -224,7 +224,7 @@ public class Logger {
             str = "";
         }
         
-        boolean dyeFlag = false;
+        Boolean dyeFlag = false;
         String dyeFileName = null;
         String dyeServantName = null; 
         DistributedContext distributedContext = DistributedContextManager.getDistributedContext();

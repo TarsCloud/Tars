@@ -1,0 +1,10 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: false
+
+tars:
+  client:
+    async-invoke-timeout: 10000
+    locator: http://localhost:8761/eureka/

@@ -476,8 +476,6 @@ public class Tars2JavaMojo extends AbstractMojo {
             }
         } else if (type.isPrimitive()) {
             out.println("\t\t" + (hasDeclare ? memberName : (type(type, false, nsMap) + " " + memberName)) + " = " + typeInit(type, nsMap, true) + ";");
-        } else if (isEnum(type, nsMap)) {
-            out.println("\t\t" + (hasDeclare ? memberName : (type(type, false, nsMap) + " " + memberName)) + " = " + typeInit(type, nsMap, true) + ";");
         }
     }
 
