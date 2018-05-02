@@ -22,7 +22,7 @@
 <dependency>
     <groupId>com.tencent.tars</groupId>
     <artifactId>tars-spring-cloud-starter</artifactId>
-    <version>1.0.4</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
@@ -110,7 +110,7 @@ tars:
   <dependency>
       <groupId>com.tencent.tars</groupId>
       <artifactId>tars-spring-cloud-starter</artifactId>
-      <version>1.0.4</version>
+      <version>1.4.0</version>
   </dependency>
   ```
 

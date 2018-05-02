@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.tencent.tars</groupId>
 		<artifactId>tars-parent</artifactId>
-		<version>1.0.4</version>
+		<version>1.4.0</version>
 	</parent>
 	<artifactId>tars-core</artifactId>
 	<name>${project.artifactId}</name>

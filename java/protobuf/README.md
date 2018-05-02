@@ -6,7 +6,7 @@
 <dependency>
       <groupId>com.tencent.tars</groupId>
       <artifactId>tars-protobuf</artifactId>
-      <version>1.0.4</version>
+      <version>1.4.0</version>
 </dependency>
 ```
 然后使用java-protobuf-plugin插件配合pb生成代码，详细使用方式参见

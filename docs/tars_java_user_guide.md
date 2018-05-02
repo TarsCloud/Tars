@@ -17,20 +17,20 @@
 在构建项目**pom.xml**中添加依赖jar包
 
 - 框架依赖配置
-```
+```xml
 <dependency>
-    <groupId>qq-cloud-central</groupId>
+    <groupId>com.tencent.tars</groupId>
     <artifactId>tars-server</artifactId>
-    <version>1.0.3</version>
+    <version>1.4.0</version>
     <type>jar</type>
 </dependency>
 ```
 - 插件依赖配置
-```
+```xml
 <plugin>
-    <groupId>qq-cloud-central</groupId>
+    <groupId>com.tencent.tars</groupId>
     <artifactId>tars-maven-plugin</artifactId>
-    <version>1.0.3</version>
+    <version>1.4.0</version>
     <configuration>
 	<tars2JavaConfig>
 	    <tarsFiles>
@@ -48,7 +48,7 @@
 ### 接口文件定义 ###
 
 接口文件定义是通过Tars接口描述语言来定义，在src/main/resources目录下建立hello.tars文件，内容如下
-```    	
+```    	protobuf
 module TestApp 
 {
 	interface Hello
@@ -61,32 +61,34 @@ module TestApp
 
 提供插件编译生成java代码，在tars-maven-plugin添加生成java文件配置
 
-	<plugin>
-		<groupId>qq-cloud-central</groupId>
-		<artifactId>tars-maven-plugin</artifactId>
-		<version>1.0.3</version>
-		<configuration>
-			<tars2JavaConfig>
-				<!-- tars文件位置 -->
-				<tarsFiles>
-					<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-				</tarsFiles>
-				<!-- 源文件编码 -->
-				<tarsFileCharset>UTF-8</tarsFileCharset>
-				<!-- 生成服务端代码 -->
-				<servant>true</servant>
-				<!-- 生成源代码编码 -->
-				<charset>UTF-8</charset>
-				<!-- 生成的源代码目录 -->
-				<srcPath>${basedir}/src/main/java</srcPath>
-				<!-- 生成源代码包前缀 -->
-				<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
-			</tars2JavaConfig>
-		</configuration>
-	</plugin>
+```xml
+<plugin>
+	<groupId>com.tencent.tars</groupId>
+	<artifactId>tars-maven-plugin</artifactId>
+	<version>1.4.0</version>
+	<configuration>
+		<tars2JavaConfig>
+			<!-- tars文件位置 -->
+			<tarsFiles>
+				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+			</tarsFiles>
+			<!-- 源文件编码 -->
+			<tarsFileCharset>UTF-8</tarsFileCharset>
+			<!-- 生成服务端代码 -->
+			<servant>true</servant>
+			<!-- 生成源代码编码 -->
+			<charset>UTF-8</charset>
+			<!-- 生成的源代码目录 -->
+			<srcPath>${basedir}/src/main/java</srcPath>
+			<!-- 生成源代码包前缀 -->
+			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
+		</tars2JavaConfig>
+	</configuration>
+</plugin>
+```
 
 在工程根目录下执行mvn tars:tars2java
-```			
+```			java
 @Servant
 public interface HelloServant {
     public String hello(int no, String name);
@@ -96,25 +98,31 @@ public interface HelloServant {
 
 新创建一个HelloServantImpl.java文件，实现HelloServant.java接口
 
-	public class HelloServantImpl implements HelloServant {
+```java
+public class HelloServantImpl implements HelloServant {
+```
 
-    @Override
-    public String hello(int no, String name) {
-        return String.format("hello no=%s, name=%s, time=%s", no, name, System.currentTimeMillis());
-    }
+```java
+@Override
+public String hello(int no, String name) {
+    return String.format("hello no=%s, name=%s, time=%s", no, name, System.currentTimeMillis());
+}
+```
 
 
 ### 服务暴露配置 ###
 
 在WEB-INF下创建一个servants.xml的配置文件，服务编写后需要进程启动时加载配置暴露服务，配置如下:
 ​			
-	<?xml version="1.0" encoding="UTF-8"?>
-	<servants>
-		<servant name="HelloObj">
-			<home-api>com.qq.tars.quickstart.server.testapp.HelloServant</home-api>
-			<home-class>com.qq.tars.quickstart.server.testapp.impl.HelloServantImpl</home-class>
-		</servant>
-	</servants>
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<servants>
+	<servant name="HelloObj">
+		<home-api>com.qq.tars.quickstart.server.testapp.HelloServant</home-api>
+		<home-class>com.qq.tars.quickstart.server.testapp.impl.HelloServantImpl</home-class>
+	</servant>
+</servants>
+```
 
 说明：除了此方法之外，还可以采用spring模式来配置服务，详情见tars_java_spring.md。
 
@@ -397,8 +405,10 @@ Adapter配置如下：
 
 针对proxy设置(ServantProxyConfig与CommunicatorConfig类似)
 ​	
-	//设置该代理单独初始化配置
-	public <T> T stringToProxy(Class<T> clazz, ServantProxyConfig servantProxyConfig)
+```java
+//设置该代理单独初始化配置
+public <T> T stringToProxy(Class<T> clazz, ServantProxyConfig servantProxyConfig)
+```
 
 
 ### 调用
@@ -426,51 +436,61 @@ tcp：tcp协议
 
 如果HelloServer在两台服务器上运行，则HelloPrx初始化方式如下：
 ​	
-	HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj@tcp -h 127.0.0.1 -p 9985:tcp -h 192.168.1.1 -p 9983");
+```java
+HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj@tcp -h 127.0.0.1 -p 9985:tcp -h 192.168.1.1 -p 9983");
+```
 
 即，HelloObj的地址设置为两台服务器的地址。此时请求会分发到两台服务器上（分发方式可以指定，这里不做介绍），如果一台服务器down，则自动将请求分到另外一台，并定时重试开始down的那一台服务器。
 
 对于在主控中注册的服务，服务的寻址方式是基于服务名进行的，客户端在请求服务端的时候则不需要指定HelloServer的具体地址，但是需要在生成通信器或初始化通信器的时候指定registry(主控中心)的地址。
 
-	HelloPrx prx = c.stringToProxy<HelloPrx>("TestApp.HelloServer.HelloObj");
+```java
+HelloPrx prx = c.stringToProxy<HelloPrx>("TestApp.HelloServer.HelloObj");
+```
 
 #### 单向调用
 
 所谓单向调用，表示客户端只管发送数据，而不接收服务端的响应，也不管服务端是否接收到请求。
 ​	
-	HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj");
-	//发起远程调用
-	prx.async_hello(null, 1000, "hello word");
+```java
+HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj");
+//发起远程调用
+prx.async_hello(null, 1000, "hello word");
+```
 
 #### 同步调用
 
 请看如下调用示例：
 ​	
-	HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj");
-	//发起远程调用
-	prx.hello(1000, "hello word");
+```java
+HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj");
+//发起远程调用
+prx.hello(1000, "hello word");
+```
 
 #### 异步调用
 
 请看如下调用示例：
 
-	HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj");
-	//发起远程调用
-	prx.async_hello(new HelloPrxCallback() {
-	        
-	        @Override
-	        public void callback_expired() {
-	        }
-	        
-	        @Override
-	        public void callback_exception(Throwable ex) {
-	        }
-	        
-	        @Override
-	        public void callback_hello(String ret) {
-	            System.out.println(ret);
-	        }
-	    }, 1000, "hello word");
+```java
+HelloPrx prx = c.stringToProxy("TestApp.HelloServer.HelloObj");
+//发起远程调用
+prx.async_hello(new HelloPrxCallback() {
+        
+        @Override
+        public void callback_expired() {
+        }
+        
+        @Override
+        public void callback_exception(Throwable ex) {
+        }
+        
+        @Override
+        public void callback_hello(String ret) {
+            System.out.println(ret);
+        }
+    }, 1000, "hello word");
+```
 
 
 注意：
@@ -497,23 +517,29 @@ Tars服务框架提供了从tarsconfig拉取服务的配置到本地目录的功
 
 以HelloServer为例：
 
-	public class AppStartListener implements AppContextListener {
+```java
+public class AppStartListener implements AppContextListener {
+```
 
-	    @Override
-	    public void appContextStarted(AppContextEvent event) {
-	        ConfigHelper.getInstance().loadConfig("helloServer.conf");
-	    }
-	
-	    @Override
-	    public void appServantStarted(AppServantEvent event) {
-	    }
-	}
+```java
+    @Override
+    public void appContextStarted(AppContextEvent event) {
+        ConfigHelper.getInstance().loadConfig("helloServer.conf");
+    }
+
+    @Override
+    public void appServantStarted(AppServantEvent event) {
+    }
+}
+```
 
 在servant.xml中注册配置
 ​	
-	<listener>
-		<listener-class>com.qq.tars.quickstart.server.AppStartListener</listener-class>
-	</listener>
+```xml
+<listener>
+	<listener-class>com.qq.tars.quickstart.server.AppStartListener</listener-class>
+</listener>
+```
 
 
 说明：
@@ -529,7 +555,9 @@ Tars服务框架提供了从tarsconfig拉取服务的配置到本地目录的功
 
 框架支持本地和远程日志，获取日志Logger对象如下
 ​	
-	private final static Logger FLOW_LOGGER = Logger.getLogger("flow", LogType.LOCAL);
+```java
+private final static Logger FLOW_LOGGER = Logger.getLogger("flow", LogType.LOCAL);
+```
 
 说明：打远程日志前需要预先申请远程日志服务
 > * LogType.LOCAL：只打本地日志
@@ -557,22 +585,28 @@ TARS服务框架目前内置命令：
 服务的自定义命令发送方式，通过管理平台自定义命令发送；
 只需注册相关命令以及命令处理类，如下
 
-	CustemCommandHelper.getInstance().registerCustemHandler("cmdName",new CommandHandler() {
+```java
+CustemCommandHelper.getInstance().registerCustemHandler("cmdName",new CommandHandler() {
+```
 
-		@Override
-		public void handle(String cmdName, String params) {
-			
-		}
-	});
+```java
+	@Override
+	public void handle(String cmdName, String params) {
+		
+	}
+});
+```
 
 ## 异常上报
 为了更好监控，框架支持在程序中将异常直接上报到tarsnotify，并可以在管理平台页面上查看到。
 
 框架提供异常上报工具，使用如下
 ​	
-	NotifyHelper.getInstance().notifyNormal(info);
-	NotifyHelper.getInstance().notifyWarn(info);
-	NotifyHelper.getInstance().notifyError(info);
+```java
+NotifyHelper.getInstance().notifyNormal(info);
+NotifyHelper.getInstance().notifyWarn(info);
+NotifyHelper.getInstance().notifyError(info);
+```
 
 说明：
 > * notifyNormal 上报普通的信息
@@ -636,9 +670,9 @@ DyeingSwitch.closeActiveDyeing();    //主动关闭染色开关接口
 
 首先在需要染色的Tars接口上定义染色routeKey，这个值就是判断是否开启染色的变量，示例如下：
 
-```
+```java
 @Servant
-public HelloServant {
+public interface HelloServant {
      public String sayHello(@TarsRouteKey int no, String name);  //使用注释routeKey来表示开启染色的参数变量
 }
 ```

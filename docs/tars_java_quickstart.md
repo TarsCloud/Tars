@@ -44,18 +44,18 @@
 - 框架依赖配置
 ```xml
 <dependency>
-	<groupId>qq-cloud-central</groupId>
+	<groupId>com.tencent.tars</groupId>
      	<artifactId>tars-server</artifactId>
-     	<version>1.0.3</version>
+     	<version>1.4.0</version>
      	<type>jar</type>
 </dependency>
 ```
 - 插件依赖配置
 ```xml
 <plugin>
-	<groupId>qq-cloud-central</groupId>
+	<groupId>com.tencent.tars</groupId>
    	<artifactId>tars-maven-plugin</artifactId>
-   	<version>1.0.3</version>
+   	<version>1.4.0</version>
   	<configuration>
    		<tars2JavaConfig>
   			<tarsFiles>
@@ -89,9 +89,9 @@ module TestApp
 提供插件编译生成java代码，在tars-maven-plugin添加生成java文件配置
 ```xml
 <plugin>
-	<groupId>qq-cloud-central</groupId>
+	<groupId>com.tencent.tars</groupId>
 	<artifactId>tars-maven-plugin</artifactId>
-	<version>1.0.3</version>
+	<version>1.4.0</version>
 	<configuration>
 		<tars2JavaConfig>
 			<!-- tars文件位置 -->
@@ -157,18 +157,18 @@ public class HelloServantImpl implements HelloServant {
 - 添加依赖
 ```xml
 <dependency>
-	<groupId>qq-cloud-central</groupId>
+	<groupId>com.tencent.tars</groupId>
    	<artifactId>tars-client</artifactId>
-   	<version>1.0.3</version>
+   	<version>1.4.0</version>
    	<type>jar</type>
 </dependency>    
 ```
 - 添加插件
-```xml	
-<plugin>
-   	<groupId>qq-cloud-central</groupId>
+  ```xml
+  <plugin>
+   	<groupId>com.tencent.tars</groupId>
    	<artifactId>tars-maven-plugin</artifactId>
-   	<version>1.0.3</version>
+   	<version>1.4.0</version>
    	<configuration>
    		<tars2JavaConfig>
    			<!-- tars文件位置 -->
@@ -187,10 +187,11 @@ public class HelloServantImpl implements HelloServant {
    			<packagePrefixName>com.qq.tars.quickstart.client.</packagePrefixName>
    		</tars2JavaConfig>
    	</configuration>
-</plugin>
+  </plugin>
+  ```
 ```
 - 根据服务tars接口文件生成代码
-```java
+​```java
 @Servant
 public interface HelloPrx {
       
