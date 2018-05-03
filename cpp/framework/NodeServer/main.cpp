@@ -218,7 +218,7 @@ int main( int argc, char* argv[] )
 {
     try
     {   
-        TC_Common::daemon();
+        //TC_Common::daemon();
 
         parseConfig(argc,argv);
 
