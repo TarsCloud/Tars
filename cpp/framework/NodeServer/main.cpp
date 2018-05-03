@@ -130,17 +130,16 @@ void monitorNode(const string &configFile)
     prx->tars_ping();
 }
 
-void parseConfig(int argc, char *argv[])
+void parseImpConfig(int argc, char *argv[])
 {
-
     TC_Option tOp;//consider
     tOp.decode(argc, argv);
 
-     if (tOp.hasParam("nodeversion"))
-    {
-        cout << "Node:" << TARS_VERSION << "_" << NODE_VERSION << endl;
-        exit(0);
-    }
+	if (tOp.hasParam("nodeversion"))
+	{
+		cout << "Node:" << TARS_VERSION << "_" << NODE_VERSION << endl;
+		exit(0);
+	}
 
     if (tOp.hasParam("monitor"))
     {
@@ -155,9 +154,14 @@ void parseConfig(int argc, char *argv[])
             cout << "failed:" << ex.what() << endl;
             exit(-1);
         }
-        exit(0);
-        return;
+		exit(0);
     }
+}
+
+void parseSvrConfig(int argc, char *argv[])
+{
+    TC_Option tOp;//consider
+    tOp.decode(argc, argv);
 
     string sLocator         = tOp.getValue("locator");
     string sNodeId          = tOp.getValue("nodeid"); 
@@ -218,9 +222,10 @@ int main( int argc, char* argv[] )
 {
     try
     {   
-        //TC_Common::daemon();
-
-        parseConfig(argc,argv);
+	
+        parseImpConfig(argc,argv);
+        TC_Common::daemon();
+        parseSvrConfig(argc,argv);
 
         g_pconf = &g_app.getConfig();
 
