@@ -1807,8 +1807,6 @@ void TC_EpollServer::NetThread::addTcpConnection(TC_EpollServer::NetThread::Conn
 
     cPtr->getBindAdapter()->increaseNowConnection();
 
-    //注意epoll add必须放在最后, 否则可能导致执行完, 才调用上面语句
-    _epoller.add(cPtr->getfd(), cPtr->getId(), EPOLLIN | EPOLLOUT);
 #if TARS_SSL
     if (cPtr->getBindAdapter()->getEndpoint().isSSL())
     {
@@ -1841,6 +1839,8 @@ void TC_EpollServer::NetThread::addTcpConnection(TC_EpollServer::NetThread::Conn
         }
     }
 #endif
+    //注意epoll add必须放在最后, 否则可能导致执行完, 才调用上面语句
+    _epoller.add(cPtr->getfd(), cPtr->getId(), EPOLLIN | EPOLLOUT);
 }
 
 void TC_EpollServer::NetThread::addUdpConnection(TC_EpollServer::NetThread::Connection *cPtr)
