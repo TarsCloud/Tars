@@ -18,7 +18,7 @@
 #include "NotifyImp.h"
 #include "jmem/jmem_hashmap.h"
 
-TarsHashMap<NotifyKey, NotifyInfo, ThreadLockPolicy, FileStorePolicy> * g_notifyHash;
+TarsHashMap<NotifyKey, NotifyInfo, ThreadLockPolicy, MemStorePolicy> * g_notifyHash;
 
 void NotifyServer::initialize()
 {
@@ -26,16 +26,17 @@ void NotifyServer::initialize()
     addServant<NotifyImp>(ServerConfig::Application + "." + ServerConfig::ServerName + ".NotifyObj");
 
     //初始化hash
-    g_notifyHash = new TarsHashMap<NotifyKey, NotifyInfo, ThreadLockPolicy, FileStorePolicy>();
+    g_notifyHash = new TarsHashMap<NotifyKey, NotifyInfo, ThreadLockPolicy, MemStorePolicy>();
 
     g_notifyHash->initDataBlockSize(TC_Common::strto<size_t>((*g_pconf)["/tars/hash<min_block>"]),
             TC_Common::strto<size_t>((*g_pconf)["/tars/hash<max_block>"]),
             TC_Common::strto<float>((*g_pconf)["/tars/hash<factor>"]));
 
-    string sHashFile = ServerConfig::DataPath + "/" + (*g_pconf)["/tars/hash/<file_path>"];
-    size_t iSize     = TC_Common::toSize((*g_pconf)["/tars/hash<file_size>"], 1024*1024*10);
-
-    g_notifyHash->initStore(sHashFile.c_str(), iSize);
+    size_t iSize = TC_Common::toSize((*g_pconf)["/tars/hash<file_size>"], 1024 * 1024 * 10);
+    if (iSize > 1024 * 1024 * 100)
+        iSize = 1024 * 1024 * 100;
+    char* data = new char[iSize];
+    g_notifyHash->create(data, iSize);
 
     _loadDbThread = new LoadDbThread();
     _loadDbThread->init();

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>tars-parent</artifactId>
-        <groupId>qq-cloud-central</groupId>
-        <version>1.0.3</version>
+        <groupId>com.tencent.tars</groupId>
+        <version>1.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +15,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>qq-cloud-central</groupId>
+            <groupId>com.tencent.tars</groupId>
             <artifactId>tars-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

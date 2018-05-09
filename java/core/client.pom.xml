@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>qq-cloud-central</groupId>
+		<groupId>com.tencent.tars</groupId>
 		<artifactId>tars-parent</artifactId>
-		<version>1.0.3</version>
+		<version>1.4.0</version>
 	</parent>
 	<artifactId>tars-client</artifactId>
 	<name>${project.artifactId}</name>
@@ -14,12 +14,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>qq-cloud-central</groupId>
+			<groupId>com.tencent.tars</groupId>
 			<artifactId>tars-net</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>qq-cloud-central</groupId>
+			<groupId>com.tencent.tars</groupId>
 			<artifactId>tars-context</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -47,6 +47,7 @@
 						<include>com/qq/tars/common/**</include>
 						<include>com/qq/tars/protocol/**</include>
 						<include>com/qq/tars/rpc/**</include>
+						<include>com/qq/tars/register/**</include>
 						<include>com/qq/tars/support/query/**</include>
 						<include>com/qq/tars/support/stat/**</include>
 						<include>com/qq/tars/support/log/**</include>
@@ -80,6 +81,7 @@
 						<include>com/qq/tars/common/**</include>
 						<include>com/qq/tars/protocol/**</include>
 						<include>com/qq/tars/rpc/**</include>
+						<include>com/qq/tars/register/**</include>
 						<include>com/qq/tars/support/query/**</include>
 						<include>com/qq/tars/support/stat/**</include>
 						<include>com/qq/tars/support/log/**</include>

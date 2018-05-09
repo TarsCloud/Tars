@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>qq-cloud-central</groupId>
+	<groupId>com.tencent.tars</groupId>
 	<artifactId>tars-parent</artifactId>
-	<version>1.0.3</version>
+	<version>1.4.0</version>
 	<packaging>pom</packaging>
 	<name>Tars</name>
 	<description>Super POM For Projects</description>
@@ -15,12 +15,12 @@
     	<module>tools</module>
 		<module>protobuf</module>
 		<module>spring</module>
-  	</modules>
+    </modules>
 
 	<properties>
 		<maven_compiler_plugin_version>2.3.2</maven_compiler_plugin_version>
-		<java_source_version>1.6</java_source_version>
-		<java_target_version>1.6</java_target_version>
+		<java_source_version>1.7</java_source_version>
+		<java_target_version>1.7</java_target_version>
 		<file_encoding>UTF-8</file_encoding>
 
 		<maven_source_plugin_version>2.1.1</maven_source_plugin_version>

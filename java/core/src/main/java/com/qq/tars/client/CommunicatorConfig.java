@@ -24,7 +24,7 @@ import com.qq.tars.common.util.Constants;
 
 public class CommunicatorConfig {
 
-    private String locator = null;
+    private String locator = "";
     private int syncInvokeTimeout = 3000;
     private int asyncInvokeTimeout = 3000;
     private int refreshEndpointInterval = 60000;

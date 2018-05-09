@@ -50,6 +50,45 @@ public class ServantAdapter implements Adapter {
         this.servantAdapterConfig = servantAdapterConfig;
     }
 
+    public void bind() throws IOException {
+        ServerConfig serverCfg = ConfigurationManager.getInstance().getServerConfig();
+
+        boolean keepAlive = true;
+        Codec codec = new TarsCodec(serverCfg.getCharsetName());
+        Processor processor = new TarsServantProcessor();
+        Executor threadPool = ServantThreadPoolManager.get(servantAdapterConfig);
+
+        Endpoint endpoint = this.servantAdapterConfig.getEndpoint();
+        if (endpoint.type().equals("tcp")) {
+            this.selectorManager = new SelectorManager(Utils.getSelectorPoolSize(), new ServantProtocolFactory(codec), threadPool, processor, keepAlive, "server-tcp-reactor", false);
+            this.selectorManager.setTcpNoDelay(serverCfg.isTcpNoDelay());
+            this.selectorManager.start();
+
+            System.out.println("[SERVER] server starting at " + endpoint + "...");
+            ServerSocketChannel serverChannel = ServerSocketChannel.open();
+            serverChannel.socket().bind(new InetSocketAddress(endpoint.host(), endpoint.port()), 1024);
+            serverChannel.configureBlocking(false);
+
+            selectorManager.getReactor(0).registerChannel(serverChannel, SelectionKey.OP_ACCEPT);
+
+            System.out.println("[SERVER] server started at " + endpoint + "...");
+
+        } else if (endpoint.type().equals("udp")) {
+
+            this.selectorManager = new SelectorManager(1, new ServantProtocolFactory(codec), threadPool, processor, false, "server-udp-reactor", true);
+            this.selectorManager.start();
+
+            System.out.println("[SERVER] server starting at " + endpoint + "...");
+            DatagramChannel serverChannel = DatagramChannel.open();
+            DatagramSocket socket = serverChannel.socket();
+            socket.bind(new InetSocketAddress(endpoint.host(), endpoint.port()));
+            serverChannel.configureBlocking(false);
+
+            this.selectorManager.getReactor(0).registerChannel(serverChannel, SelectionKey.OP_READ);
+            System.out.println("[SERVER] servant started at " + endpoint + "...");
+        }
+    }
+
     public void bind(AppService appService) throws IOException {
         this.skeleton = (ServantHomeSkeleton) appService;
         ServerConfig serverCfg = ConfigurationManager.getInstance().getServerConfig();

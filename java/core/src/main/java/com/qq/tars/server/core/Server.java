@@ -25,6 +25,7 @@ import com.qq.tars.client.CommunicatorFactory;
 import com.qq.tars.common.util.BeanAccessor;
 import com.qq.tars.common.util.StringUtils;
 import com.qq.tars.net.core.SessionManager;
+import com.qq.tars.register.RegisterManager;
 import com.qq.tars.server.common.ServerLogger;
 import com.qq.tars.server.config.ConfigurationManager;
 import com.qq.tars.server.config.ServantAdapterConfig;
@@ -47,6 +48,7 @@ public class Server {
 
     public void startUp(String args[]) {
         try {
+
             initCommunicator();
 
             configLogger();

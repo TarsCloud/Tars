@@ -19,7 +19,7 @@
 #include "NotifyServer.h"
 
 extern TC_Config * g_pconf;
-extern TarsHashMap<NotifyKey, NotifyInfo, ThreadLockPolicy, FileStorePolicy> * g_notifyHash;
+extern TarsHashMap<NotifyKey, NotifyInfo, ThreadLockPolicy, MemStorePolicy> * g_notifyHash;
 
 void NotifyImp::loadconf()
 {

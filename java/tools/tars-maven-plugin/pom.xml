@@ -4,9 +4,9 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>qq-cloud-central</groupId>
+		<groupId>com.tencent.tars</groupId>
 		<artifactId>tars-tools</artifactId>
-		<version>1.0.3</version>
+		<version>1.4.0</version>
 	</parent>
 	<artifactId>tars-maven-plugin</artifactId>
 	<name>${project.artifactId}</name>

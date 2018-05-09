@@ -37,16 +37,16 @@ public class ServerConfig {
 	private String log;
 	private String logPath;
 	private String logLevel;
-	private int logRate;
+	private int logRate = 5;
 	private String dataPath;
 	private String localIP;
 
-	private int sessionTimeOut;
-	private int sessionCheckInterval;
-	private boolean tcpNoDelay;
-	private int udpBufferSize;
+	private int sessionTimeOut = 120000;
+	private int sessionCheckInterval = 60000;
+	private boolean tcpNoDelay = false;
+	private int udpBufferSize = 4096;
 
-	private String charsetName;
+	private String charsetName = "UTF-8";
 
 	private LinkedHashMap<String, ServantAdapterConfig> servantAdapterConfMap;
 	private CommunicatorConfig communicatorConfig;

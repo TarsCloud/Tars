@@ -16,6 +16,7 @@
 
 package com.qq.tars.support.query;
 
+import com.qq.tars.client.util.ParseTools;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +68,7 @@ public final class QueryHelper {
                 if (value.length() > 0) {
                     value.append(":");
                 }
-                value.append(toFormatString(endpointF, true));
+                value.append(ParseTools.toFormatString(endpointF, true));
             }
         }
         if (value.length() < 1) {
@@ -75,26 +76,6 @@ public final class QueryHelper {
         }
         value.insert(0, Constants.TARS_AT);
         value.insert(0, name);
-        return value.toString();
-    }
-
-    private String toFormatString(EndpointF endpointF, boolean active) {
-        StringBuffer value = new StringBuffer();
-        if (!(StringUtils.isEmpty(endpointF.host) || endpointF.port <= 0)) {
-            value.append(endpointF.istcp == 0 ? "udp" : "tcp").append(" ");
-            value.append("-h").append(" ").append(endpointF.host).append(" ");
-            value.append("-p").append(" ").append(endpointF.port).append(" ");
-            value.append("-t").append(" 3000 ");
-            value.append("-a").append(" ").append(active ? "1" : "0").append(" ");
-            value.append("-g").append(" ").append(endpointF.grid).append(" ");
-            if (endpointF.setId != null && endpointF.setId.length() > 0) {
-                value.append(" ").append("-s").append(" ").append(endpointF.setId);
-            }
-            if (endpointF.weightType != 0) {
-                value.append(" ").append("-v").append(" ").append(endpointF.weightType);
-                value.append(" ").append("-w").append(" ").append(endpointF.weight);
-            }
-        }
         return value.toString();
     }
 }

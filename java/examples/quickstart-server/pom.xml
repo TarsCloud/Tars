@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>qq-cloud-central</groupId>
+		<groupId>com.tencent.tars</groupId>
 		<artifactId>tars-parent</artifactId>
-		<version>1.0.3</version>
+		<version>1.4.0</version>
 	</parent>
 	<artifactId>tars-quickstart-server</artifactId>
 	<name>${project.artifactId}</name>
@@ -16,7 +16,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>qq-cloud-central</groupId>
+			<groupId>com.tencent.tars</groupId>
 			<artifactId>tars-core</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
@@ -49,7 +49,7 @@
 			</plugin>
 
 			<plugin>
-				<groupId>qq-cloud-central</groupId>
+				<groupId>com.tencent.tars</groupId>
 				<artifactId>tars-maven-plugin</artifactId>
 				<version>${project.parent.version}</version>
 				<configuration>
