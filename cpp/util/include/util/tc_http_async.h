@@ -17,11 +17,11 @@
 #ifndef __TC_HTTP_ASYNC_H_
 #define __TC_HTTP_ASYNC_H_
 
+#include <functional>
 #include "util/tc_thread_pool.h"
 #include "util/tc_http.h"
 #include "util/tc_autoptr.h"
 #include "util/tc_socket.h"
-//#include "util/tc_timeoutQueue.h"
 
 namespace tars
 {
@@ -428,7 +428,7 @@ public:
 
 protected:
 
-    typedef TC_Functor<void, TL::TLMaker<AsyncRequestPtr, int>::Result> async_process_type;
+    using async_process_type = std::function<void (AsyncRequestPtr&, int)>;
 
     /**
      * @brief 超时处理. 

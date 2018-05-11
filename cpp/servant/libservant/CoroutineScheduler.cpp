@@ -165,7 +165,7 @@ CoroutineInfo::~CoroutineInfo()
 {
 }
 
-void CoroutineInfo::registerFunc(const tars::TC_Callback<void ()> &callback)
+void CoroutineInfo::registerFunc(const std::function<void ()>& callback)
 {
     _callback = callback;
 
@@ -212,7 +212,7 @@ void CoroutineInfo::corotineProc(void * args)
 
     try
     {
-        tars::TC_Callback<void ()> cb = coro->_callback;
+        std::function<void ()> cb = coro->_callback;
 
         cb();
     }
@@ -386,7 +386,7 @@ int    CoroutineScheduler::increaseCoroPoolSize()
     return 0;
 }
 
-uint32_t CoroutineScheduler::createCoroutine(const tars::TC_Callback<void ()> &callback)
+uint32_t CoroutineScheduler::createCoroutine(const std::function<void ()> &callback)
 {
     if(_usedSize >= _currentSize || CoroutineInfo::CoroutineHeadEmpty(&_free))
     {
@@ -845,7 +845,7 @@ void Coroutine::handleCoro()
 
     for(uint32_t i = 0; i < _num; ++i)
     {
-        _coroSched->createCoroutine(tars::TC_Bind(&Coroutine::coroEntry, tars::tc_unretained(this)));
+        _coroSched->createCoroutine(std::bind(&Coroutine::coroEntry, this));
     }
 
     _coroSched->run();
@@ -870,7 +870,7 @@ void Coroutine::coroEntry(Coroutine *pCoro)
     }
 }
 
-uint32_t Coroutine::createCoroutine(const tars::TC_Callback<void ()> &coroFunc)
+uint32_t Coroutine::createCoroutine(const std::function<void ()> &coroFunc)
 {
     if(_coroSched)
     {

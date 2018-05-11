@@ -21,7 +21,7 @@
 #include <exception>
 #include <string>
 #include <sstream>
-#include "util/tc_shared_ptr.h"
+#include <memory>
 #include "util/detail/tc_template_util.h"
 
 namespace promise 
@@ -107,8 +107,8 @@ private:
     const char *_filename;
     int _line;
 
-    mutable TC_SharedPtr<std::string> _what;
-    mutable TC_SharedPtr<std::string> _data;
+    mutable std::shared_ptr<std::string> _what;
+    mutable std::shared_ptr<std::string> _data;
     mutable char _sep;
 
     template <typename T>

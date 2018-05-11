@@ -248,9 +248,6 @@ int DbProxy::createRespData(const string& sUid, const map<string,string>& mSqlPa
  */
 void DbProxy::queryData(map<string, string> &mSqlPart, string &sResult, bool bDbCountFlag)
 {
-    typedef TC_Functor<void, TL::TLMaker<int, const TC_DBConf &, map<string,string>&, map<string,vector<Int64> >&, string&, QueryParam &>::Result> QueryFun;
-    typedef QueryFun::wrapper_type QueryFunWrapper;
-
     try
     {
         string sUid = mSqlPart.find("uid")->second;
@@ -268,14 +265,11 @@ void DbProxy::queryData(map<string, string> &mSqlPart, string &sResult, bool bDb
 
         int iThreads = vActive.size();
 
-        //int iThreads = bDbCountFlag ? g_app.getDbNumber() : g_app.getDbNumber();
         if(iThreads > 0)
         {
             vector<string> res(iThreads);
 
             vector<map<string, vector<Int64> > >  vDataList(iThreads);
-
-            QueryFun qeryCMD(query);
 
             _queryParam._run_times = iThreads;
 
@@ -285,7 +279,13 @@ void DbProxy::queryData(map<string, string> &mSqlPart, string &sResult, bool bDb
 
             for(int i=0; i < iThreads; i++)
             {
-                QueryFunWrapper fwrapper(qeryCMD, i, vActive[i], mSqlPart, vDataList[i], res[i], _queryParam);
+                auto fwrapper = std::bind(&query,
+                                          i,
+                                          std::cref(vActive[i]),
+                                          std::ref(mSqlPart),
+                                          std::ref(vDataList[i]),
+                                          std::ref(res[i]),
+                                          std::ref(_queryParam));
 
                 if(bDbCountFlag)
                 {
@@ -623,16 +623,11 @@ void selectLastMinTime(const string& sUid, int iThread , const string& tbname, c
     string sId = sUid;
     try
     {
-        TC_Mysql tcMysql;
-
-        //TC_DBConf tcDbConf = tcDbInfo;
-
-        //tcDbConf._database = TC_Common::trimright(tbname, "_");
-        //tcDbConf._database = tbname;
         string sTbNamePre = tbname + ".t_ecstatus";
 
         //TLOGDEBUG("selectLastMinTime database name:" << tcDbConf._database << "|tbname:" << tbname << endl);
 
+        TC_Mysql tcMysql;
         tcMysql.init(tcDbInfo);
 
         int interval      = g_app.getInsertInterval();
@@ -701,9 +696,6 @@ string DbProxy::getLastTime(const map<string,string>& mSqlPart)
     //TLOGDEBUG("mSqlPart"<< mSqlPart.find("dataid")->second <<endl);
     try
     {
-        typedef TC_Functor<void, TL::TLMaker<const string &, int, const string &, const TC_DBConf &, string &, QueryParam &>::Result> CheckTimeFun;
-        typedef CheckTimeFun::wrapper_type CheckTimeFunWrapper;
-
         vector<TC_DBConf> vDbInfo = g_app.getAllActiveDbInfo();
 
         int iThreads = vDbInfo.size();
@@ -712,22 +704,20 @@ string DbProxy::getLastTime(const map<string,string>& mSqlPart)
         {
             vector<string> res(iThreads);
 
-            //vector<string> vsTbNamePre(iThreads);
-
-            CheckTimeFun qeryCMD(selectLastMinTime);
-
             _queryParam._run_times = iThreads;
 
             int64_t tStart    = TC_TimeProvider::getInstance()->getNowMs();
 
             for (int i=0; i< iThreads; i++)
             {
-                //vsTbNamePre[i] = vDbInfo[i]._database + "_";
-                //vsTbNamePre[i] = vDbInfo[i]._database;
-
-            //    TLOGDEBUG("mSqlPart"<< mSqlPart["dataid"] <<endl);
-            //    CheckTimeFunWrapper fwrapper(qeryCMD, sUid, i, mSqlPart["dataid"], vDbInfo[i], res[i], _queryParam);
-                CheckTimeFunWrapper fwrapper(qeryCMD, sUid, i,  mSqlPart.find("dataid")->second, vDbInfo[i], res[i], _queryParam);
+                const string tbname = mSqlPart.find("dataid")->second;
+                auto fwrapper = std::bind(&selectLastMinTime,
+                                           std::cref(sUid),
+                                           i,
+                                           std::cref(tbname),
+                                           std::cref(vDbInfo[i]),
+                                           std::ref(res[i]),
+                                           std::ref(_queryParam));
 
                 g_app.getThreadPoolTimeCheck().exec(fwrapper);
             }

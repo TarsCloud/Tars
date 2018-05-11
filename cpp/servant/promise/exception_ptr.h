@@ -17,7 +17,7 @@
 #ifndef __TARS_PROMISE_EXCEPTION_PTR_H_
 #define __TARS_PROMISE_EXCEPTION_PTR_H_
 
-#include "util/tc_shared_ptr.h"
+#include <memory>
 #include "promise_exception.h"
 #include <stdexcept>
 #include <new>
@@ -89,7 +89,7 @@ namespace detail
 
 }  // namespace detail
 
-typedef TC_SharedPtr<detail::ExceptionBase> ExceptionPtr;
+typedef std::shared_ptr<detail::ExceptionBase> ExceptionPtr;
 
 class CurrentExceptionUnknownException : PromiseException 
 {

@@ -17,10 +17,10 @@
 #ifndef __PROPERTY_IMP_H_
 #define __PROPERTY_IMP_H_
 
+#include <functional>
 #include "util/tc_common.h"
 #include "util/tc_thread.h"
 #include "util/tc_option.h"
-#include "util/tc_functor.h"
 #include "util/tc_hash_fun.h"
 #include "jmem/jmem_hashmap.h"
 #include "servant/PropertyF.h"
@@ -60,7 +60,7 @@ class PropertyImp : public PropertyF,public TC_ThreadLock
 {
 public:
  
-    typedef TC_Functor<size_t, TL::TLMaker<const string &>::Result> hash_functor;
+    using hash_functor = std::function<size_t (const std::string&) >;
     /**
      *
      */

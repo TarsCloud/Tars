@@ -150,7 +150,6 @@ void Transceiver::setConnected()
 
 void Transceiver::_onConnect()
 {
-    ObjectProxy* obj = _adapterProxy->getObjProxy();
 #if TARS_SSL
     if (isSSL())
     {
@@ -158,6 +157,7 @@ void Transceiver::_onConnect()
         SSL* ssl = NewSSL("client");
         if (!ssl)
         {
+            ObjectProxy* obj = _adapterProxy->getObjProxy();
             TLOGERROR("[TARS][_onConnect:" << obj->name() << " can't find client SSL_CTX " << endl);
             this->close();
             return;

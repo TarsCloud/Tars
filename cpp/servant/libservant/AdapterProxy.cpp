@@ -788,23 +788,21 @@ void AdapterProxy::doStat(map<StatMicMsgHead, StatMicMsgBody> & mStatMicMsg)
 {
     TLOGINFO("[TARS][AdapterProxy::doStat objname:" << _objectProxy->name() << ",desc:" << _endpoint.desc() << endl);
 
-    map<string,StatMicMsgBody>::iterator iter = _statBody.begin();
-
-    for(; iter != _statBody.end(); ++iter)
+    for (const auto& kv : _statBody)
     {
-        _statHead.interfaceName = iter->first;
+        _statHead.interfaceName = kv.first;
         //有数据就放到map里面
-        if(iter->second.count != 0 || iter->second.timeoutCount != 0 || iter->second.execCount != 0)
+        if(kv.second.count != 0 || kv.second.timeoutCount != 0 || kv.second.execCount != 0)
         {
             //判断是否已经有相同的数据了，需要汇总
-            StatReport::MapStatMicMsg::iterator it = mStatMicMsg.find(_statHead);
+            auto it = mStatMicMsg.find(_statHead);
             if(it != mStatMicMsg.end())
             {
-                merge(iter->second,it->second);
+                merge(kv.second, it->second);
             }
             else
             {
-                mStatMicMsg[_statHead] = iter->second;
+                mStatMicMsg[_statHead] = kv.second;
             }
         }
     }
