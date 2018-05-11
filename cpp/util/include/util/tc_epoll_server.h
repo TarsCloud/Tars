@@ -599,7 +599,7 @@ public:
          * 接收队列的大小
          * @return size_t
          */
-        size_t getRecvBufferSize();
+        size_t getRecvBufferSize() const;
 
         /**
          * 默认的协议解析类, 直接echo
@@ -1114,7 +1114,7 @@ public:
              */
             bool                _authInit;
 #if TARS_SSL
-            TC_OpenSSL*         _openssl;
+            std::unique_ptr<TC_OpenSSL> _openssl;
 #endif
         };
         ////////////////////////////////////////////////////////////////////////////

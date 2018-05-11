@@ -88,12 +88,10 @@ void RollTestThread()
     tpoolA.start();
 
     {
-        TC_Functor<void> functor(RollTest);
-        TC_Functor<void>::wrapper_type wtA(functor);
 
         for(size_t i = 0; i < tpoolA.getThreadNum(); i++)
         {
-            tpoolA.exec(wtA);
+            tpoolA.exec(RollTest);
         }
     }
 
@@ -123,12 +121,9 @@ void DayTestThread()
     tpoolA.start();
 
     {
-        TC_Functor<void> functor(DayTest);
-        TC_Functor<void>::wrapper_type wtA(functor);
-
         for(size_t i = 0; i < tpoolA.getThreadNum(); i++)
         {
-            tpoolA.exec(wtA);
+            tpoolA.exec(DayTest);
         }
     }
 

@@ -642,7 +642,7 @@ private:
     /**
      * 获取endpoint对象
      */
-    EndpointManagerThread * _endpointInfo;
+    std::unique_ptr<EndpointManagerThread> _endpointInfo;
     
     /**
      * 是否在RequestPacket中的context设置主调信息

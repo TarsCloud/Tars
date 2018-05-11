@@ -4,8 +4,8 @@ project(tars_cpp)
 
 set(CMAKE_VERBOSE_MAKEFILE off)
 
-set(MYSQL_DIR_INC "/usr/local/mysql/include")
-set(MYSQL_DIR_LIB "/usr/local/mysql/lib")
+set(MYSQL_DIR_INC "/usr/include/mysql")
+set(MYSQL_DIR_LIB "/usr/lib64/mysql")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -g -O2 -Wall -Wno-deprecated")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O2 -Wall -Wno-deprecated")
@@ -14,7 +14,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O2 -Wall -Wno-deprecated")
 
 set(TARS_VERSION "1.1.0")
 add_definitions(-DTARS_VERSION="${TARS_VERSION}")
-set(TARS_SSL 0)
+set(TARS_SSL 1)
 add_definitions(-DTARS_SSL=${TARS_SSL})
 
 set(INSTALL_PREFIX "/usr/local/tars/cpp")
@@ -29,4 +29,4 @@ set(TARS2CPP "${tools_BINARY_DIR}/tars2cpp/tars2cpp")
 add_subdirectory(servant)
 add_subdirectory(framework)
 
-#add_subdirectory(test)
+add_subdirectory(test)
