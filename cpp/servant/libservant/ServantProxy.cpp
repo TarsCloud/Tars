@@ -846,7 +846,7 @@ void ServantProxy::selectNetThreadInfo(ServantProxyThreadData * pSptd, ObjectPro
         if(pSptd->_netThreadSeq >= 0)
         {
             //网络线程发起的请求
-            assert(pSptd->_netThreadSeq < _objectProxyNum);
+            assert(pSptd->_netThreadSeq < static_cast<int>(_objectProxyNum));
 
             pObjProxy = *(_objectProxy + pSptd->_netThreadSeq);
             pReqQ     = pSptd->_reqQueue[pSptd->_netThreadSeq];

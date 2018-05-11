@@ -33,8 +33,6 @@ AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Com
 : _communicator(pCom)
 , _objectProxy(pObjectProxy)
 , _endpoint(ep)
-, _trans(NULL)
-, _timeoutQueue(NULL)
 , _activeStateInReg(true)
 , _activeStatus(true)
 , _totalInvoke(0)
@@ -52,9 +50,7 @@ AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Com
 , _maxSampleCount(1000)
 , _sampleRate(0)
 {
-    _timeoutQueue = new TC_TimeoutQueueNew<ReqMessage*>();
-
-    assert(_timeoutQueue != NULL);
+    _timeoutQueue.reset(new TC_TimeoutQueueNew<ReqMessage*>());
 
     if(pObjectProxy->getCommunicatorEpoll())
     {
@@ -68,11 +64,11 @@ AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Com
 
     if (ep.type() == EndpointInfo::UDP)
     {
-        _trans = new UdpTransceiver(this, ep);
+        _trans.reset(new UdpTransceiver(this, ep));
     }
     else
     {
-        _trans = new TcpTransceiver(this, ep);
+        _trans.reset(new TcpTransceiver(this, ep));
     }
 
     //初始化stat的head信息
@@ -81,17 +77,6 @@ AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Com
 
 AdapterProxy::~AdapterProxy()
 {
-    if(_trans)
-    {
-        delete _trans;
-        _trans = NULL;
-    }
-
-    if(_timeoutQueue)
-    {
-        delete _timeoutQueue;
-        _timeoutQueue = NULL;
-    }
 }
 
 string AdapterProxy::getSlaveName(const string& sSlaveName)
@@ -681,12 +666,11 @@ void AdapterProxy::doTimeout()
 
 void AdapterProxy::sample(ReqMessage * msg)
 {
-    map<string,vector<StatSampleMsg> >::iterator iter = _sample.find(msg->request.sFuncName);
+    auto iter = _sample.find(msg->request.sFuncName);
     if(iter == _sample.end())
     {
         vector<StatSampleMsg> vBuf;
-        pair<map<string,vector<StatSampleMsg> >::iterator, bool> result ;
-        result = _sample.insert(make_pair(msg->request.sFuncName,vBuf));
+        auto result = _sample.insert(make_pair(msg->request.sFuncName,vBuf));
         assert(result.second);
         iter = result.first;
     }
@@ -741,7 +725,7 @@ void AdapterProxy::stat(ReqMessage * msg)
         body.execCount = 1;
     }
 
-    map<string,StatMicMsgBody>::iterator it = _statBody.find(msg->request.sFuncName);
+    auto it = _statBody.find(msg->request.sFuncName);
     if(it != _statBody.end())
     {
         merge(body,it->second);

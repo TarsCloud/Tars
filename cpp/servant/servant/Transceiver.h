@@ -278,7 +278,7 @@ protected:
 
 protected:
 #if TARS_SSL
-    TC_OpenSSL* _openssl;
+    std::unique_ptr<TC_OpenSSL> _openssl;
 #endif
 
 };
@@ -384,7 +384,7 @@ private:
     /*
      * 接收缓存
      */
-    char                *_recvBuffer;
+    char*                       _recvBuffer;
 };
 //////////////////////////////////////////////////////////
 

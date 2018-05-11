@@ -311,7 +311,7 @@ private:
     /*
      * 结点路由管理类
      */
-    EndpointManager *                     _endpointManger;
+    std::unique_ptr<EndpointManager>      _endpointManger;
 
     /*
      * 超时队列
