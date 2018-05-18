@@ -9,7 +9,7 @@
   ],
   "require": {
     "php": ">=5.3",
-    "phptars/tars-client" : "0.1.6"
+    "phptars/tars-client" : "0.1.0"
   },
   "autoload": {
     "psr-4": {
