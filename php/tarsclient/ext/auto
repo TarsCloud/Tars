@@ -1,9 +1,0 @@
-#!/bin/sh
-phpize=`which phpize`
-$phpize --clean
-$phpize
-phpconfig=`which php-config`
-./configure --enable-phptars --with-php-config=$phpconfig
-make
-make install
-$phpize --clean
