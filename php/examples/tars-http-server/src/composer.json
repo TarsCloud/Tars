@@ -6,7 +6,7 @@
         "phptars/tars-deploy": "0.1.0",
         "phptars/tars2php": "0.1.0",
         "phptars/tars-log": "0.1.0",
-        "ext-gzip" : ">=0.0.1"
+        "ext-zip" : ">=0.0.1"
     },
     "autoload": {
         "psr-4": {
