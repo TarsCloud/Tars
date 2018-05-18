@@ -246,12 +246,11 @@ ServantProxy::ServantProxy(Communicator * pCommunicator, ObjectProxy ** ppObject
 , _syncTimeout(DEFAULT_SYNCTIMEOUT)
 , _asyncTimeout(DEFAULT_ASYNCTIMEOUT)
 , _id(0)
-, _endpointInfo(NULL)
 , _masterFlag(false)
 , _queueSize(1000)
 , _minTimeout(100)
 {
-    _endpointInfo = new EndpointManagerThread(pCommunicator, (*_objectProxy)->name());
+    _endpointInfo.reset(new EndpointManagerThread(pCommunicator, (*_objectProxy)->name()));
 
     for(size_t i = 0;i < _objectProxyNum; ++i)
     {
@@ -278,7 +277,7 @@ ServantProxy::ServantProxy(Communicator * pCommunicator, ObjectProxy ** ppObject
              
     if (conf.getDomainVector("/tars/application/client", adapterNames))
     {
-        vector<string>::const_iterator it = std::find(adapterNames.begin(), adapterNames.end(), tars_name());
+        auto it = std::find(adapterNames.begin(), adapterNames.end(), tars_name());
         if (it != adapterNames.end())
         {
             string accessKey = conf.get("/tars/application/client/" + *it + "<accesskey>");
@@ -295,11 +294,6 @@ ServantProxy::ServantProxy(Communicator * pCommunicator, ObjectProxy ** ppObject
 
 ServantProxy::~ServantProxy()
 {
-    if(_endpointInfo)
-    {
-        delete _endpointInfo;
-        _endpointInfo = NULL;
-    }
 }
 
 string ServantProxy::tars_name() const
@@ -852,7 +846,7 @@ void ServantProxy::selectNetThreadInfo(ServantProxyThreadData * pSptd, ObjectPro
         if(pSptd->_netThreadSeq >= 0)
         {
             //网络线程发起的请求
-            assert(pSptd->_netThreadSeq < _objectProxyNum);
+            assert(pSptd->_netThreadSeq < static_cast<int>(_objectProxyNum));
 
             pObjProxy = *(_objectProxy + pSptd->_netThreadSeq);
             pReqQ     = pSptd->_reqQueue[pSptd->_netThreadSeq];

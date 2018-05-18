@@ -1,0 +1,14 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+tars:
+  server:
+    port: 18601
+    application: TestApp
+    server-name: HelloJavaServer
+    log-path: /usr/local/tars-eureka-test/bin/log
+    data-path: /usr/local/tars-eureka-test/data
+  client:
+    async-invoke-timeout: 10000

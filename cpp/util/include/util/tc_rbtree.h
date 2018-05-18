@@ -20,10 +20,10 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <functional>
 #include "util/tc_ex.h"
 #include "util/tc_pack.h"
 #include "util/tc_mem_chunk.h"
-#include "util/tc_functor.h"
 
 using namespace std;
 
@@ -1209,7 +1209,7 @@ public:
     typedef RBTreeIterator nolock_iterator;
 
     //定义key比较处理器
-    typedef TC_Functor<bool, TL::TLMaker<const string &, const string &>::Result> less_functor;
+    using less_functor = std::function<bool (const string& , const string& )>;
 
     /**
      * 缺省的小写比较符号

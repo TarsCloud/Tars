@@ -142,7 +142,7 @@ public:
      *
      * @return Transceiver*
      */
-    inline Transceiver* trans() { return _trans; }
+    inline Transceiver* trans() { return _trans.get(); }
 
     /**
      * 设置节点的静态权重值
@@ -213,12 +213,12 @@ private:
     /*
      * 收发包处理
      */
-    Transceiver*                           _trans;
+    std::unique_ptr<Transceiver>           _trans;
 
     /*
      * 超时队列
      */
-    TC_TimeoutQueueNew<ReqMessage*>*       _timeoutQueue;
+    std::unique_ptr<TC_TimeoutQueueNew<ReqMessage*>> _timeoutQueue;
 
     /*
      * 节点在主控的存活状态

@@ -147,12 +147,12 @@ public:
     }
 };
 
-typedef TC_Functor<void, TL::TLMaker<const RequestPacket&, string&>::Result> request_protocol;
+using request_protocol = std::function<void (const RequestPacket& , string& )>;
 /**
  * 接收协议处理, 返回值表示解析了多少字节
  * 框架层会自动对处理了包做处理
  */
-typedef TC_Functor<size_t, TL::TLMaker<const char *, size_t, list<ResponsePacket>&>::Result> response_protocol;
+using response_protocol = std::function<size_t (const char* , size_t, list<ResponsePacket>& )>;
 
 //////////////////////////////////////////////////////////////////////
 /**

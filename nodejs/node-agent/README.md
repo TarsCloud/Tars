@@ -353,7 +353,7 @@ __请注意：您在处理完该事件后，请一定显示调用 `process.exit(
 
 `node-agent` 会将服务的输出（`stdout|stderr` 管道以及 `console` 模块的输出）重定向到指定的文件（当使用 `-l --log` 参数启动时）或者管道。
 
-日志的输出由 [winston-tars](http://git.code.oa.com/tars/winston-tars "winston-tars") 模块实现，其输出的日志格式为：`日期 时间|PID|日志级别|文件名:行号|内容`
+日志的输出由 [winston-tars](../winston-tars) 模块实现，其输出的日志格式为：`日期 时间|PID|日志级别|文件名:行号|内容`
 
 服务脚本可以通过 `node` 自带的 `console` 模块输出不同级别的日志。
 

@@ -78,7 +78,7 @@ namespace tars
  * 多个前置方法之间顺序不确定
  */
 #define TARS_ADD_ADMIN_CMD_PREFIX(c,f) \
-    do { addAdminCommandPrefix(string(c), TAdminFunc(this, &f)); } while (0);
+    do { addAdminCommandPrefix(string(c), std::bind(&f, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)); } while (0);
 
 /**
  * 添加Normal命令处理方法
@@ -86,7 +86,7 @@ namespace tars
  * 多个Normal方法之间顺序不确定
  */
 #define TARS_ADD_ADMIN_CMD_NORMAL(c,f) \
-    do { addAdminCommandNormal(string(c), TAdminFunc(this, &f)); } while (0);
+    do { addAdminCommandNormal(string(c), std::bind(&f, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)); } while (0);
 
 //////////////////////////////////////////////////////////////////////
 /**

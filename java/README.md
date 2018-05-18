@@ -9,8 +9,7 @@
 | examples           | 框架的示例代码          |
 | distributedContext | 框架的分布式上下文        |
 | protobuf           | 框架的pb协议支持        |
-| spring             | 框架的spring支持      |
-
+| spring             | 框架的spring相关支持      |
 
 
 

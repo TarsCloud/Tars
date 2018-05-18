@@ -18,18 +18,16 @@
 #define __TC_TIMEOUT_QUEUE_H
 
 #include <deque>
-//#include <map>
-#include <ext/hash_map>
+#include <unordered_map>
 #include <iostream>
 #include <list>
 #include <cassert>
 #include "util/tc_autoptr.h"
 #include "util/tc_monitor.h"
-#include "util/tc_functor.h"
+#include <functional>
 #include "util/tc_timeprovider.h"
 
 using namespace std;
-using namespace __gnu_cxx;
  
 namespace tars
 {
@@ -50,12 +48,11 @@ public:
 
     struct NodeInfo;
 
-   // typedef map<uint32_t, PtrInfo> data_type;
-    typedef hash_map<uint32_t, PtrInfo> data_type;
+    typedef unordered_map<uint32_t, PtrInfo> data_type;
 
     typedef list<NodeInfo>         time_type;
 
-    typedef TC_Functor<void, TL::TYPELIST_1(T&)> data_functor;
+    using data_functor = std::function<void (T& )>;
 
     struct PtrInfo
     {
@@ -82,7 +79,7 @@ public:
     TC_TimeoutQueue(int timeout = 5*1000,size_t size = 100 ) : _uniqId(0), _timeout(timeout) 
     {
         _firstNoPopIter=_time.end();
-        _data.resize(size);
+        _data.reserve(size);
     }
 
     /**

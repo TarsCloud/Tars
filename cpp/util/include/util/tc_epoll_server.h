@@ -23,6 +23,7 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <functional>
 #include "util/tc_epoller.h"
 #include "util/tc_thread.h"
 #include "util/tc_clientsocket.h"
@@ -86,8 +87,8 @@ public:
      * 定义协议解析接口的操作对象
      * 注意必须是线程安全的或是可以重入的
      */
-    typedef TC_Functor<int, TL::TLMaker<string &, string&>::Result> protocol_functor;
-    typedef TC_Functor<int, TL::TLMaker<int, string&>::Result>      header_filter_functor;
+    using protocol_functor = std::function<int (string&, string&)>;
+    using header_filter_functor = std::function<int (int, string&)>;
 
     class NetThread;
 
@@ -333,7 +334,7 @@ public:
 
     };
 
-    typedef TC_Functor<bool /*processed*/, TL::TLMaker<void* /*conn*/, const std::string& /*data*/ >::Result> auth_process_wrapper_functor;
+    using auth_process_wrapper_functor = std::function<bool (void*, const std::string& )>;
 
     ////////////////////////////////////////////////////////////////////////////
     // 服务端口管理,监听socket信息
@@ -598,7 +599,7 @@ public:
          * 接收队列的大小
          * @return size_t
          */
-        size_t getRecvBufferSize();
+        size_t getRecvBufferSize() const;
 
         /**
          * 默认的协议解析类, 直接echo
@@ -1113,7 +1114,7 @@ public:
              */
             bool                _authInit;
 #if TARS_SSL
-            TC_OpenSSL*         _openssl;
+            std::unique_ptr<TC_OpenSSL> _openssl;
 #endif
         };
         ////////////////////////////////////////////////////////////////////////////

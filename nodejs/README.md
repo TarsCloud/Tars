@@ -16,7 +16,7 @@
 
 [notify](notify/README.md)
 
-[registry](registry/README.md)
+[registry](registry)
 
 [rpc](rpc/README.md)
 

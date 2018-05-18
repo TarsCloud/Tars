@@ -17,13 +17,13 @@
 #ifndef __STAT_IMP_H_
 #define __STAT_IMP_H_
 
+#include <functional>
 #include "util/tc_common.h"
 #include "util/tc_thread.h"
 #include "util/tc_option.h"
 #include "util/tc_file.h"
 #include "util/tc_mysql.h"
 #include "util/tc_config.h"
-#include "util/tc_functor.h"
 #include "util/tc_hash_fun.h"
 #include "servant/TarsLogger.h"
 #include "jmem/jmem_hashmap.h"
@@ -104,7 +104,7 @@ public:
      */
     virtual int reportSampleMsg(const vector<StatSampleMsg> &msg,tars::TarsCurrentPtr current );
 
-    typedef TC_Functor<size_t, TL::TLMaker<const string &>::Result> hash_functor;
+    using hash_functor = std::function<size_t (const std::string& )>;
 
 protected:
 

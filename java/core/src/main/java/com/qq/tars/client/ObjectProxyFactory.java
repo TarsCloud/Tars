@@ -23,9 +23,11 @@ import com.qq.tars.client.rpc.loadbalance.DefaultLoadBalance;
 import com.qq.tars.client.rpc.tars.TarsProtocolInvoker;
 import com.qq.tars.client.support.ServantCacheManager;
 import com.qq.tars.client.util.ClientLogger;
+import com.qq.tars.client.util.ParseTools;
 import com.qq.tars.common.util.StringUtils;
 import com.qq.tars.protocol.annotation.Servant;
 import com.qq.tars.protocol.annotation.ServantCodec;
+import com.qq.tars.register.RegisterManager;
 import com.qq.tars.rpc.common.LoadBalance;
 import com.qq.tars.rpc.common.ProtocolInvoker;
 import com.qq.tars.rpc.exc.ClientException;
@@ -118,10 +120,15 @@ class ObjectProxyFactory {
         CommunicatorConfig communicatorConfig = communicator.getCommunicatorConfig();
 
         String endpoints = null;
-        if (StringUtils.isNotEmpty(communicatorConfig.getLocator()) && !cfg.isDirectConnection() && !communicatorConfig.getLocator().startsWith(cfg.getSimpleObjectName())) {
+        if (!ParseTools.hasServerNode(cfg.getObjectName()) && !cfg.isDirectConnection() && !communicatorConfig.getLocator().startsWith(cfg.getSimpleObjectName())) {
             try {
                 /** 从主控拉取server node */
-                endpoints = communicator.getQueryHelper().getServerNodes(cfg);
+                if (RegisterManager.getInstance().getHandler() != null) {
+                    endpoints = ParseTools.parse(RegisterManager.getInstance().getHandler().query(cfg.getSimpleObjectName()),
+                            cfg.getSimpleObjectName());
+                } else {
+                    endpoints = communicator.getQueryHelper().getServerNodes(cfg);
+                }
                 if (StringUtils.isEmpty(endpoints)) {
                     throw new CommunicatorConfigException(cfg.getSimpleObjectName(), "servant node is empty on get by registry! communicator id=" + communicator.getId());
                 }

@@ -42,6 +42,7 @@ public class XmlAppContext extends BaseAppContext {
             injectAdminServant();
             initServants();
             appContextStarted();
+            setAppContext();
             System.out.println("[SERVER] The application started successfully.  {appname=}");
         } catch (Exception ex) {
             ready = false;

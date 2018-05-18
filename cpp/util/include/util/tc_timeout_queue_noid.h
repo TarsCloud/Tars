@@ -19,16 +19,13 @@
 
 #include <map>
 #include <list>
-#include <ext/hash_map>
 #include <iostream>
 #include <cassert>
 #include "util/tc_autoptr.h"
 #include "util/tc_monitor.h"
-#include "util/tc_functor.h"
 #include "util/tc_timeprovider.h"
 
 using namespace std;
-using namespace __gnu_cxx;
 
 namespace tars
 {

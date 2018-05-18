@@ -84,7 +84,7 @@ void ServantHandle::run()
         _coroSched->init(iCoroutineNum, ServerConfig::CoroutineStackSize);
         _coroSched->setHandle(this);
 
-        _coroSched->createCoroutine(tars::TC_Bind(&ServantHandle::handleRequest, tars::tc_unretained(this)));
+        _coroSched->createCoroutine(std::bind(&ServantHandle::handleRequest, this));
 
         ServantProxyThreadData * pSptd = ServantProxyThreadData::getData();
 
@@ -200,7 +200,7 @@ void ServantHandle::handleRequest()
                         }
                         else
                         {
-                            uint32_t iRet = _coroSched->createCoroutine(tars::TC_Bind(&ServantHandle::handleRecvData, tars::tc_unretained(this), tars::tc_unretained(recv)));
+                            uint32_t iRet = _coroSched->createCoroutine(std::bind(&ServantHandle::handleRecvData, this, recv));
                             if(iRet == 0)
                             {
                                 handleOverload(stRecvData);

@@ -304,8 +304,6 @@ int DbProxy::createRespData(const string& sUid, const map<string,string>& mSqlPa
  */
 void DbProxy::queryData(map<string, string> &mSqlPart, string &sResult, bool bDbCountFlag)
 {
-    typedef TC_Functor<void, TL::TLMaker<int, const TC_DBConf &, map<string,string>&, map<string,vector<double> >&, string&, QueryParam &,string&>::Result> QueryFun;
-    typedef QueryFun::wrapper_type QueryFunWrapper;
 
     try
     {
@@ -333,8 +331,6 @@ void DbProxy::queryData(map<string, string> &mSqlPart, string &sResult, bool bDb
 
             vector<map<string, vector<double> > >  vDataList(iThreads);
 
-            QueryFun qeryCMD(query);
-
             _queryParam._run_times = iThreads;
 
             //TLOGDEBUG("DbProxy::queryData sUid:" << sUid << "all thread query data begin." << endl);
@@ -343,7 +339,14 @@ void DbProxy::queryData(map<string, string> &mSqlPart, string &sResult, bool bDb
 
             for(int i=0; i < iThreads; i++)
             {
-                QueryFunWrapper fwrapper(qeryCMD, i, vActive[i], mSqlPart, vDataList[i], res[i], _queryParam,vPolicy[i]);
+                auto fwrapper = std::bind(&query,
+                                          i,
+                                          std::cref(vActive[i]),
+                                          std::ref(mSqlPart),
+                                          std::ref(vDataList[i]),
+                                          std::ref(res[i]),
+                                          std::ref(_queryParam),
+                                          std::ref(vPolicy[i]));
 
                 if(bDbCountFlag)
                 {
@@ -777,9 +780,6 @@ string DbProxy::getLastTime(const map<string,string>& mSqlPart)
     //TLOGDEBUG("mSqlPart"<< mSqlPart.find("dataid")->second <<endl);
     try
     {
-        typedef TC_Functor<void, TL::TLMaker<const string &, int, const string &, const TC_DBConf &, string &, QueryParam &>::Result> CheckTimeFun;
-        typedef CheckTimeFun::wrapper_type CheckTimeFunWrapper;
-
         vector<TC_DBConf> vDbInfo = g_app.getAllActiveDbInfo();
 
         int iThreads = vDbInfo.size();
@@ -788,22 +788,20 @@ string DbProxy::getLastTime(const map<string,string>& mSqlPart)
         {
             vector<string> res(iThreads);
 
-            //vector<string> vsTbNamePre(iThreads);
-
-            CheckTimeFun qeryCMD(selectLastMinTime);
-
             _queryParam._run_times = iThreads;
 
             int64_t tStart    = TC_TimeProvider::getInstance()->getNowMs();
 
             for (int i=0; i< iThreads; i++)
             {
-                //vsTbNamePre[i] = vDbInfo[i]._database + "_";
-                //vsTbNamePre[i] = vDbInfo[i]._database;
-
-            //    TLOGDEBUG("mSqlPart"<< mSqlPart["dataid"] <<endl);
-            //    CheckTimeFunWrapper fwrapper(qeryCMD, sUid, i, mSqlPart["dataid"], vDbInfo[i], res[i], _queryParam);
-                CheckTimeFunWrapper fwrapper(qeryCMD, sUid, i,  mSqlPart.find("dataid")->second, vDbInfo[i], res[i], _queryParam);
+                const string tbname = mSqlPart.find("dataid")->second;
+                auto fwrapper = std::bind(&selectLastMinTime,
+                                           std::cref(sUid),
+                                           i,
+                                           std::cref(tbname),
+                                           std::cref(vDbInfo[i]),
+                                           std::ref(res[i]),
+                                           std::ref(_queryParam));
 
                 g_app.getThreadPoolTimeCheck().exec(fwrapper);
             }

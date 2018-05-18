@@ -33,7 +33,6 @@ ObjectProxy::ObjectProxy(CommunicatorEpoll * pCommunicatorEpoll, const string & 
 , _id(0)
 , _hasSetProtocol(false)
 , _conTimeout(1000)
-, _endpointManger(NULL)
 , _servantProxy(NULL)
 {
     string::size_type pos = sObjectProxyName.find_first_of('@');
@@ -57,17 +56,12 @@ ObjectProxy::ObjectProxy(CommunicatorEpoll * pCommunicatorEpoll, const string & 
     _proxyProtocol.requestFunc  = ProxyProtocol::tarsRequest;
     _proxyProtocol.responseFunc = ProxyProtocol::tarsResponse;
 
-    _endpointManger = new EndpointManager(this, _communicatorEpoll->getCommunicator(), sObjectProxyName, pCommunicatorEpoll->isFirstNetThread(), setName);
+    _endpointManger.reset(new EndpointManager(this, _communicatorEpoll->getCommunicator(), sObjectProxyName, pCommunicatorEpoll->isFirstNetThread(), setName));
 
 }
 
 ObjectProxy::~ObjectProxy()
 {
-    if(_endpointManger)
-    {
-        delete _endpointManger;
-        _endpointManger = NULL;
-    }
 }
 
 void ObjectProxy::initialize()
@@ -100,13 +94,11 @@ int ObjectProxy::loadLocator()
 
 void ObjectProxy::setProxyProtocol(const ProxyProtocol& protocol)
 {
-    if(_hasSetProtocol)
+    if(!_hasSetProtocol)
     {
-        return ;
+        _hasSetProtocol = true;
+        _proxyProtocol  = protocol;
     }
-
-    _hasSetProtocol = true;
-    _proxyProtocol  = protocol;
 }
 
 ProxyProtocol& ObjectProxy::getProxyProtocol()
@@ -224,8 +216,6 @@ void ObjectProxy::doInvokeException(ReqMessage * msg)
     if(msg->eType == ReqMessage::ONE_WAY)
     {
         delete msg;
-        msg = NULL;
-
         return;
     }
 
@@ -294,7 +284,6 @@ void ObjectProxy::doInvokeException(ReqMessage * msg)
             {
                 TLOGERROR("[TARS]ObjectProxy::doInvokeException coro parallel callback error, objname:" << _name << endl);
                 delete msg;
-                msg = NULL;
             }
         }
     }
@@ -304,14 +293,14 @@ void ObjectProxy::doTimeout()
 {
     TLOGINFO("[TARS][ObjectProxy::doInvokeException, objname:" << _name << "]" << endl);
 
-    ReqMessage * reqINfo = NULL;
-    while(_reqTimeoutQueue.timeout(reqINfo))
+    ReqMessage * reqInfo = NULL;
+    while(_reqTimeoutQueue.timeout(reqInfo))
     {
         TLOGERROR("[TARS][ObjectProxy::doTimeout, objname:" << _name << ", queue timeout error]" << endl);
 
-        reqINfo->response.iRet = TARSINVOKETIMEOUT;
+        reqInfo->response.iRet = TARSINVOKETIMEOUT;
 
-        doInvokeException(reqINfo);
+        doInvokeException(reqInfo);
     }
 }
 

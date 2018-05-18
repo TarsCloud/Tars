@@ -33,9 +33,6 @@ Transceiver::Transceiver(AdapterProxy * pAdapterProxy,const EndpointInfo &ep)
 , _connStatus(eUnconnected)
 , _conTimeoutTime(0)
 , _authState(AUTH_INIT)
-#if TARS_SSL
-, _openssl(NULL)
-#endif
 {
     _fdInfo.iType = FDInfo::ET_C_NET;
     _fdInfo.p     = (void *)this;
@@ -150,7 +147,6 @@ void Transceiver::setConnected()
 
 void Transceiver::_onConnect()
 {
-    ObjectProxy* obj = _adapterProxy->getObjProxy();
 #if TARS_SSL
     if (isSSL())
     {
@@ -158,13 +154,13 @@ void Transceiver::_onConnect()
         SSL* ssl = NewSSL("client");
         if (!ssl)
         {
+            ObjectProxy* obj = _adapterProxy->getObjProxy();
             TLOGERROR("[TARS][_onConnect:" << obj->name() << " can't find client SSL_CTX " << endl);
             this->close();
             return;
         }
 
-        delete _openssl;
-        _openssl = new TC_OpenSSL();
+        _openssl.reset(new TC_OpenSSL());
         _openssl->Init(ssl, false);
         std::string out = _openssl->DoHandshake();
         if (_openssl->HasError())
@@ -248,8 +244,7 @@ void Transceiver::close()
     if (_openssl)
     {
         _openssl->Release();
-        delete _openssl;
-        _openssl = NULL;
+        _openssl.reset();
     }
 #endif
 

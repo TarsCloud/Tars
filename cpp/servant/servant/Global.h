@@ -39,8 +39,6 @@
 #include "util/tc_common.h"
 #include "util/tc_logger.h"
 #include "util/tc_thread_mutex.h"
-#include "util/tc_functor.h"
-#include "util/tc_loki.h"
 #include "tup/RequestF.h"
 #include "servant/BaseF.h"
 

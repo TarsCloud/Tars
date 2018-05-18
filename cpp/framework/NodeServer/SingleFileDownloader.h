@@ -52,7 +52,7 @@ inline bool operator<(const DownloadTask&l, const DownloadTask&r)
 class DownloadTaskFactory
 {
     /**定义hash处理器*/
-    typedef TC_Functor<uint32_t, TL::TLMaker<const string &>::Result> hash_functor;
+    using hash_functor = std::function<uint32_t (const string &)>;
 
 public:
 

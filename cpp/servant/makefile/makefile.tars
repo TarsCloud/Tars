@@ -9,7 +9,7 @@ TARS_PATH    :=/usr/local/tars/cpp
 
 CC          = gcc
 CXX         = g++
-CFLAGS      += -g -O2 -Wno-deprecated -Wall
+CFLAGS      += -std=c++0x -g -O2 -Wno-deprecated -Wall
 
 #-------------------------------------------------------------------------------
 
@@ -44,8 +44,6 @@ endif
 endif
 
 #-----------------------------------------------------------------------------
-
-#include ${TARS_PATH}/make.rules.lp64
 
 TARGET                  := $(strip $(TARGET))
 IS_LIB                  := F
