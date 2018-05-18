@@ -1,0 +1,34 @@
+{
+  "name": "demo",
+  "description": "demo",
+  "authors": [
+    {
+      "name": "Chen Liang",
+      "email": "liangchen@yuewen.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3",
+    "phptars/tars-client" : "0.1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "App/"
+    }
+  },
+  "repositories": [
+    {"type": "composer", "url": "http://composer.inner.yuewen.local/repo/private/"},
+    {"type": "composer", "url": "http://composer.inner.yuewen.local/repo/packagist/"},
+    {"packagist": false}
+  ],
+  "config": {
+    "preferred-install": "dist",
+    "secure-http": false,
+    "http-basic": {
+      "composer.inner.yuewen.local": {
+        "username": "ywcomposer",
+        "password": "yW1120"
+      }
+    }
+  }
+}
