@@ -24,6 +24,7 @@ Tars详细介绍参见[Introduction.md](Introduction.md)。
 - C++
 - Java
 - Nodejs
+- PHP [分支地址](https://github.com/Tencent/Tars/tree/phptars)
 
 ## 安装说明
 

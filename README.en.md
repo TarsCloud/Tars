@@ -20,6 +20,8 @@ For now it supports following languages:
 
 - C++
 - Java
+- Nodejs
+- PHP [branch](https://github.com/Tencent/Tars/tree/phptars)
  
 ## Installation 
 

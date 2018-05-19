@@ -14,7 +14,7 @@ If you use Tars for production environment, the deployment steps is similar, but
 Software | Software requirements
 ------|--------
 linux kernel version:   |	2.6.18 or later (Dependent OS)
-gcc version:            |   4.1.2 or later¡¢glibc-devel£¨Dependent c++ framework tools£©
+gcc version:            |   4.8.2 or later¡¢glibc-devel£¨Dependent c++ framework tools£©
 bison version:          |	2.5 or later£¨Dependent c++ framework tools£©
 flex version:           |	2.5 or later£¨Dependent c++ framework tools£©
 cmake version:          |   2.8.8 or later£¨Dependent c++ framework tools£©
