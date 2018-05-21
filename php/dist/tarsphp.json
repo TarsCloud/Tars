@@ -19,6 +19,12 @@
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-client-0.1.0.zip?raw=true",
           "type": "zip"
         },
+        "require": {
+            "php": ">=5.3",
+            "phptars/tars-registry": "0.1.0",
+            "phptars/tars-monitor": "0.1.0",
+            "phptars/tars-utils": "0.1.0"
+        },
         "autoload": {
             "psr-4": {
                 "Tars\\client\\": "src/"
@@ -34,6 +40,10 @@
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-config-0.1.0.zip?raw=true",
           "type": "zip"
         },
+        "require":{
+          "php": ">=5.3",
+          "phptars/tars-client": "0.1.0"
+        },       
         "autoload" : {
           "psr-4": {
             "Tars\\config\\": "src/"
@@ -64,6 +74,10 @@
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-log-0.1.0.zip?raw=true",
           "type": "zip"
         },
+        "require":{
+          "php": ">=5.3",
+          "phptars/tars-client": "0.1.0"
+        },
         "autoload": {
           "psr-4": {
             "Tars\\log\\": "src/"
@@ -79,6 +93,11 @@
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-monitor-0.1.0.zip?raw=true",
           "type": "zip"
         },
+        "require":{
+          "php": ">=5.3",
+          "phptars/tars-utils": "0.1.0",
+          "phptars/tars-registry": "0.1.0"
+        },
         "autoload": {
           "psr-4": {
             "Tars\\monitor\\": "src/"
@@ -93,6 +112,10 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-registry-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "require": {
+          "php": ">=5.3",
+          "phptars/tars-utils": "0.1.0"
         },
         "autoload": {
           "psr-4": {
@@ -123,6 +146,12 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-server-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "require": {
+            "php": ">=5.6",
+            "phptars/tars-client": "0.1.0",
+            "phptars/tars-report": "0.1.0",
+            "phptars/tars-config": "0.1.0"
         },
         "autoload": {
             "psr-4": {
