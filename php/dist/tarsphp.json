@@ -1,3 +1,4 @@
+
 {
   "packages": {
     "phptars/tars2php": {
@@ -17,6 +18,11 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-client-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "autoload": {
+            "psr-4": {
+                "Tars\\client\\": "src/"
+            }
         }
       }
     },
@@ -27,6 +33,11 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-config-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "autoload" : {
+          "psr-4": {
+            "Tars\\config\\": "src/"
+          }
         }
       }
     },
@@ -37,6 +48,11 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-deploy-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "autoload": {
+            "psr-4":{ 
+              "Tars\\deploy\\": "src/"
+          }
         }
       }
     },
@@ -47,6 +63,11 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-log-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\log\\": "src/"
+          }
         }
       }
     },
@@ -57,6 +78,11 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-monitor-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\monitor\\": "src/"
+          }
         }
       }
     },
@@ -67,6 +93,11 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-registry-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\registry\\": "src/"
+          }
         }
       }
     },
@@ -77,6 +108,11 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-report-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\report\\": "src/"
+          }
         }
       }
     },
@@ -87,6 +123,11 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-server-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+        "autoload": {
+            "psr-4": {
+                "Tars\\": "src/"
+            }
         }
       }
     },
@@ -97,7 +138,12 @@
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-utils-0.1.0.zip?raw=true",
           "type": "zip"
+        },
+      "autoload": {
+        "psr-4": {
+          "Tars\\": "src/"
         }
+      }
       }
     }
   }
