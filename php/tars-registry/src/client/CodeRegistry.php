@@ -3,12 +3,13 @@
  * Created by PhpStorm.
  * User: liangchen
  * Date: 2018/4/29
- * Time: 下午3:58
+ * Time: 下午3:58.
  */
 
 namespace Tars\registry\client;
 
-class CodeRegistry {
+class CodeRegistry
+{
     // 错误码定义（需要从扩展开始规划）
     const TARS_SUCCESS = 0; // taf
     const TARS_FAILED = 1; // taf失败（通用失败）
@@ -24,7 +25,6 @@ class CodeRegistry {
     const TARS_SOCKET_CONNECT_FAILED = -1007; // socket tcp 连接失败
     const TARS_SOCKET_CLOSED = -1008; // socket tcp 服务端连接关闭
     const TARS_SOCKET_CREATE_FAILED = -1009;
-
 
     const TARS_PUT_STRUCT_FAILED = -10009;
     const TARS_PUT_VECTOR_FAILED = -10010;
@@ -59,19 +59,19 @@ class CodeRegistry {
     const TARS_GET_FLOAT_FAILED = -10044;
 
     // tars服务端可能返回的错误码
-    const JCESERVERSUCCESS       = 0; //服务器端处理成功
-    const JCESERVERDECODEERR     = -1; //服务器端解码异常
-    const JCESERVERENCODEERR     = -2; //服务器端编码异常
-    const JCESERVERNOFUNCERR     = -3; //服务器端没有该函数
-    const JCESERVERNOSERVANTERR = -4;//服务器端五该Servant对象
-    const JCESERVERRESETGRID     = -5; //服务器端灰度状态不一致
+    const JCESERVERSUCCESS = 0; //服务器端处理成功
+    const JCESERVERDECODEERR = -1; //服务器端解码异常
+    const JCESERVERENCODEERR = -2; //服务器端编码异常
+    const JCESERVERNOFUNCERR = -3; //服务器端没有该函数
+    const JCESERVERNOSERVANTERR = -4; //服务器端五该Servant对象
+    const JCESERVERRESETGRID = -5; //服务器端灰度状态不一致
     const JCESERVERQUEUETIMEOUT = -6; //服务器队列超过限制
-    const JCEASYNCCALLTIMEOUT    = -7; //异步调用超时
-    const JCEPROXYCONNECTERR     = -8; //proxy链接异常
-    const JCESERVERUNKNOWNERR    = -99; //服务器端未知异常
+    const JCEASYNCCALLTIMEOUT = -7; //异步调用超时
+    const JCEPROXYCONNECTERR = -8; //proxy链接异常
+    const JCESERVERUNKNOWNERR = -99; //服务器端未知异常
 
-
-    public static function getErrMsg($code) {
+    public static function getErrMsg($code)
+    {
         $errMap = [
             self::JCESERVERSUCCESS => '服务器端处理成功',
             self::JCESERVERDECODEERR => '服务器端解码异常',
@@ -99,7 +99,6 @@ class CodeRegistry {
             self::TARS_PUT_UINT32_FAILED => 'uint8类型打包失败，请检查是否传入了正确值',
             self::TARS_PUT_DOUBLE_FAILED => 'uint8类型打包失败，请检查是否传入了正确值',
 
-
             self::TARS_ENCODE_FAILED => 'taf编码失败，请检查数据类型，传入字段长度',
             self::TARS_DECODE_FAILED => 'taf解码失败，请检查传入的数据类型，是否从服务端接收到了正确的结果',
 
@@ -125,9 +124,9 @@ class CodeRegistry {
             self::TARS_SOCKET_TIMEOUT => 'socket超时，一般是svr后台没回包，或者seq错误',
             self::TARS_SOCKET_CONNECT_FAILED => 'socket tcp 连接失败',
             self::TARS_SOCKET_CLOSED => 'socket tcp 服务端连接关闭',
-            self::TARS_SOCKET_CREATE_FAILED => 'socket 创建失败'
+            self::TARS_SOCKET_CREATE_FAILED => 'socket 创建失败',
         ];
 
-        return isset($errMap[$code])?$errMap[$code]:'未定义异常';
+        return isset($errMap[$code]) ? $errMap[$code] : '未定义异常';
     }
 }

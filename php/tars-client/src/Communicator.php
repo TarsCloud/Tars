@@ -3,14 +3,16 @@
  * Created by PhpStorm.
  * User: liangchen
  * Date: 2018/4/29
- * Time: 下午12:55
+ * Time: 下午12:55.
  */
+
 namespace Tars\client;
 
 use Tars\monitor\StatFWrapper;
-use \Tars\registry\QueryFWrapper;
-class Communicator {
+use Tars\registry\QueryFWrapper;
 
+class Communicator
+{
     protected $_moduleName;
     protected $_servantName;
 
@@ -25,7 +27,7 @@ class Communicator {
 
     protected $_routeInfo;
 
-    protected $_socketMode;//1 socket ,2 swoole sync ,3 swoole coroutine
+    protected $_socketMode; //1 socket ,2 swoole sync ,3 swoole coroutine
     protected $_iVersion;
 
     // monitorHelper?
@@ -34,7 +36,6 @@ class Communicator {
     // registrHelper?
     protected $_queryF;
     protected $_refreshEndpointInterval;
-
 
     public function __construct(CommunicatorConfig $config)
     {
@@ -52,40 +53,38 @@ class Communicator {
         $this->_statServantName = $config->getStat();
 
         $this->_refreshEndpointInterval = empty($config->getRefreshEndpointInterval())
-            ?60000:$config->getRefreshEndpointInterval();
+            ? 60000 : $config->getRefreshEndpointInterval();
 
         // 如果已经有配置的地址的话,直接选用
-        if(!empty($config->getRouteInfo())) {
+        if (!empty($config->getRouteInfo())) {
             $this->_routeInfo = $config->getRouteInfo();
-        }
-        else {
+        } else {
             // 完成服务的路由
-            $this->_queryF = new QueryFWrapper($this->_locator,$this->_socketMode
-                ,$this->_refreshEndpointInterval);
+            $this->_queryF = new QueryFWrapper($this->_locator, $this->_socketMode, $this->_refreshEndpointInterval);
             $this->_routeInfo = $this->_queryF->findObjectById($this->_servantName);
         }
 
         // 初始化上报组件
-        $this->_statF = new StatFWrapper($this->_locator,$this->_socketMode,
-            $this->_statServantName,$this->_moduleName);
+        $this->_statF = new StatFWrapper($this->_locator, $this->_socketMode,
+            $this->_statServantName, $this->_moduleName);
     }
 
     // 同步的socket tcp收发
-    public function invoke(RequestPacket $requestPacket,$timeout,$sIp='',$iPort=0)
+    public function invoke(RequestPacket $requestPacket, $timeout, $sIp = '', $iPort = 0)
     {
         // 转换成网络需要的timeout
-        $timeout = $timeout/1000;
+        $timeout = $timeout / 1000;
 
         $startTime = $this->militime();
-        $count = count($this->_routeInfo)-1;
-        if($count === -1) {
-            throw new \Exception("Rout fail", Code::ROUTE_FAIL);
+        $count = count($this->_routeInfo) - 1;
+        if ($count === -1) {
+            throw new \Exception('Rout fail', Code::ROUTE_FAIL);
         }
-        $index = rand(0,$count);
-        $ip = empty($sIp)?$this->_routeInfo[$index]['sIp']:$sIp;
-        $port = empty($iPort)?$this->_routeInfo[$index]['iPort']:$iPort;
-        $bTcp = isset($this->_routeInfo[$index]['bTcp'])?
-            $this->_routeInfo[$index]['bTcp']:1;
+        $index = rand(0, $count);
+        $ip = empty($sIp) ? $this->_routeInfo[$index]['sIp'] : $sIp;
+        $port = empty($iPort) ? $this->_routeInfo[$index]['iPort'] : $iPort;
+        $bTcp = isset($this->_routeInfo[$index]['bTcp']) ?
+            $this->_routeInfo[$index]['bTcp'] : 1;
 
         try {
             $requestBuf = $requestPacket->encode();
@@ -94,35 +93,34 @@ class Communicator {
                 switch ($this->_socketMode) {
                     // 单纯的socket
                     case 1:{
-                        $responseBuf = $this->socketTcp($ip,$port,
-                            $requestBuf,$timeout);
+                        $responseBuf = $this->socketTcp($ip, $port,
+                            $requestBuf, $timeout);
                         break;
                     }
                     case 2:{
-                        $responseBuf = $this->swooleTcp($ip,$port,
-                            $requestBuf,$timeout);
+                        $responseBuf = $this->swooleTcp($ip, $port,
+                            $requestBuf, $timeout);
                         break;
                     }
                     case 3:{
-                        $responseBuf = $this->swooleCoroutineTcp($ip,$port,
-                            $requestBuf,$timeout);
+                        $responseBuf = $this->swooleCoroutineTcp($ip, $port,
+                            $requestBuf, $timeout);
                         break;
                     }
                 }
-            }
-            else{
+            } else {
                 switch ($this->_socketMode) {
                     // 单纯的socket
                     case 1:{
-                        $responseBuf = $this->socketUdp($ip,$port,$requestBuf,$timeout);
+                        $responseBuf = $this->socketUdp($ip, $port, $requestBuf, $timeout);
                         break;
                     }
                     case 2:{
-                        $responseBuf = $this->swooleUdp($ip,$port,$requestBuf,$timeout);
+                        $responseBuf = $this->swooleUdp($ip, $port, $requestBuf, $timeout);
                         break;
                     }
                     case 3:{
-                        $responseBuf = $this->swooleCoroutineUdp($ip,$port,$requestBuf,$timeout);
+                        $responseBuf = $this->swooleCoroutineUdp($ip, $port, $requestBuf, $timeout);
                         break;
                     }
                 }
@@ -135,22 +133,21 @@ class Communicator {
 
             $endTime = $this->militime();
 
-            $this->_statF->monitorStat($requestPacket->_servantName,$requestPacket->_funcName,$ip,
-                $port,($endTime-$startTime),0,0);
+            $this->_statF->monitorStat($requestPacket->_servantName, $requestPacket->_funcName, $ip,
+                $port, ($endTime - $startTime), 0, 0);
 
             return $sBuffer;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $endTime = $this->militime();
 
-            $this->_statF->monitorStat($requestPacket->_servantName,$requestPacket->_funcName,$ip,
-                $port,($endTime-$startTime),$e->getCode(),$e->getCode());
+            $this->_statF->monitorStat($requestPacket->_servantName, $requestPacket->_funcName, $ip,
+                $port, ($endTime - $startTime), $e->getCode(), $e->getCode());
 
             throw $e;
         }
     }
 
-    private function socketTcp($sIp,$iPort,$requestBuf,$timeout=2)
+    private function socketTcp($sIp, $iPort, $requestBuf, $timeout = 2)
     {
         $time = microtime(true);
 
@@ -201,10 +198,11 @@ class Communicator {
                 }
             }
         }
+
         return $responseBuf;
     }
 
-    private function socketUdp($sIp,$iPort,$requestBuf,$timeout=2)
+    private function socketUdp($sIp, $iPort, $requestBuf, $timeout = 2)
     {
         $time = microtime(true);
         $sock = \socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
@@ -216,18 +214,19 @@ class Communicator {
         if (!\socket_set_nonblock($sock)) {
             \socket_close($sock);
             $code = Code::TARS_SOCKET_SET_NONBLOCK_FAILED; // 设置socket非阻塞失败
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         $len = strlen($requestBuf);
         if (\socket_sendto($sock, $requestBuf, $len, 0x100, $sIp, $iPort) != $len) {
             \socket_close($sock);
             $code = Code::TARS_SOCKET_SEND_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         if (0 == $timeout) {
             \socket_close($sock);
+
             return ''; // 无回包的情况，返回成功
         }
 
@@ -236,14 +235,14 @@ class Communicator {
         $usecond = ($timeout - $second) * 1000000;
         $ret = \socket_select($read, $write, $except, $second, $usecond);
 
-        if (FALSE === $ret) {
+        if (false === $ret) {
             \socket_close($sock);
             $code = Code::TARS_SOCKET_RECEIVE_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         } elseif ($ret != 1) {
             \socket_close($sock);
             $code = Code::TARS_SOCKET_SELECT_TIMEOUT;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         $out = null;
@@ -252,7 +251,7 @@ class Communicator {
             if (microtime(true) - $time > $timeout) {
                 \socket_close($sock);
                 $code = Code::TARS_SOCKET_TIMEOUT;
-                throw new \Exception(Code::getErrMsg($code),$code);
+                throw new \Exception(Code::getErrMsg($code), $code);
             }
 
             // 32k：32768 = 1024 * 32
@@ -262,30 +261,31 @@ class Communicator {
             }
             $responseBuf = $out;
             \socket_close($sock);
+
             return $responseBuf;
         }
     }
-    private function swooleTcp($sIp,$iPort,$requestBuf,$timeout=2)
+    private function swooleTcp($sIp, $iPort, $requestBuf, $timeout = 2)
     {
         $client = new \swoole_client(SWOOLE_SOCK_TCP | SWOOLE_KEEP);
 
         $client->set(array(
-            'open_length_check'     => 1,
-            'package_length_type'   => 'N',
+            'open_length_check' => 1,
+            'package_length_type' => 'N',
             'package_length_offset' => 0,       //第N个字节是包长度的值
-            'package_body_offset'   => 0,       //第几个字节开始计算长度
-            'package_max_length'    => 2000000,  //协议最大长度
+            'package_body_offset' => 0,       //第几个字节开始计算长度
+            'package_max_length' => 2000000,  //协议最大长度
         ));
 
         if (!$client->connect($sIp, $iPort, $timeout)) {
             $code = Code::TARS_SOCKET_CONNECT_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         if (!$client->send($requestBuf)) {
             $client->close();
             $code = Code::TARS_SOCKET_SEND_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
         //读取最多32M的数据
         $tarsResponseBuf = $client->recv();
@@ -294,33 +294,33 @@ class Communicator {
             $client->close();
             // 已经断开连接
             $code = Code::TARS_SOCKET_RECEIVE_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         return $tarsResponseBuf;
     }
 
-    private function swooleUdp($sIp,$iPort,$requestBuf,$timeout=2)
+    private function swooleUdp($sIp, $iPort, $requestBuf, $timeout = 2)
     {
         $client = new \swoole_client(SWOOLE_SOCK_UDP);
 
         $client->set(array(
-            'open_length_check'     => 1,
-            'package_length_type'   => 'N',
+            'open_length_check' => 1,
+            'package_length_type' => 'N',
             'package_length_offset' => 0,       //第N个字节是包长度的值
-            'package_body_offset'   => 0,       //第几个字节开始计算长度
-            'package_max_length'    => 2000000,  //协议最大长度
+            'package_body_offset' => 0,       //第几个字节开始计算长度
+            'package_max_length' => 2000000,  //协议最大长度
         ));
 
         if (!$client->connect($sIp, $iPort, $timeout)) {
             $code = Code::TARS_SOCKET_CONNECT_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         if (!$client->send($requestBuf)) {
             $client->close();
             $code = Code::TARS_SOCKET_SEND_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
         //读取最多32M的数据
         $tarsResponseBuf = $client->recv();
@@ -329,13 +329,13 @@ class Communicator {
             $client->close();
             // 已经断开连接
             $code = Code::TARS_SOCKET_RECEIVE_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         return $tarsResponseBuf;
     }
 
-    private function swooleCoroutineTcp($sIp,$iPort,$requestBuf,$timeout=2)
+    private function swooleCoroutineTcp($sIp, $iPort, $requestBuf, $timeout = 2)
     {
         $client = new \Swoole\Coroutine\Client(SWOOLE_SOCK_TCP);
 
@@ -349,40 +349,39 @@ class Communicator {
 
         if (!$client->connect($sIp, $iPort, $timeout)) {
             $code = Code::TARS_SOCKET_CONNECT_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         if (!$client->send($requestBuf)) {
             $client->close();
             $code = Code::TARS_SOCKET_SEND_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
         $firstRsp = true;
         $curLen = 0;
         $responseBuf = '';
         $packLen = 0;
         $isConnected = true;
-        while($isConnected) {
+        while ($isConnected) {
             if ($client->errCode) {
-                throw new \Exception("socket recv falied",$client->errCode);
-
+                throw new \Exception('socket recv falied', $client->errCode);
             }
             $data = $client ? $client->recv() : '';
             if ($firstRsp) {
-                $firstRsp=false;
+                $firstRsp = false;
                 $list = unpack('Nlen', substr($data, 0, 4));
                 $packLen = $list['len'];
                 $responseBuf = $data;
                 $curLen += strlen($data);
-                if($curLen == $packLen) {
+                if ($curLen == $packLen) {
                     $isConnected = false;
                     $client->close();
                 }
             } else {
-                if($curLen < $packLen) {
+                if ($curLen < $packLen) {
                     $responseBuf .= $data;
                     $curLen += strlen($data);
-                    if($curLen == $packLen) {
+                    if ($curLen == $packLen) {
                         $isConnected = false;
                         $client->close();
                     }
@@ -400,33 +399,33 @@ class Communicator {
             $client->close();
             // 已经断开连接
             $code = Code::TARS_SOCKET_RECEIVE_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         return $responseBuf;
     }
 
-    private function swooleCoroutineUdp($sIp,$iPort,$requestBuf,$timeout=2)
+    private function swooleCoroutineUdp($sIp, $iPort, $requestBuf, $timeout = 2)
     {
         $client = new \Swoole\Coroutine\Client(SWOOLE_SOCK_UDP);
 
         $client->set(array(
-            'open_length_check'     => 1,
-            'package_length_type'   => 'N',
+            'open_length_check' => 1,
+            'package_length_type' => 'N',
             'package_length_offset' => 0,       //第N个字节是包长度的值
-            'package_body_offset'   => 0,       //第几个字节开始计算长度
-            'package_max_length'    => 2000000,  //协议最大长度
+            'package_body_offset' => 0,       //第几个字节开始计算长度
+            'package_max_length' => 2000000,  //协议最大长度
         ));
 
         if (!$client->connect($sIp, $iPort, $timeout)) {
             $code = Code::TARS_SOCKET_CONNECT_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         if (!$client->send($requestBuf)) {
             $client->close();
             $code = Code::TARS_SOCKET_SEND_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         //读取最多32M的数据
@@ -436,7 +435,7 @@ class Communicator {
             $client->close();
             // 已经断开连接
             $code = Code::TARS_SOCKET_RECEIVE_FAILED;
-            throw new \Exception(Code::getErrMsg($code),$code);
+            throw new \Exception(Code::getErrMsg($code), $code);
         }
 
         return $responseBuf;
@@ -445,8 +444,8 @@ class Communicator {
     private function militime()
     {
         list($msec, $sec) = explode(' ', microtime());
-        $miliseconds =  (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
+        $miliseconds = (float) sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
+
         return $miliseconds;
     }
-
 }

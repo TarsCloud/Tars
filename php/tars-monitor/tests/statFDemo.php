@@ -3,25 +3,22 @@
  * Created by PhpStorm.
  * User: liangchen
  * Date: 2018/4/27
- * Time: 下午6:11
+ * Time: 下午6:11.
  */
 
 // 需要增加对网络的jianrong
 
-require_once "../vendor/autoload.php";
+require_once '../vendor/autoload.php';
 
+$statfWrapper = new \Tars\monitor\StatFWrapper('tars.tarsregistry.QueryObj@tcp -h 172.16.0.161 -p 17890', 1);
+$statfWrapper->monitorStat('PHPTest.helloTars.obj', 'test', '172.16.0.116', 51003, 200, 0, 0);
+$statfWrapper->monitorStat('PHPTest.helloTars.obj', 'test', '172.16.0.116', 51003, 200, 0, 0);
+$statfWrapper->monitorStat('PHPTest.helloTars.obj', 'test', '172.16.0.116', 51003, 200, 0, 0);
 
-$statfWrapper = new \Tars\monitor\StatFWrapper("tars.tarsregistry.QueryObj@tcp -h 172.16.0.161 -p 17890",1);
-$statfWrapper->monitorStat("PHPTest.helloTars.obj","test","172.16.0.116",51003,200,0,0);
-$statfWrapper->monitorStat("PHPTest.helloTars.obj","test","172.16.0.116",51003,200,0,0);
-$statfWrapper->monitorStat("PHPTest.helloTars.obj","test","172.16.0.116",51003,200,0,0);
-
-
-$statfWrapper = new \Tars\monitor\StatFWrapper("tars.tarsregistry.QueryObj@tcp -h 172.16.0.161 -p 17890",2);
-$statfWrapper->monitorStat("PHPTest.helloTars.obj","11111","172.16.0.116",51003,200,2,2);
-$statfWrapper->monitorStat("PHPTest.helloTars.obj","11111","172.16.0.116",51003,200,2,2);
-$statfWrapper->monitorStat("PHPTest.helloTars.obj","11111","172.16.0.116",51003,200,2,2);
-
+$statfWrapper = new \Tars\monitor\StatFWrapper('tars.tarsregistry.QueryObj@tcp -h 172.16.0.161 -p 17890', 2);
+$statfWrapper->monitorStat('PHPTest.helloTars.obj', '11111', '172.16.0.116', 51003, 200, 2, 2);
+$statfWrapper->monitorStat('PHPTest.helloTars.obj', '11111', '172.16.0.116', 51003, 200, 2, 2);
+$statfWrapper->monitorStat('PHPTest.helloTars.obj', '11111', '172.16.0.116', 51003, 200, 2, 2);
 
 /*
 $inst = \Tars\monitor\StatF::getInstance();

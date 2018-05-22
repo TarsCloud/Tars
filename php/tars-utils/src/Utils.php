@@ -16,7 +16,7 @@ class Utils
         $parts = explode('@', $locatorString);
         $locatorName = $parts[0];
 
-        $subParts = explode(':',$parts[1]);
+        $subParts = explode(':', $parts[1]);
         $infos = [];
         foreach ($subParts as $subPart) {
             $info = self::getEndpointInfo($subPart);
@@ -25,7 +25,7 @@ class Utils
 
         return [
             'locatorName' => $locatorName,
-            'routeInfo' => $infos
+            'routeInfo' => $infos,
         ];
     }
 
@@ -63,11 +63,9 @@ class Utils
         foreach ($parts as $part) {
             if (strstr($part, 'tcp')) {
                 $sProtocol = 'tcp';
-            }
-            else if(strstr($part, 'udp')) {
+            } elseif (strstr($part, 'udp')) {
                 $sProtocol = 'udp';
-            }
-            elseif (strpos($part, 'h') !== false) {
+            } elseif (strpos($part, 'h') !== false) {
                 $sHost = trim($part, " h\t\r");
             } elseif (strpos($part, 'b') !== false) {
                 $bIp = trim($part, " b\t\r");
@@ -84,7 +82,7 @@ class Utils
             'iPort' => $iPort,
             'iTimeout' => $iTimeout,
             'bIp' => $bIp,
-            'sIp' => $sHost
+            'sIp' => $sHost,
         ];
     }
 
@@ -98,6 +96,7 @@ class Utils
         }
 
         $conf = self::parseText($text);
+
         return $conf;
     }
 
@@ -108,9 +107,9 @@ class Utils
         $tarsClient = [];
         $objAdapter = [];
         $application = [];
-        $lines = explode("\n",$text);
+        $lines = explode("\n", $text);
 
-        $status = 0;//标识在application内
+        $status = 0; //标识在application内
         foreach ($lines as $line) {
             $line = trim($line, " \r\0\x0B\t\n");
             if (empty($line)) {
@@ -124,14 +123,12 @@ class Utils
                 case 0:{
                     if (strstr($line, '<server>')) {
                         $status = 1;
-                    }
-                    else if(strstr($line, '<client>')) {
+                    } elseif (strstr($line, '<client>')) {
                         $status = 3;
-                    }
-                    else if (strstr($line, '=')) {
-                        $pos = strpos($line,'=');
-                        $name = substr($line,0,$pos);
-                        $value = substr($line,$pos+1,strlen($line) - $pos);
+                    } elseif (strstr($line, '=')) {
+                        $pos = strpos($line, '=');
+                        $name = substr($line, 0, $pos);
+                        $value = substr($line, $pos + 1, strlen($line) - $pos);
                         $application[$name] = $value;
                     }
                     break;
@@ -139,9 +136,9 @@ class Utils
                 // 在server内
                 case 1:{
                     if (strstr($line, '=')) {
-                        $pos = strpos($line,'=');
-                        $name = substr($line,0,$pos);
-                        $value = substr($line,$pos+1,strlen($line) - $pos);
+                        $pos = strpos($line, '=');
+                        $name = substr($line, 0, $pos);
+                        $value = substr($line, $pos + 1, strlen($line) - $pos);
                         $tarsServer[$name] = $value;
                     }
                     // 还要兼容多个adapter的情况(终止的时候兼容即可)
@@ -150,8 +147,7 @@ class Utils
                         $adapterName = substr($line, 0, strlen($line) - 1);
                         $adapterName = substr($adapterName, 1, strlen($line) - 1);
                         $objAdapter['adapterName'] = $adapterName;
-                    }
-                    else if(strstr($line, '<client>')) {
+                    } elseif (strstr($line, '<client>')) {
                         $status = 3;
                     }
                     break;
@@ -159,9 +155,9 @@ class Utils
                 // 在adapter内
                 case 2: {
                     if (strstr($line, '=')) {
-                        $pos = strpos($line,'=');
-                        $name = substr($line,0,$pos);
-                        $value = substr($line,$pos+1,strlen($line) - $pos);
+                        $pos = strpos($line, '=');
+                        $name = substr($line, 0, $pos);
+                        $value = substr($line, $pos + 1, strlen($line) - $pos);
                         $objAdapter[$name] = $value;
                     }
                     // 还要兼容多个adapter的情况(终止的时候兼容即可)
@@ -175,9 +171,9 @@ class Utils
                 // 在client内
                 case 3: {
                     if (strstr($line, '=')) {
-                        $pos = strpos($line,'=');
-                        $name = substr($line,0,$pos);
-                        $value = substr($line,$pos+1,strlen($line) - $pos);
+                        $pos = strpos($line, '=');
+                        $name = substr($line, 0, $pos);
+                        $value = substr($line, $pos + 1, strlen($line) - $pos);
                         $tarsClient[$name] = $value;
                     }
                     // 还要兼容多个adapter的情况(终止的时候兼容即可)
@@ -192,16 +188,15 @@ class Utils
             }
         }
         // 进行一下到Swoole配置的转换
-        if($tarsAdapters[0]['protocol'] == 'not_tars' || $tarsAdapters[0]['protocol'] == 'not_taf') {
+        if ($tarsAdapters[0]['protocol'] == 'not_tars' || $tarsAdapters[0]['protocol'] == 'not_taf') {
             $tarsServer['servType'] = 'http';
-        }
-        else {
+        } else {
             $tarsServer['servType'] = 'tcp';
         }
 
         $tarsServer['listen'][] = self::getEndpointInfo($tarsAdapters[0]['endpoint']);
 
-        $tarsServer['entrance'] = isset($tarsServer['entrance'])?$tarsServer['entrance']:$tarsServer['basepath'].'src/index.php';
+        $tarsServer['entrance'] = isset($tarsServer['entrance']) ? $tarsServer['entrance'] : $tarsServer['basepath'].'src/index.php';
         $setting['worker_num'] = $tarsAdapters[0]['threads'];
         $setting['task_worker_num'] = $tarsServer['task_worker_num'];
         $setting['dispatch_mode'] = $tarsServer['dispatch_mode'];
@@ -356,27 +351,25 @@ class Utils
         $tarsServer['adapters'] = $tarsAdapters;
         $tarsServer['setting'] = $setting;
 
-
-
         $application['server'] = $tarsServer;
         $application['client'] = $tarsClient;
 
         $tarsConf = [
             'tars' => [
-                'application' => $application
-            ]
+                'application' => $application,
+            ],
         ];
 
         // 把配置缓存一份
-        if(class_exists("swoole_table"))
-        {
+        if (class_exists('swoole_table')) {
             Conf::init($tarsConf);
         }
 
         return $tarsConf;
     }
 
-    public static function getTarsConf() {
+    public static function getTarsConf()
+    {
         return Conf::get();
     }
 }

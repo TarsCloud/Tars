@@ -6,8 +6,8 @@ use Tars\monitor\classes\StatMicMsgBody;
 use Tars\monitor\classes\StatMicMsgHead;
 use Tars\Utils;
 
-class StatFWrapper {
-
+class StatFWrapper
+{
     protected $_statF;
     protected $_routeInfo;
 
@@ -18,19 +18,19 @@ class StatFWrapper {
     protected $_masterName = '';
     protected $_reportInterval;
 
-
-    public function __construct($locator,$socketMode,$statServantName,
-                                $masterName='phpClient',$reportInterval=60000) {
+    public function __construct($locator, $socketMode, $statServantName,
+                                $masterName = 'phpClient', $reportInterval = 60000)
+    {
         $result = Utils::getLocatorInfo($locator);
-        if(empty($result) || !isset($result['locatorName'])
+        if (empty($result) || !isset($result['locatorName'])
             || !isset($result['routeInfo']) || empty($result['routeInfo'])) {
-            throw new \Exception("Route Fail",-100);
+            throw new \Exception('Route Fail', -100);
         }
 
         $this->_masterName = $masterName;
         $this->_reportInterval = $reportInterval;
-        $this->_statF = new StatFServant($locator,$socketMode,$statServantName);
-	}
+        $this->_statF = new StatFServant($locator, $socketMode, $statServantName);
+    }
 
     /**
      * @param $slaveName
@@ -38,8 +38,8 @@ class StatFWrapper {
      * @param $slaveIp
      * @param $slavePort
      * @param $rspTime
-     * @param int $returnValue
-     * @param int $status
+     * @param int    $returnValue
+     * @param int    $status
      * @param string $masterName
      * @param string $masterIp
      * @param string $tarsVersion
@@ -50,7 +50,7 @@ class StatFWrapper {
      * @param string $sMasterContainer
      * @param string $iStatVer
      */
-	public function addStat($slaveName, $interfaceName, $slaveIp, $slavePort,
+    public function addStat($slaveName, $interfaceName, $slaveIp, $slavePort,
      $rspTime, $returnValue = 0,
      $status = self::SWOOLE_STAT_SUCCESS,
      $masterName = '', $masterIp = '', $tarsVersion = '',
@@ -58,18 +58,18 @@ class StatFWrapper {
      $sMasterSetInfo = '', $sSlaveContainer = '',
      $sMasterContainer = '', $iStatVer = '')
     {
-
     }
 
     /**
      * 单次上报，来一次报一次
+     *
      * @param $slaveName
      * @param $interfaceName
      * @param $slaveIp
      * @param $slavePort
      * @param $rspTime
-     * @param int $returnValue
-     * @param int $status
+     * @param int    $returnValue
+     * @param int    $status
      * @param string $masterName
      * @param string $masterIp
      * @param string $tarsVersion
@@ -79,7 +79,8 @@ class StatFWrapper {
      * @param string $sSlaveContainer
      * @param string $sMasterContainer
      * @param string $iStatVer
-     * @return boolean
+     *
+     * @return bool
      */
     public function monitorStat($slaveName, $interfaceName, $slaveIp, $slavePort,
      $rspTime, $returnValue = 0,
@@ -110,7 +111,7 @@ class StatFWrapper {
             $successCount = $timeoutCount = $execCount = 0;
             if ($status == self::SWOOLE_STAT_SUCCESS) {
                 $successCount = 1;
-            } else if ($status == self::SWOOLE_STAT_TIMEOUT) {
+            } elseif ($status == self::SWOOLE_STAT_TIMEOUT) {
                 $timeoutCount = 1;
             } else {
                 $execCount = 1;
@@ -122,25 +123,22 @@ class StatFWrapper {
             $msgBody->maxRspTime = $rspTime;
             $msgBody->minRspTime = $rspTime;
 
-            $msg[] = ["key" => $msgHead, "value" => $msgBody];
+            $msg[] = ['key' => $msgHead, 'value' => $msgBody];
             $this->reportMicMsg($msg, true);
+
             return true;
-        }
-        catch (\Exception $e) {
-            error_log("monitorStat failed");
+        } catch (\Exception $e) {
+            error_log('monitorStat failed');
             throw $e;
         }
-
     }
 
     public function reportMicMsg($msg, $bFromClient = true)
     {
         try {
-            $this->_statF->reportMicMsg($msg,$bFromClient);
-        }
-        catch (\Exception $e) {
+            $this->_statF->reportMicMsg($msg, $bFromClient);
+        } catch (\Exception $e) {
             throw $e;
         }
     }
 }
-

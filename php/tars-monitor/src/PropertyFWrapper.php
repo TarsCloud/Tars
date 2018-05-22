@@ -7,8 +7,8 @@ use Tars\monitor\classes\StatPropMsgBody;
 use Tars\monitor\classes\StatPropMsgHead;
 use Tars\Utils;
 
-class PropertyFWrapper {
-
+class PropertyFWrapper
+{
     protected $_propertyF;
     protected $_routeInfo;
     protected $_moduleName;
@@ -19,44 +19,40 @@ class PropertyFWrapper {
 
     protected $_masterName = '';
 
-    public function __construct($locator, $socketMode, $moduleName='php',
-                                $propertyName="tars.tarsproperty.PropertyObj")
+    public function __construct($locator, $socketMode, $moduleName = 'php',
+                                $propertyName = 'tars.tarsproperty.PropertyObj')
     {
         $result = Utils::getLocatorInfo($locator);
-        if(empty($result) || !isset($result['locatorName'])
+        if (empty($result) || !isset($result['locatorName'])
             || !isset($result['routeInfo']) || empty($result['routeInfo'])) {
-            throw new \Exception("Route Fail",-100);
+            throw new \Exception('Route Fail', -100);
         }
 
         $this->_moduleName = $moduleName;
-        $this->_propertyF = new PropertyFServant($locator,$socketMode,$propertyName);
-	}
+        $this->_propertyF = new PropertyFServant($locator, $socketMode, $propertyName);
+    }
 
-	public function monitorProperty($ip,$propertyName,$policy,$value,$moduleName='',
-                                    $setName='', $setArea = '', $setID = '',
-                                    $sContainer = '', $iPropertyVer = 1) {
+    public function monitorProperty($ip, $propertyName, $policy, $value, $moduleName = '',
+                                    $setName = '', $setArea = '', $setID = '',
+                                    $sContainer = '', $iPropertyVer = 1)
+    {
         $msgHead = new StatPropMsgHead();
-        $msgHead->moduleName = empty($moduleName)?$this->_moduleName:$moduleName;
-        $msgHead->ip = empty($ip)?'127.0.0.1':$ip;
+        $msgHead->moduleName = empty($moduleName) ? $this->_moduleName : $moduleName;
+        $msgHead->ip = empty($ip) ? '127.0.0.1' : $ip;
         $msgHead->propertyName = $propertyName;
-        if(!empty($setName))
-        {
+        if (!empty($setName)) {
             $msgHead->setName = $setName;
         }
-        if(!empty($setArea))
-        {
+        if (!empty($setArea)) {
             $msgHead->setArea = $setArea;
         }
-        if(!empty($setID))
-        {
+        if (!empty($setID)) {
             $msgHead->setID = $setID;
         }
-        if(!empty($sContainer))
-        {
+        if (!empty($sContainer)) {
             $msgHead->sContainer = $sContainer;
         }
         $msgHead->iPropertyVer = $iPropertyVer;
-
 
         $msgBody = new StatPropMsgBody();
 
@@ -65,7 +61,7 @@ class PropertyFWrapper {
         $propInfo->value = $value;
 
         $msgBody->vInfo->pushBack($propInfo);
-        $msg[] = ["key" => $msgHead, "value" => $msgBody];
+        $msg[] = ['key' => $msgHead, 'value' => $msgBody];
 
         $this->reportPropMsg($msg);
     }
@@ -80,17 +76,16 @@ class PropertyFWrapper {
      * @param string $setArea
      * @param string $setID
      * @param string $sContainer
-     * @param int $iPropertyVer
+     * @param int    $iPropertyVer
+     *
      * @return bool
      */
     public function reportPropMsg($statmsg)
     {
         try {
             $this->_propertyF->reportPropMsg($statmsg);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
 }
-

@@ -2,22 +2,22 @@
 
 namespace Tars\monitor\classes;
 
-class ProxyInfo extends \TARS_Struct {
-	const BFROMCLIENT = 0;
+class ProxyInfo extends \TARS_Struct
+{
+    const BFROMCLIENT = 0;
 
+    public $bFromClient;
 
-	public $bFromClient; 
+    protected static $__fields = array(
+        self::BFROMCLIENT => array(
+            'name' => 'bFromClient',
+            'required' => true,
+            'type' => \TARS::BOOL,
+            ),
+    );
 
-
-	protected static $__fields = array(
-		self::BFROMCLIENT => array(
-			'name'=>'bFromClient',
-			'required'=>true,
-			'type'=>\TARS::BOOL,
-			),
-	);
-
-	public function __construct() {
-		parent::__construct('tars_tarsstat_StatObj_ProxyInfo', self::$__fields);
-	}
+    public function __construct()
+    {
+        parent::__construct('tars_tarsstat_StatObj_ProxyInfo', self::$__fields);
+    }
 }

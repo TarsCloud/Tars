@@ -3,16 +3,16 @@
  * Created by PhpStorm.
  * User: liangchen
  * Date: 2018/2/24
- * Time: 下午3:43
+ * Time: 下午3:43.
  */
 
 return array(
     'appName' => 'PHPTest',
     'serverName' => 'PHPServer',
     'objName' => 'obj',
-    'withServant' => false,//决定是服务端,还是客户端的自动生成
+    'withServant' => false, //决定是服务端,还是客户端的自动生成
     'tarsFiles' => array(
-        './example.tars'
+        './example.tars',
     ),
     'dstPath' => '../src/servant',
     'namespacePrefix' => 'HttpServer\servant',
