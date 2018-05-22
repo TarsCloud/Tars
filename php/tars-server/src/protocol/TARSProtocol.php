@@ -19,13 +19,13 @@ class TARSProtocol implements Protocol
     // 可以支持自定义的
     // 决定传什么参数进来、
     // 路由的方式
-    public function route(Request $request, Response $response, $tarsConfig=[])
+    public function route(Request $request, Response $response, $tarsConfig = [])
     {
         $unpackResult = $this->unpackReq($request->reqBuf);
         $sServantName = $unpackResult['sServantName'];
         $sFuncName = $unpackResult['sFuncName'];
 
-        if($sServantName === 'AdminObj') {
+        if ($sServantName === 'AdminObj') {
             $app = $tarsConfig['tars']['application']['server']['app'];
             $server = $tarsConfig['tars']['application']['server']['server'];
 
@@ -36,19 +36,18 @@ class TARSProtocol implements Protocol
                     break;
                 }
                 case 'notify': {
-                    if($iVersion === Consts::TUPVERSION) {
-                        $cmd = \TUPAPI::getString("cmd",$sBuffer,false,$iVersion);
-                    }
-                    else if($iVersion === Consts::TARSVERSION) {
-                        $cmd = \TUPAPI::getString(1,$sBuffer,false,$iVersion);
-                    }
-                    else {
+                    if ($iVersion === Consts::TUPVERSION) {
+                        $cmd = \TUPAPI::getString('cmd', $sBuffer, false, $iVersion);
+                    } elseif ($iVersion === Consts::TARSVERSION) {
+                        $cmd = \TUPAPI::getString(1, $sBuffer, false, $iVersion);
+                    } else {
                         $rspBuf = $this->packErrRsp($unpackResult, Code::TARSSERVERSUCCESS, Code::getMsg(Code::TARSSERVERSUCCESS));
                         $response->send($rspBuf);
+
                         return null;
                     }
                     // 这个事,最好是起一个task worker去干比较好
-                    $parts = explode(" ",$cmd);
+                    $parts = explode(' ', $cmd);
                     $fileName = $parts[1];
 
                     $config = new \Tars\client\CommunicatorConfig();
@@ -58,22 +57,22 @@ class TARSProtocol implements Protocol
                     $config->setModuleName($moduleName);
                     $config->setSocketMode(2);
                     $configF = new ConfigServant($config);
-                    $configContent = "";
-                    $configF->loadConfig($app,$server,$fileName,$configContent);
-
+                    $configContent = '';
+                    $configF->loadConfig($app, $server, $fileName, $configContent);
 
                     $basePath = $tarsConfig['tars']['application']['server']['basepath'];
-                    file_put_contents($basePath."/src/conf/".$fileName,$configContent);
+                    file_put_contents($basePath.'/src/conf/'.$fileName, $configContent);
                     $paramInfo = [
                         'return' => [
                             'type' => 'string',
-                            'tag' => 0
-                        ]
+                            'tag' => 0,
+                        ],
                     ];
-                    $args=[];
+                    $args = [];
 
-                    $rspBuf = $this->packRsp($paramInfo,$unpackResult,$args, "success");
+                    $rspBuf = $this->packRsp($paramInfo, $unpackResult, $args, 'success');
                     $response->send($rspBuf);
+
                     return null;
                 }
             }
@@ -89,12 +88,12 @@ class TARSProtocol implements Protocol
         // 需要一个函数,专门把参数,转换为args
 
         $args = $this->convertToArgs($paramInfo, $unpackResult);
+
         return [
             'args' => $args,
             'unpackResult' => $unpackResult,
-            'sFuncName' => $sFuncName
+            'sFuncName' => $sFuncName,
         ];
-
     }
 
     // 另外就是发包的时候怎么组包
@@ -130,7 +129,7 @@ class TARSProtocol implements Protocol
             'enum' => '\TUPAPI::putShort',
             'map' => '\TUPAPI::putMap',
             'vector' => '\TUPAPI::putVector',
-            'struct' => '\TUPAPI::putStruct'
+            'struct' => '\TUPAPI::putStruct',
         ];
 
         $packMethod = $packMethods[$type];
@@ -186,7 +185,7 @@ class TARSProtocol implements Protocol
 
             if ($iVersion === 1) {
                 $return = $paramInfo['return'];
-                if($return['type'] !== 'void') {
+                if ($return['type'] !== 'void') {
                     $returnBuf = $this->packBuffer($return['type'], $returnVal, $return['tag'], '', $iVersion);
                     $encodeBufs[] = $returnBuf;
                 }
@@ -214,7 +213,7 @@ class TARSProtocol implements Protocol
                     $iMessageType, $iRequestId, Code::TARSSERVERSUCCESS, 'success', $encodeBufs, $statuses);
             } else {
                 $return = $paramInfo['return'];
-                if($return['type'] !== 'void') {
+                if ($return['type'] !== 'void') {
                     $returnBuf = $this->packBuffer($return['type'], $returnVal, $return['tag'], '', $iVersion);
 
                     $encodeBufs[''] = $returnBuf;
@@ -349,7 +348,7 @@ class TARSProtocol implements Protocol
                 'enum' => '\TUPAPI::getShort',
                 'map' => '\TUPAPI::getMap',
                 'vector' => '\TUPAPI::getVector',
-                'struct' => '\TUPAPI::getStruct'
+                'struct' => '\TUPAPI::getStruct',
             ];
 
             $inParams = $paramInfo['inParams'];
@@ -405,10 +404,10 @@ class TARSProtocol implements Protocol
             // 对于输出参数而言,所需要的仅仅是对应的实例化而已
             $index = 0;
             foreach ($outParams as $outParam) {
-                $index++;
+                ++$index;
                 $type = $outParam['type'];
 
-                $protoName = "proto".$index;
+                $protoName = 'proto'.$index;
 
                 // 如果是结构体
                 if ($type === 'map' || $type === 'vector') {
@@ -421,7 +420,6 @@ class TARSProtocol implements Protocol
                     $protoName = null;
                     $args[] = &$protoName;
                 }
-
             }
 
             return $args;
@@ -430,36 +428,33 @@ class TARSProtocol implements Protocol
         }
     }
 
-    private function createInstance($proto) {
-        if($this->isBasicType($proto)) {
+    private function createInstance($proto)
+    {
+        if ($this->isBasicType($proto)) {
             return $this->convertBasicType($proto);
-        }
-        else if(!strpos($proto,"(")) {
+        } elseif (!strpos($proto, '(')) {
             $structInst = new $proto();
+
             return $structInst;
-        }
-        else {
-            $pos = strpos($proto,"(");
-            $className = substr($proto,0,$pos);
-            if($className == '\TARS_Vector') {
-                $next = trim(substr($proto,$pos,strlen($proto)-$pos),"()");
+        } else {
+            $pos = strpos($proto, '(');
+            $className = substr($proto, 0, $pos);
+            if ($className == '\TARS_Vector') {
+                $next = trim(substr($proto, $pos, strlen($proto) - $pos), '()');
                 $args[] = $this->createInstance($next);
-            }
-            else if($className == '\TARS_Map') {
-                $next = trim(substr($proto,$pos,strlen($proto)-$pos),"()");
-                $pos = strpos($next,",");
-                $left = substr($next,0,$pos);
-                $right = trim(substr($next,$pos,strlen($next)-$pos),",");
+            } elseif ($className == '\TARS_Map') {
+                $next = trim(substr($proto, $pos, strlen($proto) - $pos), '()');
+                $pos = strpos($next, ',');
+                $left = substr($next, 0, $pos);
+                $right = trim(substr($next, $pos, strlen($next) - $pos), ',');
 
                 $args[] = $this->createInstance($left);
                 $args[] = $this->createInstance($right);
-            }
-            else if($this->isBasicType($className)) {
-                $next = trim(substr($proto,$pos,strlen($proto)-$pos),"()");
+            } elseif ($this->isBasicType($className)) {
+                $next = trim(substr($proto, $pos, strlen($proto) - $pos), '()');
                 $basicInst = $this->createInstance($next);
                 $args[] = $basicInst;
-            }
-            else {
+            } else {
                 $structInst = new $className();
                 $args[] = $structInst;
             }
@@ -469,7 +464,8 @@ class TARSProtocol implements Protocol
         return $ins;
     }
 
-    private function isBasicType($type) {
+    private function isBasicType($type)
+    {
         $basicTypes = [
             '\TARS::BOOL',
             '\TARS::CHAR',
@@ -487,10 +483,11 @@ class TARSProtocol implements Protocol
             '\TARS::INT32',
         ];
 
-        return in_array($type,$basicTypes);
+        return in_array($type, $basicTypes);
     }
 
-    private function convertBasicType($type) {
+    private function convertBasicType($type)
+    {
         $basicTypes = [
             '\TARS::BOOL' => 1,
             '\TARS::CHAR' => 2,

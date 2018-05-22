@@ -8,7 +8,6 @@
 
 namespace Tars\cmd;
 
-
 class Command
 {
     public $cmd;

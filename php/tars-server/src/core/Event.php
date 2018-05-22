@@ -8,11 +8,8 @@
 
 namespace Tars\core;
 
-use Tars\config\ConfigServant;
-use Tars\Consts;
 use Tars\protocol\Protocol;
 use Tars\Code;
-use Tars\Utils;
 
 class Event
 {
@@ -46,12 +43,11 @@ class Event
 
         try {
             // 这里通过protocol先进行unpack
-            $result = $this->protocol->route($request,$response,$this->tarsConfig);
+            $result = $this->protocol->route($request, $response, $this->tarsConfig);
 
-            if(is_null($result)) {
+            if (is_null($result)) {
                 return;
-            }
-            else {
+            } else {
                 $sFuncName = $result['sFuncName'];
                 $args = $result['args'];
                 $unpackResult = $result['unpackResult'];
@@ -64,44 +60,47 @@ class Event
 
                 $rspBuf = $this->protocol->packRsp($paramInfo, $unpackResult, $args, $returnVal);
                 $response->send($rspBuf);
+
                 return;
             }
         } catch (\Exception $e) {
             $rspBuf = $this->protocol->packErrRsp($unpackResult, $e->getCode(), $e->getMessage());
             $response->send($rspBuf);
+
             return;
         }
     }
 
-
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Response $response
-     * 针对http进行处理
+     *                           针对http进行处理
      */
     public function onRequest(Request $request, Response $response)
     {
-        if($request->data['server']['request_uri'] == '/monitor/monitor') {
-            $response->header('Content-Type','application/json');
+        if ($request->data['server']['request_uri'] == '/monitor/monitor') {
+            $response->header('Content-Type', 'application/json');
             $response->send("{'code':0}");
+
             return;
         }
         $namespaceName = $request->namespaceName;
 
-        $route = $this->protocol->route($request,$response);
-        if(!$route){
+        $route = $this->protocol->route($request, $response);
+        if (!$route) {
             $class = $namespaceName.'controller\IndexController';
             $fun = 'actionIndex';
-        }else{
+        } else {
             $class = $namespaceName.'controller\\'.$route['class'];
-            $fun=$route['action'];
+            $fun = $route['action'];
         }
 
-        if((!class_exists($class) || !method_exists(($class), ($fun)))){
-            if($response->servType=='http'){
+        if ((!class_exists($class) || !method_exists(($class), ($fun)))) {
+            if ($response->servType == 'http') {
                 $response->status(404);
-            };
+            }
             $response->send('not found');
+
             return;
         }
         $obj = new $class($request, $response);

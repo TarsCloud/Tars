@@ -3,18 +3,19 @@
  * Created by PhpStorm.
  * User: liangchen
  * Date: 2018/4/21
- * Time: 下午1:09
+ * Time: 下午1:09.
  */
-class Conf {
+class Conf
+{
     public static function parseText($text)
     {
         $tafAdapters = [];
         $tafServer = [];
         $tafClient = [];
         $objAdapter = [];
-        $lines = explode($text,"\r\n");
+        $lines = explode($text, "\r\n");
 
-        $status = 0;//标识在application内
+        $status = 0; //标识在application内
         foreach ($lines as $line) {
             $line = trim($line, " \r\0\x0B\t\n");
             if (empty($line)) {
@@ -28,9 +29,9 @@ class Conf {
                 // 在server内
                 case 1:{
                     if (strstr($line, '=')) {
-                        $pos = strpos($line,'=');
-                        $name = substr($line,0,$pos);
-                        $value = substr($line,$pos+1,strlen($line) - $pos);
+                        $pos = strpos($line, '=');
+                        $name = substr($line, 0, $pos);
+                        $value = substr($line, $pos + 1, strlen($line) - $pos);
                         $tafServer[$name] = $value;
                     }
                     // 还要兼容多个adapter的情况(终止的时候兼容即可)
@@ -39,8 +40,7 @@ class Conf {
                         $adapterName = substr($line, 0, strlen($line) - 1);
                         $adapterName = substr($adapterName, 1, strlen($line) - 1);
                         $objAdapter['adapterName'] = $adapterName;
-                    }
-                    else if(strstr($line, '<client>')) {
+                    } elseif (strstr($line, '<client>')) {
                         $status = 3;
                     }
                     break;
@@ -48,9 +48,9 @@ class Conf {
                 // 在adapter内
                 case 2: {
                     if (strstr($line, '=')) {
-                        $pos = strpos($line,'=');
-                        $name = substr($line,0,$pos);
-                        $value = substr($line,$pos+1,strlen($line) - $pos);
+                        $pos = strpos($line, '=');
+                        $name = substr($line, 0, $pos);
+                        $value = substr($line, $pos + 1, strlen($line) - $pos);
                         $objAdapter[$name] = $value;
                     }
                     // 还要兼容多个adapter的情况(终止的时候兼容即可)
@@ -68,9 +68,9 @@ class Conf {
                 // 在client内
                 case 3: {
                     if (strstr($line, '=')) {
-                        $pos = strpos($line,'=');
-                        $name = substr($line,0,$pos);
-                        $value = substr($line,$pos+1,strlen($line) - $pos);
+                        $pos = strpos($line, '=');
+                        $name = substr($line, 0, $pos);
+                        $value = substr($line, $pos + 1, strlen($line) - $pos);
                         $tafClient[$name] = $value;
                     }
                     // 还要兼容多个adapter的情况(终止的时候兼容即可)
@@ -89,7 +89,7 @@ class Conf {
         $tafServer['type'] = $tafAdapters[0]['protocol'] == 'not_taf' ? 'http' : $tafAdapters[0]['protocol'];
         $tafServer['listen'][] = self::getEndpointInfo($tafAdapters[0]['endpoint']);
 
-        $tafServer['entrance'] = isset($tafServer['entrance'])?$tafServer['entrance']:$tafServer['basepath'].'src/index.php';
+        $tafServer['entrance'] = isset($tafServer['entrance']) ? $tafServer['entrance'] : $tafServer['basepath'].'src/index.php';
         $setting['worker_num'] = $tafAdapters[0]['threads'];
         $setting['task_worker_num'] = $tafServer['task_worker_num'];
         $setting['dispatch_mode'] = $tafServer['dispatch_mode'];
@@ -138,7 +138,7 @@ class Conf {
         $parts = explode('@', $locatorString);
         $locatorName = $parts[0];
 
-        $subParts = explode(':',$parts[1]);
+        $subParts = explode(':', $parts[1]);
         $infos = [];
         foreach ($subParts as $subPart) {
             $info = self::getEndpointInfo($subPart);
@@ -147,7 +147,7 @@ class Conf {
 
         return [
             'locatorName' => $locatorName,
-            'routeInfo' => $infos
+            'routeInfo' => $infos,
         ];
     }
 
@@ -167,7 +167,7 @@ class Conf {
             $mode,
             $host,
             $port,
-            $timeout
+            $timeout,
         ];
     }
 
@@ -181,14 +181,12 @@ class Conf {
         $iTimeout = '';
         $bIp = '';
         foreach ($parts as $part) {
-            echo "part:".$part;
+            echo 'part:'.$part;
             if (strstr($part, 'tcp')) {
                 $sProtocol = 'tcp';
-            }
-            else if(strstr($part, 'udp')) {
+            } elseif (strstr($part, 'udp')) {
                 $sProtocol = 'udp';
-            }
-            elseif (strpos($part, 'h') !== false) {
+            } elseif (strpos($part, 'h') !== false) {
                 $sHost = trim($part, " h\t\r");
             } elseif (strpos($part, 'b') !== false) {
                 $bIp = trim($part, " b\t\r");
@@ -204,7 +202,7 @@ class Conf {
             'sProtocol' => $sProtocol,
             'iPort' => $iPort,
             'iTimeout' => $iTimeout,
-            'bIp' => $bIp
+            'bIp' => $bIp,
         ];
     }
 }
@@ -266,7 +264,6 @@ $text = "<taf>
 </taf>
 ";
 
-
 //$result = Conf::parseText($text);
 
 //var_dump($result);
@@ -278,6 +275,5 @@ $result = Conf::parseNodeInfo('taf.tafnode.ServerObj@tcp -h 127.0.0.1 -p 2345 -t
 
 var_dump($result);
 $result = Conf::getLocatorInfo('taf.tafregistry.QueryObj@tcp -h 10.121.107.80 -p 17890:tcp -h 10.219.140.217 -p 17890:tcp -h 10.224.137.102 -p 17890');
-
 
 var_dump($result);

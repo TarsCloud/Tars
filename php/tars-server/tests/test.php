@@ -3,62 +3,60 @@
  * Created by PhpStorm.
  * User: liangchen
  * Date: 2018/4/18
- * Time: 下午11:35
+ * Time: 下午11:35.
  */
 
-/**
- * @param $proto \Taf\TJCE_VECTOR(new \Taf\TJCE_Map(\Taf\TJCE::STRING,new SimpleStruct))
- * 需要递归的实例化出来
- */
- function createInstance($proto) {
-     if(isBasicType($proto)) {
-        return convertBasicType($proto);
-     }
-     else if(!strpos($proto,"(")) {
+ /**
+  * @param $proto \Taf\TJCE_VECTOR(new \Taf\TJCE_Map(\Taf\TJCE::STRING,new SimpleStruct))
+  * 需要递归的实例化出来
+  */
+ function createInstance($proto)
+ {
+     if (isBasicType($proto)) {
+         return convertBasicType($proto);
+     } elseif (!strpos($proto, '(')) {
          $structInst = new $proto();
-         return $structInst;
-     }
-     else {
-         $pos = strpos($proto,"(");
-         $className = substr($proto,0,$pos);
-         echo "className:".$className."\n";
-         if($className == '\Taf\TJCE_Vector') {
-             $next = trim(substr($proto,$pos,strlen($proto)-$pos),"()");
-             echo "vector next:".$next."\n";
-             $args[] = createInstance($next);
-         }
-         else if($className == '\Taf\TJCE_Map') {
-             $next = trim(substr($proto,$pos,strlen($proto)-$pos),"()");
-             echo "map next:".$next."\n";
-             $pos = strpos($next,",");
-             $left = substr($next,0,$pos);
-             $right = trim(substr($next,$pos,strlen($next)-$pos),",");
 
-             echo "left:".$left."\n";
-             echo "right:".$right."\n";
+         return $structInst;
+     } else {
+         $pos = strpos($proto, '(');
+         $className = substr($proto, 0, $pos);
+         echo 'className:'.$className."\n";
+         if ($className == '\Taf\TJCE_Vector') {
+             $next = trim(substr($proto, $pos, strlen($proto) - $pos), '()');
+             echo 'vector next:'.$next."\n";
+             $args[] = createInstance($next);
+         } elseif ($className == '\Taf\TJCE_Map') {
+             $next = trim(substr($proto, $pos, strlen($proto) - $pos), '()');
+             echo 'map next:'.$next."\n";
+             $pos = strpos($next, ',');
+             $left = substr($next, 0, $pos);
+             $right = trim(substr($next, $pos, strlen($next) - $pos), ',');
+
+             echo 'left:'.$left."\n";
+             echo 'right:'.$right."\n";
 
              $args[] = createInstance($left);
              $args[] = createInstance($right);
-         }
-         else if(isBasicType($className)) {
-             $next = trim(substr($proto,$pos,strlen($proto)-$pos),"()");
-             echo "basic next:".$next."\n";
+         } elseif (isBasicType($className)) {
+             $next = trim(substr($proto, $pos, strlen($proto) - $pos), '()');
+             echo 'basic next:'.$next."\n";
              $basicInst = createInstance($next);
              $args[] = $basicInst;
-         }
-         else {
+         } else {
              $structInst = new $className();
              $args[] = $structInst;
          }
-         echo "args:".var_export($args,true)."\n";
+         echo 'args:'.var_export($args, true)."\n";
          $ins = new $className(...$args);
      }
 
-    return $ins;
-}
+     return $ins;
+ }
 
- function isBasicType($type) {
-    $basicTypes = [
+ function isBasicType($type)
+ {
+     $basicTypes = [
         '\Taf\TJCE::BOOL',
         '\Taf\TJCE::CHAR',
         '\Taf\TJCE::CHAR',
@@ -75,10 +73,11 @@
         '\Taf\TJCE::INT32',
     ];
 
-    return in_array($type,$basicTypes);
-}
+     return in_array($type, $basicTypes);
+ }
 
-function convertBasicType($type) {
+function convertBasicType($type)
+{
     $basicTypes = [
         '\Taf\TJCE::BOOL' => 1,
         '\Taf\TJCE::CHAR' => 2,

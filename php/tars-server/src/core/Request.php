@@ -15,22 +15,20 @@ class Request
     public $data;
     public $server = array();
 
-
     public $paramInfos;
     public $impl;
-    public $namespaceName;//标识当前服务的namespacePrefix
+    public $namespaceName; //标识当前服务的namespacePrefix
 
     /**
-     * 将原始请求信息转换到PHP超全局变量中
+     * 将原始请求信息转换到PHP超全局变量中.
      */
-    function setGlobal()
+    public function setGlobal()
     {
-        if ($this->server)
-        {
+        if ($this->server) {
             $_SERVER = $this->server;
         }
     }
-    function unsetGlobal()
+    public function unsetGlobal()
     {
         $_SERVER = array();
     }

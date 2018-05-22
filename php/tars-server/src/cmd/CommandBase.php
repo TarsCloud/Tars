@@ -25,6 +25,7 @@ class CommandBase
 
     /**
      * @param $processName
+     *
      * @return array
      */
     public function getProcess($processName)

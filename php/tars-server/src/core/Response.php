@@ -17,28 +17,28 @@ class Response
     public $servType;
     public $resource;
 
-    public function  sendto($ip, $port, $data, $ipv6 = false)
+    public function sendto($ip, $port, $data, $ipv6 = false)
     {
         $this->server->sendto($ip, $port, $data, $ipv6);
     }
 
     //http
-    public function  header($key, $value)
+    public function header($key, $value)
     {
         $this->resource->header($key, $value);
     }
 
-    public function  status($http_status_code)
+    public function status($http_status_code)
     {
         $this->resource->status($http_status_code);
     }
 
-    public function  cookie($key, $value = '', $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = false)
+    public function cookie($key, $value = '', $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = false)
     {
         $this->resource->cookie($key, $value, $expire, $path, $domain, $secure, $httponly);
     }
 
-    public function  send($data)
+    public function send($data)
     {
         switch ($this->servType) {
             //tcp
@@ -50,7 +50,8 @@ class Response
         }
     }
 
-    public function addTask(Task $task) {
+    public function addTask(Task $task)
+    {
         $this->server->addTask($task);
     }
 }

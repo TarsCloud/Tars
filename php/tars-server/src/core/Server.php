@@ -22,12 +22,12 @@ class Server
 
     protected $application;
     protected $serverName = '';
-    protected $protocolName='tars';
+    protected $protocolName = 'tars';
 
     protected $host = '0.0.0.0';
     protected $port = '8088';
     protected $worker_num = 4;
-    protected $servType='tcp';
+    protected $servType = 'tcp';
 
     protected $setting;
 
@@ -42,7 +42,7 @@ class Server
     protected $protocol;
     protected $timers;
 
-    public function __construct($conf,$table=null)
+    public function __construct($conf, $table = null)
     {
         $tarsServerConf = $conf['tars']['application']['server'];
         $tarsClientConf = $conf['tars']['application']['client'];
@@ -65,6 +65,7 @@ class Server
         $this->protocolName = $tarsServerConf['protocolName'];
         $this->servType = $tarsServerConf['servType'];
         $this->table = $table;
+        $this->worker_num = $this->setting['worker_num'];
     }
 
     public function start()
@@ -76,41 +77,39 @@ class Server
         $this->sw->servType = $this->servType;
 
         if ($this->servType == 'http') {
-            $this->sw->on('Request', array($this,'onRequest'));
+            $this->sw->on('Request', array($this, 'onRequest'));
 
             // 判断是否是timer服务
-            if(isset($this->tarsConfig['tars']['application']['server']['isTimer']) &&
+            if (isset($this->tarsConfig['tars']['application']['server']['isTimer']) &&
                 $this->tarsConfig['tars']['application']['server']['isTimer'] == true) {
-                $timerDir = $this->basePath."src/timer/";
+                $timerDir = $this->basePath.'src/timer/';
                 if (is_dir($timerDir)) {
                     $files = scandir($timerDir);
                     foreach ($files as $f) {
-                        $fileName = $timerDir . $f;
-                        if (is_file($fileName) && strrchr($fileName,".php") == ".php") {
+                        $fileName = $timerDir.$f;
+                        if (is_file($fileName) && strrchr($fileName, '.php') == '.php') {
                             $this->timers[] = $fileName;
                         }
                     }
+                } else {
+                    error_log('timer dir missing');
                 }
-                else {
-                    error_log("timer dir missing");
-                }
-
             }
         }
 
         $this->sw->set($this->setting);
 
-        $this->sw->on('Start', array($this,'onMasterStart'));
-        $this->sw->on('ManagerStart', array($this,'onManagerStart'));
-        $this->sw->on('WorkerStart', array($this,'onWorkerStart'));
-        $this->sw->on('Connect', array($this,'onConnect'));
-        $this->sw->on('Receive', array($this,'onReceive'));
-        $this->sw->on('Close', array($this,'onClose'));
-        $this->sw->on('WorkerStop', array($this,'onWorkerStop'));
+        $this->sw->on('Start', array($this, 'onMasterStart'));
+        $this->sw->on('ManagerStart', array($this, 'onManagerStart'));
+        $this->sw->on('WorkerStart', array($this, 'onWorkerStart'));
+        $this->sw->on('Connect', array($this, 'onConnect'));
+        $this->sw->on('Receive', array($this, 'onReceive'));
+        $this->sw->on('Close', array($this, 'onClose'));
+        $this->sw->on('WorkerStop', array($this, 'onWorkerStop'));
 
-        $this->sw->on('Task', array($this,'onTask'));
-        $this->sw->on('Finish', array($this,'onFinish'));
-        if(!is_null($this->table)) {
+        $this->sw->on('Task', array($this, 'onTask'));
+        $this->sw->on('Finish', array($this, 'onFinish'));
+        if (!is_null($this->table)) {
             $this->sw->table = $this->table;
         }
 
@@ -171,7 +170,7 @@ class Server
         //         其实不用,因为impl的construct就是一个天然的执行的地方
         // 下面的上报逻辑,接入平台的时候进行调试
 
-        if($this->servType === 'tcp') {
+        if ($this->servType === 'tcp') {
             $className = $this->servicesInfo['home-class'];
             self::$impl = new $className();
             $interface = new \ReflectionClass($this->servicesInfo['home-api']);
@@ -182,8 +181,7 @@ class Server
                 self::$paramInfos[$method->name]
                     = $this->protocol->parseAnnotation($docblock);
             }
-        }
-        else {
+        } else {
             $this->namespaceName = $this->servicesInfo['namespaceName'];
         }
 
@@ -191,19 +189,19 @@ class Server
             $this->_setProcessName($this->application.'.'.$this->serverName.': task worker process');
         } else {
             $this->_setProcessName($this->application.'.'.$this->serverName.': event worker process');
-            if (isset($this ->timers[$workerId])) {
-                $runnable = $this ->timers[$workerId];
-                require_once($runnable);
-                $className = $this->namespaceName."timer\\".basename($runnable, '.php');
+            if (isset($this->timers[$workerId])) {
+                $runnable = $this->timers[$workerId];
+                require_once $runnable;
+                $className = $this->namespaceName.'timer\\'.basename($runnable, '.php');
 
                 $obj = new $className();
                 if (method_exists($obj, 'execute')) {
                     swoole_timer_tick($obj->interval, function () use ($workerId, $runnable, $obj) {
                         try {
-                            $funcName = "execute";
+                            $funcName = 'execute';
                             $obj->$funcName();
                         } catch (\Exception $e) {
-                            error_log("error in runnable: $runnable, worker id: $workerId, e: " . print_r($e, true));
+                            error_log("error in runnable: $runnable, worker id: $workerId, e: ".print_r($e, true));
                         }
                     });
                 }
@@ -212,7 +210,7 @@ class Server
 
         if ($workerId == 0) {
             // 将定时上报的任务投递到task worker 0,只需要投递一次
-            $result  = Utils::parseNodeInfo($this->tarsConfig['tars']['application']['server']['node']);
+            $result = Utils::parseNodeInfo($this->tarsConfig['tars']['application']['server']['node']);
             $this->sw->task(
                 [
                     'application' => $this->application,
@@ -223,11 +221,10 @@ class Server
                     'host' => $result['host'],
                     'port' => $result['port'],
                     'timeout' => $result['timeout'],
-                    'objName' => $result['objName']
-                ],0);
+                    'objName' => $result['objName'],
+                ], 0);
         }
     }
-
 
     public function onConnect($server, $fd, $fromId)
     {
@@ -272,7 +269,6 @@ class Server
                 break;
             }
         }
-
     }
 
     public function onFinish($server, $taskId, $data)
@@ -313,7 +309,7 @@ class Server
         $event->setBasePath($this->basePath);
         $event->setTarsConfig($this->tarsConfig);
         // 预先对impl和paramInfos进行处理,这样可以速度更快
-        $event->onReceive($request,$response);
+        $event->onReceive($request, $response);
 
         $request->unsetGlobal();
     }
@@ -326,8 +322,8 @@ class Server
             $req->data['cookie'] = $req->data['zcookie'];
             unset($req->data['zcookie']);
         }
-        if(empty($req->data['post'])){
-            $req->data['post']=$request->rawContent();
+        if (empty($req->data['post'])) {
+            $req->data['post'] = $request->rawContent();
         }
         $req->servType = $this->servType;
         $req->namespaceName = $this->namespaceName;
@@ -335,14 +331,13 @@ class Server
         $req->server = $this->sw;
         $req->setGlobal();
 
-
         $resp = new Response();
         $resp->servType = $this->servType;
         $resp->resource = $response;
 
         $event = new Event();
         $event->setProtocol(ProtocolFactory::getProtocol($this->protocolName));
-        $event->onRequest($req,$resp);
+        $event->onRequest($req, $resp);
 
         $req->unsetGlobal();
     }
@@ -359,7 +354,7 @@ class Server
         $serverInfo->pid = $this->sw->master_pid;
 
         // 解析出node上报的配置 tars.tarsnode.ServerObj@tcp -h 127.0.0.1 -p 2345 -t 10000
-        $result  = Utils::parseNodeInfo($this->tarsConfig['tars']['application']['server']['node']);
+        $result = Utils::parseNodeInfo($this->tarsConfig['tars']['application']['server']['node']);
         $objName = $result['objName'];
         $host = $result['host'];
         $port = $result['port'];

@@ -20,9 +20,9 @@ class Stop extends CommandBase
         $tarsConfig = $this->tarsConfig;
 
         //判断master进程是否存在
-        if(empty($tarsConfig['tars']['application']['server']['app'])
+        if (empty($tarsConfig['tars']['application']['server']['app'])
             || empty($tarsConfig['tars']['application']['server']['server'])) {
-            echo "AppName or ServerName empty! Please check config!".PHP_EOL;
+            echo 'AppName or ServerName empty! Please check config!'.PHP_EOL;
             exit;
         }
 
