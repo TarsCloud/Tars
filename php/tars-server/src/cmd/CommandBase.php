@@ -37,6 +37,9 @@ class CommandBase
 
         $cmd = "ps aux | grep '".$processName."' | grep worker | grep -v grep  | awk '{ print $2}'";
         exec($cmd, $ret);
+        
+        $cmd = "ps aux | grep '".$processName."' | grep task | grep -v grep  | awk '{ print $2}'";
+        exec($cmd, $ret);
 
         if (empty($ret)) {
             return [
