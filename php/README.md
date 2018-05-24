@@ -2,6 +2,11 @@
 
 TARS-PHP是针对php使用tars二进制协议，以及tars平台整体运维、RPC等一系列能力的解决方案。它主要由如下的几个部分组成：
 
+如果你想要快速的体验tars-server,请进入examples目录,里面有详尽的三种服务的部署guideline和开发guideline
+* [tcp server](https://github.com/Tencent/Tars/blob/phptars/php/examples/tars-tcp-server/README.md)
+* [http server](https://github.com/Tencent/Tars/blob/phptars/php/examples/tars-http-server/README.md)
+* [timer server ](https://github.com/Tencent/Tars/blob/phptars/php/examples/tars-timer-server/README.md)
+
 ## tars-client
 
 tars-client中提供了对tars服务进行调用的php能力，包括：

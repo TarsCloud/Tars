@@ -20,9 +20,12 @@
 这个tcp服务所依赖的就是这个文件夹下面的example.tars文件 
 而tars.client.proto.php文件,则是生成servant下代码所必须的,这个会在下面的guideline中具体说明。
 
+## 服务部署guideline
 
-## 开发guideline
-0. 平台会提供一份新的针对php的模板,命名为tars.tarsphp.default. !!!!!!!必须首先修改其中php的执行路径!!!!!!!
+1. 进入运维管理=> 模板管理
+平台会提供一份新的针对php的模板,命名为tars.tarsphp.default. 
+
+!!!!!!!必须首先修改其中php的执行路径!!!!!!!
 
 其次有两种方式保证http-server使用正确的模板:
 * 自己新建一个tars.tarsphp.http,里面添加如下内容:
@@ -46,6 +49,28 @@
 即可。
 * 第二种方式是在私有模板里面添加这部分内容,但是这种方式并不推荐。
 
+
+2. 在平台上进入运维管理=>部署服务,填写对应的应用名和服务名称,注意,这个与下文中tars文件夹中的tars.proto.php
+需要完全一致。
+
+3. 选择服务类型为tars_php
+
+4. 选择模板为刚刚建立的http服务模板,默认不启用set
+
+5. 选择可用端口,填写服务器内网ip
+
+6. 端口类型为TCP
+!!!!协议类型HTTP服务必须选择非TARS!!!!!!
+
+7. 线程数对应SWOOLE的进程数
+
+8. 最大连接数和队列最大长度、队列超时时间,对php服务不生效
+
+9. 点击添加和提交即可,接下来请进入开发guidline
+
+
+## 开发guideline
+
 1. 新建对应的目录结构,固定为scripts、src和tars
 
 2. 在src下新建目录,拷贝example中的component和controller两个文件夹
@@ -56,11 +81,11 @@
        "name" : "tars-http-server-demo",
        "description": "tars http server",
        "require": {
-           "phptars/tars-server": "0.8.9",
-           "phptars/tars-deploy": "0.0.6",
-           "phptars/tars2php": "0.1.1",
-           "phptars/tars-log": "0.2.0",
-           "ext-gzip" : ">=0.0.1"
+           "phptars/tars-server": "0.1.0",
+           "phptars/tars-deploy": "0.1.0",
+           "phptars/tars2php": "0.1.0",
+           "phptars/tars-log": "0.1.0",
+           "ext-zip" : ">=0.0.1"
        },
        "autoload": {
            "psr-4": {
@@ -70,6 +95,12 @@
        "minimum-stability": "stable",
        "scripts" : {
            "deploy" : "\\Tars\\deploy\\Deploy::run"
+       },
+       "repositories": {
+           "tars": {
+               "type": "composer",
+               "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/tarsphp.json"
+           }
        }
    }
 
