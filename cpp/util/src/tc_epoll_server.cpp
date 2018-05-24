@@ -23,6 +23,7 @@
 #include <sys/un.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <sys/uio.h>
 #include <sys/types.h>
 #include <net/if_arp.h>
 #include <netinet/tcp.h>
