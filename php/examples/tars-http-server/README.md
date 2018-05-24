@@ -29,6 +29,8 @@
 
 其次有两种方式保证http-server使用正确的模板:
 * 自己新建一个tars.tarsphp.http,里面添加如下内容:
+
+```
 <tars>
  <application>
 ...
@@ -41,6 +43,7 @@
     </server>
  </application>
 </tars>
+```
 
 只需要在<server>里面添加:
 ```
