@@ -291,7 +291,7 @@ class TARSProtocol implements Protocol
 
                     $inParams[] = [
                         'type' => $parts[1],
-                        'proto' => $parts[3],
+                        'proto' => isset($parts[3])?$parts[3]:'',
                         'name' => trim($parts[2], '$'),
                         'tag' => $index,
                     ];
@@ -310,7 +310,6 @@ class TARSProtocol implements Protocol
                 } else {
                     $returnParam = [
                         'type' => $parts[1],
-                        'proto' => $parts[2],
                         'tag' => 0,
                     ];
                 }

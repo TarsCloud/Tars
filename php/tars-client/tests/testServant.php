@@ -12,12 +12,16 @@ $config = new \Tars\client\CommunicatorConfig();
 $config->setLocator('tars.tarsregistry.QueryObj@tcp -h 172.16.0.161 -p 17890');
 $config->setModuleName('App.Server');
 $config->setCharsetName('UTF-8');
+$servant = new \PHPTest\PHPServer\obj\TestTafServiceServant($config);
 
-$servant = new \App\Server\Servant\TestTafServiceServant($config);
+echo "Locator specified with default socketmode 1\n";
+$name = 'ted';
+$intVal = $servant->sayHelloWorld($name, $greetings);
+var_dump($greetings);
 
 // 直接指定服务ip
-$route['sIp'] = '127.0.0.1';
-$route['iPort'] = 8080;
+$route['sIp'] = '172.16.0.161';
+$route['iPort'] = 28888;
 $routeInfo[] = $route;
 $config = new \Tars\client\CommunicatorConfig();
 $config->setRouteInfo($routeInfo);
@@ -25,7 +29,10 @@ $config->setSocketMode(2); //1标识socket 2标识swoole同步 3标识swoole协�
 $config->setModuleName('App.Server');
 $config->setCharsetName('UTF-8');
 
-$servant = new \App\Server\Servant\TestTafServiceServant($config);
+$servant = new \PHPTest\PHPServer\obj\TestTafServiceServant($config);
+
+echo "Service ip and port specified with socket mode 2 (swoole client)\n";
 
 $name = 'ted';
 $intVal = $servant->sayHelloWorld($name, $greetings);
+var_dump($greetings);

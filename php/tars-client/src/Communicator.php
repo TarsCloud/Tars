@@ -62,11 +62,11 @@ class Communicator
             // 完成服务的路由
             $this->_queryF = new QueryFWrapper($this->_locator, $this->_socketMode, $this->_refreshEndpointInterval);
             $this->_routeInfo = $this->_queryF->findObjectById($this->_servantName);
+            // 初始化上报组件,只在指定了主控的前提下
+            $this->_statF = new StatFWrapper($this->_locator, $this->_socketMode,
+                $this->_statServantName, $this->_moduleName);
         }
 
-        // 初始化上报组件
-        $this->_statF = new StatFWrapper($this->_locator, $this->_socketMode,
-            $this->_statServantName, $this->_moduleName);
     }
 
     // 同步的socket tcp收发
@@ -133,16 +133,21 @@ class Communicator
 
             $endTime = $this->militime();
 
-            $this->_statF->monitorStat($requestPacket->_servantName, $requestPacket->_funcName, $ip,
-                $port, ($endTime - $startTime), 0, 0);
+            if(!is_null($this->_locator))
+            {
+                $this->_statF->monitorStat($requestPacket->_servantName, $requestPacket->_funcName, $ip,
+                    $port, ($endTime - $startTime), 0, 0);
+            }
 
             return $sBuffer;
         } catch (\Exception $e) {
             $endTime = $this->militime();
 
-            $this->_statF->monitorStat($requestPacket->_servantName, $requestPacket->_funcName, $ip,
-                $port, ($endTime - $startTime), $e->getCode(), $e->getCode());
-
+            if(!is_null($this->_locator))
+            {
+                $this->_statF->monitorStat($requestPacket->_servantName, $requestPacket->_funcName, $ip,
+                    $port, ($endTime - $startTime), $e->getCode(), $e->getCode());
+            }
             throw $e;
         }
     }

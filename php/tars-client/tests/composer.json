@@ -13,22 +13,13 @@
   },
   "autoload": {
     "psr-4": {
-      "App\\": "App/"
+      "PHPTest\\": "PHPTest/"
     }
   },
-  "repositories": [
-    {"type": "composer", "url": "http://composer.inner.yuewen.local/repo/private/"},
-    {"type": "composer", "url": "http://composer.inner.yuewen.local/repo/packagist/"},
-    {"packagist": false}
-  ],
-  "config": {
-    "preferred-install": "dist",
-    "secure-http": false,
-    "http-basic": {
-      "composer.inner.yuewen.local": {
-        "username": "ywcomposer",
-        "password": "yW1120"
-      }
+  "repositories": {
+    "tars": {
+      "type": "composer",
+      "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/tarsphp.json"
     }
   }
 }

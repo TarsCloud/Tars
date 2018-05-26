@@ -64,6 +64,7 @@ class Event
                 return;
             }
         } catch (\Exception $e) {
+            $unpackResult['iVersion'] = 1;
             $rspBuf = $this->protocol->packErrRsp($unpackResult, $e->getCode(), $e->getMessage());
             $response->send($rspBuf);
 

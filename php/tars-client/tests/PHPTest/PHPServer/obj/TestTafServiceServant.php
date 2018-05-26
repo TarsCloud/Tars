@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Server\Servant;
+namespace PHPTest\PHPServer\obj;
 
 use Tars\client\CommunicatorConfig;
 use Tars\client\Communicator;
 use Tars\client\RequestPacket;
 use Tars\client\TUPAPIWrapper;
-use App\Server\Servant\classes\LotofTags;
-use App\Server\Servant\classes\SimpleStruct;
-use App\Server\Servant\classes\OutStruct;
-use App\Server\Servant\classes\ComplicatedStruct;
+use PHPTest\PHPServer\obj\classes\LotofTags;
+use PHPTest\PHPServer\obj\classes\SimpleStruct;
+use PHPTest\PHPServer\obj\classes\OutStruct;
+use PHPTest\PHPServer\obj\classes\ComplicatedStruct;
 
 class TestTafServiceServant
 {
     protected $_communicator;
     protected $_iVersion;
     protected $_iTimeout;
-    public $_servantName = 'App.Server.Servant';
+    public $_servantName = 'PHPTest.PHPServer.obj';
 
     public function __construct(CommunicatorConfig $config)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Server\Servant\classes;
+namespace PHPTest\PHPServer\obj\classes;
 
 class OutStruct extends \TARS_Struct
 {

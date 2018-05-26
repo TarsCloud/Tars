@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Server\Servant\classes;
+namespace PHPTest\PHPServer\obj\classes;
 
 class SimpleStruct extends \TARS_Struct
 {
