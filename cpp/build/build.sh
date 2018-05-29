@@ -10,7 +10,7 @@ BASEPATH=$(cd `dirname $0`; pwd)
 
 case $ARGS in
     all)
-	cd $BASEPATH; cp CMakeLists.txt ../; cmake ..;  make
+        cd $BASEPATH; cp CMakeLists.txt ../; cmake ..;  make -j $(nproc)
         ;;
     cleanall)
         cd $BASEPATH; make clean; rm -rf CMakeFiles/ CMakeCache.txt Makefile util/ tools/ servant/ framework/ test/ cmake_install.cmake *.tgz install_manifest.txt

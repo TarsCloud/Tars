@@ -21,6 +21,7 @@ foreach (FILE ${SRC_LEX_LIST})
             OUTPUT ${CP_SOURCE_CPP_DIR}/${LEX_CPP}
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             COMMAND cp -rf ${LEX_CPP} ${CP_SOURCE_CPP_DIR}
+            DEPENDS ${LEX_CPP}
             COMMENT "cp -rf ${LEX_CPP} ${CP_SOURCE_CPP_DIR}")
 
     #设置依赖
@@ -49,6 +50,7 @@ foreach (FILE ${SRC_YACC_LIST})
             OUTPUT ${CP_SOURCE_H_DIR}/${YACC_H}
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             COMMAND cp -rf ${YACC_H} ${YACC_CPP} ${CP_SOURCE_H_DIR}
+            DEPENDS ${YACC_H}
             COMMENT "cp -rf ${YACC_H} ${YACC_CPP} ${CP_SOURCE_H_DIR}")
 
     #设置依赖

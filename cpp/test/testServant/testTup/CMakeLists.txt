@@ -10,3 +10,4 @@ link_libraries(tarsutil pthread)
 aux_source_directory(. DIR_SRCS)
 add_executable(${TARGETNAME} ${DIR_SRCS})
 
+add_dependencies(${TARGETNAME} TUP-TARS)

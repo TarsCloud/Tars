@@ -23,6 +23,7 @@ foreach (FILE ${SRC_LIST})
             OUTPUT ${CP_SOURCE_H_DIR}/${TARS_H}
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             COMMAND cp -rf ${TARS_H} ${CP_SOURCE_H_DIR}
+            DEPENDS ${TARS_H}
             COMMENT "cp -rf ${TARS_H} ${CP_SOURCE_H_DIR}")
 
     #设置依赖
