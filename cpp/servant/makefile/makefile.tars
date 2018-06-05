@@ -31,9 +31,9 @@ ifneq ($(PB_SRC),)
 	LIB += -lprotobuf
 endif
 
-LOCAL_SRC   += $(sort $(wildcard *.cpp *.c))
+LOCAL_SRC   += $(sort $(wildcard *.cpp *.c) $(PB_CPP))
 
-LOCAL_OBJ   += $(patsubst %.cpp,%.o, $(patsubst %.c,%.o, $(LOCAL_SRC)))
+LOCAL_OBJ   += $(patsubst %.cpp,%.o, $(patsubst %.cc,%.o, $(LOCAL_SRC)))
 
 DEP_FILE    := $(foreach obj, $(LOCAL_OBJ), $(dir $(obj)).$(basename $(notdir $(obj))).d)
 
