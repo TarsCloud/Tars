@@ -4,6 +4,7 @@ vector: map in vector
 --SKIPIF--
 <?php require __DIR__ . "/../include/skipif.inc"; ?>
 --INI--
+zend.assertions=-1
 assert.active=1
 assert.warning=1
 assert.bail=0
@@ -29,6 +30,8 @@ $encodeBufs['vec'] = $buf;
 $requestBuf = \TUPAPI::encode($iVersion, $iRequestId, $servantName, $funcName, $cPacketType, $iMessageType, $iTimeout, $contexts,$statuses,$encodeBufs);
 
 $decodeRet = \TUPAPI::decode($requestBuf);
+assert($decodeRet['status'] == 0);
+
 if($decodeRet['status'] !== 0) {
     echo "error";
 } else {
@@ -40,8 +43,9 @@ if($decodeRet['status'] !== 0) {
         [1 => 'test yong1', 2 => 'test yong2'],
     ];
 
-    assert($data,$out);
-    echo "success";
+    if ($data == $out) {
+        echo "success";
+    }
 }
 
 ?>

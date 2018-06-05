@@ -19,3 +19,17 @@ function fromArray($data, &$structObj)
         }
     }
 }
+
+if (!function_exists('bccomp')) {
+    function bccomp($left_operand, $right_operand, $scale = null) {
+        $tmp = 1;
+        while ($scale--) {
+            $tmp = $tmp / 10;
+        }
+        if (($left_operand - $right_operand) < $tmp && ($right_operand - $left_operand) < $tmp) {
+            return 0;
+        } else {
+            return ($left_operand > $right_operand) ? 1 : -1;
+        }
+    }
+}

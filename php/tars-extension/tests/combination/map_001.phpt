@@ -4,6 +4,7 @@ map: string & int64
 --SKIPIF--
 <?php require __DIR__ . "/../include/skipif.inc"; ?>
 --INI--
+zend.assertions=-1
 assert.active=1
 assert.warning=1
 assert.bail=0
@@ -26,6 +27,8 @@ $encodeBufs['map'] = $buf;
 $requestBuf = \TUPAPI::encode($iVersion, $iRequestId, $servantName, $funcName, $cPacketType, $iMessageType, $iTimeout, $contexts,$statuses,$encodeBufs);
 
 $decodeRet = \TUPAPI::decode($requestBuf);
+assert($decodeRet['status'] == 0);
+
 if($decodeRet['status'] !== 0) {
     echo "error";
 } else {
@@ -35,8 +38,9 @@ if($decodeRet['status'] !== 0) {
     $out = \TUPAPI::getMap("map", $map,$respBuf);
 
     $okData = ["test1" => 1, "test2" => 2];
-    assert($okData,$out);
-    echo "success";
+    if ($okData == $out) {
+        echo "success";
+    }
 }
 
 ?>

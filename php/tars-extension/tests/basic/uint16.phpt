@@ -4,6 +4,7 @@ basic: uint16
 --SKIPIF--
 <?php require __DIR__ . "/../include/skipif.inc"; ?>
 --INI--
+zend.assertions=-1
 assert.active=1
 assert.warning=1
 assert.bail=0
@@ -22,6 +23,8 @@ $encodeBufs['uint16'] = $buf;
 $requestBuf = \TUPAPI::encode($iVersion, $iRequestId, $servantName, $funcName, $cPacketType, $iMessageType, $iTimeout, $contexts,$statuses,$encodeBufs);
 
 $decodeRet = \TUPAPI::decode($requestBuf);
+assert($decodeRet['status'] == 0);
+
 if($decodeRet['status'] !== 0) {
     echo "error";
 } else {
@@ -29,8 +32,9 @@ if($decodeRet['status'] !== 0) {
 
     $out = \TUPAPI::getUInt16("uint16",$respBuf);
 
-    assert($uint16,$out);
-    echo "success";
+    if ($uint16 == $out) {
+        echo "success";
+    }
 }
 
 ?>

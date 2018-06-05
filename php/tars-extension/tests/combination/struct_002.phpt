@@ -4,6 +4,7 @@ struct: all type struct
 --SKIPIF--
 <?php require __DIR__ . "/../include/skipif.inc"; ?>
 --INI--
+zend.assertions=-1
 assert.active=1
 assert.warning=1
 assert.bail=0
@@ -39,6 +40,8 @@ $encodeBufs['struct'] = $buf;
 $requestBuf = \TUPAPI::encode($iVersion, $iRequestId, $servantName, $funcName, $cPacketType, $iMessageType, $iTimeout, $contexts,$statuses,$encodeBufs);
 
 $decodeRet = \TUPAPI::decode($requestBuf);
+assert($decodeRet['status'] == 0);
+
 if($decodeRet['status'] !== 0) {
     echo "error";
 } else {
@@ -51,8 +54,22 @@ if($decodeRet['status'] !== 0) {
     $result = \TUPAPI::getStruct("struct",$outAllTypeStruct,$respBuf);
     fromArray($result,$outAllTypeStruct);
 
-    assert($allTypeStruct,$outAllTypeStruct);
-    echo "success";
+
+    if ($allTypeStruct->bool == $outAllTypeStruct->bool &&
+        $allTypeStruct->char == $outAllTypeStruct->char &&
+        $allTypeStruct->uint8 == $outAllTypeStruct->uint8 &&
+        $allTypeStruct->short == $outAllTypeStruct->short &&
+        bccomp($allTypeStruct->float, $outAllTypeStruct->float, 7) == 0 &&
+        $allTypeStruct->double == $outAllTypeStruct->double &&
+        $allTypeStruct->int32 == $outAllTypeStruct->int32 &&
+        $allTypeStruct->uint32 == $outAllTypeStruct->uint32 &&
+        $allTypeStruct->int64 == $outAllTypeStruct->int64 &&
+        $allTypeStruct->string == $outAllTypeStruct->string
+    ) {
+        echo "success";
+    } else {
+        var_dump($outAllTypeStruct);
+    }
 }
 
 ?>

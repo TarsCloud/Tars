@@ -4,6 +4,7 @@ map: vector in map with key obj
 --SKIPIF--
 <?php require __DIR__ . "/../include/skipif.inc"; ?>
 --INI--
+zend.assertions=-1
 assert.active=1
 assert.warning=1
 assert.bail=0
@@ -33,6 +34,8 @@ $encodeBufs['map'] = $buf;
 $requestBuf = \TUPAPI::encode($iVersion, $iRequestId, $servantName, $funcName, $cPacketType, $iMessageType, $iTimeout, $contexts,$statuses,$encodeBufs);
 
 $decodeRet = \TUPAPI::decode($requestBuf);
+assert($decodeRet['status'] == 0);
+
 if($decodeRet['status'] !== 0) {
     echo "error";
 } else {
@@ -46,9 +49,9 @@ if($decodeRet['status'] !== 0) {
     fromArray($out[0]['key'], $retKeyS);
     fromArray($out[0]['value'], $retValS);
 
-    assert($retKeyS,$keyS);
-    assert($retValS,$valS);
-    echo "success";
+    if ($retKeyS == $keyS && $retValS == $valS) {
+        echo "success";
+    }
 }
 
 ?>

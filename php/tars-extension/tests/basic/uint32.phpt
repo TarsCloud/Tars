@@ -4,6 +4,7 @@ basic: uint32
 --SKIPIF--
 <?php require __DIR__ . "/../include/skipif.inc"; ?>
 --INI--
+zend.assertions=-1
 assert.active=1
 assert.warning=1
 assert.bail=0
@@ -22,6 +23,8 @@ $encodeBufs['uint32'] = $buf;
 $requestBuf = \TUPAPI::encode($iVersion, $iRequestId, $servantName, $funcName, $cPacketType, $iMessageType, $iTimeout, $contexts,$statuses,$encodeBufs);
 
 $decodeRet = \TUPAPI::decode($requestBuf);
+assert($decodeRet['status'] == 0);
+
 if($decodeRet['status'] !== 0) {
     echo "error";
 } else {
@@ -29,8 +32,9 @@ if($decodeRet['status'] !== 0) {
 
     $out = \TUPAPI::getUInt32("uint32",$respBuf);
 
-    assert($uint32,$out);
-    echo "success";
+    if ($uint32 == $out) {
+        echo "success";
+    }
 }
 
 ?>
