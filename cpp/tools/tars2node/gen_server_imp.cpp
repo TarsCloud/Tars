@@ -14,16 +14,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
+#include "code_generator.h"
 
-#include "tars2node.h"
-
-#define TAB     g_parse->getTab()
-#define INC_TAB g_parse->incTab()
-#define DEL_TAB g_parse->delTab()
-
-string Tars2Node::generateJSServerImp(const NamespacePtr &nPtr, const InterfacePtr &pPtr, const OperationPtr &oPtr)
+string CodeGenerator::generateJSServerImp(const NamespacePtr &nPtr, const InterfacePtr &pPtr, const OperationPtr &oPtr)
 {
-    std::ostringstream str;
+    ostringstream str;
     str << nPtr->getId() << "." << pPtr->getId() << "Imp.prototype." << oPtr->getId() << " = function (current";
 
     vector<ParamDeclPtr> & vParamDecl = oPtr->getAllParamDeclPtr();
@@ -33,13 +28,15 @@ string Tars2Node::generateJSServerImp(const NamespacePtr &nPtr, const InterfaceP
     }
 
     str << ") {" << endl;
-    str << "    //TODO::\r\n" << endl;
-    str << "}" << endl << endl;
+    INC_TAB;
+    str << TAB << "//TODO::" << endl;
+    DEL_TAB;
+    str << "};" << endl << endl;
 
     return str.str();
 }
 
-string Tars2Node::generateJSServerImp(const NamespacePtr &nPtr, const InterfacePtr &pPtr)
+string CodeGenerator::generateJSServerImp(const NamespacePtr &nPtr, const InterfacePtr &pPtr)
 {
     ostringstream str;
 
@@ -53,9 +50,9 @@ string Tars2Node::generateJSServerImp(const NamespacePtr &nPtr, const InterfaceP
     return str.str();
 }
 
-string Tars2Node::generateJSServerImp(const ContextPtr &cPtr, const NamespacePtr &nPtr)
+string CodeGenerator::generateJSServerImp(const ContextPtr &cPtr, const NamespacePtr &nPtr)
 {
-    std::ostringstream str;
+    ostringstream str;
 
     vector<InterfacePtr> & is = nPtr->getAllInterfacePtr();
     for (size_t i = 0; i < is.size(); i++)
@@ -66,19 +63,20 @@ string Tars2Node::generateJSServerImp(const ContextPtr &cPtr, const NamespacePtr
     return str.str();
 }
 
-void Tars2Node::generateJSServerImp(const ContextPtr &cPtr)
+void CodeGenerator::generateJSServerImp(const ContextPtr &cPtr)
 {
-    std::string sFileName = tars::TC_File::excludeFileExt(_sToPath + tars::TC_File::extractFileName(cPtr->getFileName())) + "Imp.js";
-    if (tars::TC_File::isFileExist(sFileName))
+    string sFileName = TC_File::excludeFileExt(_sToPath + TC_File::extractFileName(cPtr->getFileName())) + "Imp.js";
+    if (TC_File::isFileExist(sFileName))
     {
         return ;
     }
 
-    std::ostringstream str;
-    str << g_parse->printHeaderRemark();
+    ostringstream str;
+    str << printHeaderRemark("Imp");
+    str << "\"use strict\";" << endl << endl;
 
     vector<NamespacePtr> namespaces = cPtr->getNamespaces();
-    std::set<string> setNamespace;
+    set<string> setNamespace;
     for(size_t i = 0; i < namespaces.size(); i++)
     {
         if (setNamespace.count(namespaces[i]->getId()) != 0)
@@ -87,15 +85,15 @@ void Tars2Node::generateJSServerImp(const ContextPtr &cPtr)
         }
         setNamespace.insert(namespaces[i]->getId());
 
-        str << "var " << namespaces[i]->getId() << " = require('./" 
-            << tars::TC_File::excludeFileExt(tars::TC_File::extractFileName(cPtr->getFileName())) << ".js')." 
+        str << "var " << namespaces[i]->getId() << " = require(\"./" 
+            << TC_File::excludeFileExt(TC_File::extractFileName(cPtr->getFileName())) << ".js\")." 
             << namespaces[i]->getId() << ";" << endl;
 
         str << "module.exports." << namespaces[i]->getId() << " = " << namespaces[i]->getId() << ";" << endl;
     }
     str << endl;
 
-    std::set<string> setInterface;
+    set<string> setInterface;
     for(size_t i = 0; i < namespaces.size(); i++) 
     {
         vector<InterfacePtr> & is = namespaces[i]->getAllInterfacePtr();
@@ -107,9 +105,11 @@ void Tars2Node::generateJSServerImp(const ContextPtr &cPtr)
             }
             setInterface.insert(namespaces[i]->getId() + "::" + is[ii]->getId());
 
-            str << namespaces[i]->getId() << "." << is[ii]->getId() << "Imp.prototype.initialize = function ( ) {" << endl;
-            str << "    //TODO::" << endl << endl;
-            str << "}" << endl << endl;
+            str << namespaces[i]->getId() << "." << is[ii]->getId() << "Imp.prototype.initialize = function () {" << endl;
+            INC_TAB;
+            str << TAB << "//TODO::" << endl;
+            DEL_TAB;
+            str << "};" << endl << endl;
         }
     }
 
@@ -118,7 +118,6 @@ void Tars2Node::generateJSServerImp(const ContextPtr &cPtr)
 		str << generateJSServerImp(cPtr, namespaces[i]);
 	}
 
-    tars::TC_File::makeDirRecursive(_sToPath, 0755);
+    TC_File::makeDirRecursive(_sToPath, 0755);
     makeUTF8File(sFileName, str.str());
 }
-

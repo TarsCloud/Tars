@@ -14,95 +14,114 @@
  * specific language governing permissions and limitations under the License.
  */
 
+#include "code_generator.h"
 
-#include "tars2node.h"
-
-string Tars2Node::makeName()
+string CodeGenerator::makeName()
 {
     int iHigh = uiNameIndex/26;
     int iLow  = uiNameIndex%26;
 
     uiNameIndex++;
 
+    ostringstream s;
+
+    s << "_" << TC_Common::upper(IDL_NAMESPACE_STR) << "_MODULE_";
+
     if (iHigh != 0)
     {
-        return "_TARS_MODULE_" + string(1, (char)(iHigh + 65)) + string(1, (char)(iLow + 65)) + "_"; 
+        s << string(1, (char)(iHigh + 65)) << string(1, (char)(iLow + 65)); 
+    }
+    else
+    {
+        s << string(1, (char)(iLow + 65));
     }
 
-    return "_TARS_MODULE_" + string(1, (char)(iLow + 65)) + "_";
+    s << "_";
+
+    return s.str();
 }
 
-string Tars2Node::findName(const std::string & sNamespace, const std::string & sName) 
+bool CodeGenerator::isDependent(const string& sNamespace, const string& sName) const
 {
-    #ifdef DUMP_FIND_NAME
+    return _depMembers.find(sNamespace + "::" + sName) != _depMembers.end();
+}
+
+string CodeGenerator::findName(const string& sNamespace, const string& sName) 
+{
+#ifdef DUMP_FIND_NAME
     cout << "FINDNAME BEGIN:" << sNamespace << "|" << sName << endl;
-    #endif
+#endif
 
     for (map<string, ImportFile>::iterator it = _mapFiles.begin(); it != _mapFiles.end(); it++)
     {
-        #ifdef DUMP_FIND_NAME
+    #ifdef DUMP_FIND_NAME
         for (map<string, ImportFileType>::iterator demo = it->second.mapVars.begin(); demo != it->second.mapVars.end(); demo++)
         {
             cout << "FINDNAME:" << it->second.sModule << "|" << demo->first << "|" << demo->second.sNamespace << "|" << demo->second.sName << endl;
         }
-        #endif
+    #endif
 
-        std::map<string, ImportFileType>::iterator inIter = it->second.mapVars.find(sNamespace + "::" + sName);
+        map<string, ImportFileType>::iterator inIter = it->second.mapVars.find(sNamespace + "::" + sName);
         if (inIter == it->second.mapVars.end())
         {
             continue;
         }
 
-        if (inIter->second.iType == ImportFileType::EN_ENUM)
-        {
-            return it->second.sModule + (it->second.sModule.empty()?"":".") + inIter->second.sNamespace + "." + inIter->second.sName;
-        }
+    #ifdef DUMP_FIND_NAME
+        cout << "DEPMEMBER:" << it->first << "|" << inIter->second.sNamespace << "::" << inIter->second.sName << endl;
+    #endif
+        _depMembers.insert(inIter->second.sNamespace + "::" + inIter->second.sName);
 
-        if (inIter->second.iType == ImportFileType::EN_ENUM_VALUE)
+        switch (inIter->second.iType)
         {
-            return it->second.sModule + (it->second.sModule.empty()?"":".") + inIter->second.sNamespace + "." + inIter->second.sTypeName + "." + inIter->second.sName;
+            case ImportFileType::EN_ENUM : // [[fallthrough]]
+            case ImportFileType::EN_STRUCT :
+            {
+                return it->second.sModule + (it->second.sModule.empty()?"":".") + inIter->second.sNamespace + "." + inIter->second.sName;
+            }
+            case ImportFileType::EN_ENUM_VALUE :
+            {
+                return it->second.sModule + (it->second.sModule.empty()?"":".") + inIter->second.sNamespace + "." + inIter->second.sTypeName + "." + inIter->second.sName;
+            }
+            default :
+            {
+                return it->second.sModule;
+            }
         }
-
-        if (inIter->second.iType == ImportFileType::EN_STRUCT)
-        {
-            return it->second.sModule + (it->second.sModule.empty()?"":".") + inIter->second.sNamespace + "." + inIter->second.sName;
-        }
-
-        return it->second.sModule;
     }
 
     return "";
 }
 
-void Tars2Node::scan(const std::string & sFile, bool bNotPrefix)
+void CodeGenerator::scan(const string& sFile, bool bNotPrefix)
 {
     if (_mapFiles.find(sFile) != _mapFiles.end())
     {
         return ;
     }
 
-    std::string sTarsFile = getRealFileInfo(sFile);
-    g_parse->parse(sTarsFile);
+    string sIdlFile = getRealFileInfo(sFile);
+    g_parse->parse(sIdlFile);
 
-    std::vector<ContextPtr> contexts = g_parse->getContexts();
+    vector<ContextPtr> contexts = g_parse->getContexts();
 
 	for(size_t i = 0; i < contexts.size(); i++)
 	{
-		if (sTarsFile == contexts[i]->getFileName())
+		if (sIdlFile == contexts[i]->getFileName())
 		{
             ImportFile item;
-            item.sFile   = "./" + tars::TC_File::excludeFileExt(tars::TC_File::extractFileName(sFile)) + "Tars.js";
+            item.sFile   = "./" + TC_File::excludeFileExt(TC_File::extractFileName(sFile)) + IDL_TYPE + ".js";
             item.sModule = bNotPrefix?"":makeName();
 
             vector<NamespacePtr> namespaces = contexts[i]->getNamespaces();
             for (size_t ii = 0; ii < namespaces.size(); ii++)
             {
-                std::string sNamespace = namespaces[ii]->getId();
+                string sNamespace = namespaces[ii]->getId();
 
                 vector<StructPtr> & ss = namespaces[ii]->getAllStructPtr();
                 for (size_t iii = 0; iii < ss.size(); iii++)
                 {
-                    vector<string> vecNames = tars::TC_Common::sepstr<string>(ss[iii]->getSid(), "::");
+                    vector<string> vecNames = TC_Common::sepstr<string>(ss[iii]->getSid(), "::");
 
                     ImportFileType temp;
                     temp.iType      = ImportFileType::EN_STRUCT;
@@ -115,7 +134,7 @@ void Tars2Node::scan(const std::string & sFile, bool bNotPrefix)
                 vector<EnumPtr> & es = namespaces[ii]->getAllEnumPtr();
                 for (size_t iii = 0; iii < es.size(); iii++)
                 {
-                    vector<string> vecNames = tars::TC_Common::sepstr<string>(es[iii]->getSid(), "::");
+                    vector<string> vecNames = TC_Common::sepstr<string>(es[iii]->getSid(), "::");
 
                     ImportFileType temp;
                     temp.iType      = ImportFileType::EN_ENUM;
@@ -133,9 +152,9 @@ void Tars2Node::scan(const std::string & sFile, bool bNotPrefix)
                         temp.sTypeName  = vecNames[1];
                         temp.sName      = eMember[iiii]->getId();
 
-                        #ifdef DUMP_FIND_NAME
+                    #ifdef DUMP_FIND_NAME
                         cout << "GET::::" << temp.sNamespace << "|" << temp.sName << endl;
-                        #endif
+                    #endif
 
                         item.mapVars.insert(make_pair(temp.sNamespace + "::" + temp.sName, temp));
                     }
@@ -147,11 +166,10 @@ void Tars2Node::scan(const std::string & sFile, bool bNotPrefix)
             vector<string> vecFiles = contexts[i]->getIncludes();
             for (size_t ii = 0; ii < vecFiles.size(); ii++)
             {
-                std::string sFileName = tars::TC_File::extractFilePath(vecFiles[ii]) + tars::TC_File::excludeFileExt(tars::TC_File::extractFileName(vecFiles[ii])) + ".tars";
+                string sFileName = TC_File::extractFilePath(vecFiles[ii]) + TC_File::excludeFileExt(TC_File::extractFileName(vecFiles[ii])) + "." + TC_Common::lower(IDL_TYPE);
 
                 scan(sFileName, false);
             }
 		}
 	}
 }
-
