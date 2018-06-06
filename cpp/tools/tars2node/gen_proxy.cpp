@@ -71,7 +71,19 @@ string CodeGenerator::generateJSProxy(const NamespacePtr &nPtr, const InterfaceP
     str << TAB << "try {" << endl;
     INC_TAB;
 
-    if (oPtr->getReturnPtr()->getTypePtr() || vParamDecl.size() != 0)
+    bool bHasParamOut = false;
+    if (vParamDecl.size() > 0) 
+    {
+        for (size_t i = 0; i < vParamDecl.size(); i++)
+        {
+            if (vParamDecl[i]->isOut()) {
+                bHasParamOut = true;
+                break;   
+            }
+        }
+    }
+
+    if (oPtr->getReturnPtr()->getTypePtr() || bHasParamOut)
     {
         str << TAB << "var is = new " << IDL_NAMESPACE_STR << "Stream." << IDL_TYPE << "InputStream(data.response.sBuffer);" << endl;
     }
@@ -100,18 +112,6 @@ string CodeGenerator::generateJSProxy(const NamespacePtr &nPtr, const InterfaceP
         }
 
         str << ")";
-    }
-
-    bool bHasParamOut = false;
-    if (vParamDecl.size() > 0) 
-    {
-        for (size_t i = 0; i < vParamDecl.size(); i++)
-        {
-            if (vParamDecl[i]->isOut()) {
-                bHasParamOut = true;
-                break;   
-            }
-        }
     }
 
     if (bHasParamOut)
