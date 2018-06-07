@@ -1,0 +1,27 @@
+[submodule "nodejs/config"]
+	path = nodejs/config
+	url = https://github.com/tars-node/config.git
+[submodule "nodejs/dyeing"]
+	path = nodejs/dyeing
+	url = https://github.com/tars-node/dyeing.git
+[submodule "nodejs/logs"]
+	path = nodejs/logs
+	url = https://github.com/tars-node/logs.git
+[submodule "nodejs/monitor"]
+	path = nodejs/monitor
+	url = https://github.com/tars-node/monitor.git
+[submodule "nodejs/node-agent"]
+	path = nodejs/node-agent
+	url = https://github.com/tars-node/node-agent.git
+[submodule "nodejs/notify"]
+	path = nodejs/notify
+	url = https://github.com/tars-node/notify.git
+[submodule "nodejs/utils"]
+	path = nodejs/utils
+	url = https://github.com/tars-node/utils.git
+[submodule "nodejs/winston-tars"]
+	path = nodejs/winston-tars
+	url = https://github.com/tars-node/winston-tars.git
+[submodule "nodejs/deploy"]
+	path = nodejs/deploy
+	url = https://github.com/tars-node/deploy.git
