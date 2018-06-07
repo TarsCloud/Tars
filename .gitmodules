@@ -25,3 +25,6 @@
 [submodule "nodejs/deploy"]
 	path = nodejs/deploy
 	url = https://github.com/tars-node/deploy.git
+[submodule "nodejs/registry"]
+	path = nodejs/registry
+	url = https://github.com/tars-node/registry.git
