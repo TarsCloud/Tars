@@ -34,7 +34,7 @@ if($decodeRet['status'] !== 0) {
 
     $out = \TUPAPI::getFloat("float",$respBuf);
 
-    if (bccomp($float, $out, 7) == 0) {
+    if (floatComp($float, $out, 7) == 0) {
         echo "success";
     }
 }

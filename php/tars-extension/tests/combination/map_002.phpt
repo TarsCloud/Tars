@@ -41,7 +41,7 @@ if($decodeRet['status'] !== 0) {
     $sValue = $sData[$sKey];
     $rKey = key($out);
     $rValue = $out[$rKey];
-    if ($sKey == $rKey && (bccomp($sValue, $rValue, 7) == 0)) {
+    if ($sKey == $rKey && (floatComp($sValue, $rValue, 7) == 0)) {
         echo "success";
     }
 }

@@ -59,12 +59,13 @@ if($decodeRet['status'] !== 0) {
         $allTypeStruct->char == $outAllTypeStruct->char &&
         $allTypeStruct->uint8 == $outAllTypeStruct->uint8 &&
         $allTypeStruct->short == $outAllTypeStruct->short &&
-        bccomp($allTypeStruct->float, $outAllTypeStruct->float, 7) == 0 &&
+        floatComp($allTypeStruct->float, $outAllTypeStruct->float, 7) == 0 &&
         $allTypeStruct->double == $outAllTypeStruct->double &&
         $allTypeStruct->int32 == $outAllTypeStruct->int32 &&
         $allTypeStruct->uint32 == $outAllTypeStruct->uint32 &&
         $allTypeStruct->int64 == $outAllTypeStruct->int64 &&
-        $allTypeStruct->string == $outAllTypeStruct->string
+        $allTypeStruct->string == $outAllTypeStruct->string &&
+        "ta" == $outAllTypeStruct->vecchar
     ) {
         echo "success";
     } else {
