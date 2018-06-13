@@ -1662,6 +1662,9 @@ class StructParser
      */
     public function structBodyParseLine()
     {
+		$wholeType='';
+		$defaultValue='';
+
         $validLine = false;
 
         $this->state = 'init';
