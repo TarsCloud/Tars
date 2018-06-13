@@ -94,4 +94,6 @@ tars进行配置文件解析的模块
 
 在tars-server模块中,三个不同的http、timer、tcp server都需要使用不同的模块,请务必进行新的模板的添加和修改工作!!
 
-    
+## 演讲稿
+
+* [TARS-PHP：PHP构建高性能RPC框架](https://ppt.baomitu.com/d/78a5b24e)
