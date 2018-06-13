@@ -1582,7 +1582,7 @@ class StructParser
 
         $structClassStr .= $this->consts.$this->doubleReturn;
         $structClassStr .= $this->variables.$this->doubleReturn;
-        $fieldsPrefix = $this->tabSymbol.'protected static $__fields = array('.$this->returnSymbol;
+        $fieldsPrefix = $this->tabSymbol.'protected static $_fields = array('.$this->returnSymbol;
         $fieldsSuffix = $this->tabSymbol.');'.$this->doubleReturn;
 
         $structClassStr .= $fieldsPrefix;
@@ -1592,7 +1592,7 @@ class StructParser
         // 处理最后一行
 
         $construct = $this->tabSymbol.'public function __construct() {'.$this->returnSymbol.
-            $this->doubleTab."parent::__construct('".$this->uniqueName.'_'.$this->structName."', self::\$__fields);".$this->returnSymbol
+            $this->doubleTab."parent::__construct('".$this->uniqueName.'_'.$this->structName."', self::\$_fields);".$this->returnSymbol
             .$this->extraContructs
             .$this->extraExtInit
             .$this->tabSymbol.'}'.$this->returnSymbol;
@@ -1668,6 +1668,9 @@ class StructParser
 
         $lineString = '';
         $word = '';
+        $wholeType = '';
+        $defaultValue = null;
+
 
         $mapVectorState = false;
         while (1) {

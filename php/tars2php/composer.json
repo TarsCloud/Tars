@@ -1,7 +1,7 @@
 {
     "name": "phptars/tars2php",
     "description": "php代码自动生成工具",
-    "version":"0.1.0",
+    "version":"0.1.1",
     "authors": [
         {
             "name": "Chen Liang",

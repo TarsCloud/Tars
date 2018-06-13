@@ -11,6 +11,16 @@
         }
       }
     },
+    "phptars/tars2php": {
+      "0.1.1": {
+        "name": "phptars/tars2php",
+        "version": "0.1.1",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars2php-0.1.1.zip?raw=true",
+          "type": "zip"
+        }
+      }
+    },
     "phptars/tars-client": {
       "0.1.0": {
         "name": "phptars/tars-client",
