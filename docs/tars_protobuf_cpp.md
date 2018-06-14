@@ -1,17 +1,17 @@
-# tars֧��protobuf service�����ļ�
+# tars支持protobuf service描述文件
 
-��������˽⵽tars��ʱ�����Ѿ��в�������ҵ�������protobufЭ�飻�����Ҫ����Щҵ��Ǩ�Ƶ�tars���㻹��Ҫ�ֶ���proto�ļ������tars�ļ�,�ǳ��鷳�������׳�����
-����tarsʹ��protoc�Ĳ�����ƣ��ṩ�˶�proto�ļ���ֱ��֧�֣��ܹ�����tars rpc��ش��룬ʹ��Ǩ��ƽ��ʡ�ġ�
-
-
-## ʹ�÷���
+如果当你了解到tars的时候，你已经有不少已有业务采用了protobuf协议；如果想要把这些业务迁移到tars，你还需要手动把proto文件翻译成tars文件,非常麻烦而且容易出错。
+现在tars使用protoc的插件机制，提供了对proto文件的直接支持，能够生成tars rpc相关代码，使得迁移平滑省心。
 
 
-### 1. ׼��proto�ļ�
-proto�ļ����﷨�ǲ����Ƶģ������ʹ��proto2��proto3��
-��ע�⣬һ������**option cc_generic_services=false;**
-��Ϊ���ǵ�Ŀ����ǲ�ʹ��protoc���ɵ�pb rpc�ӿڣ�����Ҫ��tars����ӹܣ����ɷ���tars��ܵ�rpc�ӿ�.
-һ��proto�ļ���ʾ������:
+## 使用方法
+
+
+### 1. 准备proto文件
+proto文件的语法是不限制的，你可以使用proto2或proto3；
+但注意，一定加上**option cc_generic_services=false;**
+因为我们的目标就是不使用protoc生成的pb rpc接口，而是要用tars插件接管，生成符合tars框架的rpc接口.
+一个proto文件的示例如下:
 
 
 ```cpp
@@ -37,8 +37,8 @@ service Hello {
 ```
 
 
-### 2. ֱ��ִ��make����
-��Ϊ����tars pb�������䣬�Ѿ������ڿ��makefile.tars�ļ��С�
-����protocĬ�����ɵ��ļ�������.pb.h��׺,tars���Ҳ��ѭ��������������ɵ��ļ���׺��.tars.h
+### 2. 直接执行make即可
+因为调用tars pb插件的语句，已经内置在框架makefile.tars文件中。
+由于protoc默认生成的文件名带有.pb.h后缀,tars插件也遵循这个命名规则，生成的文件后缀是.tars.h
 
 
