@@ -23,6 +23,11 @@
 #if TARS_SSL
 #include "util/tc_openssl.h"
 #endif
+
+#if TARS_HTTP2
+#include "util/tc_nghttp2.h"
+#include "util/tc_http2clientmgr.h"
+#endif
 namespace tars
 {
 ///////////////////////////////////////////////////////////////////////
@@ -175,12 +180,11 @@ void Transceiver::_onConnect()
         {
             this->sendRequest(out.data(), out.size(), true);
         }
+        return;
     }
-    else
 #endif
-    {
-        _doAuthReq();
-    }
+
+    _doAuthReq();
 }
 
 void Transceiver::_doAuthReq()
@@ -246,6 +250,10 @@ void Transceiver::close()
         _openssl->Release();
         _openssl.reset();
     }
+#endif
+
+#if TARS_HTTP2
+    Http2ClientSessionManager::getInstance()->delSession(_adapterProxy->getId());
 #endif
 
     _adapterProxy->getObjProxy()->getCommunicatorEpoll()->delFd(_fd,&_fdInfo,EPOLLIN|EPOLLOUT);
@@ -434,8 +442,7 @@ int TcpTransceiver::doResponse(list<ResponsePacket>& done)
                 }
                 else
                 {
-                    if (!out.empty())
-                        this->sendRequest(out.data(), out.size(), true);
+                    sendRequest(out.data(), out.size(), true);
                 }
 
                 _recvBuffer.Clear();
@@ -451,8 +458,18 @@ int TcpTransceiver::doResponse(list<ResponsePacket>& done)
                 len  = plainBuf->size();
             }
 #endif
-            size_t pos = _adapterProxy->getObjProxy()->getProxyProtocol().responseFunc(
-                data, len, done);
+            size_t pos = 0;
+            ProxyProtocol& proto = _adapterProxy->getObjProxy()->getProxyProtocol();
+
+            if (proto.responseExFunc) 
+            {
+                long id = _adapterProxy->getId();
+                pos = proto.responseExFunc(data, len, done, (void*)id);
+            }
+            else
+            {
+                pos = proto.responseFunc(data, len, done);
+            }
 
             if(pos > 0)
             {
@@ -510,6 +527,10 @@ int TcpTransceiver::send(const void* buf, uint32_t len, uint32_t flag)
 
         return iRet;
     }
+
+    // EAGAIN不能认为是错误
+    if (iRet < 0 && errno == EAGAIN)
+        iRet = 0;
 
     TLOGINFO("[TARS][tcp send," << _adapterProxy->getObjProxy()->name() << ",fd:" << _fd 
         << ",desc:" << _ep.desc() << ",len:" << iRet << "]" << endl);
