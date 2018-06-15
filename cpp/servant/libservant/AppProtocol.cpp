@@ -90,6 +90,27 @@ static ssize_t reqbody_read_callback(nghttp2_session *session, int32_t stream_id
     return len;
 }
 
+size_t http1Response(const char* recvBuffer, size_t length, std::list<tars::ResponsePacket>& done)
+{
+    tars::TC_HttpResponse httpRsp;
+    bool ok = httpRsp.decode(std::string(recvBuffer, length));
+    if(!ok)
+        return 0;
+
+    ResponsePacket rsp;
+    rsp.status["status"]  = httpRsp.getResponseHeaderLine();
+    for (const auto& kv : httpRsp.getHeaders())
+    {
+        // 响应的头部 
+        rsp.status[kv.first] = kv.second; 
+    } 
+
+    std::string content(httpRsp.getContent()); 
+    rsp.sBuffer.assign(content.begin(), content.end());
+    done.push_back(rsp);
+    return httpRsp.getHeadLength() + httpRsp.getContentLength();
+}
+
 std::string encodeHttp2(RequestPacket& request, TC_NgHttp2* session)
 {
     std::vector<nghttp2_nv> nva;

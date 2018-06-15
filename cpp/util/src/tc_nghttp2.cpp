@@ -197,18 +197,7 @@ void TC_NgHttp2::Init()
     _state = Http2;
 }
 
-static
-char trans2token68(char c)
-{
-    if (c == '+')
-        return '-';
-    else if (c == '/')
-        return '_';
-    else
-        return c;
-}
-
-int TC_NgHttp2::settings(int maxCurrentStreams)
+int TC_NgHttp2::settings(unsigned int maxCurrentStreams)
 {
     nghttp2_settings_entry iv[2] = { 
                                         {NGHTTP2_SETTINGS_MAX_CONCURRENT_STREAMS, maxCurrentStreams},

@@ -137,17 +137,13 @@ public:
      */
     void Init();
     /** 
-     * @brief 先协商，成功后才有HTTP2握手+setting
-     */
-    int negotiate(std::string& out, const std::string& host, int maxCurrentStreams = 10);
-    /** 
      * @brief 协商结果
      */
     void onNegotiateDone(bool succ);
     /** 
      * @brief HTTP2握手+setting
      */
-    int settings(int maxCurrentStreams = 1);
+    int settings(unsigned int maxCurrentStreams = 1);
     /** 
      * @brief  当前缓冲区
      */

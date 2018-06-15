@@ -844,11 +844,6 @@ void ServantProxy::http_call(const std::string& method,
                              std::map<std::string, std::string>& rheaders,
                              std::string& rbody)
 {
-    if (_objectProxy[0]->getProtoName() != HTTP2)
-    {
-        throw TC_Exception("The proto is not HTTP2");
-    }
-
     ReqMessage* msg = new ReqMessage();
 
     msg->init(ReqMessage::SYNC_CALL, NULL, "");

@@ -497,14 +497,16 @@ public:
 };
 
 class TC_NgHttp2;
-std::string encodeHttp1(RequestPacket& request);
+
+void http1Request(const tars::RequestPacket& request, std::string& out);
+size_t http1Response(const char* recvBuffer, size_t length, std::list<tars::ResponsePacket>& done);
 std::string encodeHttp2(RequestPacket& request, TC_NgHttp2* session);
 
 // ENCODE function, called by network thread
 void http2Request(const tars::RequestPacket& request, std::string& out);
 
 // DECODE function, called by network thread
-size_t http2Response(const char* recvBuffer, size_t length, std::list<tars::ResponsePacket>& done, long userData);
+size_t http2Response(const char* recvBuffer, size_t length, std::list<tars::ResponsePacket>& done, void* userData);
 
 
 //////////////////////////////////////////////////////////////////////
