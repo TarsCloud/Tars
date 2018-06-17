@@ -2,10 +2,10 @@
     "name" : "tars-tcp-server-demo",
     "description": "tars tcp server",
     "require": {
-        "phptars/tars-server": "0.1.1",
-        "phptars/tars-deploy": "0.1.0",
-        "phptars/tars-log": "0.1.1",
-        "phptars/tars2php": "0.1.0",
+        "phptars/tars-server": "~0.1",
+        "phptars/tars-deploy": "~0.1",
+        "phptars/tars-log": "~0.1",
+        "phptars/tars2php": "~0.1",
         "ext-zip" : ">=0.0.1"
     },
     "autoload": {

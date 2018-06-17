@@ -35,8 +35,8 @@ class Stop extends CommandBase
             return;
         }
 
-        $pidList = implode(' ', $ret['pidList']);
-        $cmd = "kill -9 {$pidList}";
+        $masterPid = implode(' ', $ret['masterPid']);
+        $cmd = "kill -15 {$masterPid}";
         exec($cmd, $output, $r);
 
         if ($r === false) { // kill失败时

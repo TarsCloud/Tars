@@ -8,10 +8,8 @@
 
 namespace Tars\protocol;
 
-use Tars\Consts;
 use Tars\core\Request;
 use Tars\Code;
-use Tars\config\ConfigServant;
 use Tars\core\Response;
 
 class TARSProtocol implements Protocol
@@ -24,59 +22,6 @@ class TARSProtocol implements Protocol
         $unpackResult = $this->unpackReq($request->reqBuf);
         $sServantName = $unpackResult['sServantName'];
         $sFuncName = $unpackResult['sFuncName'];
-
-        if ($sServantName === 'AdminObj') {
-            $app = $tarsConfig['tars']['application']['server']['app'];
-            $server = $tarsConfig['tars']['application']['server']['server'];
-
-            $sBuffer = $unpackResult['sBuffer'];
-            $iVersion = $unpackResult['iVersion'];
-            switch ($sFuncName) {
-                case 'shutdown': {
-                    break;
-                }
-                case 'notify': {
-                    if ($iVersion === Consts::TUPVERSION) {
-                        $cmd = \TUPAPI::getString('cmd', $sBuffer, false, $iVersion);
-                    } elseif ($iVersion === Consts::TARSVERSION) {
-                        $cmd = \TUPAPI::getString(1, $sBuffer, false, $iVersion);
-                    } else {
-                        $rspBuf = $this->packErrRsp($unpackResult, Code::TARSSERVERSUCCESS, Code::getMsg(Code::TARSSERVERSUCCESS));
-                        $response->send($rspBuf);
-
-                        return null;
-                    }
-                    // 这个事,最好是起一个task worker去干比较好
-                    $parts = explode(' ', $cmd);
-                    $fileName = $parts[1];
-
-                    $config = new \Tars\client\CommunicatorConfig();
-                    $locator = $tarsConfig['tars']['application']['client']['locator'];
-                    $moduleName = $tarsConfig['tars']['application']['client']['modulename'];
-                    $config->setLocator($locator);
-                    $config->setModuleName($moduleName);
-                    $config->setSocketMode(2);
-                    $configF = new ConfigServant($config);
-                    $configContent = '';
-                    $configF->loadConfig($app, $server, $fileName, $configContent);
-
-                    $basePath = $tarsConfig['tars']['application']['server']['basepath'];
-                    file_put_contents($basePath.'/src/conf/'.$fileName, $configContent);
-                    $paramInfo = [
-                        'return' => [
-                            'type' => 'string',
-                            'tag' => 0,
-                        ],
-                    ];
-                    $args = [];
-
-                    $rspBuf = $this->packRsp($paramInfo, $unpackResult, $args, 'success');
-                    $response->send($rspBuf);
-
-                    return null;
-                }
-            }
-        }
 
         $paramInfos = $request->paramInfos;
         // 发生了注释异常,说明生成的注释有问题
@@ -156,7 +101,7 @@ class TARSProtocol implements Protocol
         $iVersion = $unpackResult['iVersion'];
         $cPacketType = 0;
         $iMessageType = 0;
-        $iRequestId = 1; // 使用协程的id
+        $iRequestId = $unpackResult['iRequestId']; // 使用协程的id
         $statuses = [];
         $encodeBufs = [];
 
@@ -182,7 +127,7 @@ class TARSProtocol implements Protocol
             $iVersion = $unpackResult['iVersion'];
             // 获取返回值之后,需要按照正确的格式进行打包,这里应该进行抽象(之后再说)
             $encodeBufs = [];
-
+            $iRequestId = $unpackResult['iRequestId']; // 使用协程的id
             if ($iVersion === 1) {
                 $return = $paramInfo['return'];
                 if ($return['type'] !== 'void') {
@@ -206,7 +151,7 @@ class TARSProtocol implements Protocol
                 // 完成所有的打包之后,开始编码
                 $cPacketType = 0;
                 $iMessageType = 0;
-                $iRequestId = 1; // 使用协程的id
+
                 $statuses = [];
 
                 $rspBuf = \TUPAPI::encodeRspPacket($iVersion, $cPacketType,

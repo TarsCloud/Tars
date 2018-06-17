@@ -15,9 +15,9 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3",
-        "phptars/tars-registry": "0.1.0",
-        "phptars/tars-monitor": "0.1.0",
-        "phptars/tars-utils": "0.1.0"
+        "phptars/tars-registry": "~0.1",
+        "phptars/tars-monitor": "~0.1",
+        "phptars/tars-utils": "~0.1"
     },
     "autoload": {
         "psr-4": {

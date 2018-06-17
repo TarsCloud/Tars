@@ -25,7 +25,8 @@ class Start extends CommandBase
 
         //检查必须的服务名是否存在
         if (empty($tarsConfig['tars']['application']['server']['app'])
-            || empty($tarsConfig['tars']['application']['server']['server'])) {
+            || empty($tarsConfig['tars']['application']['server']['server']))
+        {
             echo 'AppName or ServerName empty! Please check config!'.PHP_EOL;
             exit;
         }
@@ -34,8 +35,10 @@ class Start extends CommandBase
         $basePath = $tarsConfig['tars']['application']['server']['basepath'];
 
         $servicesInfo = require $basePath.'src/services.php';
-        if ($tarsConfig['tars']['application']['server']['type'] === 'tcp') {
-            if (!isset($servicesInfo['home-class']) || !isset($servicesInfo['home-api'])) {
+        if ($tarsConfig['tars']['application']['server']['servType'] === 'tcp')
+        {
+            if (!isset($servicesInfo['home-class']) || !isset($servicesInfo['home-api']))
+            {
                 echo 'home-class or home-api not exist, please chech services.php!'.PHP_EOL;
                 exit;
             }
@@ -47,7 +50,8 @@ class Start extends CommandBase
         $name = $tarsConfig['tars']['application']['server']['app']
             .'.'.$tarsConfig['tars']['application']['server']['server'];
         $ret = $this->getProcess($name);
-        if ($ret['exist'] === true) {
+        if ($ret['exist'] === true)
+        {
             echo "{$name} start  \033[34;40m [FAIL] \033[0m process already exists".PHP_EOL;
             exit;
         }

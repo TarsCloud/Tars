@@ -8,6 +8,8 @@
 
 namespace Tars\core;
 
+use Tars\Consts;
+use Tars\config\ConfigServant;
 use Tars\protocol\ProtocolFactory;
 use Tars\report\ServerFSync;
 use Tars\report\ServerInfo;
@@ -304,6 +306,20 @@ class Server
         $response->fromFd = $fromId;
         $response->server = $server;
 
+
+        // 处理管理端口的特殊逻辑
+        $unpackResult = \TUPAPI::decodeReqPacket($data);
+        $sServantName = $unpackResult['sServantName'];
+        $sFuncName = $unpackResult['sFuncName'];
+
+        // 处理管理端口相关的逻辑
+        if ($sServantName === 'AdminObj')
+        {
+            $this->processAdmin($unpackResult,$sFuncName,$response);
+        }
+
+
+
         $event = new Event();
         $event->setProtocol(ProtocolFactory::getProtocol($this->protocolName));
         $event->setBasePath($this->basePath);
@@ -335,6 +351,7 @@ class Server
         $resp->servType = $this->servType;
         $resp->resource = $response;
 
+
         $event = new Event();
         $event->setProtocol(ProtocolFactory::getProtocol($this->protocolName));
         $event->onRequest($req, $resp);
@@ -363,5 +380,92 @@ class Server
         $serverF->keepAlive($serverInfo);
         $serverInfo->adapter = 'AdminAdapter';
         $serverF->keepAlive($serverInfo);
+    }
+
+    private function processAdmin($unpackResult,$sFuncName,$response) {
+        $app = $this->application;
+        $server = $this->serverName;
+
+        $sBuffer = $unpackResult['sBuffer'];
+        $iVersion = $unpackResult['iVersion'];
+        $iRequestId = $unpackResult['iRequestId'];
+        switch ($sFuncName)
+        {
+            case 'shutdown':
+            {
+                $cmd = "kill -15 ".$server->master_pid;
+                exec($cmd, $output, $r);
+                break;
+            }
+            case 'notify':
+            {
+                $iVersion = $unpackResult['iVersion'];
+
+                if ($iVersion === Consts::TUPVERSION) {
+                    $cmd = \TUPAPI::getString('cmd', $sBuffer, false, $iVersion);
+
+                } elseif ($iVersion === Consts::TARSVERSION) {
+                    $cmd = \TUPAPI::getString(1, $sBuffer, false, $iVersion);
+                }
+
+                $returnStr = '';
+                // 查看服务状态
+                if($cmd == "tars.viewstatus")
+                {
+                    $returnStr = "[1]:==================================================\n[proxy config]:\n";
+                    foreach ($this->tarsConfig['tars']['application']['client'] as $key => $value) {
+                        $returnStr .= "$key      ".$value;
+                        $returnStr .= "\n";
+                    }
+                    $returnStr .= "--------------------------------------------------\n[server config]:\n";
+                    foreach ($this->tarsConfig['tars']['application']['server'] as $key => $value) {
+                        if($key == "adapters") continue;
+                        $returnStr .= "$key      ".$value;
+                        $returnStr .= "\n";
+                    }
+
+                    foreach ($this->tarsConfig['tars']['application']['server']['adapters'] as $adapter) {
+                        $returnStr .= "--------------------------------------------------\n";
+                        foreach ($adapter as $key => $value) {
+                            $returnStr .= "$key      ".$value;
+                            $returnStr .= "\n";
+                        }
+                    }
+                    $returnStr .= "--------------------------------------------------\n";
+                }
+                // 加载服务配置
+                else if(strstr($cmd,"tars.loadconfig"))
+                {
+                    // 这个事,最好是起一个task worker去干比较好
+                    $parts = explode(' ', $cmd);
+                    $fileName = $parts[1];
+
+                    $config = new \Tars\client\CommunicatorConfig();
+                    $locator = $this->tarsConfig['tars']['application']['client']['locator'];
+                    $moduleName = $this->tarsConfig['tars']['application']['client']['modulename'];
+                    $config->setLocator($locator);
+                    $config->setModuleName($moduleName);
+                    $config->setSocketMode(2);
+                    $configF = new ConfigServant($config);
+                    $configContent = '';
+                    $configF->loadConfig($app, $server, $fileName, $configContent);
+
+                    $basePath = $this->tarsConfig['tars']['application']['server']['basepath'];
+                    file_put_contents($basePath.'/src/conf/'.$fileName, $configContent);
+
+                    $returnStr = '[notify file num:1][located in {ServicePath}/bin/conf]';
+                }
+
+                $str = \TUPAPI::putString(0,$returnStr,1);
+                $cPacketType = 0;
+                $iMessageType = 0;
+
+                $rspBuf = \TUPAPI::encodeRspPacket($iVersion, $cPacketType,
+                    $iMessageType, $iRequestId, 0, '', [$str], []);
+                $response->send($rspBuf);
+
+                return null;
+            }
+        }
     }
 }

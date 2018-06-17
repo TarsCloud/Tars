@@ -2,9 +2,9 @@
     "name" : "tars-timer-server-demo",
     "description": "tars timer server",
     "require": {
-        "phptars/tars-server": "0.1.1",
-        "phptars/tars-deploy": "0.1.0",
-        "phptars/tars2php": "0.1.0",
+        "phptars/tars-server": "~0.1",
+        "phptars/tars-deploy": "~0.1",
+        "phptars/tars2php": "~0.1",
         "ext-zip" : ">=0.0.1"
     },
     "autoload": {

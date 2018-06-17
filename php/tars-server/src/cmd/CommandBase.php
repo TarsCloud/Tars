@@ -33,15 +33,6 @@ class CommandBase
         $cmd = "ps aux | grep '".$processName."' | grep master | grep -v grep  | awk '{ print $2}'";
         exec($cmd, $ret);
 
-        $cmd = "ps aux | grep '".$processName."' | grep manager | grep -v grep  | awk '{ print $2}'";
-        exec($cmd, $ret);
-
-        $cmd = "ps aux | grep '".$processName."' | grep worker | grep -v grep  | awk '{ print $2}'";
-        exec($cmd, $ret);
-        
-        $cmd = "ps aux | grep '".$processName."' | grep task | grep -v grep  | awk '{ print $2}'";
-        exec($cmd, $ret);
-
         if (empty($ret)) {
             return [
                 'exist' => false,
@@ -49,7 +40,7 @@ class CommandBase
         } else {
             return [
                 'exist' => true,
-                'pidList' => $ret,
+                'masterPid' => $ret,
             ];
         }
     }
