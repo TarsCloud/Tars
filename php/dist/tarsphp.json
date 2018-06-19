@@ -6,7 +6,7 @@
         "name": "phptars/tars2php",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars2php-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars2php-0.1.0.zip?raw=true",
           "type": "zip"
         }
       }
@@ -16,7 +16,7 @@
         "name": "phptars/tars2php",
         "version": "0.1.1",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars2php-0.1.1.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars2php-0.1.1.zip?raw=true",
           "type": "zip"
         }
       }
@@ -26,7 +26,7 @@
         "name": "phptars/tars-client",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-client-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-client-0.1.0.zip?raw=true",
           "type": "zip"
         },
         "require": {
@@ -45,7 +45,7 @@
         "name": "phptars/tars-client",
         "version": "0.1.1",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-client-0.1.1.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-client-0.1.1.zip?raw=true",
           "type": "zip"
         },
         "require": {
@@ -66,7 +66,7 @@
         "name": "phptars/tars-config",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-config-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-config-0.1.0.zip?raw=true",
           "type": "zip"
         },
         "require":{
@@ -83,7 +83,7 @@
         "name": "phptars/tars-config",
         "version": "0.1.1",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-config-0.1.1.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-config-0.1.1.zip?raw=true",
           "type": "zip"
         },
         "require":{
@@ -102,7 +102,7 @@
         "name": "phptars/tars-deploy",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-deploy-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-deploy-0.1.0.zip?raw=true",
           "type": "zip"
         },
         "autoload": {
@@ -117,7 +117,7 @@
         "name": "phptars/tars-log",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-log-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-log-0.1.0.zip?raw=true",
           "type": "zip"
         },
         "require":{
@@ -134,7 +134,7 @@
         "name": "phptars/tars-log",
         "version": "0.1.1",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-log-0.1.1.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-log-0.1.1.zip?raw=true",
           "type": "zip"
         },
         "require":{
@@ -153,7 +153,7 @@
         "name": "phptars/tars-monitor",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-monitor-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-monitor-0.1.0.zip?raw=true",
           "type": "zip"
         },
         "require":{
@@ -173,7 +173,7 @@
         "name": "phptars/tars-registry",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-registry-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-registry-0.1.0.zip?raw=true",
           "type": "zip"
         },
         "require": {
@@ -192,7 +192,7 @@
         "name": "phptars/tars-report",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-report-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-report-0.1.0.zip?raw=true",
           "type": "zip"
         },
         "autoload": {
@@ -207,7 +207,7 @@
         "name": "phptars/tars-server",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-server-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-server-0.1.0.zip?raw=true",
           "type": "zip"
         },
         "require": {
@@ -226,7 +226,7 @@
         "name": "phptars/tars-server",
         "version": "0.1.1",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-server-0.1.1.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-server-0.1.1.zip?raw=true",
           "type": "zip"
         },
         "require": {
@@ -245,7 +245,7 @@
         "name": "phptars/tars-server",
         "version": "0.1.2",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-server-0.1.2.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-server-0.1.2.zip?raw=true",
           "type": "zip"
         },
         "require": {
@@ -266,7 +266,7 @@
         "name": "phptars/tars-utils",
         "version": "0.1.0",
         "dist": {
-          "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/phptars-tars-utils-0.1.0.zip?raw=true",
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-utils-0.1.0.zip?raw=true",
           "type": "zip"
         },
       "autoload": {
