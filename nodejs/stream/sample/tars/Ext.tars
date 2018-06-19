@@ -1,8 +1,0 @@
-module Ext
-{
-    struct ExtInfo  {
-        0 optional string sUserName;
-        1 optional map<string, vector<byte> > data;
-        2 optional map<string, map<string, vector<byte> > > cons;
-    };
-};

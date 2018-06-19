@@ -2,27 +2,26 @@
 
 ### 目录
 
-[config](config/README.md)
+[config](https://github.com/tars-node/config)
 
-[deploy](deploy/README.md)
+[deploy](https://github.com/tars-node/deploy)
 
-[dyeing](dyeing/README.md)
+[dyeing](https://github.com/tars-node/dyeing)
 
-[logs](logs/README.md)
+[logs](https://github.com/tars-node/logs)
 
-[monitor](monitor/README.md)
+[monitor](https://github.com/tars-node/monitor)
 
-[node-agent](node-agent/README.md)
+[node-agent](https://github.com/tars-node/node-agent)
 
-[notify](notify/README.md)
+[notify](https://github.com/tars-node/notify)
 
-[registry](registry)
+[registry](https://github.com/tars-node/registry)
 
-[rpc](rpc/README.md)
+[rpc](https://github.com/tars-node/rpc)
 
-[stream](stream/README.md)
+[stream](https://github.com/tars-node/stream)
 
-[utils](utils/README.md)
+[utils](https://github.com/tars-node/utils)
 
-[winston-tars](winston-tars/README.md)
-
+[winston-tars](https://github.com/tars-node/winston-tars)
