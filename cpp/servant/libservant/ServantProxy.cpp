@@ -193,6 +193,24 @@ ServantProxyCallback::ServantProxyCallback()
 {
 }
 
+HttpServantProxyCallback::HttpServantProxyCallback(HttpCallback* cb) :
+    _httpCb(cb)
+{
+}
+
+int HttpServantProxyCallback::onDispatch(ReqMessagePtr msg)
+{
+    if (!_httpCb)
+        return 0;
+
+    if (msg->response.iRet != tars::TARSSERVERSUCCESS)
+        _httpCb->onHttpResponseException(msg->request.context, msg->response.iRet);
+    else
+        return _httpCb->onHttpResponse(msg->request.context, msg->response.status, msg->response.sBuffer);
+
+    return 0;
+}
+
 ///////////////////////////////////////////////////////////////
 void coroWhenAll(const CoroParallelBasePtr &ptr)
 {
@@ -366,13 +384,13 @@ int ServantProxy::tars_async_timeout() const
 }
 
 
-void ServantProxy::tars_set_protocol(const ProxyProtocol& protocol)
+void ServantProxy::tars_set_protocol(const ProxyProtocol& protocol, const std::string& protoName)
 {
     TC_LockT<TC_ThreadMutex> lock(*this);
 
     for(size_t i = 0;i < _objectProxyNum; ++i)
     {
-        (*(_objectProxy + i))->setProxyProtocol(protocol);
+        (*(_objectProxy + i))->setProxyProtocol(protocol, protoName);
     }
 }
 
@@ -788,8 +806,7 @@ void ServantProxy::rpc_call(uint32_t iRequestId,
 
     msg->request.iRequestId  = iRequestId;
     msg->request.sFuncName   = sFuncName;
-    msg->request.sBuffer.resize(len);
-    ::memcpy((tars::Char*)&msg->request.sBuffer[0], buff, len);
+    msg->request.sBuffer.assign(buff, buff + len);
 
     invoke(msg);
 
@@ -815,10 +832,55 @@ void ServantProxy::rpc_call_async(uint32_t iRequestId,
 
     msg->request.iRequestId = iRequestId;
     msg->request.sFuncName  = sFuncName;
-    msg->request.sBuffer.resize(len);
-    ::memcpy((tars::Char*)&msg->request.sBuffer[0], buff, len);
+    msg->request.sBuffer.assign(buff, buff + len);
 
     invoke(msg, bCoro);
+}
+
+void ServantProxy::http_call(const std::string& method,
+                             const std::string& uri,
+                             const std::map<std::string, std::string>& headers,
+                             const std::string& body,
+                             std::map<std::string, std::string>& rheaders,
+                             std::string& rbody)
+{
+    ReqMessage* msg = new ReqMessage();
+
+    msg->init(ReqMessage::SYNC_CALL, NULL, "");
+
+    msg->bFromRpc = true;
+    msg->request.sServantName = uri;
+    msg->request.sFuncName = method;
+    // 使用下面两个字段保存头部和包体
+    msg->request.context = headers;
+    msg->request.sBuffer.assign(body.begin(), body.end());
+
+    invoke(msg);
+
+    rheaders.swap(msg->response.status);
+    rbody.assign(msg->response.sBuffer.begin(), msg->response.sBuffer.end());
+
+    delete msg;
+    msg = NULL;
+}
+
+void ServantProxy::http_call_async(const std::map<std::string, std::string>& headers,
+                                   const std::string& body,
+                                   HttpCallback* cb)
+{
+    ReqMessage * msg = new ReqMessage();
+
+    msg->init(ReqMessage::ASYNC_CALL, NULL, "");
+
+    msg->bFromRpc = true;
+    // 使用下面两个字段保存头部和包体
+    msg->request.context = headers;
+    msg->request.sBuffer.assign(body.begin(), body.end());
+
+    ServantProxyCallbackPtr callback = new HttpServantProxyCallback(cb);
+    msg->callback = callback;
+
+    invoke(msg);
 }
 
 //选取一个网络线程对应的信息

@@ -26,6 +26,10 @@
 #include "servant/BaseF.h"
 #include "util/tc_epoll_server.h"
 
+#if TARS_HTTP2
+#include "nghttp2/nghttp2.h"
+#endif
+
 using namespace std;
 using namespace tup;
 
@@ -152,7 +156,8 @@ using request_protocol = std::function<void (const RequestPacket& , string& )>;
  * 接收协议处理, 返回值表示解析了多少字节
  * 框架层会自动对处理了包做处理
  */
-using response_protocol = std::function<size_t (const char* , size_t, list<ResponsePacket>& )>;
+using response_protocol = std::function<size_t (const char *, size_t, list<ResponsePacket>&)>;
+using response_ex_protocol = std::function<size_t (const char *, size_t, list<ResponsePacket>&, void*)>;
 
 //////////////////////////////////////////////////////////////////////
 /**
@@ -487,7 +492,22 @@ public:
     request_protocol  requestFunc;
 
     response_protocol responseFunc;
+
+    response_ex_protocol responseExFunc;
 };
+
+class TC_NgHttp2;
+
+void http1Request(const tars::RequestPacket& request, std::string& out);
+size_t http1Response(const char* recvBuffer, size_t length, std::list<tars::ResponsePacket>& done);
+std::string encodeHttp2(RequestPacket& request, TC_NgHttp2* session);
+
+// ENCODE function, called by network thread
+void http2Request(const tars::RequestPacket& request, std::string& out);
+
+// DECODE function, called by network thread
+size_t http2Response(const char* recvBuffer, size_t length, std::list<tars::ResponsePacket>& done, void* userData);
+
 
 //////////////////////////////////////////////////////////////////////
 }

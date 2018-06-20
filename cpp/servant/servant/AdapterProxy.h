@@ -153,6 +153,10 @@ public:
      * 获取节点的静态权重值
      */
     inline int getWeight() { return _staticWeight; }
+    /**
+     * 获取id
+     */
+    inline int getId() const { return _id; }
 
 private:
 
@@ -314,6 +318,9 @@ private:
      * 采样信息
      */
     map<string,vector<StatSampleMsg> >     _sample;
+
+    int                                    _id;
+    static  TC_Atomic                      _idGen;
 };
 ////////////////////////////////////////////////////////////////////
 }
