@@ -34,6 +34,8 @@
     #define DEL_TAB g_parse->delTab()
 #endif
 
+#define TO_LOWER_STRING(str) TC_Common::lower(str)
+
 #define DEFINE_STRING(str) string(CSTR(str))
 #define CSTR(str) #str
 #define IDL_NAMESPACE_STR DEFINE_STRING(IDL_NAMESPACE)
@@ -51,6 +53,12 @@
     CONST_GRAMMAR_V(name, val)
 #define CONST_GRAMMAR(val) \
     CONST_GRAMMAR_BASE(GRAMMAR_NAME, val)
+
+#define PROTOCOL_V(space, protocol, type) \
+    space + "Stream." + protocol + "." + TC_Common::upper(protocol) + "_" + type
+#define PROTOCOL_SIMPLE PROTOCOL_V(IDL_NAMESPACE_STR, PROTOCOL_NAME, "SIMPLE")
+#define PROTOCOL_COMPLEX PROTOCOL_V(IDL_NAMESPACE_STR, PROTOCOL_NAME, "COMPLEX")
+#define PROTOCOL_VAR TO_LOWER_STRING(PROTOCOL_NAME)
 
 using namespace TC_NAMESPACE;
 

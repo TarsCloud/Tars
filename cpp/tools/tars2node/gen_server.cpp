@@ -22,12 +22,12 @@ string CodeGenerator::generatePing(const NamespacePtr &nPtr, const InterfacePtr 
 
     str << TAB << "var __" << nPtr->getId() << "_" << pPtr->getId() << "$" << TC_Common::lower(IDL_NAMESPACE_STR) << "_ping$RE = function (_ret) {" << endl;
     INC_TAB;
-    str << TAB << "if (this.getRequestVersion() === " << IDL_NAMESPACE_STR << "Stream.Wup.WUP_SIMPLE || this.getRequestVersion() === " << IDL_NAMESPACE_STR << "Stream.Wup.WUP_COMPLEX) {" << endl;
+    str << TAB << "if (this.getRequestVersion() === " << PROTOCOL_SIMPLE << " || this.getRequestVersion() === " << PROTOCOL_COMPLEX << ") {" << endl;
     INC_TAB;
-    str << TAB << "var wup = new " << IDL_NAMESPACE_STR << "Stream.UniAttribute();" << endl; 
-    str << TAB << "wup.wupVersion = this.getRequestVersion();" << endl; 
-    str << TAB << "wup.writeInt32(\"\", _ret);" << endl << endl; 
-    str << TAB << "this.doResponse(wup.encode());" << endl;
+    str << TAB << "var " << PROTOCOL_VAR << " = new " << IDL_NAMESPACE_STR << "Stream.UniAttribute();" << endl; 
+    str << TAB << PROTOCOL_VAR << "." << PROTOCOL_VAR << "Version = this.getRequestVersion();" << endl; 
+    str << TAB << PROTOCOL_VAR << ".writeInt32(\"\", _ret);" << endl << endl; 
+    str << TAB << "this.doResponse(" << PROTOCOL_VAR << ".encode());" << endl;
     DEL_TAB;
     str << TAB << "} else {" << endl;
     INC_TAB;
@@ -83,25 +83,25 @@ string CodeGenerator::generateAsync(const NamespacePtr &nPtr, const InterfacePtr
         return str.str();
     }
 
-    str << TAB << "if (this.getRequestVersion() === " << IDL_NAMESPACE_STR << "Stream.Wup.WUP_SIMPLE || this.getRequestVersion() === " << IDL_NAMESPACE_STR << "Stream.Wup.WUP_COMPLEX) {" << endl;
+    str << TAB << "if (this.getRequestVersion() === " << PROTOCOL_SIMPLE << " || this.getRequestVersion() === " << PROTOCOL_COMPLEX << ") {" << endl;
     INC_TAB;
-    str << TAB << "var wup = new " << IDL_NAMESPACE_STR << "Stream.UniAttribute();" << endl;
-    str << TAB << "wup.wupVersion = this.getRequestVersion();" << endl;
+    str << TAB << "var " << PROTOCOL_VAR << " = new " << IDL_NAMESPACE_STR << "Stream.UniAttribute();" << endl;
+    str << TAB << PROTOCOL_VAR << "." << PROTOCOL_VAR << "Version = this.getRequestVersion();" << endl;
     if (oPtr->getReturnPtr()->getTypePtr())
     {
-        str << TAB << "wup." << toFunctionName(oPtr->getReturnPtr(), "write") << "(\"\", _ret" 
+        str << TAB << PROTOCOL_VAR << "." << toFunctionName(oPtr->getReturnPtr(), "write") << "(\"\", _ret" 
             << (isRawOrString(oPtr->getReturnPtr()->getTypePtr()) ? ", 1" : "") << ");" << endl;
     }
     for (size_t i = 0; i < vParamDecl.size(); i++)
     {
         if (!vParamDecl[i]->isOut()) continue;
 
-        str << TAB << "wup." << toFunctionName(vParamDecl[i]->getTypeIdPtr(), "write") << "(\"" 
+        str << TAB << PROTOCOL_VAR << "." << toFunctionName(vParamDecl[i]->getTypeIdPtr(), "write") << "(\"" 
             << vParamDecl[i]->getTypeIdPtr()->getId() << "\", " << vParamDecl[i]->getTypeIdPtr()->getId()
             << (isRawOrString(vParamDecl[i]->getTypeIdPtr()->getTypePtr()) ? ", 1" : "") << ");" << endl;
     }
     str << endl;
-    str << TAB << "this.doResponse(wup.encode());" << endl;
+    str << TAB << "this.doResponse(" << PROTOCOL_VAR << ".encode());" << endl;
     DEL_TAB;
     str << TAB << "} else {" << endl;
 
@@ -152,16 +152,16 @@ string CodeGenerator::generateDispatch(const NamespacePtr &nPtr, const Interface
         dstr << endl;
     }
 
-    dstr << TAB << "if (current.getRequestVersion() === " << IDL_NAMESPACE_STR << "Stream.Wup.WUP_SIMPLE || current.getRequestVersion() === " << IDL_NAMESPACE_STR << "Stream.Wup.WUP_COMPLEX) {" << endl;
+    dstr << TAB << "if (current.getRequestVersion() === " << PROTOCOL_SIMPLE << " || current.getRequestVersion() === " << PROTOCOL_COMPLEX << ") {" << endl;
     INC_TAB;
-    dstr << TAB << "var wup = new " << IDL_NAMESPACE_STR << "Stream.UniAttribute();" << endl;
-    dstr << TAB << "wup.wupVersion = current.getRequestVersion();" << endl;
-    dstr << TAB << "wup.decode(binBuffer);" << endl;
+    dstr << TAB << "var " << PROTOCOL_VAR << " = new " << IDL_NAMESPACE_STR << "Stream.UniAttribute();" << endl;
+    dstr << TAB << PROTOCOL_VAR << "." << PROTOCOL_VAR << "Version = current.getRequestVersion();" << endl;
+    dstr << TAB << PROTOCOL_VAR << ".decode(binBuffer);" << endl;
 
     for (size_t i = 0; i < vParamDecl.size(); i++)
     {
         dstr << TAB << vParamDecl[i]->getTypeIdPtr()->getId()
-                << " = wup." << toFunctionName(vParamDecl[i]->getTypeIdPtr(), "read")
+                << " = " << PROTOCOL_VAR << "." << toFunctionName(vParamDecl[i]->getTypeIdPtr(), "read")
                 << "(\"" << vParamDecl[i]->getTypeIdPtr()->getId() << "\"";
 
         if (!isSimple(vParamDecl[i]->getTypeIdPtr()->getTypePtr()) && !isBinBuffer(vParamDecl[i]->getTypeIdPtr()->getTypePtr()))
