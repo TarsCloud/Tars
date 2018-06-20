@@ -50,6 +50,8 @@ class CommunicatorMonitor
             $requestBuf = $requestPacket->encode();
 
             $count = count($this->_routeInfo) - 1;
+            //当没有部署tars.tarsstat.StatObj服务时，不上报
+            if( $count <= -1 ) return;
             $index = rand(0, $count);
             $sIp = $this->_routeInfo[$index]['sIp'];
             $iPort = $this->_routeInfo[$index]['iPort'];
