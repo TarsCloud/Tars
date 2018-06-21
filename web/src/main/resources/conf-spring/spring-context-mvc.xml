@@ -60,4 +60,8 @@
         <property name="exposeSessionAttributes" value="true"/>
         <property name="exposeSpringMacroHelpers" value="true"/>
     </bean>
+    
+    <mvc:interceptors>
+    		<bean class="com.qq.tars.web.interceptor.VariablesInterceptor"/>
+    </mvc:interceptors>
 </beans>
