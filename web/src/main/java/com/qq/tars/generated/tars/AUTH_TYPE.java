@@ -5,21 +5,14 @@
 
 package com.qq.tars.generated.tars;
 
-/**
- * 任务的状态
- */
-public enum EMTaskStatus {
+public enum AUTH_TYPE {
 
-	EM_T_NOT_START(0),
-	EM_T_RUNNING(1),
-	EM_T_SUCCESS(2),
-	EM_T_FAILED(3),
-	EM_T_CANCEL(4),
-	EM_T_PARIAL(5);
+	AUTH_TYPENONE(0),
+	AUTH_TYPEREMOTE(1);
 
 	private final int value;
 
-	private EMTaskStatus(int value) {
+	private AUTH_TYPE(int value) {
 		this.value = value;
 	}
 
@@ -32,8 +25,8 @@ public enum EMTaskStatus {
 		return this.name() + ":" + this.value;
 	}
 
-	public static EMTaskStatus convert(int value) {
-		for(EMTaskStatus v : values()) {
+	public static AUTH_TYPE convert(int value) {
+		for(AUTH_TYPE v : values()) {
 			if(v.value() == value) {
 				return v;
 			}

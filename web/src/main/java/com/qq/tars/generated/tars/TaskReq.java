@@ -111,11 +111,18 @@ public class TaskReq {
 		}
 	}
 
+	static java.util.List<TaskItemReq> cache_taskItemReq;
+	static { 
+		cache_taskItemReq = new java.util.ArrayList<TaskItemReq>();
+		TaskItemReq var_3 = new TaskItemReq();
+		cache_taskItemReq.add(var_3);
+	}
+
 	public void readFrom(TarsInputStream _is) {
-		this.taskItemReq = (java.util.List<TaskItemReq>) _is.read(taskItemReq, 0, false);
-		this.taskNo = _is.read(taskNo, 1, false);
+		this.taskItemReq = (java.util.List<TaskItemReq>) _is.read(cache_taskItemReq, 0, false);
+		this.taskNo = _is.readString(1, false);
 		this.serial = _is.read(serial, 2, false);
-		this.userName = _is.read(userName, 3, false);
+		this.userName = _is.readString(3, false);
 	}
 
 }

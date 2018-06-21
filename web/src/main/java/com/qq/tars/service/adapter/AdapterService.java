@@ -21,6 +21,7 @@ import com.qq.tars.entity.AdapterConf;
 import com.qq.tars.entity.ServerConf;
 import com.qq.tars.service.server.ServerService;
 import com.qq.tars.tools.DateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,8 +29,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AdapterService {
@@ -82,6 +85,19 @@ public class AdapterService {
 
     public List<AdapterConf> getAdapterConf(String application, String serverName, String nodeName) {
         return adapterMapper.getAdapterConf(application, serverName, nodeName);
+    }
+    
+    public List<String> getAdapterConfList(String application,String serverName){
+    	List<Map<String,String>> list = adapterMapper.getAdapterList(application, serverName);
+    	
+    	List<String> rList =  new ArrayList<String>();
+    	
+    	for(int i=0;i<list.size();i++){
+    		Map<String,String> map = list.get(i);   		
+    		String servant = map.get("servant");    		
+    		rList.add(servant);  		
+    	}
+    	return rList;
     }
 
 

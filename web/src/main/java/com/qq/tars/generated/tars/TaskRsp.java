@@ -122,12 +122,19 @@ public class TaskRsp {
 		_os.write(status, 4);
 	}
 
+	static java.util.List<TaskItemRsp> cache_taskItemRsp;
+	static { 
+		cache_taskItemRsp = new java.util.ArrayList<TaskItemRsp>();
+		TaskItemRsp var_4 = new TaskItemRsp();
+		cache_taskItemRsp.add(var_4);
+	}
+
 	public void readFrom(TarsInputStream _is) {
-		this.taskItemRsp = (java.util.List<TaskItemRsp>) _is.read(taskItemRsp, 0, false);
-		this.taskNo = _is.read(taskNo, 1, false);
+		this.taskItemRsp = (java.util.List<TaskItemRsp>) _is.read(cache_taskItemRsp, 0, false);
+		this.taskNo = _is.readString(1, false);
 		this.serial = _is.read(serial, 2, false);
-		this.userName = _is.read(userName, 3, false);
-		this.status = (int) _is.read(status, 4, false);
+		this.userName = _is.readString(3, false);
+		this.status = _is.read(status, 4, false);
 	}
 
 }

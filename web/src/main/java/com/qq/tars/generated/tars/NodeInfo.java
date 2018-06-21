@@ -161,20 +161,12 @@ public class NodeInfo {
 	}
 
 	public void writeTo(TarsOutputStream _os) {
-		if (null != nodeName) {
-			_os.write(nodeName, 0);
-		}
-		if (null != nodeObj) {
-			_os.write(nodeObj, 1);
-		}
-		if (null != endpointIp) {
-			_os.write(endpointIp, 2);
-		}
+		_os.write(nodeName, 0);
+		_os.write(nodeObj, 1);
+		_os.write(endpointIp, 2);
 		_os.write(endpointPort, 3);
 		_os.write(timeOut, 4);
-		if (null != dataDir) {
-			_os.write(dataDir, 5);
-		}
+		_os.write(dataDir, 5);
 		if (null != version) {
 			_os.write(version, 6);
 		}
@@ -184,15 +176,16 @@ public class NodeInfo {
 		_os.write(openFiles, 8);
 	}
 
+
 	public void readFrom(TarsInputStream _is) {
-		this.nodeName = _is.read(nodeName, 0, true);
-		this.nodeObj = _is.read(nodeObj, 1, true);
-		this.endpointIp = _is.read(endpointIp, 2, true);
+		this.nodeName = _is.readString(0, true);
+		this.nodeObj = _is.readString(1, true);
+		this.endpointIp = _is.readString(2, true);
 		this.endpointPort = _is.read(endpointPort, 3, true);
 		this.timeOut = _is.read(timeOut, 4, true);
-		this.dataDir = _is.read(dataDir, 5, true);
-		this.version = _is.read(version, 6, false);
-		this.coreFileSize = _is.read(coreFileSize, 7, false);
+		this.dataDir = _is.readString(5, true);
+		this.version = _is.readString(6, false);
+		this.coreFileSize = _is.readString(7, false);
 		this.openFiles = _is.read(openFiles, 8, false);
 	}
 
