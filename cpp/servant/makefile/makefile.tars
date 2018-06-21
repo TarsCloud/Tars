@@ -202,7 +202,7 @@ help:
 .%.d: %.cpp
 	@echo "update $@ ..."; \
 	echo -n $< | sed s/\.cpp/\.o:/ > $@; \
-	$(CC) $(INCLUDE) -MM $< | sed '1s/.*.://' >> $@;
+	$(CXX) $(INCLUDE) -MM $< | sed '1s/.*.://' >> $@;
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) $(INCLUDE) -o $@ -c $<

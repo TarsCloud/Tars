@@ -134,10 +134,10 @@ TC_EpollServer::HandleGroupPtr& TC_EpollServer::Handle::getHandleGroup()
 
 void TC_EpollServer::Handle::notifyFilter()
 {
-    TC_ThreadLock::Lock lock(_handleGroup->monitor);
-
-    //如何做到不唤醒所有handle呢？
-    _handleGroup->monitor.notifyAll();
+    if (_handleGroup->runningCount <= _handleGroup->handleCount) 
+    {
+        sem_post(&_handleGroup->sem);
+    }
 }
 
 void TC_EpollServer::Handle::setWaitTime(uint32_t iWaitTime)
@@ -151,15 +151,21 @@ void TC_EpollServer::Handle::handleImp()
 {
     startHandle();
 
+    __sync_fetch_and_add(&(_handleGroup->handleCount), 1);
+    __sync_fetch_and_add(&(_handleGroup->runningCount), 1);
+
+    struct timespec ts;
+
     while (!getEpollServer()->isTerminate())
     {
+        uint64_t inow = TNOWMS + _iWaitTime;
+        ts.tv_sec = inow / 1000;
+        ts.tv_nsec = inow % 1000 * 1000 * 1000;
+        if (_handleGroup->recvCount <= 0)
         {
-            TC_ThreadLock::Lock lock(_handleGroup->monitor);
-
-            if (allAdapterIsEmpty() && allFilterIsEmpty())
-            {
-                _handleGroup->monitor.timedWait(_iWaitTime);
-            }
+            __sync_fetch_and_sub(&(_handleGroup->runningCount), 1);
+            sem_timedwait(&(_handleGroup->sem), &ts);
+            __sync_fetch_and_add(&(_handleGroup->runningCount), 1);
         }
 
         //上报心跳
@@ -222,7 +228,7 @@ void TC_EpollServer::Handle::handleImp()
                 }
             }
             catch (exception &ex)
-            {
+           {
                 if(recv)
                 {
                     close(recv->uid, recv->fd);
@@ -271,6 +277,7 @@ TC_EpollServer::BindAdapter::BindAdapter(TC_EpollServer *pEpollServer)
 , _protocolName("tars")
 , _iBackPacketBuffLimit(0)
 {
+    _rBufQueue.init(100000);
 }
 
 TC_EpollServer::BindAdapter::~BindAdapter()
@@ -327,39 +334,47 @@ bool TC_EpollServer::BindAdapter::isIpAllow(const string& ip) const
 
 void TC_EpollServer::BindAdapter::insertRecvQueue(const recv_queue::queue_type &vtRecvData, bool bPushBack)
 {
+    recv_queue::queue_type::const_iterator it = vtRecvData.begin();
+    recv_queue::queue_type::const_iterator itEnd = vtRecvData.end();
+    for(;it != itEnd;it++)
     {
-        if (bPushBack)
+        int ret = _rBufQueue.enqueue(*it, false);
+        if (ret == LockFreeQueue<tagRecvData*>::RT_OK) 
         {
-            _rbuffer.push_back(vtRecvData);
+            __sync_fetch_and_add(&(_handleGroup->recvCount), 1);
         }
         else
         {
-            _rbuffer.push_front(vtRecvData);
+            _pEpollServer->error("[TC_EpollServer::BindAdapter::insertRecvQueue] queue full!");
+            delete *it;
         }
     }
 
-    TC_ThreadLock::Lock lock(_handleGroup->monitor);
-
-    _handleGroup->monitor.notify();
+    if(_handleGroup->runningCount < _handleGroup->handleCount)
+    {
+        sem_post(&(_handleGroup->sem));
+    }
 }
 
 bool TC_EpollServer::BindAdapter::waitForRecvQueue(tagRecvData* &recv, uint32_t iWaitTime)
 {
     bool bRet = false;
 
-    bRet = _rbuffer.pop_front(recv, iWaitTime);
-
-    if(!bRet)
+    int ret = _rBufQueue.dequeue(recv, false);
+    if (ret == LockFreeQueue<tagRecvData*>::RT_OK)
     {
-        return bRet;
+        bRet = true;
+        __sync_fetch_and_sub(&(_handleGroup->recvCount), 1);
     }
+    else
+        bRet = false;
 
     return bRet;
 }
 
 size_t TC_EpollServer::BindAdapter::getRecvBufferSize() const
 {
-    return _rbuffer.size();
+    return _rBufQueue.size();
 }
 
 TC_EpollServer* TC_EpollServer::BindAdapter::getEpollServer()
@@ -427,7 +442,7 @@ void TC_EpollServer::BindAdapter::setQueueCapacity(int n)
 
 int TC_EpollServer::BindAdapter::isOverloadorDiscard()
 {
-    int iRecvBufferSize = _rbuffer.size();
+    int iRecvBufferSize = _rBufQueue.size();
 
     if(iRecvBufferSize <= (_iQueueCapacity / 2))//未过载
     {
@@ -1474,6 +1489,8 @@ TC_EpollServer::NetThread::NetThread(TC_EpollServer *epollServer)
     _shutdown.createSocket();
 
     _notify.createSocket();
+
+    _sBufQueue.init(100000);
 }
 
 TC_EpollServer::NetThread::~NetThread()
@@ -1673,9 +1690,6 @@ void TC_EpollServer::NetThread::initUdp()
 void TC_EpollServer::NetThread::terminate()
 {
     _bTerminate = true;
-
-    //通知队列醒过来
-    _sbuffer.notifyT();
 
     //通知epoll响应, 关闭连接
     _epoller.mod(_shutdown.getfd(), H64(ET_CLOSE), EPOLLOUT);
@@ -1894,10 +1908,11 @@ void TC_EpollServer::NetThread::close(uint32_t uid)
 
     send->cmd = 'c';
 
-    _sbuffer.push_back(send);
-
-    //通知epoll响应, 关闭连接
-    _epoller.mod(_notify.getfd(), H64(ET_NOTIFY), EPOLLOUT);
+    if(_sBufQueue.enqueue(send, false) == LockFreeQueue<tagSendData*>::RT_OK)
+        //通知epoll响应, 关闭连接
+        _epoller.mod(_notify.getfd(), H64(ET_NOTIFY), EPOLLOUT);
+    else
+        delete send;
 }
 
 void TC_EpollServer::NetThread::send(uint32_t uid, const string &s, const string &ip, uint16_t port)
@@ -1919,29 +1934,23 @@ void TC_EpollServer::NetThread::send(uint32_t uid, const string &s, const string
 
     send->port = port;
 
-    _sbuffer.push_back(send);
-
-    //通知epoll响应, 有数据要发送
-    _epoller.mod(_notify.getfd(), H64(ET_NOTIFY), EPOLLOUT);
+    if(_sBufQueue.enqueue(send, false) == LockFreeQueue<tagSendData*>::RT_OK)
+        //通知epoll响应, 关闭连接
+        _epoller.mod(_notify.getfd(), H64(ET_NOTIFY), EPOLLOUT);
+    else
+        delete send;
 }
 
 void TC_EpollServer::NetThread::processPipe()
 {
-    send_queue::queue_type deSendData;
-
-    _sbuffer.swap(deSendData);
-
-    send_queue::queue_type::iterator it = deSendData.begin();
-
-    send_queue::queue_type::iterator itEnd = deSendData.end();
-
-    while(it != itEnd)
+    tagSendData* sendp = NULL;
+    while(_sBufQueue.dequeue(sendp, false) == LockFreeQueue<tagSendData*>::RT_OK)
     {
-        switch((*it)->cmd)
+        switch(sendp->cmd)
         {
         case 'c':
             {
-                Connection *cPtr = getConnectionPtr((*it)->uid);
+                Connection *cPtr = getConnectionPtr(sendp->uid);
 
                 if(cPtr)
                 {
@@ -1954,21 +1963,21 @@ void TC_EpollServer::NetThread::processPipe()
             }
         case 's':
             {
-                Connection *cPtr = getConnectionPtr((*it)->uid);
+                Connection *cPtr = getConnectionPtr(sendp->uid);
 
                 if(cPtr)
                 {
 #if TARS_SSL
                     if (cPtr->getBindAdapter()->getEndpoint().isSSL() && cPtr->_openssl->IsHandshaked())
                     {
-                        std::string out = cPtr->_openssl->Write((*it)->buffer.data(), (*it)->buffer.size());
+                        std::string out = cPtr->_openssl->Write(sendp->buffer.data(), sendp->buffer.size());
                         if (cPtr->_openssl->HasError())
                             break; // should not happen
     
-                        (*it)->buffer = out;
+                        sendp->buffer = out;
                     }
 #endif
-                    int ret = sendBuffer(cPtr, (*it)->buffer, (*it)->ip, (*it)->port);
+                    int ret = sendBuffer(cPtr, sendp->buffer, sendp->ip, sendp->port);
 
                     if(ret < 0)
                     {
@@ -1980,8 +1989,7 @@ void TC_EpollServer::NetThread::processPipe()
         default:
             assert(false);
         }
-        delete (*it);
-        ++it;
+        delete sendp;
     }
 }
 
@@ -2098,7 +2106,7 @@ void TC_EpollServer::NetThread::run()
 }
 size_t TC_EpollServer::NetThread::getSendRspSize()
 {
-    return _sbuffer.size();
+    return _sBufQueue.size();
 }
 //////////////////////////////////////////////////////////////
 TC_EpollServer::TC_EpollServer(unsigned int iNetThreadNum)
@@ -2253,9 +2261,8 @@ void TC_EpollServer::stopThread()
     for (auto& kv : _handleGroups)
     {
         {
-            TC_ThreadLock::Lock lock(kv.second->monitor);
-
-            kv.second->monitor.notifyAll();
+            for (int i = 0; i < kv.second->handleCount; ++i)
+                sem_post(&kv.second->sem);
         }
         auto& hds = kv.second->handles;
         for (auto& handle : hds)
