@@ -20,7 +20,6 @@
 #include "servant/EndpointInfo.h"
 #include "servant/NetworkUtil.h"
 #include "servant/CommunicatorEpoll.h"
-#include "servant/Auth.h"
 #include "util/tc_buffer.h"
 #include <list>
 
@@ -205,21 +204,6 @@ public:
         _connStatus = eUnconnected; 
     }
 
-    /** 
-     * * 设置鉴权状态
-     **/
-    void setAuthState(int newstate) { _authState = newstate; }
-
-    /** 
-     ** 获取鉴权状态
-     **/
-    int getAuthState() const { return _authState; }
-
-    /** 
-     ** 发送鉴权数据
-     **/
-    bool sendAuthData(const BasicAuthInfo& );
-
 protected:
     /** 
      ** 物理连接成功回调
@@ -271,9 +255,9 @@ protected:
      */
     TC_Buffer                _recvBuffer;
 
-    /*
-     * 鉴权状态
-     */
+    /* 
+     * 鉴权状态 
+     */ 
     int                      _authState;
 
 protected:

@@ -425,6 +425,13 @@ public:
      * @return             字节数
      */
     static size_t toSize(const string &s, size_t iDefaultSize);
+
+    /** 
+     * @brief  生成基于16进制字符的随机串
+     * @param p            存储随机字符串
+     * @param len          字符串大小
+     */
+    static void getRandomHexChars(char* p, unsigned int len);
 };
 
 namespace p
