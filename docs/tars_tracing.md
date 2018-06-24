@@ -104,7 +104,7 @@ java 版本参考/pathtodemoof java
 
 1. 在tars管理平台上选中要开启调用链的服务，点击“编辑”。
 
-   ![1](img/trace_1.png)
+   ![1](images/trace_1.png)
 
    2.选择编辑私有模版，填写以下内容：
 
@@ -195,13 +195,13 @@ trace_html=zipkin_address(include http://)
 - 最终效果如下图所示
 
 
-![2](img/trace_2.png)
+![2](images/trace_2.png)
 
-![3](img/trace_3.png)
+![3](images/trace_3.png)
 
 点开单次调用链查看详细信息：
 
-![5](img/trace_4.png)
+![5](images/trace_4.png)
 
 
 
@@ -222,5 +222,5 @@ trace_html=zipkin_address(include http://)
 
 依赖分析展示：
 
-![6](img/trace_5.png)
+![6](images/trace_5.png)
 
