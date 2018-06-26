@@ -41,6 +41,8 @@ private:
 
     bool startByScript(string& sResult);
 
+    bool startByScriptPHP(string& sResult);
+
 private:
     bool                _byNode;
     string              _exeFile;
@@ -99,7 +101,7 @@ inline ServerCommand::ExeStatus CommandStart::canExecute(string& sResult)
     if (TC_File::isAbsolute(_exeFile) &&
         !TC_File::isFileExistEx(_exeFile) &&
         _serverObjectPtr->getStartScript().empty() &&
-        _serverObjectPtr->getServerType() != "tars_nodejs")
+        _serverObjectPtr->getServerType() != "tars_nodejs" && _serverObjectPtr->getServerType() != "tars_php")
     {
         _serverObjectPtr->setPatched(false);
         sResult      = "The server exe patch " + _exeFile + " is not exist.";
@@ -210,6 +212,119 @@ inline bool CommandStart::startByScript(string& sResult)
     return bSucc;
 }
 
+inline bool CommandStart::startByScriptPHP(string& sResult)
+{
+    //生成启动shell脚本 
+    string sConfigFile      = _serverObjectPtr->getConfigFile();
+    string sLogPath         = _serverObjectPtr->getLogPath();
+    string sServerDir       = _serverObjectPtr->getServerDir();
+    string sLibPath         = _serverObjectPtr->getLibPath();
+    string sExePath         = _serverObjectPtr->getExePath();
+    string sLogRealPath     = sLogPath + _desc.application +"/" + _desc.serverName + "/" ;
+    string sLogRealPathFile = sLogRealPath +_serverObjectPtr->getServerId() +".log";
+
+    TC_Config conf;
+    conf.parseFile(sConfigFile);
+    string phpexecPath = "";
+    string entrance = "";
+    try{
+        phpexecPath = TC_Common::strto<string>(conf["/tars/application/server<php>"]);
+        entrance =  TC_Common::strto<string>(conf["/tars/application/server<entrance>"]);
+    } catch (...){}
+    entrance = entrance=="" ? sServerDir+"/bin/src/index.php" : entrance;
+
+    std::ostringstream osStartStcript;
+    osStartStcript << "#!/bin/sh" << std::endl;
+    osStartStcript << "if [ ! -d \"" << sLogRealPath << "\" ];then mkdir -p \"" << sLogRealPath << "\"; fi" << std::endl;
+    osStartStcript << phpexecPath << " " << entrance <<" --config=" << sConfigFile << " start  >> " << sLogRealPathFile << " 2>&1 " << std::endl;
+    osStartStcript << "echo \"end-tars_start.sh\"" << std::endl;
+
+    TC_File::save2file(sExePath + "/tars_start.sh", osStartStcript.str());
+    TC_File::setExecutable(sExePath + "/tars_start.sh", true);
+
+    pid_t iPid = -1;
+    bool bSucc = false;
+
+    string sStartScript     = _serverObjectPtr->getStartScript();
+    sStartScript = sStartScript=="" ? _serverObjectPtr->getExePath() + "/tars_start.sh" : sStartScript;
+    string sMonitorScript   = _serverObjectPtr->getMonitorScript();
+    string sServerId    = _serverObjectPtr->getServerId();
+    iPid = _serverObjectPtr->getActivator()->activate(sServerId, sStartScript, sMonitorScript, sResult);
+
+
+    vector<string> vtServerName =  TC_Common::sepstr<string>(sServerId, ".");
+    if (vtServerName.size() != 2)
+    {
+        sResult = sResult + "|failed to get pid for  " + sServerId + ",server id error";
+        NODE_LOG("startServer")->error() << FILE_FUN << sResult  << endl;
+        throw runtime_error(sResult);
+    }
+
+    //默认使用启动脚本路径
+    string sFullExeFileName = TC_File::extractFilePath(sStartScript) + vtServerName[1];
+    time_t tNow = TNOW;
+    int iStartWaitInterval = START_WAIT_INTERVAL;
+    try
+    {
+        //服务启动,超时时间自己定义的情况
+        TC_Config conf;
+        conf.parseFile(_serverObjectPtr->getConfigFile());
+        iStartWaitInterval = TC_Common::strto<int>(conf.get("/tars/application/server<activating-timeout>", "3000")) / 1000;
+        if (iStartWaitInterval < START_WAIT_INTERVAL)
+        {
+            iStartWaitInterval = START_WAIT_INTERVAL;
+        }
+        if (iStartWaitInterval > 60)
+        {
+            iStartWaitInterval = 60;
+        }
+
+    }
+    catch (...)
+    {
+    }                
+
+    string sPidFile = "/usr/local/app/tars/tarsnode/util/" + sServerId + ".pid";
+    string sGetServerPidScript = "ps -ef | grep -v 'grep' |grep -iE ' " + _desc.application+"."+_desc.serverName + "'|grep master| awk '{print $2}' > " + sPidFile;
+
+    while ((TNOW - iStartWaitInterval) < tNow)
+    {
+        //注意:由于是守护进程,不要对sytem返回值进行判断,始终wait不到子进程
+        system(sGetServerPidScript.c_str());
+        string sPid = TC_Common::trim(TC_File::load2str(sPidFile));
+        if (TC_Common::isdigit(sPid))
+        {
+            iPid = TC_Common::strto<int>(sPid);
+            _serverObjectPtr->setPid(iPid);
+            if (_serverObjectPtr->checkPid() == 0)
+            {
+                bSucc = true;
+                break;
+            }
+        }
+
+        NODE_LOG("startServer")->debug() << FILE_FUN << _desc.application << "." << _desc.serverName << " activating usleep " << int(iStartWaitInterval) << endl;
+        usleep(START_SLEEP_INTERVAL);
+    }
+
+    if (_serverObjectPtr->checkPid() != 0)
+    {
+        sResult = sResult + "|get pid for server[" + sServerId + "],pid is not digit";
+        NODE_LOG("startServer")->error() << FILE_FUN << sResult << endl;
+        if (TC_File::isFileExist(sPidFile))
+        {
+            TC_File::removeFile(sPidFile, false);
+        }
+        throw runtime_error(sResult);
+    }
+
+    if (TC_File::isFileExist(sPidFile))
+    {
+        TC_File::removeFile(sPidFile, false);
+    }
+    return bSucc;
+}
+
 inline bool CommandStart::startNormal(string& sResult)
 {
     pid_t iPid = -1;
@@ -272,6 +387,11 @@ inline bool CommandStart::startNormal(string& sResult)
 
         osStartStcript<<sExePath+"/tars_nodejs/node" <<" "<<TC_Common::tostr(vOptions)<<" &"<< endl;
     }
+    else if (_serverObjectPtr->getServerType() == "tars_php") 
+    { 
+        vOptions.push_back("--config=" + sConfigFile);
+        osStartStcript << _exeFile << " " << TC_Common::tostr(vOptions) << " &" << endl;
+    }
     else
     {
         //c++服务
@@ -312,8 +432,12 @@ inline int CommandStart::execute(string& sResult)
         //set stdout & stderr
         _serverObjectPtr->getActivator()->setRedirectPath(_serverObjectPtr->getRedirectPath());
 
-        if (!_serverObjectPtr->getStartScript().empty() || _serverObjectPtr->isTarsServer() == false)
-        {
+        if( TC_Common::lower(TC_Common::trim(_desc.serverType)) == "tars_php" ){
+
+            bSucc = startByScriptPHP(sResult);
+
+        }else if (!_serverObjectPtr->getStartScript().empty() || _serverObjectPtr->isTarsServer() == false){
+
             bSucc = startByScript(sResult);
         }
         else

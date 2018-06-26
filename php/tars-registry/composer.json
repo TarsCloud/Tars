@@ -1,0 +1,27 @@
+{
+  "name": "phptars/tars-registry",
+  "description": "tars的php主控寻址相关",
+  "version":"0.1.0",
+  "authors": [
+    {
+      "name": "Chen Liang",
+      "email": "liangchen@yuewen.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.3",
+    "phptars/tars-utils": "~0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tars\\registry\\": "src/"
+    }
+  },
+  "repositories": {
+    "tars": {
+      "type": "composer",
+      "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/tarsphp.json"
+    }
+  }
+}

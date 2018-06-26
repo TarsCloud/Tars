@@ -1,0 +1,64 @@
+/**
+ * Tencent is pleased to support the open source community by making Tars available.
+ *
+ * Copyright (C) 2016THL A29 Limited, a Tencent company. All rights reserved.
+ *
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+module tars
+{
+
+//属性上报消息包  Prop = property
+struct StatPropMsgHead
+{
+      0 require string moduleName;          //模块name
+      1 require string ip;                  //ip
+      2 require string propertyName;        //属性name
+      3 optional string setName;            //set名
+      4 optional string setArea;            //set地区名
+      5 optional string setID;           //set组名
+      6 optional string sContainer;        //容器名
+      7 optional int    iPropertyVer=1;    //协议版本
+};
+
+key[StatPropMsgHead, moduleName, ip, propertyName, setName, setArea, setID ];
+
+//属性值信息
+struct StatPropInfo
+{
+    0 require string policy;                //Sum\Avg\Distr\Count\Max\Min
+    1 require string value;                 //值
+};
+
+//属性上报包体
+struct StatPropMsgBody
+{
+     0 require vector<StatPropInfo> vInfo;  //上报信息
+};
+
+/**
+ *
+ * 上报服务的接口
+ *
+ **/
+interface PropertyF
+{
+      /**
+       * 上报属性统计信息   Prop = property
+       * @param statmsg,             上报信息
+       * @return int,                返回0表示成功
+       */
+      int reportPropMsg( map<StatPropMsgHead, StatPropMsgBody> statmsg );
+};
+
+
+};

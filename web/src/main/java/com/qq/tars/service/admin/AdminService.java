@@ -23,10 +23,17 @@ import com.qq.tars.common.support.Holder;
 import com.qq.tars.common.util.Config;
 import com.qq.tars.exception.TARSRequestException;
 import com.qq.tars.generated.tars.AdminRegPrx;
+import com.qq.tars.generated.tars.ApplyTokenRequest;
+import com.qq.tars.generated.tars.ApplyTokenResponse;
+import com.qq.tars.generated.tars.AuthPrx;
 import com.qq.tars.generated.tars.ConfigPrx;
+import com.qq.tars.generated.tars.DeleteTokenRequest;
 import com.qq.tars.generated.tars.TaskReq;
 import com.qq.tars.generated.tars.TaskRsp;
+import com.qq.tars.generated.tars.TokenRequest;
+import com.qq.tars.generated.tars.TokenResponse;
 import com.qq.tars.support.query.prx.EndpointF;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +73,10 @@ public class AdminService {
 
     private ConfigPrx getConfigPrx() {
         return communicator.stringToProxy(ConfigPrx.class, "tars.tarsconfig.ConfigObj");
+    }
+    
+    private AuthPrx getAuthPrx(){
+    	return communicator.stringToProxy(AuthPrx.class, "tars.tarsauth.AuthObj");
     }
 
     public String loadServer(String application, String serverName, String nodeName) throws TARSRequestException {
@@ -159,4 +170,20 @@ public class AdminService {
                 .map(endpoint -> Pair.of(endpoint.getHost(), endpoint.getPort()))
                 .collect(Collectors.toList());
     }
+    
+    public List<TokenResponse> getTokens(TokenRequest request){
+    	
+    	return getAuthPrx().getTokens(request);
+    }
+    
+    public  ApplyTokenResponse applyToken(ApplyTokenRequest request){
+    	
+    	return  getAuthPrx().applyToken(request);
+    }
+    
+    public int deleteToken(DeleteTokenRequest request){
+    	
+    	return getAuthPrx().deleteToken(request);
+    }
+    
 }

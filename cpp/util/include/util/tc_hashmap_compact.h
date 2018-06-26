@@ -21,11 +21,11 @@
 #include <memory>
 #include <cassert>
 #include <iostream>
+#include <functional>
 #include "util/tc_ex.h"
 #include "util/tc_mem_vector.h"
 #include "util/tc_pack.h"
 #include "util/tc_mem_chunk.h"
-#include "util/tc_functor.h"
 #include "util/tc_hash_fun.h"
 #include "util/tc_thread.h"
 
@@ -1175,7 +1175,7 @@ public:
     /**
      * @brief 定义hash处理器
       */
-    typedef TC_Functor<size_t, TL::TLMaker<const string &>::Result> hash_functor;
+    using hash_functor = std::function<size_t (const string& )>;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //map的接口定义

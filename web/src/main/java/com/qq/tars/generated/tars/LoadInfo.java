@@ -102,6 +102,7 @@ public class LoadInfo {
 		_os.write(avgCpu, 3);
 	}
 
+
 	public void readFrom(TarsInputStream _is) {
 		this.avg1 = _is.read(avg1, 0, true);
 		this.avg5 = _is.read(avg5, 1, true);

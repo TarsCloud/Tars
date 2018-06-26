@@ -17,10 +17,10 @@
 #ifndef __TARS_PROPERTY_REPORT_H_
 #define __TARS_PROPERTY_REPORT_H_
 
-#include "util/tc_loki.h"
 #include "util/tc_autoptr.h"
 #include "util/tc_thread_mutex.h"
 
+#include <tuple>
 #include <vector>
 #include <string>
 
@@ -164,547 +164,92 @@ typedef TC_AutoPtr<PropertyReport> PropertyReportPtr;
 /**
  * 具体的属性策略管理
  */
-template<typename TList>
+
+template <typename... Params>
 class PropertyReportImp : public PropertyReport, public TC_ThreadMutex
 {
 public:
-    typedef TL::Tuple<TList> PropertyReportData;
+    using PropertyReportData = std::tuple<Params...>;
 
-    //定义类型列表中每个参数的原类型
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 0, TL::EmptyType>::Result>::ParameterType Param1;
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 1, TL::EmptyType>::Result>::ParameterType Param2;
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 2, TL::EmptyType>::Result>::ParameterType Param3;
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 3, TL::EmptyType>::Result>::ParameterType Param4;
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 4, TL::EmptyType>::Result>::ParameterType Param5;
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 5, TL::EmptyType>::Result>::ParameterType Param6;
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 6, TL::EmptyType>::Result>::ParameterType Param7;
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 7, TL::EmptyType>::Result>::ParameterType Param8;
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 8, TL::EmptyType>::Result>::ParameterType Param9;
-    typedef typename TL::TypeTraits<typename TL::TypeAtNonStrict<TList, 9, TL::EmptyType>::Result>::ParameterType Param10;
-
-    /**
-     * 构造函数
-     * @param p1
-     */
-    PropertyReportImp(Param1 p1)
+    PropertyReportImp(Params&&... args) :
+        _propertyReportData(std::forward<Params>(args)...)
     {
-        TL::field<0>(_propertyReportData) = p1;
     }
 
-    /**
-     * 构造函数
-     * @param p1
-     * @param p2
-     */
-    PropertyReportImp(Param1 p1, Param2 p2)
-    {
-        TL::field<0>(_propertyReportData) = p1;
-        TL::field<1>(_propertyReportData) = p2;
-    }
+    // do NOT copy
+    PropertyReportImp(const PropertyReportImp& ) = delete;
+    void operator = (const PropertyReportImp& ) = delete;
 
-    /**
-     * 三参数构造函数
-     * @param p1
-     * @param p2
-     * @param p3
-     */
-    PropertyReportImp(Param1 p1, Param2 p2, Param3 p3)
-    {
-        TL::field<0>(_propertyReportData) = p1;
-        TL::field<1>(_propertyReportData) = p2;
-        TL::field<2>(_propertyReportData) = p3;
-    }
+    // but CAN move
+    PropertyReportImp(PropertyReportImp&& ) = default;
+    PropertyReportImp& operator= (PropertyReportImp&& ) = default;
 
-    /**
-     * 四参数构造函数
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param p4
-     */
-    PropertyReportImp(Param1 p1, Param2 p2, Param3 p3, Param4 p4)
-    {
-        TL::field<0>(_propertyReportData) = p1;
-        TL::field<1>(_propertyReportData) = p2;
-        TL::field<2>(_propertyReportData) = p3;
-        TL::field<3>(_propertyReportData) = p4;
-    }
-
-    /**
-     * 五参数构造函数
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param p4
-     * @param p5
-     */
-    PropertyReportImp(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5)
-    {
-        TL::field<0>(_propertyReportData) = p1;
-        TL::field<1>(_propertyReportData) = p2;
-        TL::field<2>(_propertyReportData) = p3;
-        TL::field<3>(_propertyReportData) = p4;
-        TL::field<4>(_propertyReportData) = p5;
-    }
-
-    /**
-     * 六参数构造函数
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param p4
-     * @param p5
-     * @param p6
-     */
-    PropertyReportImp(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6)
-    {
-        TL::field<0>(_propertyReportData) = p1;
-        TL::field<1>(_propertyReportData) = p2;
-        TL::field<2>(_propertyReportData) = p3;
-        TL::field<3>(_propertyReportData) = p4;
-        TL::field<4>(_propertyReportData) = p5;
-        TL::field<5>(_propertyReportData) = p6;
-    }
-
-    /**
-     * 七参数构造函数
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param p4
-     * @param p5
-     * @param p6
-     * @param p7
-     */
-    PropertyReportImp(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7)
-    {
-        TL::field<0>(_propertyReportData) = p1;
-        TL::field<1>(_propertyReportData) = p2;
-        TL::field<2>(_propertyReportData) = p3;
-        TL::field<3>(_propertyReportData) = p4;
-        TL::field<4>(_propertyReportData) = p5;
-        TL::field<5>(_propertyReportData) = p6;
-        TL::field<6>(_propertyReportData) = p7;
-    }
-
-    /**
-     * 八参数构造函数
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param p4
-     * @param p5
-     * @param p6
-     * @param p7
-     * @param p8
-     */
-    PropertyReportImp(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param8 p8)
-    {
-        TL::field<0>(_propertyReportData) = p1;
-        TL::field<1>(_propertyReportData) = p2;
-        TL::field<2>(_propertyReportData) = p3;
-        TL::field<3>(_propertyReportData) = p4;
-        TL::field<4>(_propertyReportData) = p5;
-        TL::field<5>(_propertyReportData) = p6;
-        TL::field<6>(_propertyReportData) = p7;
-        TL::field<7>(_propertyReportData) = p8;
-    }
-
-    /**
-     * 九参数构造函数
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param p4
-     * @param p5
-     * @param p6
-     * @param p7
-     * @param p8
-     * @param p9
-     */
-    PropertyReportImp(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param8 p8, Param9 p9)
-    {
-        TL::field<0>(_propertyReportData) = p1;
-        TL::field<1>(_propertyReportData) = p2;
-        TL::field<2>(_propertyReportData) = p3;
-        TL::field<3>(_propertyReportData) = p4;
-        TL::field<4>(_propertyReportData) = p5;
-        TL::field<5>(_propertyReportData) = p6;
-        TL::field<6>(_propertyReportData) = p7;
-        TL::field<7>(_propertyReportData) = p8;
-        TL::field<8>(_propertyReportData) = p9;
-    }
-
-    /**
-     * 十参数构造函数
-     * @param p1
-     * @param p2
-     * @param p3
-     * @param p4
-     * @param p5
-     * @param p6
-     * @param p7
-     * @param p8
-     * @param p9
-     * @param p10
-     */
-    PropertyReportImp(Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param8 p8, Param9 p9, Param10 p10)
-    {
-        TL::field<0>(_propertyReportData) = p1;
-        TL::field<1>(_propertyReportData) = p2;
-        TL::field<2>(_propertyReportData) = p3;
-        TL::field<3>(_propertyReportData) = p4;
-        TL::field<4>(_propertyReportData) = p5;
-        TL::field<5>(_propertyReportData) = p6;
-        TL::field<6>(_propertyReportData) = p7;
-        TL::field<7>(_propertyReportData) = p8;
-        TL::field<8>(_propertyReportData) = p9;
-        TL::field<9>(_propertyReportData) = p10;
-    }
 
     /**
     * 设置调用数据
     * @param iValue,值
     */
-    virtual void report(int iValue)
+    void report(int iValue) override
     {
         TC_LockT<TC_ThreadMutex> lock(*this);
-        report(iValue, TL::Int2Type<TL::Length<TList>::value-1>());
+        Helper<std::tuple_size<decltype(_propertyReportData)>::value>::Report(*this, iValue);
     }
+
 
     /**
      * 获取属性信息
      *
      * @return vector<pair<string, string>>
      */
-    virtual vector<pair<string, string> > get()
+    vector<pair<string, string> > get() override
     {
         TC_LockT<TC_ThreadMutex> lock(*this);
-        return get(TL::Int2Type<TL::Length<TList>::value-1>());
+        return Helper<std::tuple_size<decltype(_propertyReportData)>::value>::Get(*this);
     }
-protected:
-    void report(int iValue, TL::Int2Type<0>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-    }
-    void report(int iValue, TL::Int2Type<1>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-        TL::field<1>(_propertyReportData).set(iValue);
-    }
-    void report(int iValue, TL::Int2Type<2>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-        TL::field<1>(_propertyReportData).set(iValue);
-        TL::field<2>(_propertyReportData).set(iValue);
-    }
-    void report(int iValue, TL::Int2Type<3>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-        TL::field<1>(_propertyReportData).set(iValue);
-        TL::field<2>(_propertyReportData).set(iValue);
-        TL::field<3>(_propertyReportData).set(iValue);
-    }
-    void report(int iValue, TL::Int2Type<4>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-        TL::field<1>(_propertyReportData).set(iValue);
-        TL::field<2>(_propertyReportData).set(iValue);
-        TL::field<3>(_propertyReportData).set(iValue);
-        TL::field<4>(_propertyReportData).set(iValue);
-    }
-    void report(int iValue, TL::Int2Type<5>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-        TL::field<1>(_propertyReportData).set(iValue);
-        TL::field<2>(_propertyReportData).set(iValue);
-        TL::field<3>(_propertyReportData).set(iValue);
-        TL::field<4>(_propertyReportData).set(iValue);
-        TL::field<5>(_propertyReportData).set(iValue);
-    }
-    void report(int iValue, TL::Int2Type<6>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-        TL::field<1>(_propertyReportData).set(iValue);
-        TL::field<2>(_propertyReportData).set(iValue);
-        TL::field<3>(_propertyReportData).set(iValue);
-        TL::field<4>(_propertyReportData).set(iValue);
-        TL::field<5>(_propertyReportData).set(iValue);
-        TL::field<6>(_propertyReportData).set(iValue);
-    }
-    void report(int iValue, TL::Int2Type<7>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-        TL::field<1>(_propertyReportData).set(iValue);
-        TL::field<2>(_propertyReportData).set(iValue);
-        TL::field<3>(_propertyReportData).set(iValue);
-        TL::field<4>(_propertyReportData).set(iValue);
-        TL::field<5>(_propertyReportData).set(iValue);
-        TL::field<6>(_propertyReportData).set(iValue);
-        TL::field<7>(_propertyReportData).set(iValue);
-    }
-    void report(int iValue, TL::Int2Type<8>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-        TL::field<1>(_propertyReportData).set(iValue);
-        TL::field<2>(_propertyReportData).set(iValue);
-        TL::field<3>(_propertyReportData).set(iValue);
-        TL::field<4>(_propertyReportData).set(iValue);
-        TL::field<5>(_propertyReportData).set(iValue);
-        TL::field<6>(_propertyReportData).set(iValue);
-        TL::field<7>(_propertyReportData).set(iValue);
-        TL::field<8>(_propertyReportData).set(iValue);
-    }
-    void report(int iValue, TL::Int2Type<9>)
-    {
-        TL::field<0>(_propertyReportData).set(iValue);
-        TL::field<1>(_propertyReportData).set(iValue);
-        TL::field<2>(_propertyReportData).set(iValue);
-        TL::field<3>(_propertyReportData).set(iValue);
-        TL::field<4>(_propertyReportData).set(iValue);
-        TL::field<5>(_propertyReportData).set(iValue);
-        TL::field<6>(_propertyReportData).set(iValue);
-        TL::field<7>(_propertyReportData).set(iValue);
-        TL::field<8>(_propertyReportData).set(iValue);
-        TL::field<9>(_propertyReportData).set(iValue);
-    }
-
-    vector<pair<string, string> > get(TL::Int2Type<0>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-
-        return vs;
-    }
-    vector<pair<string, string> > get(TL::Int2Type<1>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<1>(_propertyReportData).desc();
-        sp.second  = TL::field<1>(_propertyReportData).get();
-        vs.push_back(sp);
-
-        return vs;
-    }
-    vector<pair<string, string> > get(TL::Int2Type<2>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<1>(_propertyReportData).desc();
-        sp.second  = TL::field<1>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<2>(_propertyReportData).desc();
-        sp.second  = TL::field<2>(_propertyReportData).get();
-        vs.push_back(sp);
-
-        return vs;
-    }
-    vector<pair<string, string> > get(TL::Int2Type<3>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<1>(_propertyReportData).desc();
-        sp.second  = TL::field<1>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<2>(_propertyReportData).desc();
-        sp.second  = TL::field<2>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<3>(_propertyReportData).desc();
-        sp.second  = TL::field<3>(_propertyReportData).get();
-        vs.push_back(sp);
-
-        return vs;
-    }
-    vector<pair<string, string> > get(TL::Int2Type<4>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<1>(_propertyReportData).desc();
-        sp.second  = TL::field<1>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<2>(_propertyReportData).desc();
-        sp.second  = TL::field<2>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<3>(_propertyReportData).desc();
-        sp.second  = TL::field<3>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<4>(_propertyReportData).desc();
-        sp.second  = TL::field<4>(_propertyReportData).get();
-        vs.push_back(sp);
-        return vs;
-    }
-    vector<pair<string, string> > get(TL::Int2Type<5>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<1>(_propertyReportData).desc();
-        sp.second  = TL::field<1>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<2>(_propertyReportData).desc();
-        sp.second  = TL::field<2>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<3>(_propertyReportData).desc();
-        sp.second  = TL::field<3>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<4>(_propertyReportData).desc();
-        sp.second  = TL::field<4>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<5>(_propertyReportData).desc();
-        sp.second  = TL::field<5>(_propertyReportData).get();
-        vs.push_back(sp);
-
-        return vs;
-    }
-    vector<pair<string, string> > get(TL::Int2Type<6>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<1>(_propertyReportData).desc();
-        sp.second  = TL::field<1>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<2>(_propertyReportData).desc();
-        sp.second  = TL::field<2>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<3>(_propertyReportData).desc();
-        sp.second  = TL::field<3>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<4>(_propertyReportData).desc();
-        sp.second  = TL::field<4>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<5>(_propertyReportData).desc();
-        sp.second  = TL::field<5>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<6>(_propertyReportData).desc();
-        sp.second  = TL::field<6>(_propertyReportData).get();
-        vs.push_back(sp);
-
-        return vs;
-    }
-    vector<pair<string, string> > get(TL::Int2Type<7>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<1>(_propertyReportData).desc();
-        sp.second  = TL::field<1>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<2>(_propertyReportData).desc();
-        sp.second  = TL::field<2>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<3>(_propertyReportData).desc();
-        sp.second  = TL::field<3>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<4>(_propertyReportData).desc();
-        sp.second  = TL::field<4>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<5>(_propertyReportData).desc();
-        sp.second  = TL::field<5>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<6>(_propertyReportData).desc();
-        sp.second  = TL::field<6>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<7>(_propertyReportData).desc();
-        sp.second  = TL::field<7>(_propertyReportData).get();
-        vs.push_back(sp);
-
-        return vs;
-    }
-    vector<pair<string, string> > get(TL::Int2Type<8>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<1>(_propertyReportData).desc();
-        sp.second  = TL::field<1>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<2>(_propertyReportData).desc();
-        sp.second  = TL::field<2>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<3>(_propertyReportData).desc();
-        sp.second  = TL::field<3>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<4>(_propertyReportData).desc();
-        sp.second  = TL::field<4>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<5>(_propertyReportData).desc();
-        sp.second  = TL::field<5>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<6>(_propertyReportData).desc();
-        sp.second  = TL::field<6>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<7>(_propertyReportData).desc();
-        sp.second  = TL::field<7>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<8>(_propertyReportData).desc();
-        sp.second  = TL::field<8>(_propertyReportData).get();
-        vs.push_back(sp);
-
-        return vs;
-    }
-    vector<pair<string, string> > get(TL::Int2Type<9>)
-    {
-        vector<pair<string, string> > vs;
-        pair<string, string> sp;
-        sp.first   = TL::field<0>(_propertyReportData).desc();
-        sp.second  = TL::field<0>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<1>(_propertyReportData).desc();
-        sp.second  = TL::field<1>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<2>(_propertyReportData).desc();
-        sp.second  = TL::field<2>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<3>(_propertyReportData).desc();
-        sp.second  = TL::field<3>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<4>(_propertyReportData).desc();
-        sp.second  = TL::field<4>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<5>(_propertyReportData).desc();
-        sp.second  = TL::field<5>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<6>(_propertyReportData).desc();
-        sp.second  = TL::field<6>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<7>(_propertyReportData).desc();
-        sp.second  = TL::field<7>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<8>(_propertyReportData).desc();
-        sp.second  = TL::field<8>(_propertyReportData).get();
-        vs.push_back(sp);
-        sp.first   = TL::field<9>(_propertyReportData).desc();
-        sp.second  = TL::field<9>(_propertyReportData).get();
-        vs.push_back(sp);
-        return vs;
-    }
-
 
 private:
+    // report helper
+    template <int N, typename DUMMY = void>
+    struct Helper
+    {
+        static void Report(PropertyReportImp<Params...>& pp, int iValue)
+        {
+            static_assert(N >= 1, "Obviously success");
+            Helper<N - 1, DUMMY>::Report(pp, iValue);
+            pp.template SetResult<N - 1>(iValue);
+        }
+
+        static std::vector<std::pair<std::string, std::string>> Get(PropertyReportImp<Params...>& pp)
+        {
+            static_assert(N >= 1, "Obviously success");
+                
+            std::vector<std::pair<std::string, std::string> > vs = Helper<N-1, DUMMY>::Get(pp);
+
+            vs.push_back({std::get<N - 1>(pp._propertyReportData).desc(), std::get<N-1>(pp._propertyReportData).get()});
+            return vs;
+        }
+    };
+
+    template <typename DUMMY>
+    struct Helper<0, DUMMY>
+    {
+        // base template
+        static void Report(PropertyReportImp<Params...>&, int  )
+        {
+        }
+
+        static 
+        std::vector<std::pair<std::string, std::string>> Get(PropertyReportImp<Params...>& )
+        {
+            return std::vector<std::pair<std::string, std::string> >();
+        }
+    };
+
+    template <int I>
+    void SetResult(int iValue)
+    {
+        std::get<I>(_propertyReportData).set(iValue);
+    }
     /**
      * 状态报告数据
      */

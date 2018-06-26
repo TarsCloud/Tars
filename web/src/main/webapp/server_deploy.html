@@ -96,7 +96,7 @@
                 <th>线程数<span class="text-danger">*</span></th>
                 <th>最大连接数<span class="text-danger">*</span></th>
                 <th>队列最大长度<span class="text-danger">*</span></th>
-                <th>队列超时时间(ms)<span class="text-danger">*</span></th>
+                <th>队列超时(ms)<span class="text-danger">*</span></th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -104,19 +104,22 @@
             <tr>
                 <td><input type="text" class="form-control obj-name" placeholder="英文字母"></td>
                 <td><input type="text" class="form-control bind-ip"></td>
-                <td><input type="number" min="0" class="form-control num-control port" placeholder="0~65535"></td>
+                <td><input type="number" min="0" class="form-control num-control port" title="0~65535" placeholder="0~65535"></td>
                 <td>
                     <div style="white-space: nowrap">
-                        <label><input type="radio" name="port-type" class="port-type" id="port-type-tcp" value="tcp" checked="true" />TCP</label>
-                        <label><input type="radio" name="port-type" class="port-type" id="port-type-udp" value="udp"/>UDP</label>
+                        <select name="port-type" class="form-control port-type" style="width:80px">
+                            <option value="tcp" selected>TCP</option>
+                            <option value="udp">UDP</option>
+                        </select>
                     </div>
                 </td>
                 <td>
                     <div style="white-space: nowrap">
-                        <label><input type="radio" name="protocol" class="protocol" id="protocol-tars" value="tars" checked="true" />TARS</label>
-                        <label><input type="radio" name="protocol" class="protocol" id="protocol-not-tars" value="not_tars"/>非TARS</label>
+                        <select name="protocol" class="form-control protocol" style="width:90px">
+                            <option value="tars" selected>TARS</option>
+                            <option value="not_tars">非TARS</option>
+                        </select>
                     </div>
-
                 </td>
                 <td><input type="number" min="10" style="width: 60px;" class="form-control num-control thread-num" value="5"></td>
                 <td><input type="number" min="10" style="width: 100px;" class="form-control num-control max-connections" value="200000"></td>
@@ -283,8 +286,8 @@
                 obj_name : $.trim($(this).find('.obj-name').val()),
                 bind_ip : $.trim($(this).find('.bind-ip').val()),
                 port : $.trim($(this).find('.port').val()),
-                port_type: $.trim($(this).find('.port-type:checked').val()),
-                protocol: $.trim($(this).find('.protocol:checked').val()),
+                port_type: $.trim($(this).find('.port-type').val()),
+                protocol: $.trim($(this).find('.protocol').val()),
                 thread_num : $(this).find('.thread-num').val(),
                 max_connections : $(this).find('.max-connections').val(),
                 queuecap : $(this).find('.queuecap').val(),

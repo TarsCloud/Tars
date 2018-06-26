@@ -74,20 +74,16 @@ void testThreadPool()
     //4个线程
     tpool.init(4);
 
-    TC_Functor<void> init(threadInitialize);
-    TC_Functor<void>::wrapper_type iwt(init);
     //启动线程, 指定初始化对象,也可以没有初始化对象:tpool.start();
-    tpool.start(iwt);
+    tpool.start(threadInitialize);
 
     string s("a");
     int i = 1000000;
 
     //调用i次
-    TC_Functor<void, TL::TLMaker<const string&, int>::Result> cmd(TestFunction3);
     while(i)
     {
-        TC_Functor<void, TL::TLMaker<const string&, int>::Result>::wrapper_type fw(cmd, s, i);
-        tpool.exec(fw);
+        tpool.exec(std::bind(&TestFunction3, std::cref(s), i));
         --i;
     } 
 
@@ -118,23 +114,16 @@ void testThreadPool1()
     //启动线程, 指定初始化对象,也可以没有初始化对象:tpool.start();
     tpool.start();
 
-    typedef void (*TpMem)(int, string&);
-    TC_Functor<void, TL::TLMaker<int, string&>::Result> cmd(static_cast<TpMem>(&test));
-
     string bid;
-       for(int i=0; i<10; i++)
-       {
+    for(int i=0; i<10; i++)
+    {
+        bid = TC_Common::tostr(i);
         cout << bid << endl;
 
-           bid = TC_Common::tostr(i);
+        cout << "index = " << i << ",bid = " << bid << endl;
 
-           cout << "index = " << i << ",bid = " << bid << endl;
-
-           TC_Functor<void, TL::TLMaker<int, string&>::Result>::wrapper_type fwrapper(cmd, i, bid);
-           tpool.exec(fwrapper);
-
-//        sleep(1);
-       }
+        tpool.exec(std::bind(&test, i, std::ref(bid)));
+    }
 
     //等待线程结束
     cout << "waitForAllDone..." << endl;

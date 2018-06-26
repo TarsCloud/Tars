@@ -136,13 +136,14 @@ public class ServerStateInfo {
 		_os.write(settingState, 5);
 	}
 
+
 	public void readFrom(TarsInputStream _is) {
-		this.serverState = (int) _is.read(serverState, 0, true);
+		this.serverState = _is.read(serverState, 0, true);
 		this.processId = _is.read(processId, 1, true);
-		this.nodeName = _is.read(nodeName, 2, false);
-		this.application = _is.read(application, 3, false);
-		this.serverName = _is.read(serverName, 4, false);
-		this.settingState = (int) _is.read(settingState, 5, false);
+		this.nodeName = _is.readString(2, false);
+		this.application = _is.readString(3, false);
+		this.serverName = _is.readString(4, false);
+		this.settingState = _is.read(settingState, 5, false);
 	}
 
 }

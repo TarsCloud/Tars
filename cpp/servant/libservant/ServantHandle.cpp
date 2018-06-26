@@ -84,7 +84,7 @@ void ServantHandle::run()
         _coroSched->init(iCoroutineNum, ServerConfig::CoroutineStackSize);
         _coroSched->setHandle(this);
 
-        _coroSched->createCoroutine(tars::TC_Bind(&ServantHandle::handleRequest, tars::tc_unretained(this)));
+        _coroSched->createCoroutine(std::bind(&ServantHandle::handleRequest, this));
 
         ServantProxyThreadData * pSptd = ServantProxyThreadData::getData();
 
@@ -108,24 +108,31 @@ void ServantHandle::run()
 void ServantHandle::handleRequest()
 {
     bool bYield = false;
+
+    __sync_fetch_and_add(&(_handleGroup->handleCount), 1);
+    __sync_fetch_and_add(&(_handleGroup->runningCount), 1);
+
+    struct timespec ts;
+
     while (!getEpollServer()->isTerminate())
     {
         bool bServerReqEmpty = false;
 
+        uint64_t inow = TNOWMS + 3000;
+        ts.tv_sec = inow / 1000;
+        ts.tv_nsec = inow % 1000 * 1000 * 1000;
+        if (_handleGroup->recvCount <= 0)
         {
-            TC_ThreadLock::Lock lock(_handleGroup->monitor);
-
-            if (allAdapterIsEmpty() && allFilterIsEmpty())
+            __sync_fetch_and_sub(&(_handleGroup->runningCount), 1);
+            if(_coroSched->getResponseCoroSize() > 0)
             {
-                if(_coroSched->getResponseCoroSize() > 0)
-                {
-                    bServerReqEmpty = true;
-                }
-                else
-                {
-                    _handleGroup->monitor.timedWait(3000);
-                }
+                bServerReqEmpty = true;
             }
+            else
+            {
+                sem_timedwait(&(_handleGroup->sem), &ts);
+            }
+            __sync_fetch_and_add(&(_handleGroup->runningCount), 1);
         }
 
         //上报心跳
@@ -200,7 +207,7 @@ void ServantHandle::handleRequest()
                         }
                         else
                         {
-                            uint32_t iRet = _coroSched->createCoroutine(tars::TC_Bind(&ServantHandle::handleRecvData, tars::tc_unretained(this), tars::tc_unretained(recv)));
+                            uint32_t iRet = _coroSched->createCoroutine(std::bind(&ServantHandle::handleRecvData, this, recv));
                             if(iRet == 0)
                             {
                                 handleOverload(stRecvData);

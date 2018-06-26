@@ -17,10 +17,12 @@
 package com.qq.tars.db;
 
 import com.qq.tars.entity.AdapterConf;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface AdapterMapper {
@@ -41,4 +43,6 @@ public interface AdapterMapper {
     List<AdapterConf> getAdapterConf(@Param("application") String application,
                                      @Param("serverName") String serverName,
                                      @Param("nodeName") String nodeName);
+    
+    List<Map<String,String>> getAdapterList(@Param("application") String application,@Param("serverName") String serverName);
 }

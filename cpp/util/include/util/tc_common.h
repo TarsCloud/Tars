@@ -40,7 +40,6 @@
 #include <map>
 #include <stack>
 #include <vector>
-#include "util/tc_loki.h"
 
 using namespace std;
 
@@ -426,6 +425,13 @@ public:
      * @return             字节数
      */
     static size_t toSize(const string &s, size_t iDefaultSize);
+
+    /** 
+     * @brief  生成基于16进制字符的随机串
+     * @param p            存储随机字符串
+     * @param len          字符串大小
+     */
+    static void getRandomHexChars(char* p, unsigned int len);
 };
 
 namespace p
@@ -609,7 +615,7 @@ namespace p
 template<typename T>
 T TC_Common::strto(const string &sStr)
 {
-    typedef typename TL::TypeSelect<TL::TypeTraits<T>::isStdArith, p::strto1<T>, p::strto2<T> >::Result strto_type;
+    using strto_type = typename std::conditional<std::is_arithmetic<T>::value, p::strto1<T>, p::strto2<T>>::type;
 
     return strto_type()(sStr);
 }

@@ -1,0 +1,21 @@
+{
+    "name": "phptars/tars2php",
+    "description": "php代码自动生成工具",
+    "version":"0.1.1",
+    "authors": [
+        {
+            "name": "Chen Liang",
+            "email": "liangchen@yuewen.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3"
+    },
+    "repositories": {
+        "tars": {
+            "type": "composer",
+            "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/tarsphp.json"
+        }
+    }
+}

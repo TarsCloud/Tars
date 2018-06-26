@@ -1,9 +1,0 @@
-module tars
-{
-    interface NodeSecond
-    {
-        int test();
-
-        string yourName(string sName, out string sUserName);
-    };
-};

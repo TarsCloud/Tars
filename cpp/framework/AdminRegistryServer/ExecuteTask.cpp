@@ -15,7 +15,6 @@
  */
 
 #include "ExecuteTask.h"
-#include "util/tc_functor.h"
 #include "servant/Application.h"
 #include "util/tc_timeprovider.h"
 
@@ -337,10 +336,8 @@ void TaskListSerial::execute()
 {
     TLOGDEBUG("TaskListSerial::execute" << endl);
     
-    TC_Functor<void> cmd(this, &TaskListSerial::doTask);
-    TC_Functor<void>::wrapper_type fwrapper(cmd);
-
-    _pool.exec(fwrapper);
+    auto cmd = std::bind(&TaskListSerial::doTask, this);
+    _pool.exec(cmd);
 }
 
 void TaskListSerial::doTask()
@@ -392,15 +389,12 @@ void TaskListParallel::execute()
 {
     TLOGDEBUG("TaskListParallel::execute" << endl);
     
-    TC_Functor<void, TL::TLMaker<TaskItemReq, size_t>::Result> cmd(this, &TaskListParallel::doTask);
-
     TC_LockT<TC_ThreadMutex> lock(*this);
 
     for (size_t i=0; i < _taskReq.taskItemReq.size(); i++)
     {
-        TC_Functor<void, TL::TLMaker<TaskItemReq, size_t>::Result>::wrapper_type fwrapper(cmd, _taskReq.taskItemReq[i], i);
-
-        _pool.exec(fwrapper);
+        auto cmd = std::bind(&TaskListParallel::doTask, this, _taskReq.taskItemReq[i], i);
+        _pool.exec(cmd);
     }
 }
 

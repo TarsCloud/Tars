@@ -18,16 +18,15 @@
 #define __TC_TIMEOUT_QUEUE_NEW_H
 #include <map>
 #include <list>
-#include <ext/hash_map>
+#include <unordered_map>
 #include <iostream>
 #include <cassert>
+#include <functional>
 #include "util/tc_autoptr.h"
 #include "util/tc_monitor.h"
-#include "util/tc_functor.h"
 #include "util/tc_timeprovider.h"
 
 using namespace std;
-using namespace __gnu_cxx;
 
 namespace tars
 {
@@ -48,11 +47,11 @@ public:
     struct NodeInfo;
     struct SendInfo;
 
-    typedef hash_map<uint32_t, PtrInfo>     data_type;
+    typedef unordered_map<uint32_t, PtrInfo>     data_type;
     typedef multimap<int64_t,NodeInfo>      time_type;
     typedef list<SendInfo>                  send_type;
 
-    typedef TC_Functor<void, TL::TYPELIST_1(T&)> data_functor;
+    using data_functor = std::function<void (T& )>;
 
     struct PtrInfo
     {
@@ -79,7 +78,7 @@ public:
      */
     TC_TimeoutQueueNew(int timeout = 5*1000,size_t size = 100 ) : _uniqId(0)
     {
-        _data.resize(size);
+        _data.reserve(size);
     }
 
     /**
@@ -154,7 +153,7 @@ public:
     /**
      * @brief 删除超时的数据，并用df对数据做处理
      */
-    void timeout(data_functor &df);
+    void timeout(const data_functor &df);
 
     /**
      * @brief 队列中的数据.
@@ -296,7 +295,7 @@ template<typename T> bool TC_TimeoutQueueNew<T>::timeout(T & t)
     return true;
 }
 
-template<typename T> void TC_TimeoutQueueNew<T>::timeout(data_functor &df)
+template<typename T> void TC_TimeoutQueueNew<T>::timeout(const data_functor& df)
 {
     while(true)
     {

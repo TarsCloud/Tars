@@ -23,6 +23,8 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <functional>
+#include <semaphore.h>
 #include "util/tc_epoller.h"
 #include "util/tc_thread.h"
 #include "util/tc_clientsocket.h"
@@ -35,6 +37,7 @@
 #include "util/tc_fifo.h"
 #include "util/tc_buffer.h"
 #include "util/tc_buffer_pool.h"
+#include "util/tc_lockfree_queue.h"
 
 using namespace std;
 
@@ -86,8 +89,8 @@ public:
      * 定义协议解析接口的操作对象
      * 注意必须是线程安全的或是可以重入的
      */
-    typedef TC_Functor<int, TL::TLMaker<string &, string&>::Result> protocol_functor;
-    typedef TC_Functor<int, TL::TLMaker<int, string&>::Result>      header_filter_functor;
+    using protocol_functor = std::function<int (string&, string&)>;
+    using header_filter_functor = std::function<int (int, string&)>;
 
     class NetThread;
 
@@ -150,8 +153,16 @@ public:
      */
     struct HandleGroup : public TC_HandleBase
     {
+        HandleGroup():runningCount(0), handleCount(0), recvCount(0)
+        {
+            sem_init(&sem,0,0);
+        }
+        volatile int runningCount;
+        volatile int handleCount;
+        volatile int recvCount;
+        sem_t sem;
+
         string                      name;
-        TC_ThreadLock               monitor;
         vector<HandlePtr>           handles;
         map<string, BindAdapterPtr> adapters;
     };
@@ -333,7 +344,7 @@ public:
 
     };
 
-    typedef TC_Functor<bool /*processed*/, TL::TLMaker<void* /*conn*/, const std::string& /*data*/ >::Result> auth_process_wrapper_functor;
+    using auth_process_wrapper_functor = std::function<bool (void*, const std::string& )>;
 
     ////////////////////////////////////////////////////////////////////////////
     // 服务端口管理,监听socket信息
@@ -598,7 +609,7 @@ public:
          * 接收队列的大小
          * @return size_t
          */
-        size_t getRecvBufferSize();
+        size_t getRecvBufferSize() const;
 
         /**
          * 默认的协议解析类, 直接echo
@@ -778,7 +789,7 @@ public:
         /**
          * 接收的数据队列
          */
-        recv_queue      _rbuffer;
+        LockFreeQueue<tagRecvData*> _rBufQueue;
 
         /**
          * 队列最大容量
@@ -1113,7 +1124,7 @@ public:
              */
             bool                _authInit;
 #if TARS_SSL
-            TC_OpenSSL*         _openssl;
+            std::unique_ptr<TC_OpenSSL> _openssl;
 #endif
         };
         ////////////////////////////////////////////////////////////////////////////
@@ -1546,7 +1557,7 @@ public:
         /**
          * 发送队列
          */
-        send_queue                  _sbuffer;
+        LockFreeQueue<tagSendData*> _sBufQueue;
 
         /**
          * BindAdapter是否有udp监听

@@ -83,14 +83,13 @@ typedef long long   Int64;
 #   if __BYTE_ORDER == __LITTLE_ENDIAN
 #       define tars_ntohll(x)    tars_htonll(x)
 
-namespace tars
+
+union bswap_helper
 {
-        union bswap_helper
-        {
-                Int64   i64;
-                Int32   i32[2];
-        };
-}
+        Int64   i64;
+        Int32   i32[2];
+};
+
 inline Int64 tars_htonll(Int64 x)
 {
         tars::bswap_helper h;

@@ -69,7 +69,7 @@ public:
         os.write(t, 0);
 
         //_data[name][Class<T>::name()] = os.getByteBuffer();
-        VECTOR_CHAR_TYPE & v = _data[name][Class<T>::name()];
+		VECTOR_CHAR_TYPE & v = _data[name];
         v.assign(os.getBuffer(), os.getBuffer() + os.getLength());
     }
     /**
@@ -83,12 +83,13 @@ public:
     template<typename T> void get(const string& name, T& t)
     {
         //map<string, map<string, vector<char> > >::iterator mit;
-        typename TUP_DATA_TYPE::iterator mit;
+        typename VECTOR_CHAR_IN_MAP_TYPE::iterator mit;
 
         mit = _data.find(name);
 
         if (mit != _data.end())
         {
+			/*
             string type = Class<T>::name();
 
             typename VECTOR_CHAR_IN_MAP_TYPE::iterator mmit = mit->second.find(type);
@@ -122,6 +123,15 @@ public:
                 os << "may be:" << mit->second.begin()->first;
             }
             throw runtime_error(os.str());
+
+			*/
+			is.reset();
+
+			is.setBuffer(mit->second);
+
+			is.read(t, 0, true);
+
+			return;
         }
         throw runtime_error(string("UniAttribute not found key:") +  name + ",type:" + Class<T>::name());
     }
@@ -308,7 +318,7 @@ public:
     }
 
 protected:
-    TUP_DATA_TYPE _data;
+	VECTOR_CHAR_IN_MAP_TYPE _data;
 
 public:
     TarsInputStream<TReader>     is;

@@ -119,14 +119,12 @@ int main(int argc,char ** argv)
         tp.init(threads);
         tp.start();
 
-        TC_Functor<void, TL::TLMaker<int, int>::Result> cmd(&test1, &Test1::queryResult);
-
         tars::Int32 times = TC_Common::strto<tars::Int32>(string(argv[3]));
         tars::Int32 callMode = TC_Common::strto<tars::Int32>(string(argv[4]));
         
         for(int i = 0; i<threads; i++) 
         {
-            TC_Functor<void, TL::TLMaker< int,int>::Result>::wrapper_type fw(cmd,callMode,times);
+            auto fw = std::bind(&Test1::queryResult, &test1, callMode, times);
             tp.exec(fw);
             cout << "********************" <<endl;
         }

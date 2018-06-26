@@ -187,53 +187,40 @@ public class PreparePatchRequest implements Comparable<PreparePatchRequest> {
 	}
 
 	public void writeTo(TarsOutputStream _os) {
-		if (null != appname) {
-			_os.write(appname, 0);
-		}
-		if (null != servername) {
-			_os.write(servername, 1);
-		}
-		if (null != groupname) {
-			_os.write(groupname, 2);
-		}
-		if (null != version) {
-			_os.write(version, 3);
-		}
-		if (null != user) {
-			_os.write(user, 4);
-		}
-		if (null != servertype) {
-			_os.write(servertype, 5);
-		}
-		if (null != patchobj) {
-			_os.write(patchobj, 6);
-		}
-		if (null != md5) {
-			_os.write(md5, 7);
-		}
-		if (null != ostype) {
-			_os.write(ostype, 8);
-		}
-		if (null != specialNodeList) {
-			_os.write(specialNodeList, 9);
-		}
+		_os.write(appname, 0);
+		_os.write(servername, 1);
+		_os.write(groupname, 2);
+		_os.write(version, 3);
+		_os.write(user, 4);
+		_os.write(servertype, 5);
+		_os.write(patchobj, 6);
+		_os.write(md5, 7);
+		_os.write(ostype, 8);
+		_os.write(specialNodeList, 9);
 		if (null != filepath) {
 			_os.write(filepath, 10);
 		}
 	}
 
+	static java.util.List<String> cache_specialNodeList;
+	static { 
+		cache_specialNodeList = new java.util.ArrayList<String>();
+		String var_5 = "";
+		cache_specialNodeList.add(var_5);
+	}
+
 	public void readFrom(TarsInputStream _is) {
-		this.appname = _is.read(appname, 0, true);
-		this.servername = _is.read(servername, 1, true);
-		this.groupname = _is.read(groupname, 2, true);
-		this.version = _is.read(version, 3, true);
-		this.user = _is.read(user, 4, true);
-		this.servertype = _is.read(servertype, 5, true);
-		this.patchobj = _is.read(patchobj, 6, true);
-		this.md5 = _is.read(md5, 7, true);
-		this.ostype = _is.read(ostype, 8, true);
-		this.specialNodeList = (java.util.List<String>) _is.read(specialNodeList, 9, true);
-		this.filepath = _is.read(filepath, 10, false);
+		this.appname = _is.readString(0, true);
+		this.servername = _is.readString(1, true);
+		this.groupname = _is.readString(2, true);
+		this.version = _is.readString(3, true);
+		this.user = _is.readString(4, true);
+		this.servertype = _is.readString(5, true);
+		this.patchobj = _is.readString(6, true);
+		this.md5 = _is.readString(7, true);
+		this.ostype = _is.readString(8, true);
+		this.specialNodeList = (java.util.List<String>) _is.read(cache_specialNodeList, 9, true);
+		this.filepath = _is.readString(10, false);
 	}
 
 }

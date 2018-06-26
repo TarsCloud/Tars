@@ -77,6 +77,7 @@ add_subdirectory(patchclient)
 add_subdirectory(StatServer)
 add_subdirectory(QueryStatServer)
 add_subdirectory(QueryPropertyServer)
+add_subdirectory(AuthServer)
 ############################################################################################
 # 打包deploy, 用于部署
 
@@ -121,7 +122,7 @@ add_custom_target(framework-tar
         DEPENDS ${FRAMEWORK-TGZ} ${DEPENDS_LIST})
 
 ############################################################################################
-# 打包tarsnotify tarsstat tarsproperty tarslog
+# 打包tarsnotify tarsstat tarsproperty tarslog tarsauth
 set(TARSQUERYSTAT tarsquerystat)
 set(TARSQUERYPROPERTY tarsqueryproperty)
 
@@ -132,6 +133,7 @@ list(APPEND DEPENDS_LIST tarsproperty)
 list(APPEND DEPENDS_LIST tarslog)
 list(APPEND DEPENDS_LIST tarsquerystat)
 list(APPEND DEPENDS_LIST tarsqueryproperty)
+list(APPEND DEPENDS_LIST tarsauth)
 
 
 foreach (MODULE ${DEPENDS_LIST})

@@ -37,7 +37,7 @@ public class DeployAdapter {
     @Max(65535)
     private Integer port;
 
-    @Value(values = {"tcp", "udp", "ssl"})
+    @Value(values = {"tcp", "udp","ssl"})
     private String portType;
 
     @Value(values = {"tars", "not_tars"})

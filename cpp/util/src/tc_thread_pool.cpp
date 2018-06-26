@@ -37,31 +37,27 @@ void TC_ThreadPool::ThreadWorker::terminate()
 void TC_ThreadPool::ThreadWorker::run()
 {
     //调用初始化部分
-    TC_FunctorWrapperInterface *pst = _tpool->get();
+    auto pst = _tpool->get();
     if(pst)
     {
         try
         {
-            (*pst)();
+            pst();
         }
         catch ( ... )
         {
         }
-        delete pst;
-        pst = NULL;
     }
 
     //调用处理部分
     while (!_bTerminate)
     {
-        TC_FunctorWrapperInterface *pfw = _tpool->get(this);
-        if(pfw != NULL)
+        auto pfw = _tpool->get(this);
+        if(pfw)
         {
-            auto_ptr<TC_FunctorWrapperInterface> apfw(pfw);
-
             try
             {
-                (*pfw)();
+                pfw();
             }
             catch ( ... )
             {
@@ -260,10 +256,10 @@ start2:
     return false;
 }
 
-TC_FunctorWrapperInterface *TC_ThreadPool::get(ThreadWorker *ptw)
+std::function<void ()> TC_ThreadPool::get(ThreadWorker *ptw)
 {
-    TC_FunctorWrapperInterface *pFunctorWrapper = NULL;
-    if(!_jobqueue.pop_front(pFunctorWrapper, 1000))
+    std::function<void ()> res;
+    if(!_jobqueue.pop_front(res, 1000))
     {
         return NULL;
     }
@@ -273,18 +269,18 @@ TC_FunctorWrapperInterface *TC_ThreadPool::get(ThreadWorker *ptw)
         _busthread.insert(ptw);
     }
 
-    return pFunctorWrapper;
+    return res;
 }
 
-TC_FunctorWrapperInterface *TC_ThreadPool::get()
+std::function<void ()> TC_ThreadPool::get()
 {
-    TC_FunctorWrapperInterface *pFunctorWrapper = NULL;
-    if(!_startqueue.pop_front(pFunctorWrapper))
+    std::function<void ()> res;
+    if(!_startqueue.pop_front(res))
     {
         return NULL;
     }
 
-    return pFunctorWrapper;
+    return res;
 }
 
 void TC_ThreadPool::idle(ThreadWorker *ptw)

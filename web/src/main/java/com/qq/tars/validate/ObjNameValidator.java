@@ -29,7 +29,7 @@ public class ObjNameValidator implements ConstraintValidator<ObjName, String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return StringUtils.isNotBlank(value) && StringUtils.isAlpha(value);
+        return StringUtils.isNotBlank(value) &&StringUtils.isAlphanumeric(value);
     }
 
 
