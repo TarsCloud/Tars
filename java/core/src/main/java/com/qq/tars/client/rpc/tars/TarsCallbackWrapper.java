@@ -16,8 +16,13 @@
 
 package com.qq.tars.client.rpc.tars;
 
+import java.util.List;
+
 import com.qq.tars.client.ServantProxyConfig;
 import com.qq.tars.client.util.ClientLogger;
+import com.qq.tars.common.Filter;
+import com.qq.tars.common.FilterChain;
+import com.qq.tars.common.FilterKind;
 import com.qq.tars.common.util.Constants;
 import com.qq.tars.common.util.DyeingSwitch;
 import com.qq.tars.context.DistributedContextManager;
@@ -25,8 +30,10 @@ import com.qq.tars.net.client.Callback;
 import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.rpc.exc.ServerException;
 import com.qq.tars.rpc.exc.TarsException;
+import com.qq.tars.rpc.exc.TimeoutException;
 import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
+import com.qq.tars.server.core.AppContextManager;
 import com.qq.tars.support.stat.InvokeStatHelper;
 
 public class TarsCallbackWrapper implements Callback<TarsServantResponse> {
@@ -38,6 +45,7 @@ public class TarsCallbackWrapper implements Callback<TarsServantResponse> {
     private final int remotePort;
     private final long bornTime;
     private final TarsServantRequest request;
+    private List<Filter> filters;
 
     private final Callback<TarsServantResponse> callback;
 
@@ -52,21 +60,15 @@ public class TarsCallbackWrapper implements Callback<TarsServantResponse> {
         this.remotePort = remotePort;
         this.bornTime = bornTime;
         this.request = request;
+        this.filters = AppContextManager.getInstance().getAppContext() == null ? null : AppContextManager.getInstance().getAppContext().getFilters(FilterKind.CALLBACK);
     }
 
     public void onCompleted(TarsServantResponse response) {
         int ret = Constants.INVOKE_STATUS_SUCC;
         try {
         	beforeCallback();
-            if (response.getCause() != null) {
-                throw new TarsException(response.getCause());
-            }
-            if (response.getRet() != TarsHelper.SERVERSUCCESS) {
-                throw ServerException.makeException(response.getRet());
-            }
-            if (callback != null) {
-                this.callback.onCompleted(response);
-            }
+        	FilterChain filterChain = new TarsCallbackFilterChain(filters, objName, FilterKind.CALLBACK, callback, 0);
+        	filterChain.doFilter(request, response);
         } catch (Throwable ex) {
             ret = Constants.INVOKE_STATUS_EXEC;
             ClientLogger.getLogger().error("error occurred on callback completed", ex);
@@ -91,9 +93,12 @@ public class TarsCallbackWrapper implements Callback<TarsServantResponse> {
         int ret = Constants.INVOKE_STATUS_TIMEOUT;
         try {
         	beforeCallback();
-            if (callback != null) {
-                this.callback.onExpired();
-            }
+        	FilterChain filterChain = new TarsCallbackFilterChain(filters, objName, FilterKind.CALLBACK, callback, 1);
+        	TarsServantResponse response = new TarsServantResponse(request.getIoSession());
+        	response.setRequest(request);
+        	response.setTicketNumber(request.getTicketNumber());
+        	response.setCause(new TimeoutException("async call timeout"));
+        	filterChain.doFilter(request, response);
         } catch (Throwable ex) {
             ClientLogger.getLogger().error("error occurred on callback expired", ex);
         } finally {

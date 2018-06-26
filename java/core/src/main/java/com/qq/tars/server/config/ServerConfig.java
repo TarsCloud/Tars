@@ -40,6 +40,10 @@ public class ServerConfig {
 	private int logRate = 5;
 	private String dataPath;
 	private String localIP;
+	private float sampleRate = 0;
+	private String sampleType;
+	private String sampleAddress;
+	private String sampleEncoding;
 
 	private int sessionTimeOut = 120000;
 	private int sessionCheckInterval = 60000;
@@ -74,6 +78,11 @@ public class ServerConfig {
 		logRate = conf.getInt("/tars/application/server<lograte>", 5);
 
 		localIP = conf.get("/tars/application/server<localip>");
+		
+		sampleRate = Float.parseFloat(conf.get("/tars/application/server<samplerate>", "0"));
+		sampleType = conf.get("/tars/application/server<sampletype>");
+		sampleAddress = conf.get("/tars/application/server<sampleaddress>");
+		sampleEncoding = conf.get("/tars/application/server<sampleencoding>", "json");
 
 		sessionTimeOut = conf.getInt(
 				"/tars/application/server<sessiontimeout>", 120000);
@@ -300,4 +309,37 @@ public class ServerConfig {
 	public int getLocalPort() {
 		return this.local.port();
 	}
+	
+	public float getSampleRate() {
+		return sampleRate;
+	}
+
+	public void setSampleRate(float sampleRate) {
+		this.sampleRate = sampleRate;
+	}
+
+	public String getSampleType() {
+		return sampleType;
+	}
+
+	public void setSampleType(String sampleType) {
+		this.sampleType = sampleType;
+	}
+
+	public String getSampleAddress() {
+		return sampleAddress;
+	}
+
+	public void setSampleAddress(String sampleAddress) {
+		this.sampleAddress = sampleAddress;
+	}
+
+	public String getSampleEncoding() {
+		return sampleEncoding;
+	}
+
+	public void setSampleEncoding(String sampleEncoding) {
+		this.sampleEncoding = sampleEncoding;
+	}
+	
 }

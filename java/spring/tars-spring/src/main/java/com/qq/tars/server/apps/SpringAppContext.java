@@ -62,6 +62,9 @@ public class SpringAppContext extends BaseAppContext {
 
         loadAppContextListeners(this.applicationContext);
         loadAppServants(this.applicationContext);
+        loadDefaultFilter();
+        loadAppFilters(this.applicationContext);
+        
     }
 
     private void loadAppContextListeners(ApplicationContext applicationContext) {
@@ -98,6 +101,9 @@ public class SpringAppContext extends BaseAppContext {
         }
     }
 
+    private void loadAppFilters(ApplicationContext applicationContext) {
+    	
+    }
     private AppService loadRestServant(ServantConfig servantConfig) throws Exception {
         String homeName = servantConfig.getName();
 

@@ -45,6 +45,7 @@ import com.qq.tars.server.core.ServantAdapter;
 import com.qq.tars.server.core.ServantHomeSkeleton;
 import com.qq.tars.support.log.LogConfCacheMngr;
 import com.qq.tars.support.log.LoggerFactory;
+import com.qq.tars.support.trace.TarsTraceZipkinConfiguration;
 
 public class TarsStartLifecycle extends BaseAppContext implements SmartLifecycle, ApplicationContextAware {
 
@@ -127,6 +128,8 @@ public class TarsStartLifecycle extends BaseAppContext implements SmartLifecycle
         servantAdapterConfig.setThreads(serverProperties.getThreads());
         servantAdapterConfig.setQueueCap(serverProperties.getQueueCap());
         servantAdapterConfig.setQueueTimeout(serverProperties.getQueueTimeout());
+        
+        TarsTraceZipkinConfiguration.getInstance().init();
     }
 
     private void loadAppServants() {
