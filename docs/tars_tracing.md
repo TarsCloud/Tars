@@ -126,7 +126,7 @@ tars框架内部采用opentracing api来封装调用链数据采集功能，并�
 | samplerate      | 浮点小数 | [0,1]   区间           | 采样率，范围为0~1。0代表不开启采样，按照百分比采样              |
 | sampleaddress   | 字符串  | 无                    | 采样数据上报地址，如果采用http方式上报，填写数据收集web服务器的url，采用zipkin收集数据即填zipkin server的url，如果采用kafka方式上报，填写kafka集群的地址。 |
 | sampletype      | 字符串  | http, kafka, kafka08 | 采样数据上报传输方式，对于集成zipkin的实现，目前支持通过http和kafka两种传输方式。填写"http"代表使用http协议上报，填写“kafka”表示将采集数据传输到kafka中。"kafka08"选项用于兼容0.10以下的kafka brokers，具体事项见下方注意第一条。 |
-| sampleencodeing | 字符串  | json,  pb            | 采样数据上报传输编码格式，对于集成zipkin的实现，支持json和protocol buffer proto3两种格式，填写"json"表示采用json编码，填写“pb”表示采用pb编码。 |
+| sampleencodeing | 字符串  | json,  proto            | 采样数据上报传输编码格式，对于集成zipkin的实现，支持json和protocol buffer proto3两种格式，填写"json"表示采用json编码，填写“proto”表示采用pb编码。 |
 
 注意：
 
