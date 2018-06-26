@@ -19,8 +19,8 @@ package com.qq.tars.client;
 public final class ClientVersion {
 
     public static final String major = "1";
-    public static final String minor = "0";
-    public static final String build = "1";
+    public static final String minor = "5";
+    public static final String build = "0";
 
     public static String getVersion() {
         return major + "." + minor + "." + build;

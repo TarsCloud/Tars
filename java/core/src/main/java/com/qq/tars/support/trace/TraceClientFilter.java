@@ -73,7 +73,7 @@ public class TraceClientFilter implements Filter {
         		scope.span().setTag("tars.interface", getObjName(servantName));
         		scope.span().setTag("tars.method", tarsServantRequest.getFunctionName());
         		scope.span().setTag("tars.protocol", protocol);
-        		scope.span().setTag("tars.version", ClientVersion.getVersion());
+        		scope.span().setTag("tars.client.version", ClientVersion.getVersion());
         		
         		
         		TarsServantResponse tarsServantResponse = (TarsServantResponse)response;

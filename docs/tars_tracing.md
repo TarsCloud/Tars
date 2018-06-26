@@ -205,16 +205,18 @@ trace_html=zipkin_address(include http://)
 
 调用链key-value信息说明：
 
-| key            | value                           |
-| -------------- | ------------------------------- |
-| client.ipv4    | 客户端ipv4地址。                      |
-| client.port    | 客户端端口。                          |
-| server.ipv4    | 服务端ipv4地址。                      |
-| server.port    | 服务端端口。                          |
-| tars.interface | 服务端被调接口名（对于tars-java来说就是一个obj）。 |
-| tars.method    | 服务端被调方法名。                       |
-| tars.protocol  | 数据编码协议。                         |
-| tars.retcode   | 调用返回码，0表示成功，非0为失败。              |
+| key                 | value                           |
+| ------------------- | ------------------------------- |
+| client.ipv4         | 客户端ipv4地址。                      |
+| client.port         | 客户端端口。                          |
+| server.ipv4         | 服务端ipv4地址。                      |
+| server.port         | 服务端端口。                          |
+| tars.interface      | 服务端被调接口名（对于tars-java来说就是一个obj）。 |
+| tars.method         | 服务端被调方法名。                       |
+| tars.protocol       | 数据编码协议。                         |
+| tars.retcode        | 调用返回码，0表示成功，非0为失败。              |
+| tars.client.version | 客户端tars版本                       |
+| tars.server.version | 服务端tars版本                       |
 
 
 
