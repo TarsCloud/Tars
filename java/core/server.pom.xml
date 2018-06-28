@@ -102,6 +102,7 @@
 						<include>com/qq/tars/register/**</include>
 						<include>com/qq/tars/support/log/**</include>
 						<include>com/qq/tars/support/om/**</include>
+						<include>com/qq/tars/support/trace/**</include>
 					</includes>
 				</configuration>
 			</plugin>
