@@ -8,7 +8,7 @@ class ProxyInfo extends \TARS_Struct
 
     public $bFromClient;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::BFROMCLIENT => array(
             'name' => 'bFromClient',
             'required' => true,
@@ -18,6 +18,6 @@ class ProxyInfo extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('tars_tarsstat_StatObj_ProxyInfo', self::$__fields);
+        parent::__construct('tars_tarsstat_StatObj_ProxyInfo', self::$_fields);
     }
 }

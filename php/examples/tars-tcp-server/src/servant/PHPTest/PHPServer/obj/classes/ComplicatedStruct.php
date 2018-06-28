@@ -14,7 +14,7 @@ class ComplicatedStruct extends \TARS_Struct
     public $mss;
     public $str;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::SS => array(
             'name' => 'ss',
             'required' => true,
@@ -39,7 +39,7 @@ class ComplicatedStruct extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('PHPTest_PHPServer_obj_ComplicatedStruct', self::$__fields);
+        parent::__construct('PHPTest_PHPServer_obj_ComplicatedStruct', self::$_fields);
         $this->rs = new SimpleStruct();
         $this->ss = new \TARS_Vector(new SimpleStruct());
         $this->mss = new \TARS_Map(\TARS::STRING, new SimpleStruct());

@@ -20,7 +20,7 @@ class LotofTags extends \TARS_Struct
     public $rs;
     public $mss;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::ID => array(
             'name' => 'id',
             'required' => true,
@@ -60,7 +60,7 @@ class LotofTags extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('App_Server_Servant_LotofTags', self::$__fields);
+        parent::__construct('App_Server_Servant_LotofTags', self::$_fields);
         $this->rs = new SimpleStruct();
         $this->ss = new \TARS_Vector(new SimpleStruct());
         $this->mss = new \TARS_Map(\TARS::STRING, new SimpleStruct());

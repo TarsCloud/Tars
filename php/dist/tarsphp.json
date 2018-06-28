@@ -9,9 +9,7 @@
           "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars2php-0.1.0.zip?raw=true",
           "type": "zip"
         }
-      }
-    },
-    "phptars/tars2php": {
+      },
       "0.1.1": {
         "name": "phptars/tars2php",
         "version": "0.1.1",
@@ -59,6 +57,25 @@
             "Tars\\client\\": "src/"
           }
         }
+      },
+      "0.1.2": {
+        "name": "phptars/tars-client",
+        "version": "0.1.2",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-client-0.1.2.zip?raw=true",
+          "type": "zip"
+        },
+        "require": {
+          "php": ">=5.3",
+          "phptars/tars-registry": "~0.1",
+          "phptars/tars-monitor": "~0.1",
+          "phptars/tars-utils": "~0.1"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\client\\": "src/"
+          }
+        }
       }
     },
     "phptars/tars-config": {
@@ -84,6 +101,23 @@
         "version": "0.1.1",
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-config-0.1.1.zip?raw=true",
+          "type": "zip"
+        },
+        "require":{
+          "php": ">=5.3",
+          "phptars/tars-client": "~0.1"
+        },
+        "autoload" : {
+          "psr-4": {
+            "Tars\\config\\": "src/"
+          }
+        }
+      },
+      "0.1.2": {
+        "name": "phptars/tars-config",
+        "version": "0.1.2",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-config-0.1.2.zip?raw=true",
           "type": "zip"
         },
         "require":{
@@ -146,6 +180,23 @@
             "Tars\\log\\": "src/"
           }
         }
+      },
+      "0.1.2": {
+        "name": "phptars/tars-log",
+        "version": "0.1.2",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-log-0.1.2.zip?raw=true",
+          "type": "zip"
+        },
+        "require":{
+          "php": ">=5.3",
+          "phptars/tars-client": "~0.1"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\log\\": "src/"
+          }
+        }
       }
     },
     "phptars/tars-monitor": {
@@ -154,6 +205,24 @@
         "version": "0.1.0",
         "dist": {
           "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-monitor-0.1.0.zip?raw=true",
+          "type": "zip"
+        },
+        "require":{
+          "php": ">=5.3",
+          "phptars/tars-utils": "~0.1",
+          "phptars/tars-registry": "~0.1"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\monitor\\": "src/"
+          }
+        }
+      },
+      "0.1.1": {
+        "name": "phptars/tars-monitor",
+        "version": "0.1.1",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-monitor-0.1.1.zip?raw=true",
           "type": "zip"
         },
         "require":{
