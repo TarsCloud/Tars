@@ -16,6 +16,7 @@ import com.qq.tars.net.core.Request;
 import com.qq.tars.net.core.Response;
 import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
+import com.qq.tars.server.ServerVersion;
 import com.qq.tars.server.config.ConfigurationManager;
 
 public class TraceServerFilter implements Filter {
@@ -53,6 +54,7 @@ public class TraceServerFilter implements Filter {
 						if (StringUtils.isNotEmpty(endpoint.setDivision())) {
 							scope.span().setTag("tars.set_division", endpoint.setDivision());
 						}
+						scope.span().setTag("tars.server.version", ServerVersion.getVersion());
 					}
 					chain.doFilter(request, response);
 					TarsServantResponse tarsServantResponse = (TarsServantResponse)response;
