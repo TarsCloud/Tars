@@ -1,10 +1,11 @@
 
 #-----------------------------------------------------------------------
 
-APP       := TestApp
+APP       := Test
 TARGET    := HelloServer
 CONFIG    := 
 STRIP_FLAG:= N
+TARS_SSL := 1
 
 INCLUDE   += 
 LIB       += 

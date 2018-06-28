@@ -15,7 +15,7 @@
  */
 
 #include "util/tc_mysql.h"
-#include "errmsg.h"
+#include "mysql/errmsg.h"
 #include <sstream>
 #include <string.h>
 

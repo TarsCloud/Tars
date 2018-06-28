@@ -16,6 +16,7 @@
 
 #include "HelloServer.h"
 #include "HelloImp.h"
+#include "Log.h"
 
 using namespace std;
 
@@ -28,6 +29,9 @@ HelloServer::initialize()
     //initialize application here:
     //...
 
+	LOG_DEBUG<<"Application="<<ServerConfig::Application
+		<<" ServerConfig::ServerName="<<ServerConfig::ServerName
+		<<endl;
     addServant<HelloImp>(ServerConfig::Application + "." + ServerConfig::ServerName + ".HelloObj");
 }
 /////////////////////////////////////////////////////////////////

@@ -14,7 +14,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-module TestApp
+module Test
 {
 
 interface Hello

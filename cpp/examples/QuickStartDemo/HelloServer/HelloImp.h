@@ -24,7 +24,7 @@
  *
  *
  */
-class HelloImp : public TestApp::Hello
+class HelloImp : public Test::Hello
 {
 public:
     /**
