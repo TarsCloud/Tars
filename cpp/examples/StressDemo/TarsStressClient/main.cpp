@@ -108,14 +108,13 @@ int main(int argc,char ** argv)
 
         cout << "init tp succ" << endl;
 
-        typedef void (Test1::*TpMem)(int,int);
         tars::Int32 times = TC_Common::strto<tars::Int32>(string(argv[2]));
 	tars::Int32 size  = TC_Common::strto<tars::Int32>(string(argv[4]));
         cout << "times:" << times << endl;
 
         for(int i = 0; i<threads; i++) 
         {
-            auto fw = std::bind(&Test1::dohandle, times, size);
+            auto fw = std::bind(&Test1::dohandle, &tm, times, size);
             tp.exec(fw);
             cout << "********************" <<endl;
         }

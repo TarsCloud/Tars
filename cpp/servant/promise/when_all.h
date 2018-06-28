@@ -21,6 +21,7 @@
 #include <vector>
 #include "tuple.h"
 #include "util/tc_monitor.h"
+#include "util/tc_shared_ptr.h"
 #include "util/detail/tc_assert.h"
 namespace promise 
 {
@@ -149,7 +150,7 @@ namespace promise
         class VectorParallelCallback 
         {
         public:
-            VectorParallelCallback(const std::shared_ptr<ParallelAllCallback<std::vector<Future<T> > > >& cb, size_t idx)
+            VectorParallelCallback(const tars::TC_SharedPtr<ParallelAllCallback<std::vector<Future<T> > > >& cb, size_t idx)
                 : m_parallel_callback(cb),
                   m_idx(idx)
             {}
@@ -160,7 +161,7 @@ namespace promise
             }
 
         private:
-            std::shared_ptr<ParallelAllCallback<std::vector<Future<T> > > > m_parallel_callback;
+            tars::TC_SharedPtr<ParallelAllCallback<std::vector<Future<T> > > > m_parallel_callback;
             size_t m_idx;
         };
         
@@ -179,7 +180,7 @@ namespace promise
         typedef detail::ParallelAllCallback<FutureAllValueType> WhenAllCallback;
 
         PromiseAll promise_all;
-        std::shared_ptr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
+        tars::TC_SharedPtr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
         future1.then(tars::TC_Bind(&WhenAllCallback::template on_future<0>, tars::tc_shared(future_callback)));
         future2.then(tars::TC_Bind(&WhenAllCallback::template on_future<1>, tars::tc_shared(future_callback)));
         return promise_all.getFuture();
@@ -194,7 +195,7 @@ namespace promise
         typedef detail::ParallelAllCallback<FutureAllValueType> WhenAllCallback;
 
         PromiseAll promise_all;
-        std::shared_ptr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
+        tars::TC_SharedPtr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
         future1.then(tars::TC_Bind(&WhenAllCallback::template on_future<0>, tars::tc_shared(future_callback)));
         future2.then(tars::TC_Bind(&WhenAllCallback::template on_future<1>, tars::tc_shared(future_callback)));
         future3.then(tars::TC_Bind(&WhenAllCallback::template on_future<2>, tars::tc_shared(future_callback)));
@@ -210,7 +211,7 @@ namespace promise
         typedef detail::ParallelAllCallback<FutureAllValueType> WhenAllCallback;
 
         PromiseAll promise_all;
-        std::shared_ptr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
+        tars::TC_SharedPtr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
         future1.then(tars::TC_Bind(&WhenAllCallback::template on_future<0>, tars::tc_shared(future_callback)));
         future2.then(tars::TC_Bind(&WhenAllCallback::template on_future<1>, tars::tc_shared(future_callback)));
         future3.then(tars::TC_Bind(&WhenAllCallback::template on_future<2>, tars::tc_shared(future_callback)));
@@ -228,7 +229,7 @@ namespace promise
         typedef detail::ParallelAllCallback<FutureAllValueType> WhenAllCallback;
 
         PromiseAll promise_all;
-        std::shared_ptr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
+        tars::TC_SharedPtr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
         future1.then(tars::TC_Bind(&WhenAllCallback::template on_future<0>, tars::tc_shared(future_callback)));
         future2.then(tars::TC_Bind(&WhenAllCallback::template on_future<1>, tars::tc_shared(future_callback)));
         future3.then(tars::TC_Bind(&WhenAllCallback::template on_future<2>, tars::tc_shared(future_callback)));
@@ -247,7 +248,7 @@ namespace promise
         typedef detail::ParallelAllCallback<FutureAllValueType> WhenAllCallback;
 
         PromiseAll promise_all;
-        std::shared_ptr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
+        tars::TC_SharedPtr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
         future1.then(tars::TC_Bind(&WhenAllCallback::template on_future<0>, tars::tc_shared(future_callback)));
         future2.then(tars::TC_Bind(&WhenAllCallback::template on_future<1>, tars::tc_shared(future_callback)));
         future3.then(tars::TC_Bind(&WhenAllCallback::template on_future<2>, tars::tc_shared(future_callback)));
@@ -267,7 +268,7 @@ namespace promise
         typedef detail::ParallelAllCallback<FutureAllValueType> WhenAllCallback;
 
         PromiseAll promise_all;
-        std::shared_ptr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
+        tars::TC_SharedPtr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
         future1.then(tars::TC_Bind(&WhenAllCallback::template on_future<0>, tars::tc_shared(future_callback)));
         future2.then(tars::TC_Bind(&WhenAllCallback::template on_future<1>, tars::tc_shared(future_callback)));
         future3.then(tars::TC_Bind(&WhenAllCallback::template on_future<2>, tars::tc_shared(future_callback)));
@@ -288,7 +289,7 @@ namespace promise
         typedef detail::ParallelAllCallback<FutureAllValueType> WhenAllCallback;
 
         PromiseAll promise_all;
-        std::shared_ptr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
+        tars::TC_SharedPtr<WhenAllCallback> future_callback(new WhenAllCallback(promise_all));
         future1.then(tars::TC_Bind(&WhenAllCallback::template on_future<0>, tars::tc_shared(future_callback)));
         future2.then(tars::TC_Bind(&WhenAllCallback::template on_future<1>, tars::tc_shared(future_callback)));
         future3.then(tars::TC_Bind(&WhenAllCallback::template on_future<2>, tars::tc_shared(future_callback)));
@@ -315,7 +316,7 @@ namespace promise
         } 
         else 
         {
-            std::shared_ptr<WhenAllCallback> when_all_callback(new WhenAllCallback(promise_all, std::distance(first, last)));
+            tars::TC_SharedPtr<WhenAllCallback> when_all_callback(new WhenAllCallback(promise_all, std::distance(first, last)));
             size_t i;
 
             for (i = 0; first != last; ++first, ++i) 
