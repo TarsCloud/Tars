@@ -54,8 +54,8 @@ template<typename TWriter = BufferWriter, typename TReader = BufferReader,templa
 class UniAttribute
 {
     typedef vector<char,Alloc<char> > VECTOR_CHAR_TYPE;
-    typedef map<string, VECTOR_CHAR_TYPE, less<string>,Alloc< pair<string,VECTOR_CHAR_TYPE > > > VECTOR_CHAR_IN_MAP_TYPE;
-    typedef map<string, VECTOR_CHAR_IN_MAP_TYPE, less<string>,Alloc< pair<string,VECTOR_CHAR_IN_MAP_TYPE > > >   WUP_DATA_TYPE;
+    typedef map<string, VECTOR_CHAR_TYPE, less<string>,Alloc< pair<const string,VECTOR_CHAR_TYPE > > > VECTOR_CHAR_IN_MAP_TYPE;
+    typedef map<string, VECTOR_CHAR_IN_MAP_TYPE, less<string>,Alloc< pair<const string,VECTOR_CHAR_IN_MAP_TYPE > > >   WUP_DATA_TYPE;
 
 public:
 	/**
