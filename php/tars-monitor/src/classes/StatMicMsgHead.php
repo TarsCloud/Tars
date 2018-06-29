@@ -28,7 +28,7 @@ class StatMicMsgHead extends \TARS_Struct
     public $slaveSetID;
     public $tarsVersion;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::MASTERNAME => array(
             'name' => 'masterName',
             'required' => true,
@@ -88,6 +88,6 @@ class StatMicMsgHead extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('tars_tarsstat_StatObj_StatMicMsgHead', self::$__fields);
+        parent::__construct('tars_tarsstat_StatObj_StatMicMsgHead', self::$_fields);
     }
 }

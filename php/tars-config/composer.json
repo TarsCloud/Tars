@@ -2,7 +2,7 @@
   "name": "phptars/tars-config",
   "description": "tars的配置拉取",
   "minimum-stability": "dev",
-  "version":"0.1.1",
+  "version":"0.1.2",
   "authors": [
     {
       "name": "Chen liang",

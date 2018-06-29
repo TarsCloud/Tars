@@ -18,7 +18,7 @@ class GetConfigListInfo extends \TARS_Struct
     public $setdivision = '';
     public $containername = '';
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::APPNAME => array(
             'name' => 'appname',
             'required' => true,
@@ -53,6 +53,6 @@ class GetConfigListInfo extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('tars_tarsconfig_ConfigObj_GetConfigListInfo', self::$__fields);
+        parent::__construct('tars_tarsconfig_ConfigObj_GetConfigListInfo', self::$_fields);
     }
 }

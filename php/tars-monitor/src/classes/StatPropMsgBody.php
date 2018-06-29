@@ -8,7 +8,7 @@ class StatPropMsgBody extends \TARS_Struct
 
     public $vInfo;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::VINFO => array(
             'name' => 'vInfo',
             'required' => true,
@@ -18,7 +18,7 @@ class StatPropMsgBody extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('tars_tarsproperty_PropertyObj_StatPropMsgBody', self::$__fields);
+        parent::__construct('tars_tarsproperty_PropertyObj_StatPropMsgBody', self::$_fields);
         $this->vInfo = new \TARS_Vector(new StatPropInfo());
     }
 }

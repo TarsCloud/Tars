@@ -79,7 +79,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>qq-cloud-central</groupId>
+			<groupId>com.tencent.tars</groupId>
 			<artifactId>tars-client</artifactId>
 			<version>1.0.3</version>
 		</dependency>

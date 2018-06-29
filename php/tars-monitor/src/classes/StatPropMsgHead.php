@@ -22,7 +22,7 @@ class StatPropMsgHead extends \TARS_Struct
     public $sContainer;
     public $iPropertyVer = 1;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::MODULENAME => array(
             'name' => 'moduleName',
             'required' => true,
@@ -67,6 +67,6 @@ class StatPropMsgHead extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('tars_tarsproperty_PropertyObj_StatPropMsgHead', self::$__fields);
+        parent::__construct('tars_tarsproperty_PropertyObj_StatPropMsgHead', self::$_fields);
     }
 }
