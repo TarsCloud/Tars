@@ -112,12 +112,11 @@ public:
 		{
 			bsuccess = __sync_bool_compare_and_swap(&(((Entry*)&(_head[1]))[pos].flag), FLAG_NULL, FLAG_SETTOOK);
 		}while(false == bsuccess);
-		
+
         ((Entry*)&(_head[1]))[pos].data = val;
+        __sync_synchronize();
 		
 		((Entry*)&(_head[1]))[pos].flag = FLAG_SETED;
-
-        __sync_synchronize();
 
         return RT_OK;
     }
@@ -165,10 +164,10 @@ public:
 		}while(false == bsuccess);
 		
 		val = ((Entry*)&(_head[1]))[pos].data;
+        __sync_synchronize();
 		
 		((Entry*)&(_head[1]))[pos].flag = FLAG_NULL;
 
-        __sync_synchronize();
         return RT_OK;
     }
 

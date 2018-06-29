@@ -231,16 +231,23 @@ string TC_File::simplifyDirectory(const string& path)
 
 string TC_File::load2str(const string &sFullFileName)
 {
-    ifstream ifs(sFullFileName.c_str());
+    ifstream ifs(sFullFileName.c_str(), std::ios_base::binary);
+    if (ifs.bad())
+        return "";
 
-    return string(istreambuf_iterator<char>(ifs), istreambuf_iterator<char>());
+    std::string s((istreambuf_iterator<char>(ifs)), istreambuf_iterator<char>());
+    ifs.close();
+
+    return s;
 }
 
 void TC_File::load2str(const string &sFullFileName, vector<char> &buffer)
 {
     buffer.clear();
 
-    ifstream ifs(sFullFileName.c_str());
+    ifstream ifs(sFullFileName.c_str(), std::ios_base::binary);
+    if (ifs.bad())
+        return;
 
     buffer.insert(buffer.end(), istreambuf_iterator<char>(ifs), istreambuf_iterator<char>());
 }
