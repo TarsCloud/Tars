@@ -20,7 +20,7 @@ class StatMicMsgBody extends \TARS_Struct
     public $maxRspTime;
     public $minRspTime;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::COUNT => array(
             'name' => 'count',
             'required' => true,
@@ -60,7 +60,7 @@ class StatMicMsgBody extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('tars_tarsstat_StatObj_StatMicMsgBody', self::$__fields);
+        parent::__construct('tars_tarsstat_StatObj_StatMicMsgBody', self::$_fields);
         $this->intervalCount = new \TARS_Map(\TARS::INT32, \TARS::INT32);
     }
 }

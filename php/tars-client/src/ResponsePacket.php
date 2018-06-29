@@ -18,7 +18,7 @@ class ResponsePacket
         // 接下来解码
         $decodeRet = \TUPAPI::decode($this->_responseBuf, $this->iVersion);
         if ($decodeRet['iRet'] !== 0) {
-            $msg = $decodeRet['sResultDesc'];
+            $msg = isset($decodeRet['sResultDesc'])?$decodeRet['sResultDesc']:"";
             throw new \Exception($msg, $decodeRet['iRet']);
         }
         $sBuffer = $decodeRet['sBuffer'];

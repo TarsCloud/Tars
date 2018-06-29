@@ -24,7 +24,6 @@
 #include <list>
 #include <algorithm>
 #include <functional>
-#include <semaphore.h>
 #include "util/tc_epoller.h"
 #include "util/tc_thread.h"
 #include "util/tc_clientsocket.h"
@@ -37,7 +36,6 @@
 #include "util/tc_fifo.h"
 #include "util/tc_buffer.h"
 #include "util/tc_buffer_pool.h"
-#include "util/tc_lockfree_queue.h"
 
 using namespace std;
 
@@ -153,16 +151,8 @@ public:
      */
     struct HandleGroup : public TC_HandleBase
     {
-        HandleGroup():runningCount(0), handleCount(0), recvCount(0)
-        {
-            sem_init(&sem,0,0);
-        }
-        volatile int runningCount;
-        volatile int handleCount;
-        volatile int recvCount;
-        sem_t sem;
-
         string                      name;
+        TC_ThreadLock               monitor;
         vector<HandlePtr>           handles;
         map<string, BindAdapterPtr> adapters;
     };
@@ -789,7 +779,7 @@ public:
         /**
          * 接收的数据队列
          */
-        LockFreeQueue<tagRecvData*> _rBufQueue;
+        recv_queue      _rbuffer;
 
         /**
          * 队列最大容量
@@ -1557,7 +1547,7 @@ public:
         /**
          * 发送队列
          */
-        LockFreeQueue<tagSendData*> _sBufQueue;
+        send_queue                  _sbuffer;
 
         /**
          * BindAdapter是否有udp监听

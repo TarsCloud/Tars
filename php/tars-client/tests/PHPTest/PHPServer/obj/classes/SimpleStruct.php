@@ -12,7 +12,7 @@ class SimpleStruct extends \TARS_Struct
     public $count;
     public $page;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::ID => array(
             'name' => 'id',
             'required' => true,
@@ -32,6 +32,6 @@ class SimpleStruct extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('App_Server_Servant_SimpleStruct', self::$__fields);
+        parent::__construct('App_Server_Servant_SimpleStruct', self::$_fields);
     }
 }

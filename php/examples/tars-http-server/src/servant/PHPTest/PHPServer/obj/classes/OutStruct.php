@@ -14,7 +14,7 @@ class OutStruct extends \TARS_Struct
     public $page;
     public $str;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::ID => array(
             'name' => 'id',
             'required' => true,
@@ -39,6 +39,6 @@ class OutStruct extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('PHPTest_PHPServer_obj_OutStruct', self::$__fields);
+        parent::__construct('PHPTest_PHPServer_obj_OutStruct', self::$_fields);
     }
 }

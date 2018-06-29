@@ -81,10 +81,7 @@ pthread_key_t TC_ThreadPool::g_key;
 void TC_ThreadPool::destructor(void *p)
 {
     ThreadData *ttd = (ThreadData*)p;
-    if(ttd)
-    {
-        delete ttd;
-    }
+    delete ttd;
 }
 
 void TC_ThreadPool::exit()

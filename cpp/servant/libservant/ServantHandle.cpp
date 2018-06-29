@@ -108,31 +108,24 @@ void ServantHandle::run()
 void ServantHandle::handleRequest()
 {
     bool bYield = false;
-
-    __sync_fetch_and_add(&(_handleGroup->handleCount), 1);
-    __sync_fetch_and_add(&(_handleGroup->runningCount), 1);
-
-    struct timespec ts;
-
     while (!getEpollServer()->isTerminate())
     {
         bool bServerReqEmpty = false;
 
-        uint64_t inow = TNOWMS + 3000;
-        ts.tv_sec = inow / 1000;
-        ts.tv_nsec = inow % 1000 * 1000 * 1000;
-        if (_handleGroup->recvCount <= 0)
         {
-            __sync_fetch_and_sub(&(_handleGroup->runningCount), 1);
-            if(_coroSched->getResponseCoroSize() > 0)
+            TC_ThreadLock::Lock lock(_handleGroup->monitor);
+
+            if (allAdapterIsEmpty() && allFilterIsEmpty())
             {
-                bServerReqEmpty = true;
+                if(_coroSched->getResponseCoroSize() > 0)
+                {
+                    bServerReqEmpty = true;
+                }
+                else
+                {
+                    _handleGroup->monitor.timedWait(3000);
+                }
             }
-            else
-            {
-                sem_timedwait(&(_handleGroup->sem), &ts);
-            }
-            __sync_fetch_and_add(&(_handleGroup->runningCount), 1);
         }
 
         //上报心跳
