@@ -338,6 +338,12 @@ void TC_EpollServer::BindAdapter::insertRecvQueue(const recv_queue::queue_type &
     recv_queue::queue_type::const_iterator itEnd = vtRecvData.end();
     for(;it != itEnd;it++)
     {
+        if (*it == NULL)
+        {
+            _pEpollServer->error("[TC_EpollServer::insertRecvQueue] NULL item!");
+            continue;
+        }
+
         int ret = _rBufQueue.enqueue(*it, false);
         if (ret == LockFreeQueue<tagRecvData*>::RT_OK) 
         {
@@ -369,7 +375,13 @@ bool TC_EpollServer::BindAdapter::waitForRecvQueue(tagRecvData* &recv, uint32_t 
     else
         bRet = false;
 
-    return bRet;
+    if (bRet)
+    {
+        if (!recv)
+            _pEpollServer->error("[TC_EpollServer::waitForRecvQueue] null recv!");
+    }
+
+    return recv != NULL;
 }
 
 size_t TC_EpollServer::BindAdapter::getRecvBufferSize() const

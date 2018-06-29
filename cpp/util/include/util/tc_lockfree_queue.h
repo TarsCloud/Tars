@@ -117,6 +117,8 @@ public:
 		
 		((Entry*)&(_head[1]))[pos].flag = FLAG_SETED;
 
+        __sync_synchronize();
+
         return RT_OK;
     }
 
@@ -166,6 +168,7 @@ public:
 		
 		((Entry*)&(_head[1]))[pos].flag = FLAG_NULL;
 
+        __sync_synchronize();
         return RT_OK;
     }
 
