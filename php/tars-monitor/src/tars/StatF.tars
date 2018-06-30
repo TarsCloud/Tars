@@ -1,0 +1,92 @@
+/**
+ * Tencent is pleased to support the open source community by making Tars available.
+ *
+ * Copyright (C) 2016THL A29 Limited, a Tencent company. All rights reserved.
+ *
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * https://opensource.org/licenses/BSD-3-Clause
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+module tars
+{
+
+//模块间调用包头 Mic = module interval call
+struct StatMicMsgHead
+{
+      0 require string masterName;       //主调模块name
+      1 require string slaveName;        //被调模块name
+      2 require string interfaceName;    //被调模块接口name
+      3 require string masterIp;         //主调ip
+      4 require string slaveIp;          //被调ip
+      5 require int slavePort;           //被调端口
+      6 require int returnValue;         //返回值
+      7 optional string slaveSetName;    //被调set名
+      8 optional string slaveSetArea;    //被调set地区名
+      9 optional string slaveSetID;      //被调set组名
+      10 optional string tarsVersion;     //主调tars版本
+};
+
+key[StatMicMsgHead, masterName, slaveName,interfaceName,masterIp,slaveIp,slavePort,returnValue, slaveSetName, slaveSetArea, slaveSetID, tarsVersion];
+
+//模块间调用包体协议
+struct StatMicMsgBody
+{
+      0 require int count;                  //成功调用量
+      1 require int timeoutCount;           //超时调用量
+      2 require int execCount;              //异常调用量
+                                            //以下字段针对成功调用量所作统计
+      3 require map<int,int> intervalCount; //时间间隔内调用量
+      4 require long totalRspTime;          //调用总时间用来计算平均时间
+      5 require int maxRspTime;             //最大响应时间
+      6 require int minRspTime;             //最小响应时间
+};
+
+//模块间调用采样信息
+struct StatSampleMsg
+{
+      0 require string unid;             //唯一id值
+      1 require string masterName;       //主调模块name
+      2 require string slaveName;        //被调模块name
+      3 require string interfaceName;    //被调模块接口name
+      4 require string masterIp;         //主调ip
+      5 require string slaveIp;          //被调ip
+      6 require int depth;               //深度值
+      7 require int width;               //广度值
+      8 require int parentWidth;         //父节点广度值
+};
+
+struct ProxyInfo
+{
+    0 require bool bFromClient;//是否来自客户端
+};
+/**
+ *
+ * 上报服务的接口
+ *
+ **/
+interface StatF
+{
+    /**
+     * 上报模块间调用信息 Mic = module interval call
+     * @param statmsg,             上报信息
+     * @param bFromServer,         上报源  bFromClient: true 客户端发起的上报 false 服务端发起上报
+     * @return int,                返回0表示成功
+     */
+    int reportMicMsg( map<StatMicMsgHead,StatMicMsgBody> msg, bool bFromClient);
+
+    /**
+     * 上报模块间调用采样信息 Mic = module interval call
+     * @param msg,               上报信息
+     * @return int,                返回0表示成功
+     */
+    int reportSampleMsg(vector<StatSampleMsg> msg);
+};
+
+};

@@ -19,8 +19,8 @@ package com.qq.tars.server;
 public final class ServerVersion {
 
     public static final String major = "1";
-    public static final String minor = "0";
-    public static final String build = "3";
+    public static final String minor = "5";
+    public static final String build = "0";
 
     public static String getVersion() {
         return major + "." + minor + "." + build;

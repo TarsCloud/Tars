@@ -200,36 +200,16 @@ public class PatchRequest {
 	}
 
 	public void writeTo(TarsOutputStream _os) {
-		if (null != appname) {
-			_os.write(appname, 0);
-		}
-		if (null != servername) {
-			_os.write(servername, 1);
-		}
-		if (null != nodename) {
-			_os.write(nodename, 2);
-		}
-		if (null != groupname) {
-			_os.write(groupname, 3);
-		}
-		if (null != binname) {
-			_os.write(binname, 4);
-		}
-		if (null != version) {
-			_os.write(version, 5);
-		}
-		if (null != user) {
-			_os.write(user, 6);
-		}
-		if (null != servertype) {
-			_os.write(servertype, 7);
-		}
-		if (null != patchobj) {
-			_os.write(patchobj, 8);
-		}
-		if (null != md5) {
-			_os.write(md5, 9);
-		}
+		_os.write(appname, 0);
+		_os.write(servername, 1);
+		_os.write(nodename, 2);
+		_os.write(groupname, 3);
+		_os.write(binname, 4);
+		_os.write(version, 5);
+		_os.write(user, 6);
+		_os.write(servertype, 7);
+		_os.write(patchobj, 8);
+		_os.write(md5, 9);
 		if (null != ostype) {
 			_os.write(ostype, 10);
 		}
@@ -238,19 +218,20 @@ public class PatchRequest {
 		}
 	}
 
+
 	public void readFrom(TarsInputStream _is) {
-		this.appname = _is.read(appname, 0, true);
-		this.servername = _is.read(servername, 1, true);
-		this.nodename = _is.read(nodename, 2, true);
-		this.groupname = _is.read(groupname, 3, true);
-		this.binname = _is.read(binname, 4, true);
-		this.version = _is.read(version, 5, true);
-		this.user = _is.read(user, 6, true);
-		this.servertype = _is.read(servertype, 7, true);
-		this.patchobj = _is.read(patchobj, 8, true);
-		this.md5 = _is.read(md5, 9, true);
-		this.ostype = _is.read(ostype, 10, false);
-		this.filepath = _is.read(filepath, 11, false);
+		this.appname = _is.readString(0, true);
+		this.servername = _is.readString(1, true);
+		this.nodename = _is.readString(2, true);
+		this.groupname = _is.readString(3, true);
+		this.binname = _is.readString(4, true);
+		this.version = _is.readString(5, true);
+		this.user = _is.readString(6, true);
+		this.servertype = _is.readString(7, true);
+		this.patchobj = _is.readString(8, true);
+		this.md5 = _is.readString(9, true);
+		this.ostype = _is.readString(10, false);
+		this.filepath = _is.readString(11, false);
 	}
 
 }

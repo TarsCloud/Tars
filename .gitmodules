@@ -28,3 +28,9 @@
 [submodule "nodejs/registry"]
 	path = nodejs/registry
 	url = https://github.com/tars-node/registry.git
+[submodule "nodejs/stream"]
+	path = nodejs/stream
+	url = https://github.com/tars-node/stream.git
+[submodule "nodejs/rpc"]
+	path = nodejs/rpc
+	url = https://github.com/tars-node/rpc.git

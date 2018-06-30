@@ -16,8 +16,13 @@
 
 package com.qq.tars.server.core;
 
+import java.util.List;
 import java.util.Random;
 
+import com.qq.tars.common.AbstractFilterChain;
+import com.qq.tars.common.Filter;
+import com.qq.tars.common.FilterChain;
+import com.qq.tars.common.FilterKind;
 import com.qq.tars.common.support.Endpoint;
 import com.qq.tars.common.util.Constants;
 import com.qq.tars.common.util.DyeingKeyCache;
@@ -41,6 +46,7 @@ import com.qq.tars.support.log.Logger;
 import com.qq.tars.support.log.Logger.LogType;
 import com.qq.tars.support.om.OmServiceMngr;
 import com.qq.tars.support.stat.InvokeStatHelper;
+import com.qq.tars.support.trace.TraceManager;
 
 public class TarsServantProcessor extends Processor {
 
@@ -90,6 +96,7 @@ public class TarsServantProcessor extends Processor {
             DistributedContext distributedContext = DistributedContextManager.getDistributedContext();
             distributedContext.put(DyeingSwitch.REQ, request);
             distributedContext.put(DyeingSwitch.RES, response);
+            distributedContext.put(TraceManager.INTERNAL_SERVANT_NAME, request.getServantName());
 
             appContext = AppContextManager.getInstance().getAppContext();
             if (appContext == null) throw new RuntimeException("failed to find the application named:[ROOT]");
@@ -98,9 +105,9 @@ public class TarsServantProcessor extends Processor {
             preInvokeSkeleton();
             skeleton = appContext.getCapHomeSkeleton(request.getServantName());
             if (skeleton == null) throw new RuntimeException("failed to find the servant named[" + request.getServantName() + "]");
-
-            value = skeleton.invoke(request.getMethodInfo().getMethod(), request.getMethodParameters());
-            response.setResult(value);
+            List<Filter> filters = AppContextManager.getInstance().getAppContext().getFilters(FilterKind.SERVER);
+            FilterChain filterChain = new TarsServerFilterChain(filters, request.getServantName(), FilterKind.SERVER, skeleton);
+            filterChain.doFilter(request, response);
         } catch (Throwable cause) {
             cause.printStackTrace();
             System.out.println("ERROR: " + cause.getMessage());

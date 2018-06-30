@@ -61,6 +61,11 @@ public class XmlAppContext extends BaseAppContext {
         loadAppContextListeners(elements);
 
         loadAppServants(elements);
+        
+        loadDefaultFilter();
+        
+        loadAppFilters(elements);
+        
     }
 
     private void loadInitParams(ArrayList<XMLConfigElement> list) {
@@ -90,6 +95,9 @@ public class XmlAppContext extends BaseAppContext {
                 }
             }
         }
+    }
+    private void loadAppFilters(ArrayList<XMLConfigElement> list) {
+    	
     }
 
     private void loadAppServants(ArrayList<XMLConfigElement> elements) throws ClassNotFoundException, InstantiationException, IllegalAccessException {

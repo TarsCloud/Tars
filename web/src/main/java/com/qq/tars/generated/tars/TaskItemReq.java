@@ -193,16 +193,24 @@ public class TaskItemReq {
 		}
 	}
 
+	static java.util.Map<String, String> cache_parameters;
+	static { 
+		cache_parameters = new java.util.HashMap<String, String>();
+		String var_1 = "";
+		String var_2 = "";
+		cache_parameters.put(var_1 ,var_2);
+	}
+
 	public void readFrom(TarsInputStream _is) {
-		this.taskNo = _is.read(taskNo, 0, false);
-		this.itemNo = _is.read(itemNo, 1, false);
-		this.application = _is.read(application, 2, false);
-		this.serverName = _is.read(serverName, 3, false);
-		this.nodeName = _is.read(nodeName, 4, false);
-		this.setName = _is.read(setName, 5, false);
-		this.command = _is.read(command, 6, false);
-		this.userName = _is.read(userName, 7, false);
-		this.parameters = (java.util.Map<String, String>) _is.read(parameters, 8, false);
+		this.taskNo = _is.readString(0, false);
+		this.itemNo = _is.readString(1, false);
+		this.application = _is.readString(2, false);
+		this.serverName = _is.readString(3, false);
+		this.nodeName = _is.readString(4, false);
+		this.setName = _is.readString(5, false);
+		this.command = _is.readString(6, false);
+		this.userName = _is.readString(7, false);
+		this.parameters = (java.util.Map<String, String>) _is.read(cache_parameters, 8, false);
 	}
 
 }

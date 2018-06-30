@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.qq.tars.common.Filter;
+import com.qq.tars.common.FilterChain;
+import com.qq.tars.common.FilterKind;
 import com.qq.tars.common.util.StringUtils;
 import com.qq.tars.net.core.Processor;
 import com.qq.tars.protocol.annotation.Servant;
@@ -309,4 +312,10 @@ public class AppContextImpl implements AppContext {
             servantAdapter.stop();
         }
     }
+
+	@Override
+	public List<Filter> getFilters(FilterKind kind) {
+		return null;
+	}
+
 }

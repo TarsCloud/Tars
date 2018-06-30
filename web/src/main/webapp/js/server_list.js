@@ -567,10 +567,7 @@ function addAdapter() {
                 showErrorMsg($box,'OBJ名和绑定地址为必填项!!!');
                 return;
             }
-            if(!/^[a-zA-Z]+$/.test($.trim($('#a-servant-name').val()))){
-                showErrorMsg($box,'OBJ名称必须为全英文');
-                return;
-            }
+ 
             if(!/^\d+$/g.test(paramObj.thread_num) || parseInt(paramObj.thread_num)<1){
                 showErrorMsg($box,'线程数必须为数字,且大于0');
                 return;
@@ -686,10 +683,6 @@ function updateAdapter(id,tar,protocol,handlegroup,allowip) {
                 },regIP = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
             if(!paramObj.servant || !paramObj.endpoint){
                 showErrorMsg($box,'OBJ名和绑定地址为必填项!!!');
-                return;
-            }
-            if(!/^[a-zA-Z]+$/.test($.trim($('#a-servant-name').val()))){
-                showErrorMsg($box,'OBJ名称必须为全英文');
                 return;
             }
             if(!/^\d+$/g.test(paramObj.thread_num) || parseInt(paramObj.thread_num)<1){

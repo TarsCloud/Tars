@@ -321,6 +321,31 @@ protected:
     tars::CoroParallelBasePtr _pPtr;
 };
 
+// for http
+class HttpCallback : public TC_HandleBase
+{
+public:
+    virtual ~HttpCallback() {}
+    virtual int onHttpResponse(const std::map<std::string, std::string>& requestHeaders ,
+                               const std::map<std::string, std::string>& responseHeaders ,
+                               const std::vector<char>& rspBody) = 0;
+    virtual int onHttpResponseException(const std::map<std::string, std::string>& requestHeaders,
+                                        int expCode) = 0;
+};
+
+class HttpServantProxyCallback : virtual public ServantProxyCallback
+{
+public:
+    explicit
+    HttpServantProxyCallback(HttpCallback* cb);
+
+    virtual int onDispatch(ReqMessagePtr msg);
+
+private:
+    TC_AutoPtr<HttpCallback> _httpCb;
+};
+
+
 //////////////////////////////////////////////////////////////////////////
 /**
  * 1:远程对象的本地代理
@@ -463,7 +488,7 @@ public:
      * 设置用户自定义协议
      * @param protocol
      */
-    void tars_set_protocol(const ProxyProtocol& protocol);
+    void tars_set_protocol(const ProxyProtocol& protocol, const std::string& protoName = "tars");
 
     /**
     *设置套接字选项
@@ -570,6 +595,22 @@ public:
                                 const char* buff, uint32_t len,
                                 const ServantProxyCallbackPtr& callback,
                                 bool bCoro = false);
+
+    /**
+     * http1 or 2协议同步远程调用
+     */
+    void http_call(const std::string& method,
+                   const std::string& uri,
+                   const std::map<std::string, std::string>& headers,
+                   const std::string& body,
+                   std::map<std::string, std::string>& rheaders,
+                   std::string& rbody);
+    /**
+     * http2协议异步远程调用
+     */
+    void http_call_async(const std::map<std::string, std::string>& headers,
+                         const std::string& body,
+                         HttpCallback* cb);
 
     /**
      * 在RequestPacket中的context设置主调信息标识

@@ -122,9 +122,7 @@ public class GetConfigListInfo {
 	}
 
 	public void writeTo(TarsOutputStream _os) {
-		if (null != appname) {
-			_os.write(appname, 0);
-		}
+		_os.write(appname, 0);
 		if (null != servername) {
 			_os.write(servername, 1);
 		}
@@ -140,13 +138,14 @@ public class GetConfigListInfo {
 		}
 	}
 
+
 	public void readFrom(TarsInputStream _is) {
-		this.appname = _is.read(appname, 0, true);
-		this.servername = _is.read(servername, 1, false);
+		this.appname = _is.readString(0, true);
+		this.servername = _is.readString(1, false);
 		this.bAppOnly = _is.read(bAppOnly, 2, false);
-		this.host = _is.read(host, 3, false);
-		this.setdivision = _is.read(setdivision, 4, false);
-		this.containername = _is.read(containername, 5, false);
+		this.host = _is.readString(3, false);
+		this.setdivision = _is.readString(4, false);
+		this.containername = _is.readString(5, false);
 	}
 
 }

@@ -128,21 +128,18 @@ public class PreparePatchInfo {
 		_os.write(bPreparePatching, 0);
 		_os.write(iPercent, 1);
 		_os.write(iModifyTime, 2);
-		if (null != sVersion) {
-			_os.write(sVersion, 3);
-		}
-		if (null != sResult) {
-			_os.write(sResult, 4);
-		}
+		_os.write(sVersion, 3);
+		_os.write(sResult, 4);
 		_os.write(ret, 5);
 	}
+
 
 	public void readFrom(TarsInputStream _is) {
 		this.bPreparePatching = _is.read(bPreparePatching, 0, true);
 		this.iPercent = _is.read(iPercent, 1, true);
 		this.iModifyTime = _is.read(iModifyTime, 2, true);
-		this.sVersion = _is.read(sVersion, 3, true);
-		this.sResult = _is.read(sResult, 4, true);
+		this.sVersion = _is.readString(3, true);
+		this.sResult = _is.readString(4, true);
 		this.ret = _is.read(ret, 5, false);
 	}
 

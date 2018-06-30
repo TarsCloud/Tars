@@ -143,13 +143,18 @@ public class TaskItemRsp {
 		}
 	}
 
+	static TaskItemReq cache_req;
+	static { 
+		cache_req = new TaskItemReq();
+	}
+
 	public void readFrom(TarsInputStream _is) {
-		this.req = (TaskItemReq) _is.read(req, 0, false);
-		this.startTime = _is.read(startTime, 1, false);
-		this.endTime = _is.read(endTime, 2, false);
-		this.status = (int) _is.read(status, 3, false);
-		this.statusInfo = _is.read(statusInfo, 4, false);
-		this.executeLog = _is.read(executeLog, 5, false);
+		this.req = (TaskItemReq) _is.read(cache_req, 0, false);
+		this.startTime = _is.readString(1, false);
+		this.endTime = _is.readString(2, false);
+		this.status = _is.read(status, 3, false);
+		this.statusInfo = _is.readString(4, false);
+		this.executeLog = _is.readString(5, false);
 	}
 
 }

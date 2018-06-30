@@ -135,35 +135,24 @@ public class ServerStateDesc {
 	}
 
 	public void writeTo(TarsOutputStream _os) {
-		if (null != settingStateInReg) {
-			_os.write(settingStateInReg, 0);
-		}
-		if (null != presentStateInReg) {
-			_os.write(presentStateInReg, 1);
-		}
-		if (null != presentStateInNode) {
-			_os.write(presentStateInNode, 2);
-		}
+		_os.write(settingStateInReg, 0);
+		_os.write(presentStateInReg, 1);
+		_os.write(presentStateInNode, 2);
 		_os.write(processId, 3);
-		if (null != patchVersion) {
-			_os.write(patchVersion, 4);
-		}
-		if (null != patchTime) {
-			_os.write(patchTime, 5);
-		}
-		if (null != patchUser) {
-			_os.write(patchUser, 6);
-		}
+		_os.write(patchVersion, 4);
+		_os.write(patchTime, 5);
+		_os.write(patchUser, 6);
 	}
 
+
 	public void readFrom(TarsInputStream _is) {
-		this.settingStateInReg = _is.read(settingStateInReg, 0, true);
-		this.presentStateInReg = _is.read(presentStateInReg, 1, true);
-		this.presentStateInNode = _is.read(presentStateInNode, 2, true);
+		this.settingStateInReg = _is.readString(0, true);
+		this.presentStateInReg = _is.readString(1, true);
+		this.presentStateInNode = _is.readString(2, true);
 		this.processId = _is.read(processId, 3, true);
-		this.patchVersion = _is.read(patchVersion, 4, true);
-		this.patchTime = _is.read(patchTime, 5, true);
-		this.patchUser = _is.read(patchUser, 6, true);
+		this.patchVersion = _is.readString(4, true);
+		this.patchTime = _is.readString(5, true);
+		this.patchUser = _is.readString(6, true);
 	}
 
 }

@@ -42,4 +42,16 @@ public class SystemConfigService {
         }
         return props.getProperty("upload.tgz.path");
     }
+    
+    public String getProperty(String key) {
+        Resource resource = new ClassPathResource("/app.config.properties");
+        Properties props;
+        try {
+            props = PropertiesLoaderUtils.loadProperties(resource);
+        } catch (IOException e) {
+            log.error("load app.config.properties error");
+            throw new RuntimeException("load app.config.properties error", e);
+        }
+        return props.getProperty(key);
+    }
 }

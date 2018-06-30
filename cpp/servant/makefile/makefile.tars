@@ -54,6 +54,14 @@ ifneq ($(TARS_SSL), )
 endif
 endif
 
+ifneq ($(TARS_HTTP2), 0)
+ifneq ($(TARS_HTTP2), )
+	#业务编译
+	CFLAGS += -DTARS_HTTP2=1
+	LIB += -lnghttp2
+endif
+endif
+
 #-----------------------------------------------------------------------------
 
 TARGET                  := $(strip $(TARGET))
@@ -194,7 +202,7 @@ help:
 .%.d: %.cpp
 	@echo "update $@ ..."; \
 	echo -n $< | sed s/\.cpp/\.o:/ > $@; \
-	$(CC) $(INCLUDE) -MM $< | sed '1s/.*.://' >> $@;
+	$(CXX) $(INCLUDE) -MM $< | sed '1s/.*.://' >> $@;
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) $(INCLUDE) -o $@ -c $<
