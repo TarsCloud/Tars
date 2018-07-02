@@ -60,3 +60,26 @@ message out {
 
 
 ```
+controler 在 ./src/app/Controllers/ 下
+
+使用protobuf 生成的对象,  更容易 代码补全 
+```php
+    public  function  login (P\account__login\in  $in,
+                             P\account__login\out &$out)
+    {
+        $passwd=$in->getPasswd();
+        $phone=$in->getPhone();
+        if (!$passwd) {
+            return ERR::ERR_PASSWD;
+        }
+
+
+        if (strlen($phone)!=11 || empty($phone)) {
+            return ERR::ERR_PHONE;
+        }
+
+        $out->setId( 11 );
+        return ;
+    }
+
+```
