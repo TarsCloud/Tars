@@ -17,9 +17,12 @@ cp ./new_Server.php  ./src/vendor/phptars/tars-server/src/core/Server.php
 测试打开:
 http://127.0.0.1:30000/account/login?passwd=101&phone=15600000000
 
+![](https://github.com/xcwen/Tars/raw/php-http-extends/php/examples/tars-http-server-protobuf/images/2.png)
+
 协议文档地址:
 http://127.0.0.1:30000/doc
 
+![](https://github.com/xcwen/Tars/raw/php-http-extends/php/examples/tars-http-server-protobuf/images/1.png)
 
 进一步开发: 
 
