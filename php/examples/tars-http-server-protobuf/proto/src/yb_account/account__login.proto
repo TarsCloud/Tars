@@ -8,7 +8,7 @@ import "yb_account/common.proto";
 message in  {
   int32  role = 1; // 角色
   string phone = 2; //电话
-  string passwd = 3; //密码 md5(md5(passwd)."@leo") 
+  string passwd = 3; //密码 md5(md5(passwd)."@133566") 
 }
 
 message out {
