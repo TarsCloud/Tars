@@ -28,3 +28,32 @@ http://127.0.0.1:30000/doc
 生成 protobuf 协议  对应的代码: 
 
 ./proto/gen_proto.sh 
+
+当前项目名:yb_account
+
+协议protobuf 文件在: proto/src/yb_account
+
+每个协议单独一个文件
+
+如
+account__get_userid.proto
+
+```protobuf
+
+syntax = "proto3";
+
+//__CMD: 0x1003 
+//__DESC: 得到用户id
+//__TAGS: for_app
+
+message in  {
+  int32  role = 1; // 角色
+  string phone = 2; //电话
+}
+
+message out {
+  int32  id = 1 ;
+}
+
+
+```
