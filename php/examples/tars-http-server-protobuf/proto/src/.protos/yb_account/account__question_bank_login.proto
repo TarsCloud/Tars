@@ -1,0 +1,42 @@
+syntax = "proto3";
+import "yb_account/common.proto";
+
+//__CMD: 0x100114
+//__DESC: 192.168.0.6:8001/account/question_bank_login 题库系统用户登录 
+//__TAGS: for_app
+
+message in  {
+  int32  role = 1; // 角色 1 学生，2 老师，3 助教 ，4 家长，6 销售
+  string phone = 2; //电话
+  string passwd = 3; //密码 md5(md5(passwd)."@leo") 
+}
+
+message out {
+  int32  id = 1 ;
+  string  role = 2 ; //角色
+  string  realname = 3 ; //实名
+  string  nick = 4 ; //昵称
+  string  address = 5 ; //所在地区
+  string  last_login_time = 6 ; //上次登录时间
+  string  phone = 7 ; //手机号码
+  string  subject_str = 8 ; //科目
+  int32   subject = 9 ; //科目,数字
+  string  second_subject_str = 10 ; //第二科目
+  int32   second_subject = 11 ; //第二科目,数字
+  int32   grade_start=12;//第一科目开始年级,数字
+  string  grade_start_str=13;//第一科目开始年级
+  int32   grade_end=14;//第一科目结束年级,数字
+  string  grade_end_str=15;//第一科目结束年级
+  int32   second_grade_start=16;//第二科目开始年级,数字
+  string  second_grade_start_str=17;//第二科目开始年级
+  int32   second_grade_end=18;//第二科目结束年级,数字
+  string  second_grade_end_str=19;//第二科目结束年级
+  int32   grade=20;//学生年级,数字
+  string  grade_str=21;//学生年级
+  string  stu_info=22;//家长角色下学生相关信息，以json形式传递： grade 学生年级,数字;grade_str,年级;nick,学生名字;userid,学生id
+
+
+}
+
+
+option php_namespace = "Proto\\yb_account\\account__question_bank_login"; 

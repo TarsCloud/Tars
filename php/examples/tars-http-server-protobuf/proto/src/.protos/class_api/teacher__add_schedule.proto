@@ -1,0 +1,20 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1011
+//__DESC:  /teacher/add_schedule　指定时间/周期
+//__TAGS: for_admin
+
+
+message in  {
+  	int32 ids = 1; //老师id列表
+  	int32 datetime = 2; //2017-12-11 08:00:00~08:40:00,2017-12-15 20:00:00~21:45:00 开始一周的时间
+  	int32 nums = 3; //一共上几节课
+  	int32 course_type = 4; //课程类型
+
+}
+
+message out {
+	string data=1;
+}
+option php_namespace = "Proto\\class_api\\teacher__add_schedule"; 

@@ -1,0 +1,19 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1016
+//__DESC: 1.2 提交个人信息 http://api.class.leo1v1.com/student/change_stu_info?nick=张三&birth=2010-10-10&gender=1
+//__TAGS: for_app,for_website
+
+
+message in  {
+   	string nick = 1; //昵称
+   	string birth = 2; //生日
+   	uint32 gender = 3; //性别 1 男  2 女
+}
+
+message out {
+}
+
+
+option php_namespace = "Proto\\class_api\\student__change_stu_info"; 

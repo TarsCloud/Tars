@@ -1,0 +1,20 @@
+syntax = "proto3";
+import "yb_account/common.proto";
+
+//__CMD: 0x1001
+//__DESC: 用户登录 
+//__TAGS: for_app,for_admin
+
+message in  {
+  int32  role = 1; // 角色
+  string phone = 2; //电话
+  string passwd = 3; //密码 md5(md5(passwd)."@133566") 
+}
+
+message out {
+  int32  id = 1 ;
+  string  regChannel = 2 ; //渠道
+  string  wxOpenid = 3 ; //wx_openid
+
+}
+

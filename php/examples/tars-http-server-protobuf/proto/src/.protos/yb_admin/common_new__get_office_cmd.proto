@@ -1,0 +1,14 @@
+syntax = "proto3";
+import "yb_admin/common.proto";
+
+//__CMD: 8110
+//__DESC:  树莓派得到要处理的命令  http://admin.leo1v1.com/common_new/set_office_cmd
+//__TAGS: for_office_cmd
+
+message in  {
+}
+
+message out {
+  common.get_office_cmd_item_t cmd =1 ; //命令数据
+}
+option php_namespace = "Proto\\yb_admin\\common_new__get_office_cmd"; 

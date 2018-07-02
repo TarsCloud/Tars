@@ -1,0 +1,20 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1022
+//__DESC: 3.2 http://api.class.leo1v1.com/student/stu_apply_test?subject=2&grade=2&lesson_time=2018-02-02%2010:00:00 学生申请试听课接口
+//__TAGS: for_app,for_website
+
+
+message in  {
+  	int32  grade= 1; //年级
+  	int32  subject= 2; //科目
+  	string  lesson_time= 3; //选择的上课时间 例如: 2018-01-01 10:00:00
+}
+
+message out {
+  common.test_lesson data=1;
+}
+
+
+option php_namespace = "Proto\\class_api\\student__stu_apply_test"; 

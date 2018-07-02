@@ -1,0 +1,21 @@
+syntax = "proto3";
+import "yb_account/common.proto";
+//__CMD: 0x1100 
+//__DESC: 用户注册
+//__TAGS: for_app
+
+message in  {
+  int32  role = 1; // 角色
+  string phone = 2; //电话
+  string passwd = 3; //密码 md5(passwd) 
+  string reg_ip = 4; //注册ip (xxx.xx.xx.xx)
+  string reg_channel = 5; //注册渠道
+}
+
+message out {
+  int32  id = 1 ;
+  common.user_item user_info =2;  //个人信息
+  repeated common.user_item user_info_list =3; //个人列表
+}
+
+option php_namespace = "Proto\\yb_account\\account__test"; 

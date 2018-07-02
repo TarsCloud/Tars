@@ -1,0 +1,18 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1019
+//__DESC: 4.0 http://api.class.leo1v1.com/student/stu_study_progress 获取学生学习进度
+//__TAGS: for_app,for_website
+
+
+message in  {
+}
+
+message out {
+  common.stu_study_progress data=1;
+
+}
+
+
+option php_namespace = "Proto\\class_api\\student__stu_study_progress"; 

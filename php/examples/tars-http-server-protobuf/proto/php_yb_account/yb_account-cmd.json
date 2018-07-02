@@ -1,0 +1,25 @@
+{
+    "tag_list": [
+        "for_app",
+        "for_admin"
+    ],
+    "cmd_list": [
+        {
+            "NAME": "account__login",
+            "DESC": "用户登录",
+            "TAGS": [
+                "for_app",
+                "for_admin"
+            ],
+            "CMD": "0x1001"
+        },
+        {
+            "NAME": "account__get_userid",
+            "DESC": "得到用户id",
+            "TAGS": [
+                "for_app"
+            ],
+            "CMD": "0x1003"
+        }
+    ]
+}

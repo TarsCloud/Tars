@@ -1,0 +1,21 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1000
+//__DESC: 1.1 登录 http://api.class.leo1v1.com/account/login?role=1&phone=18898881886&passwd=123456&remember_me=1
+//__TAGS: for_app
+
+
+message in  {
+	int32  role = 1; // 角色 1学生　2老师
+  	string phone = 2; //电话
+   	string passwd = 3; //密码  
+   	uint32 remember_me = 4; //是否记录密码
+}
+
+message out {
+  int32  id = 1 ;//学生id
+}
+
+
+option php_namespace = "Proto\\class_api\\account__login"; 

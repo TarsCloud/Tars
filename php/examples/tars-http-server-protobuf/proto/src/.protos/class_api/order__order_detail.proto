@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1029
+//__DESC: http://test.api.class.leo1v1.com/order/order_detail?oid=6 2.2完成约课页(付款完成后查看该订单的状态,未必付款成功,具体看返回的值) 
+//__TAGS: for_app,for_website
+
+
+message in  {
+}
+
+message out {
+	common.order_detail  data = 1;//订单详情
+}
+
+
+option php_namespace = "Proto\\class_api\\order__order_detail"; 

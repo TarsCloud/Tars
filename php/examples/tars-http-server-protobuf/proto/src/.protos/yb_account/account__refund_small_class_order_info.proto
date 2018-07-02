@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+//__CMD: 0x10113 
+//__DESC: 192.168.0.6:8001/account/refund_small_class_order_info  小班课合同退费
+//__TAGS: for_app
+
+message in  {
+    string contractid = 1; //合同编号
+    int32 price =2; //退费金额,乘以100
+    string remark=3;//备注,填写原因以及沟通方式等等
+    string name=4;//学生姓名
+    string pay_account =5;//支付账号,为银行卡号或支付宝账号 
+}
+
+message out {
+    
+}
+
+option php_namespace = "Proto\\yb_account\\account__refund_small_class_order_info"; 

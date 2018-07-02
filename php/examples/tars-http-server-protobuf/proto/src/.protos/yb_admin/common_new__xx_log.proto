@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+//__CMD: 8138
+//__DESC: 记录h5页面访问信息  http://admin.leo1v1.com/common_new/xxx?
+//__TAGS: for_h5_log
+
+
+message in  {
+  uint32 web_page_id =1; // 文章id 
+  uint32 from_adminid =2; //  来自谁的转发
+}
+
+message out {
+  uint32 id=10;
+  
+}
+option php_namespace = "Proto\\yb_admin\\common_new__xx_log"; 

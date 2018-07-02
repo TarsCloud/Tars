@@ -1,0 +1,32 @@
+{
+    "name" : "tars-http-server-demo",
+    "description": "tars http server",
+    "require": {
+        "phptars/tars-server": "~0.1",
+        "phptars/tars-deploy": "~0.1",
+        "google/protobuf":"^3",
+        "phptars/tars2php": "~0.1",
+        "vlucas/phpdotenv": "^2.4",
+        "phptars/tars-log": "~0.1",
+        "ext-zip" : ">=0.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "GPBMetadata\\YbAccount\\":"app/proto/yb_account/GPBMetadata/YbAccount/",
+            "Proto\\yb_account\\" : "app/proto/yb_account/Proto/yb_account/",
+            "HttpServer\\" : "./"
+
+        }
+    },
+    "minimum-stability": "stable",
+    "scripts" : {
+        "deploy" : "\\Tars\\deploy\\Deploy::run"
+    },
+    "repositories": {
+        "tars": {
+            "type": "composer",
+            "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/tarsphp.json"
+        }
+    }
+}

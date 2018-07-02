@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1028
+//__DESC: http://test.api.class.leo1v1.com/order/my_order 4.3我的订单页(未付款的订单不显示) 
+//__TAGS: for_app,for_website
+
+
+message in  {
+}
+
+message out {
+	common.order_detail  data = 1;//订单详情列表
+}
+
+
+option php_namespace = "Proto\\class_api\\order__my_order"; 

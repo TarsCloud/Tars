@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+//__CMD: 8131
+//__DESC: 记录h5页面访问信息  http://admin.leo1v1.com/common_new/web_page_log?
+//__TAGS: for_h5_log
+
+
+message in  {
+  uint32 web_page_id =1; // 文章id 
+  uint32 from_adminid =2; //  来自谁的转发
+  uint32 share_wx_flag =3; // 是否分享微信  0:否, 1:是
+}
+
+message out {
+  
+}
+option php_namespace = "Proto\\yb_admin\\common_new__web_page_log"; 

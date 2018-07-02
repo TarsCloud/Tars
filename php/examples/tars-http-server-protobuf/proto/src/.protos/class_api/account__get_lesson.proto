@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1006
+//__DESC:  /account/get_lesson　根据login的身份获取时间段课表
+//__TAGS: for_app
+
+
+message in  {
+  	string type = 1; //week,month
+  	int32 offset = 2; //跨多少个周期
+}
+
+message out {
+  	string  data = 1 ;
+}
+option php_namespace = "Proto\\class_api\\account__get_lesson"; 

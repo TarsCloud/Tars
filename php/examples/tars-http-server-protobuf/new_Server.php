@@ -127,6 +127,7 @@ class Server
             $this->servicesInfo["onInitServer"]($this->sw , $this->tarsConfig);
         }
 
+
         $this->sw->start();
     }
 

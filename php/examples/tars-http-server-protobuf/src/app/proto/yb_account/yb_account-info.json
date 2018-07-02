@@ -1,0 +1,250 @@
+{
+    "struct_map": {
+        "Proto.yb_account_cmd_list": [],
+        "account__get_userid.out": [
+            [
+                "",
+                "int32",
+                "id",
+                "1",
+                ""
+            ]
+        ],
+        "account__get_userid.in": [
+            [
+                "",
+                "int32",
+                "role",
+                "1",
+                " 角色\n"
+            ],
+            [
+                "",
+                "string",
+                "phone",
+                "2",
+                "电话\n"
+            ]
+        ],
+        "error.enum_error": [
+            [
+                "",
+                "",
+                "ERR_SUCC",
+                "0",
+                "成功\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_SYSTEM",
+                "1002",
+                "系统出错\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_IN_PROTO_LEN",
+                "1000",
+                "报文长度长度不对(IN)\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_OUT_PROTO_LEN",
+                "1010",
+                "报文长度长度不对(OUT)\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_PASSWD",
+                "3001",
+                "密码出错\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_USER_NOFIND",
+                "3002",
+                "用户不存在\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_USER_EXISTED",
+                "3003",
+                "用户已经存在\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_PHONE",
+                "3004",
+                "手机号异常\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_CODE",
+                "3005",
+                "验证码错误\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_PASSWD_CONSISTENT",
+                "3006",
+                "两次密码不一致\n"
+            ],
+            [
+                "",
+                "",
+                "ERR_PASSWD_RESET_ERROR",
+                "3007",
+                "修改密码失败\n"
+            ]
+        ],
+        "account__login.out": [
+            [
+                "",
+                "int32",
+                "id",
+                "1",
+                ""
+            ],
+            [
+                "",
+                "string",
+                "regChannel",
+                "2",
+                "渠道\n"
+            ],
+            [
+                "",
+                "string",
+                "wxOpenid",
+                "3",
+                "wx_openid\n"
+            ]
+        ],
+        "account__login.in": [
+            [
+                "",
+                "int32",
+                "role",
+                "1",
+                " 角色\n"
+            ],
+            [
+                "",
+                "string",
+                "phone",
+                "2",
+                "电话\n"
+            ],
+            [
+                "",
+                "string",
+                "passwd",
+                "3",
+                "密码 md5(md5(passwd).\"&#64;133566\") \n"
+            ]
+        ],
+        "common.user_item": [
+            [
+                "",
+                "int32",
+                "role",
+                "1",
+                " 角色\n"
+            ],
+            [
+                "",
+                "string",
+                "phone",
+                "2",
+                "电话\n"
+            ],
+            [
+                "",
+                "string",
+                "passwd",
+                "3",
+                "密码 md5(passwd) \n"
+            ]
+        ],
+        "Proto.yb_account_error": []
+    },
+    "cmd_return_map": {
+        "account__login": [
+            {
+                "name": "ERR_PASSWD",
+                "value": "3001",
+                "desc": "密码出错\n"
+            },
+            {
+                "name": "ERR_PHONE",
+                "value": "3004",
+                "desc": "手机号异常\n"
+            }
+        ]
+    },
+    "error_list": {
+        "0": {
+            "name": "ERR_SUCC",
+            "value": "0",
+            "desc": "成功\n"
+        },
+        "1002": {
+            "name": "ERR_SYSTEM",
+            "value": "1002",
+            "desc": "系统出错\n"
+        },
+        "1000": {
+            "name": "ERR_IN_PROTO_LEN",
+            "value": "1000",
+            "desc": "报文长度长度不对(IN)\n"
+        },
+        "1010": {
+            "name": "ERR_OUT_PROTO_LEN",
+            "value": "1010",
+            "desc": "报文长度长度不对(OUT)\n"
+        },
+        "3001": {
+            "name": "ERR_PASSWD",
+            "value": "3001",
+            "desc": "密码出错\n"
+        },
+        "3002": {
+            "name": "ERR_USER_NOFIND",
+            "value": "3002",
+            "desc": "用户不存在\n"
+        },
+        "3003": {
+            "name": "ERR_USER_EXISTED",
+            "value": "3003",
+            "desc": "用户已经存在\n"
+        },
+        "3004": {
+            "name": "ERR_PHONE",
+            "value": "3004",
+            "desc": "手机号异常\n"
+        },
+        "3005": {
+            "name": "ERR_CODE",
+            "value": "3005",
+            "desc": "验证码错误\n"
+        },
+        "3006": {
+            "name": "ERR_PASSWD_CONSISTENT",
+            "value": "3006",
+            "desc": "两次密码不一致\n"
+        },
+        "3007": {
+            "name": "ERR_PASSWD_RESET_ERROR",
+            "value": "3007",
+            "desc": "修改密码失败\n"
+        }
+    }
+}

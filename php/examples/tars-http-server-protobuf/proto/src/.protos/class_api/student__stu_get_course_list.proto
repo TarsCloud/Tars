@@ -1,0 +1,19 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1023
+//__DESC: 3.7 http://self.api.class.leo1v1.com/student/stu_get_course_list?grade=1&subject=2 课程名列表 有了科目年级后请求获得课程名列表
+//__TAGS: for_app,for_website
+
+
+message in  {
+  	int32  grade= 1; //年级
+  	int32  subject= 2; //科目
+}
+
+message out {
+  common.stu_get_course_list data=1;
+}
+
+
+option php_namespace = "Proto\\class_api\\student__stu_get_course_list"; 

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>协议 __PROJECT_NAME__ </title>
+        <link rel="stylesheet" href="http://admin.leo1v1.com/css/jQueryUI/jquery-ui-1.10.3.custom.min.css">
+
+        <script src="http://admin.leo1v1.com/AdminLTE-2.4.0-rc/bower_components/jquery/dist/jquery.min.js"></script>
+
+        <script src="http://admin.leo1v1.com/js/jquery.query.js"></script>
+        <style>
+         li.xspace-loglist
+         h4.xspace-entrytitle { background-color: #B0F3DF; }
+
+         body { margin: 0; padding: 0; background: #DEE8F2 repeat-x; color: #111111;
+             font: 12px Arial, Helvetica, sans-serif; text-align: center; }
+         #wrap { margin: 1em auto; text-align: left; width: 770px; width: 760px; border: 5px solid #D1ECE9;
+             background: #D3D5E8 ; overflow: hidden; }
+
+         /* CSS Document */
+
+         body {
+             font: normal 12px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+             color: #4f6b72;
+             background:  #D3D5E8;
+         }
+
+         a.link_big{
+             color: #4f6b72;
+             font-size:14px;
+         }
+
+
+         table{
+             width: 90%;
+             padding: 0;
+             margin: 0;
+         }
+
+
+         .caption_center {
+             padding: 0 0 5px 0;
+             width: 90%;
+             font: bold  20px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif ;
+             text-align: center;
+             background:  #D3D5E8;
+             color:green ;
+
+         }
+
+
+
+         caption {
+             padding: 0 0 5px 0;
+             font: bold  15px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif ;
+             text-align: left;
+             background:  #D3D5E8;
+             color:blue;
+
+         }
+
+         th {
+             font: bold 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+             color: #4f6b72;
+             border-right: 1px solid #C1DAD7;
+             border-bottom: 1px solid #C1DAD7;
+             border-top: 1px solid #C1DAD7;
+             letter-spacing: 2px;
+             padding: 4px 4px 4px 4px;
+             text-align: left;
+         }
+
+         th.title_def {
+             font: bold 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+             color: #4f6b72;
+             border-right: 1px solid #FFD8C0;
+             border-bottom: 1px solid #FFD8C0;
+             border-top: 1px solid #FFD8C0 ;
+             letter-spacing: 2px;
+             text-align: left;
+             padding: 6px 6px 6px 12px;
+             background: #FFD8C0 ;
+         }
+         table.title_def {
+             width: 98%;
+             padding: 0;
+             margin: 0;
+         }
+
+
+
+         input{
+             border-right: 1px solid #C1DAD7;
+             border-bottom: 1px solid #C1DAD7;
+             background: #fff;
+             width:200;
+             font-size:12px;
+             color: #4f6b72;
+             text-align: left;
+         }
+
+
+
+
+         th.nobg {
+             border-top: 0;
+             border-left: 0;
+             border-right: 1px solid #C1DAD7;
+             background: none;
+         }
+
+         td {
+             border-right: 1px solid #C1DAD7;
+             border-bottom: 1px solid #C1DAD7;
+             background: #fff;
+             width:200;
+             font-size:14px;
+             padding: 2px 2px 2px 2px;
+             color: #4f6b72;
+             text-align: left;
+         }
+
+
+         td.alt {
+             background: #F5FAFA;
+             color: #797268;
+         }
+         td.spec {
+             background: #fff  no-repeat;
+             color:  #4f6b72;
+         }
+
+
+         th.spec {
+             border-left: 1px solid #C1DAD7;
+             border-top: 0;
+             background: #fff url(images/bullet1.gif) no-repeat;
+             font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+         }
+
+         th.specalt {
+             border-left: 1px solid #C1DAD7;
+             border-top: 0;
+             background: #f5fafa url(images/bullet2.gif) no-repeat;
+             font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+             color: #797268;
+         }
+
+        </style>
+    </head>
+
+
+
+    <body>
+        <div  style="max-width:1000px;margin:0 auto; "   >
+            <table      class="ui-widget ui-widget-content"  cellspacing="0"  style=" margin:0 auto; " >
+
+                <caption class="caption_center"> 命令列表 [ __PROJECT_NAME__ ]
+                    <span style="color:#4f6b72;">  标签筛选 <select id="id_tags">
+                  </select> </span>
+                </caption>
+
+                <thead>
+                    <tr  class="ui-widget-header">
+                        <td width="50px">命令号</td>
+                        <td width="200px">名称</td>
+                        <td >说明</td>
+                        <td >标签</td>
+                    </tr>
+                </thead>
+
+
+                <tbody id="id_cmd_list" >
+                </tbody>
+            </table>
+            <hr/>
+            <div id="id_desc_list">
+
+            </div>
+
+                <hr/>
+                <table      class="ui-widget ui-widget-content"  cellspacing="0"  style=" margin:0 auto; " >
+                    <thead>
+                        <tr>
+                            <td width="10%">  错误码值 </td>
+                            <td width="10%"> 错误码 </td>
+                            <td width="80%">说明
+                                <font color= "red">全体错误码列表 </font>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="id_error_list">
+                    </tbody>
+                </table>
+            @endif
+        </div>
+    </body>
+
+    <script>
+     var init_id_tags =function (tag_list ,tag){
+         var opt_str="<option value=\"\" >[全部]</option>";
+         $.each( tag_list, function(i,item)  {
+             opt_str+="<option value=\""+item +"\" >"+item +"</option> ";
+         });
+         $("#id_tags").html(opt_str);
+         $("#id_tags").val(tag);
+         $("#id_tags").on("change",function(){
+             window.location.href=  window.location.pathname+"?tag=" + $("#id_tags").val();
+         });
+     }
+
+     var gen_desc_cmd_table=function ( index,cmd_info ) {
+
+         return "<table class=\"title_def\" cellspacing=\"0\"><tbody><tr><th class=\"title_def\" width=\"50\"> "+index+" </th><th class=\"title_def\">&nbsp;"
+         +"<a         id=\""+cmd_info.NAME+"_desc\""
+         +" href=\"#"+cmd_info.NAME+"_item\"  >"
+         + cmd_info.NAME+" </a>"
+         +"<br>说明: " + cmd_info.DESC
+         +"<br>地址: http://" + window.location.host +"/"+ cmd_info.NAME.replace(/__/,"/")
+         +"</th><th class=\"title_def\" width=\"100\"> "+cmd_info.CMD+" </th></tr></tbody>"
+         +"</table><br/>";
+
+     }
+
+     var gen_desc_in_out_table =function( title, struct_info, struct_map ) {
+         if (!struct_info) {
+             struct_info=[];
+         }
+
+
+         var gen_stuct_info =function( fix_str, deal_struct_info )  {
+             var struct_str="";
+             $.each( deal_struct_info, function(i ,item) {
+                 var array_flag_str= item[0]== "repeated"?"<font color=red>数组 </font>":"";
+                 var field_type= item[1];
+                 struct_str+= "<tr>"+
+                              "<td> " +fix_str+item[2]+" </td>"+
+                              "<td>"+ field_type+ array_flag_str+
+                              "</td>"+
+                              "<td>"+item[4]+"</td>"+
+                              "<td>  "+item[3]+" </td>"+
+                              "</tr>";
+                 var type_strcut_info=struct_map[field_type];
+                 if (type_strcut_info){
+                     struct_str+= gen_stuct_info( fix_str+">>>>" , type_strcut_info);
+                 }
+
+             });
+             return struct_str;
+         }
+         var struct_str= gen_stuct_info(">>>>" , struct_info);
+
+        var html_str= "<table      class=\"ui-widget ui-widget-content\"  cellspacing=\"0\"  style=\" margin:5px auto; \" >"+
+        "<thead>"+
+        "<tr  class=\"ui-widget-header\">"+
+        "<td width=\"40%\">  <font color=\"blue\">"+title+"</font>  字段名</td>"+
+        "<td width=\"20%\">类型</td>"+
+        "<td width=\"30%\">说明</td>"+
+        "<td width=\"10%\">字段id</td>"+
+        "</tr>"+
+        "</thead>"+
+        "<tbody>"+ struct_str
+        "</tbody>"+
+        "</table>";
+
+         return html_str;
+
+     }
+
+
+     var gen_desc_error_table=function( cmd_error_list ){
+         var cmd_error_str="";
+         $.each( cmd_error_list, function(i,item)  {
+             cmd_error_str +="<tr>"+
+                       "<td>"+item.value+"</td>"+
+                       "<td>"+item.name+"</td>"+
+                       "<td>"+item.desc+"</td>"+
+                       "</tr>";
+         });
+
+         var html_str=" <table      class=\"ui-widget ui-widget-content\"  cellspacing=\"0\"  style=\" margin:0 auto; \" >"+
+                      "                    <thead>"+
+                      "                        <tr  class=\"ui-widget-header\">"+
+
+                      "         <td width=\"10%\"> 错误码值 </td>"+
+                      "         <td width=\"10%\"> 错误码 </td>"+
+                      "         <td width=\"80%\">说明</td>"+
+                      "                        </tr>"+
+                      "                    </thead>"+
+                      "                    <tbody>"+ cmd_error_str +
+                      "                    </tbody>"+
+                      "                </table>";
+         return html_str;
+     }
+     var init_cmd_list=function(cmd_list ,struct_map ,cmd_return_map ,tag) {
+         var html_str="";
+         var desc_str="";
+         $.each( cmd_list, function(i,item)  {
+             console.log ( tag ,item.TAGS );
+             if (!tag || $.inArray(  tag ,item.TAGS ) !== -1 ){
+                 html_str+="<tr>"+
+                           "<td>"+item.CMD+"</td>"+
+                           "<td  > <a"+
+                           " id=\""+item.NAME+"_item\""+
+                           " href=\"#"+item.NAME+"_desc\""+
+                           "> "+item.NAME+" </a> </td>"+
+                           "<td> "+item.DESC+"</td>"+
+                           "<td>"+item.TAGS.join(",")+" </td>"+
+                           "</tr>";
+                 desc_str+=  gen_desc_cmd_table(i, item  );
+                 var in_struct=struct_map[item.NAME+".in" ];
+                 var out_struct=struct_map[item.NAME+".out" ];
+
+                 desc_str+=  gen_desc_in_out_table("请求包" , in_struct,struct_map );
+
+                 desc_str+=  gen_desc_in_out_table("响应包" , out_struct,struct_map );
+                 desc_str += gen_desc_error_table(  cmd_return_map[item.NAME ]  );
+
+
+
+             }
+         });
+         $("#id_cmd_list").html(html_str);
+         $("#id_desc_list").html(desc_str);
+     }
+     var init_error_list=function( error_list) {
+
+         var html_str="";
+         $.each( error_list, function(i,item)  {
+             html_str+="<tr>"+
+                       "<td>"+item.value+"</td>"+
+                       "<td>"+item.name+"</td>"+
+                       "<td>"+item.desc+"</td>"+
+                       "</tr>";
+         });
+         $("#id_error_list").html(html_str);
+     };
+
+     $.getJSON("/doc_json",function(resp){
+         console.log(resp);
+         var tag=$.query.get("tag");
+         if(!tag || tag===true )  {tag="";}
+         init_id_tags(resp.tag_list,tag) ;
+         init_cmd_list(resp.cmd_list,resp.struct_map, resp.cmd_return_map,tag) ;
+         init_error_list(resp.error_list) ;
+
+     });
+    </script>
+</html>

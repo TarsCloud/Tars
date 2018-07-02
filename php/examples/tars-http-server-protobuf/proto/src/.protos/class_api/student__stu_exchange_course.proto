@@ -1,0 +1,18 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1024
+//__DESC: 3.91 http://api.class.leo1v1.com/student/stu_exchange_course?course_id=2&lesson_time=2018-02-02%2010:00:00,2018-02-02%2010:00:00 学生兑换课程
+//__TAGS: for_app,for_website
+
+
+message in  {
+  	int32  course_id= 1; //课程包id
+  	string  lesson_time= 2; //两节课的上课时间,用英文逗号分割 例如: 2018-01-25 09:00:00,2018-01-25 09:00:00 
+}
+
+message out {
+}
+
+
+option php_namespace = "Proto\\class_api\\student__stu_exchange_course"; 
