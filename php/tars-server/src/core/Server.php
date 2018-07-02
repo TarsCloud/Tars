@@ -122,6 +122,11 @@ class Server
 
         require_once $this->entrance;
 
+        // 扩展 server 的 请求处理 ,增加自定义进程
+        if ($this-servicesInfo["onInitServer"]) {
+            $this->servicesInfo["onInitServer"]($this->sw , $this->tarsConfig);
+        }
+
         $this->sw->start();
     }
 
