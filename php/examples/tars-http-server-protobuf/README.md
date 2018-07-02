@@ -9,12 +9,6 @@
 cp ./new_Server.php  ./src/vendor/phptars/tars-server/src/core/Server.php
 
 
-安装 protobuf : 安装最新版本  protobuf  ,支持php
-
-
-生成 protobuf 协议  对应的代码: 
-
-./proto/gen_proto.sh 
 
 运行 :./restart.sh
 
@@ -24,3 +18,12 @@ http://127.0.0.1:30000/account/login?passwd=101&phone=15600000000
 
 协议文档地址:
 http://127.0.0.1:30000/doc
+
+
+进一步开发: 
+
+安装 protobuf : 安装最新版本  protobuf  ,支持php
+
+生成 protobuf 协议  对应的代码: 
+
+./proto/gen_proto.sh 
