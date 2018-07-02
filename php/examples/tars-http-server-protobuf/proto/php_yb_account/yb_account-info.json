@@ -148,7 +148,7 @@
                 "string",
                 "passwd",
                 "3",
-                "密码 md5(md5(passwd).\"&#64;leo\") \n"
+                "密码 md5(md5(passwd).\"&#64;133566\") \n"
             ]
         ],
         "common.user_item": [

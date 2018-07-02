@@ -26,7 +26,7 @@ class in extends \Google\Protobuf\Internal\Message
      */
     private $phone = '';
     /**
-     *密码 md5(md5(passwd)."&#64;leo") 
+     *密码 md5(md5(passwd)."&#64;133566") 
      *
      * Generated from protobuf field <code>string passwd = 3;</code>
      */
@@ -90,7 +90,7 @@ class in extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *密码 md5(md5(passwd)."&#64;leo") 
+     *密码 md5(md5(passwd)."&#64;133566") 
      *
      * Generated from protobuf field <code>string passwd = 3;</code>
      * @return string
@@ -101,7 +101,7 @@ class in extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *密码 md5(md5(passwd)."&#64;leo") 
+     *密码 md5(md5(passwd)."&#64;133566") 
      *
      * Generated from protobuf field <code>string passwd = 3;</code>
      * @param string $var
