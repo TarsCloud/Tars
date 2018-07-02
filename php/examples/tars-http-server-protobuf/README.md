@@ -3,6 +3,7 @@
 使用proto buf 定义 接口
 
 安装: cd src/ && composer install
+cd ..
 
 更新  支持 自定义的 onInitServer:
 
