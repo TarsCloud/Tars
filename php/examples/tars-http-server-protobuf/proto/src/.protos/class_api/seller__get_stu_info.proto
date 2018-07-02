@@ -1,0 +1,19 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1005
+//__DESC: /seller/get_stu_info cc处理完分配例子后，上传评级/获取新例子 
+//__TAGS: for_class_admin
+
+
+message in  {
+	int32  admin_id = 1; // cc ID
+  	string id = 2; //seller_student 主键
+}
+
+message out {
+  int32 id = 1 ;//新例子ID
+}
+
+
+option php_namespace = "Proto\\class_api\\seller__get_stu_info"; 

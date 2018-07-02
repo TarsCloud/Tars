@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1015
+//__DESC: http://api.class.leo1v1.com/order/package_list 课程推荐
+//__TAGS: for_web/mobile
+
+
+message in  {
+}
+
+message out {
+  common.package_list data=1;//课程推荐
+}
+
+
+option php_namespace = "Proto\\class_api\\order__package_list"; 

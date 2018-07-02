@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+//__CMD: 0x1003 
+//__DESC: 得到用户id
+//__TAGS: for_app
+
+message in  {
+  int32  role = 1; // 角色
+  string phone = 2; //电话
+}
+
+message out {
+  int32  id = 1 ;
+}

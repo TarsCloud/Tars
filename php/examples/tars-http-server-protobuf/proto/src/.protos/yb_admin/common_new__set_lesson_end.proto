@@ -1,0 +1,16 @@
+syntax = "proto3";
+import "yb_admin/common.proto";
+
+//__CMD: 8101
+//__DESC:  xmpp服务器的php定时程序,检查到老师不在房间,设置该课程结束 http://admin-ex.leo1v1.com/common_new/set_lesson_end?lessonid=xx
+//__TAGS: for_xmpp_server
+
+
+message in  {
+  uint32 lessonid =1; //课程id
+}
+
+message out {
+  
+}
+option php_namespace = "Proto\\yb_admin\\common_new__set_lesson_end"; 

@@ -1,0 +1,21 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1012
+//__DESC: /lesson/add_log 添加用户的进入/退出课程记录 
+//__TAGS: for_app
+
+
+message in  {
+	int32  role = 1; // 角色 1学生　2老师
+  	int32 id = 2; //账号id
+   	int32 lessonid = 3; //课程id 
+   	string xmpp = 4; //xmpp服务器域名
+   	int32 opt_type = 5; //课堂操作类型 1 login 2 logout
+}
+
+message out {
+}
+
+
+option php_namespace = "Proto\\class_api\\lesson__add_log"; 

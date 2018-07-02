@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "yb_admin/common.proto";
+
+//__CMD: 8100
+//__DESC:  xmpp服务器每隔1分钟请求一次, 得到要检查下课的课程列表  http://admin-ex.leo1v1.com/common_new/get_check_lesson_end_list
+//__TAGS: for_xmpp_server
+
+
+message in  {
+}
+
+message out {
+  
+  repeated common.get_check_lesson_end_item_t  list =1 ; //要检查下课的课程列表 
+  
+}
+option php_namespace = "Proto\\yb_admin\\common_new__get_check_lesson_end_list"; 

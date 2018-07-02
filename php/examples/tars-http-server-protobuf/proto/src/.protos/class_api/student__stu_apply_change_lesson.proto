@@ -1,0 +1,18 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1025
+//__DESC: 4.5  http://api.class.leo1v1.com/student/stu_apply_change_lesson?class_id=2&phone=18898881888 学生申请调课 接口
+//__TAGS: for_app,for_website
+
+
+message in  {
+  	int32  class_id= 1; //班级id
+  	string  phone= 2; // 电话
+}
+
+message out {
+}
+
+
+option php_namespace = "Proto\\class_api\\student__stu_apply_change_lesson"; 

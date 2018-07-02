@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1027
+//__DESC: /order/del_order 用户删除订单信息(在my_order中不再出现) 
+//__TAGS: for_app,for_website
+
+
+message in  {
+  	int32  oid= 1; //my_order中返回的id
+}
+
+message out {
+}
+
+
+option php_namespace = "Proto\\class_api\\order__del_order"; 

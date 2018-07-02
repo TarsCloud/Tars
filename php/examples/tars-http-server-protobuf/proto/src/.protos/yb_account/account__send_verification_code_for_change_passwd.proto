@@ -1,0 +1,19 @@
+syntax = "proto3";
+import "yb_account/common.proto";
+
+//__CMD: 0x1008
+//__DESC: 192.168.0.6:8001/account/send_verification_code_for_change_passwd 用户修改密码 发验证码  
+//__TAGS: for_app
+
+message in  {
+  int32  role = 1; // 角色
+  string phone = 2; //电话
+}
+
+message out {
+  string msg_index = 1; // 验证码编号 
+  string verification_code =2; // for 测试环境 
+}
+
+
+option php_namespace = "Proto\\yb_account\\account__send_verification_code_for_change_passwd"; 

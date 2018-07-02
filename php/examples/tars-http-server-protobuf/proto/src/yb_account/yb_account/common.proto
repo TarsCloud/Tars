@@ -1,0 +1,10 @@
+syntax = "proto3";
+package common;
+option php_namespace = "Proto\\yb_account\\common"; 
+
+
+message user_item {
+  int32  role = 1; // 角色
+  string phone = 2; //电话
+  string passwd = 3; //密码 md5(passwd) 
+}

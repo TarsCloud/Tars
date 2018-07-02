@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "yb_admin/common.proto";
+
+//__CMD: 8102
+//__DESC:  xmpp服务器的php定时程序,检查课程房间是不是可以删除了 http://admin-ex.leo1v1.com/common_new/xmpp_server_get_end_time_by_roomid
+//__TAGS: for_xmpp_server
+
+
+message in  {
+  string room_name =1; //roomid l_xxyxxyx
+}
+
+message out {
+  uint32 lesson_end=1; // 下课时间
+  bool room_del_flag=2;// 是否可以删除 
+}
+option php_namespace = "Proto\\yb_admin\\common_new__xmpp_server_get_end_time_by_roomid"; 

@@ -1,0 +1,16 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1009
+//__DESC:  /teacher/set_free_time　重新上传某个老师的所有空闲时间
+//__TAGS: for_admin
+
+
+message in  {
+  	int32 tea_id = 1; //teacher_id
+  	int32 arr = 2; //参考update_free_time，将多条day_of_week,begin_time,end_time记录组成array后json_encode
+}
+
+message out {
+}
+option php_namespace = "Proto\\class_api\\teacher__set_free_time"; 

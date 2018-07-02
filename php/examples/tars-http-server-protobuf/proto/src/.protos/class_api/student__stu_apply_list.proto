@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1026
+//__DESC: /student/stu_apply_list 获取学生课程包兑换历史
+//__TAGS: for_app,for_website
+
+
+message in  {
+}
+
+message out {
+  common.stu_apply_list data=1;//课包兑换历史列表.可能为空
+}
+
+
+option php_namespace = "Proto\\class_api\\student__stu_apply_list"; 

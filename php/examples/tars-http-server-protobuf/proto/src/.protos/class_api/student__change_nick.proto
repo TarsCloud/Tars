@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1016
+//__DESC: /student/change_nick 学生修改昵称接口 
+//__TAGS: for_app,for_website
+
+
+message in  {
+   	string nick = 1; //昵称
+}
+
+message out {
+}
+
+
+option php_namespace = "Proto\\class_api\\student__change_nick"; 

@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1020
+//__DESC: /student/stu_apply_del_test 学生取消试听课 接口 
+//__TAGS: for_app,for_website
+
+
+message in  {
+  	int32  class_id= 1; //需要取消的试听课id
+}
+
+message out {
+}
+
+
+option php_namespace = "Proto\\class_api\\student__stu_apply_del_test"; 

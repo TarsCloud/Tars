@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1018
+//__DESC: 4.0 http://api.class.leo1v1.com/student/stu_lesson_info 获取学生课程信息
+//__TAGS: for_app,for_website
+
+
+message in  {
+}
+
+message out {
+  common.stu_lesson_info data=1;//列表.可能为空
+}
+
+
+option php_namespace = "Proto\\class_api\\student__stu_lesson_info"; 

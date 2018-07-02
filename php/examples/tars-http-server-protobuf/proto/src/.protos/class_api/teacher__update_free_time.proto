@@ -1,0 +1,19 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1008
+//__DESC:  /teacher/update_free_time　根据指定id修改当条空闲时间记录
+//__TAGS: for_admin
+
+
+message in  {
+  	int32 id = 1; //t_teacher_free_time主键
+  	int32 day_of_week = 2; //0~6代表星期几
+  	string begin_time = 3; //0800代表上午８：００
+  	string end_time = 4; //0800代表上午８：００
+
+}
+
+message out {
+}
+option php_namespace = "Proto\\class_api\\teacher__update_free_time"; 

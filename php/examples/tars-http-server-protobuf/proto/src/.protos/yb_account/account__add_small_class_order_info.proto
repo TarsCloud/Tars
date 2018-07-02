@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+//__CMD: 0x10112 
+//__DESC: 192.168.0.6:8001/account/add_small_class_order_info  新增小班课合同
+//__TAGS: for_app
+
+message in  {
+    int32 price = 1; //价格,乘100
+    int32 userid =2; //学生id
+    string remark=3;//备注
+}
+
+message out {
+    string  orderid = 1 ;//合同编号
+}
+
+option php_namespace = "Proto\\yb_account\\account__add_small_class_order_info"; 

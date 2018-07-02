@@ -1,0 +1,43 @@
+syntax = "proto3";
+package error;
+option php_namespace = "Proto\\yb_account\\error"; 
+enum  enum_error {
+
+  //成功
+  ERR_SUCC  =0;
+
+  //系统出错
+  ERR_SYSTEM  = 1002 ;
+
+  //报文长度长度不对(IN)
+  ERR_IN_PROTO_LEN  = 1000 ;
+
+  //报文长度长度不对(OUT)
+  ERR_OUT_PROTO_LEN  = 1010 ;
+
+  //密码出错
+  ERR_PASSWD  = 3001 ;
+
+  //用户不存在
+  ERR_USER_NOFIND = 3002 ;
+
+  //用户已经存在
+  ERR_USER_EXISTED  = 3003 ;
+
+  //手机号异常
+  ERR_PHONE  = 3004 ;
+
+  //验证码错误
+  ERR_CODE  = 3005 ;
+
+  //两次密码不一致
+  ERR_PASSWD_CONSISTENT  = 3006 ;
+
+  //修改密码失败
+  ERR_PASSWD_RESET_ERROR  = 3007 ;
+
+
+
+
+
+};

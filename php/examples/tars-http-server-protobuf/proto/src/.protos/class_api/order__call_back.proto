@@ -1,0 +1,20 @@
+syntax = "proto3";
+import "class_api/common.proto";
+
+//__CMD: 1013
+//__DESC: /order/call_back 支付接口回调结果 
+//__TAGS: for_admin
+
+
+message in  {
+  	int32  contractid= 1; //合同编号
+   	int32 price = 2; //付款金额
+   	string pay_time = 3; //付款时间
+   	int32 sign = 4; //签名
+}
+
+message out {
+}
+
+
+option php_namespace = "Proto\\class_api\\order__call_back"; 
