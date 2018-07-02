@@ -2,8 +2,7 @@
 
 使用proto buf 定义 接口
 
-安装: cd src/ && composer install
-cd ..
+安装: cd src/ && composer install && cd ..
 
 更新  支持 自定义的 onInitServer:
 
@@ -40,6 +39,12 @@ http://127.0.0.1:30000/doc
 
 如
 account__get_userid.proto
+
+__CMD:: 要定义, 和其它不一样就行
+
+__DESC:: 协议说明 
+
+__TAGS:: 协议分组 
 
 ```protobuf
 
