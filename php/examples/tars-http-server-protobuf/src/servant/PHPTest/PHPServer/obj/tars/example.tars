@@ -1,0 +1,64 @@
+module testtafserviceservant
+{
+    struct SimpleStruct {
+            0 require long id=0;
+            1 require int count=0;
+            2 require short page=0;
+        };
+
+        struct OutStruct {
+            0 require long id=0;
+            1 require int count=0;
+            2 require short page=0;
+            3 optional string str;
+        };
+
+        struct ComplicatedStruct {
+            0 require vector<SimpleStruct> ss;
+            1 require SimpleStruct rs;
+            2 require map<string, SimpleStruct> mss;
+            3 optional string str;
+        }
+
+        struct LotofTags {
+            0 require long id=0;
+            1 require int count=0;
+            2 require short page=0;
+            3 optional string str;
+            4 require vector<SimpleStruct> ss;
+            5 require SimpleStruct rs;
+            6 require map<string, SimpleStruct> mss;
+        }
+
+        interface TestTafService
+        {
+
+            void testTafServer();
+
+            int testLofofTags(LotofTags tags, out LotofTags outtags);
+
+            void sayHelloWorld(string name, out string outGreetings);
+
+            int testBasic(bool a, int b, string c, out bool d, out int e, out string f);
+
+            string testStruct(long a, SimpleStruct b, out OutStruct d);
+
+            string testMap(short a, SimpleStruct b, map<string, string> m1, out OutStruct d, out map<int, SimpleStruct> m2);
+
+            string testVector(int a, vector<string> v1, vector<SimpleStruct> v2, out vector<int> v3, out vector<OutStruct> v4);
+
+            SimpleStruct testReturn();
+
+            map<string,string> testReturn2();
+
+            vector<SimpleStruct> testComplicatedStruct(ComplicatedStruct cs,vector<ComplicatedStruct> vcs, out ComplicatedStruct ocs,out vector<ComplicatedStruct> ovcs);
+
+            map<string,ComplicatedStruct> testComplicatedMap(map<string,ComplicatedStruct> mcs, out map<string,ComplicatedStruct> omcs);
+
+            int testEmpty(short a,out bool b1, out int in2, out OutStruct d, out vector<OutStruct> v3,out vector<int> v4);
+
+            int testSelf();
+
+        };
+
+}
