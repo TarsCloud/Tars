@@ -16,6 +16,7 @@
 
 #include "HelloImp.h"
 #include "servant/Application.h"
+#include "Log.h"
 
 using namespace std;
 
@@ -35,7 +36,7 @@ void HelloImp::destroy()
 
 int HelloImp::testHello(const std::string &sReq, std::string &sRsp, tars::TarsCurrentPtr current)
 {
-    TLOGDEBUG("HelloImp::testHellosReq:"<<sReq<<endl);
+    LOG_DEBUG<<"req="<<sReq<<endl;
     sRsp = sReq;
     return 0;
 }

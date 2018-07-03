@@ -19,7 +19,7 @@
 #include "Hello.h"
 
 using namespace std;
-using namespace TestApp;
+using namespace Test;
 using namespace tars;
 
 class HelloCallBack : public HelloPrxCallback
@@ -47,7 +47,8 @@ int main(int argc,char ** argv)
     try
     {
         HelloPrx prx;
-        comm.stringToProxy("TestApp.HelloServer.HelloObj@tcp -h 10.120.129.226 -p 20001" , prx);
+        //comm.stringToProxy("TestApp.HelloServer.HelloObj@tcp -h 10.120.129.226 -p 20001" , prx);
+        comm.stringToProxy("Test.HelloServer.HelloObj@ssl -h 127.0.0.1 -p 22332" , prx);
 
         try
         {
