@@ -43,6 +43,9 @@ public class Tars2JavaConfig {
     @Parameter
     public boolean servant;
 
+    @Parameter
+    public boolean tup;
+
     public String getSrcPath() {
         return srcPath;
     }
@@ -105,5 +108,13 @@ public class Tars2JavaConfig {
 
     public void setServant(boolean servant) {
         this.servant = servant;
+    }
+
+    public boolean isTup() {
+        return tup;
+    }
+
+    public void setTup(boolean tup) {
+        this.tup = tup;
     }
 }
