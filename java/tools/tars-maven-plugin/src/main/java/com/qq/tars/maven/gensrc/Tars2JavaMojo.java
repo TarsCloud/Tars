@@ -841,10 +841,18 @@ public class Tars2JavaMojo extends AbstractMojo {
             }
             if (p.isOut()) {
                 sb.append(isFirst ? "" : ", ");
-                sb.append("@TarsHolder Holder<").append(type(p.paramType(), true, nsMap)).append("> ").append(p.paramName());
+                if (tars2JavaConfig.isServant() && tars2JavaConfig.isTup()) {
+                    sb.append("@TarsHolder(name=\"").append(p.paramName()).append("\") Holder<").append(type(p.paramType(), true, nsMap)).append("> ").append(p.paramName());
+                } else {
+                    sb.append("@TarsHolder Holder<").append(type(p.paramType(), true, nsMap)).append("> ").append(p.paramName());
+                }
             } else {
                 sb.append(isFirst ? "" : ", ");
-                sb.append(type(p.paramType(), nsMap)).append(" ").append(p.paramName());
+                if (tars2JavaConfig.isServant() && tars2JavaConfig.isTup()) {
+                    sb.append("@TarsMethodParameter(name=\"").append(p.paramName()).append("\")").append(type(p.paramType(), nsMap)).append(" ").append(p.paramName());
+                } else {
+                    sb.append(type(p.paramType(), nsMap)).append(" ").append(p.paramName());
+                }
             }
             if (isFirst) {
                 isFirst = false;
