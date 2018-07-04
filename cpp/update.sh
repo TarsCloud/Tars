@@ -8,4 +8,5 @@
 #git remote add upstream https://github.com/Tencent/Tars.git  
 git fetch upstream 
 git merge upstream/master
+git commit -a 
 git push
