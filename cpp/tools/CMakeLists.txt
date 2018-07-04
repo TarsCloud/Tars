@@ -108,5 +108,5 @@ add_subdirectory(tars2node)
 
 FIND_PACKAGE(Protobuf)
 IF(PROTOBUF_FOUND)
-    add_subdirectory(protobuf2tarscpp)
+    add_subdirectory(pb2tarscpp)
 ENDIF()
