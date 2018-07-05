@@ -3,14 +3,14 @@
  *
  * Copyright (C) 2016THL A29 Limited, a Tencent company. All rights reserved.
  *
- * Licensed under the BSD 3-Clause License (the "License"); you may not use this file except 
+ * Licensed under the BSD 3-Clause License (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
  *
  * https://opensource.org/licenses/BSD-3-Clause
  *
- * Unless required by applicable law or agreed to in writing, software distributed 
- * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
 
@@ -33,15 +33,15 @@ static string outfill(const string& s, char c = ' ', int n = 29)
 }
 
 bool getConfig(const string &sLocator,const string &sRegistryObj,string &sNodeId,string &sLocalIp, string &sConfigFile, bool bCloseCout)
-{  
+{
     try
     {
         //string          sLocalIp;
         string          sResult;
-        string          sTemplate; 
-        TC_Config       tConf;   
-        CommunicatorFactory::getInstance()->getCommunicator()->setProperty("locator",sLocator);       
-        RegistryPrx pRegistryPrx = CommunicatorFactory::getInstance()->getCommunicator()->stringToProxy<RegistryPrx>(sRegistryObj);  
+        string          sTemplate;
+        TC_Config       tConf;
+        CommunicatorFactory::getInstance()->getCommunicator()->setProperty("locator",sLocator);
+        RegistryPrx pRegistryPrx = CommunicatorFactory::getInstance()->getCommunicator()->stringToProxy<RegistryPrx>(sRegistryObj);
         if( sLocalIp.empty() && pRegistryPrx->getClientIp(sLocalIp) != 0)
         {
             cerr<<"cannot get localip: " <<sLocalIp << endl;
@@ -49,14 +49,14 @@ bool getConfig(const string &sLocator,const string &sRegistryObj,string &sNodeId
         }
 
         if(sNodeId == "" )
-        {            
+        {
             sNodeId = sLocalIp;
-        }  
+        }
 
         pRegistryPrx->getNodeTemplate(sNodeId,sTemplate);
         if(TC_Common::trim(sTemplate) == "" )
         {
-            cerr << "cannot get node Template nodeid:"<<sNodeId <<",Template:"<<sTemplate<< endl; 
+            cerr << "cannot get node Template nodeid:"<<sNodeId <<",Template:"<<sTemplate<< endl;
             return false;
         }
 
@@ -64,7 +64,7 @@ bool getConfig(const string &sLocator,const string &sRegistryObj,string &sNodeId
         sTemplate = TC_Common::replace(sTemplate, "${registryObj}",sRegistryObj);
         sTemplate = TC_Common::replace(sTemplate, "${localip}",sLocalIp);
         //sTemplate = TC_Common::replace(sTemplate, "${nodeid}",sNodeId);
-        tConf.parseString(sTemplate); 
+        tConf.parseString(sTemplate);
         if (!bCloseCout)
         {
             string sCloseCoutValue = tConf.get("/tars/application/server<closecout>");
@@ -84,8 +84,8 @@ bool getConfig(const string &sLocator,const string &sRegistryObj,string &sNodeId
                 cerr << "failed to set closeout value" << endl;
             }
         }
-    
-        string sConfigPath    = TC_File::extractFilePath(sConfigFile); 
+
+        string sConfigPath    = TC_File::extractFilePath(sConfigFile);
         if(!TC_File::makeDirRecursive( sConfigPath ))
         {
             cerr<<"cannot create dir: " <<sConfigPath << endl;
@@ -94,27 +94,27 @@ bool getConfig(const string &sLocator,const string &sRegistryObj,string &sNodeId
         string sFileTemp    = sConfigPath + "/config.conf.tem";
         ofstream configfile(sFileTemp.c_str());
         if(!configfile.good())
-        {        
+        {
             cerr << "cannot create configuration file: "<<sConfigFile<< endl;
             return false;
-        } 
+        }
         configfile <<TC_Common::replace(tConf.tostr(),"\\s"," ") << endl;
-        configfile.close(); 
-               
+        configfile.close();
+
         string sFileBak     = sConfigFile+"."+TC_Common::now2str() + ".bak";
         if(TC_File::isFileExist(sConfigFile))
         {
             TC_File::copyFile(sConfigFile,sFileBak,true);
-        }  
+        }
 
         TC_File::copyFile(sFileTemp,sConfigFile,true);
-        TC_File::removeFile(sFileTemp,false); 
+        TC_File::removeFile(sFileTemp,false);
 
-        return true;          
-    } 
+        return true;
+    }
     catch(exception &e)
     {
-       cerr<< "load config  erro:" <<e.what()<< endl; 
+       cerr<< "load config  erro:" <<e.what()<< endl;
     }
     return false;
 }
@@ -160,11 +160,11 @@ void parseConfig(int argc, char *argv[])
     }
 
     string sLocator         = tOp.getValue("locator");
-    string sNodeId          = tOp.getValue("nodeid"); 
-    string sConfigFile      = tOp.getValue("config");   
+    string sNodeId          = tOp.getValue("nodeid");
+    string sConfigFile      = tOp.getValue("config");
     string sRegistryObj     = tOp.getValue("registryObj");
     string sLocalIp         = tOp.getValue("localip");
-    
+
     if(sConfigFile == "")
     {
         cerr << endl;
@@ -172,8 +172,8 @@ void parseConfig(int argc, char *argv[])
         cerr << argv[0] << " --locator=tars.tarsregistry.QueryObj@tcp -h 172.25.38.67 -p 17890"  " --config=config.conf [--nodeid = 172.25.38.67 --registryObj=tars.tarsregistry.RegistryObj]" << endl;
         cerr << argv[0] << " --config=config.conf" << endl;
         exit(0);
-    }   
-    
+    }
+
     if(!TC_File::isAbsolute(sConfigFile))
     {
         char sCwd[PATH_MAX];
@@ -209,16 +209,29 @@ void parseConfig(int argc, char *argv[])
     map<string,string> mOp = tOp.getMulti();
     for(map<string,string>::const_iterator it = mOp.begin(); it != mOp.end(); ++it)
     {
-        cout << outfill( it->first)<< it->second << endl;  
-    } 
+        cout << outfill( it->first)<< it->second << endl;
+    }
 
 }
 
 int main( int argc, char* argv[] )
 {
     try
-    {   
-        TC_Common::daemon();
+    {
+        bool bNoDaemon = false;
+        for (int i = 1; i < argc; ++i)
+        {
+            if (::strcmp(argv[i], "--monitor") == 0)
+            {
+                bNoDaemon = true;
+                break;
+            }
+        }
+
+        if (!bNoDaemon)
+        {
+            TC_Common::daemon();
+        }
 
         parseConfig(argc,argv);
 
