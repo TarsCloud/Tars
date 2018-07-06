@@ -142,7 +142,7 @@ public:
      *
      * @return Transceiver*
      */
-    inline Transceiver* trans() { return _trans; }
+    inline Transceiver* trans() { return _trans.get(); }
 
     /**
      * 设置节点的静态权重值
@@ -153,6 +153,10 @@ public:
      * 获取节点的静态权重值
      */
     inline int getWeight() { return _staticWeight; }
+    /**
+     * 获取id
+     */
+    inline int getId() const { return _id; }
 
 private:
 
@@ -213,12 +217,12 @@ private:
     /*
      * 收发包处理
      */
-    Transceiver*                           _trans;
+    std::unique_ptr<Transceiver>           _trans;
 
     /*
      * 超时队列
      */
-    TC_TimeoutQueueNew<ReqMessage*>*       _timeoutQueue;
+    std::unique_ptr<TC_TimeoutQueueNew<ReqMessage*>> _timeoutQueue;
 
     /*
      * 节点在主控的存活状态
@@ -314,6 +318,9 @@ private:
      * 采样信息
      */
     map<string,vector<StatSampleMsg> >     _sample;
+
+    int                                    _id;
+    static  TC_Atomic                      _idGen;
 };
 ////////////////////////////////////////////////////////////////////
 }

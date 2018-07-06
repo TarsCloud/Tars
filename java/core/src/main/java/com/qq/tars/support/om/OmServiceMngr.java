@@ -35,6 +35,7 @@ import com.qq.tars.support.property.JvmPropertyPolicy.MemoryHeapUsedAvg;
 import com.qq.tars.support.property.JvmPropertyPolicy.ThreadNumAvg;
 import com.qq.tars.support.property.PropertyReportHelper;
 import com.qq.tars.support.property.PropertyReportHelper.Policy;
+import com.qq.tars.support.trace.TarsTraceZipkinConfiguration;
 
 public class OmServiceMngr {
 
@@ -71,6 +72,7 @@ public class OmServiceMngr {
         }
 
         ServerStatHelper.getInstance().init(communicator);
+        TarsTraceZipkinConfiguration.getInstance().init();
         ScheduledServiceMngr.getInstance().start();
     }
 

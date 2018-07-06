@@ -66,6 +66,7 @@ public class DeployController extends WrappedController {
             add("tars_java");
             add("tars_nodejs");
             add("tars_php");
+            add("tars_go");
         }};
     }
 

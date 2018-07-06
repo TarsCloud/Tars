@@ -24,17 +24,19 @@
 #include "tup/tup.h"
 #include "servant/StatF.h"
 #include "servant/StatReport.h"
+#include "util/tc_nghttp2.h"
+#include "util/tc_http2clientmgr.h"
 
 
 namespace tars
 {
+    
+TC_Atomic AdapterProxy::_idGen;
 
 AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Communicator* pCom)
 : _communicator(pCom)
 , _objectProxy(pObjectProxy)
 , _endpoint(ep)
-, _trans(NULL)
-, _timeoutQueue(NULL)
 , _activeStateInReg(true)
 , _activeStatus(true)
 , _totalInvoke(0)
@@ -51,10 +53,9 @@ AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Com
 , _noSendQueueLimit(1000)
 , _maxSampleCount(1000)
 , _sampleRate(0)
+, _id(_idGen.inc())
 {
-    _timeoutQueue = new TC_TimeoutQueueNew<ReqMessage*>();
-
-    assert(_timeoutQueue != NULL);
+    _timeoutQueue.reset(new TC_TimeoutQueueNew<ReqMessage*>());
 
     if(pObjectProxy->getCommunicatorEpoll())
     {
@@ -68,11 +69,11 @@ AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Com
 
     if (ep.type() == EndpointInfo::UDP)
     {
-        _trans = new UdpTransceiver(this, ep);
+        _trans.reset(new UdpTransceiver(this, ep));
     }
     else
     {
-        _trans = new TcpTransceiver(this, ep);
+        _trans.reset(new TcpTransceiver(this, ep));
     }
 
     //初始化stat的head信息
@@ -81,17 +82,6 @@ AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Com
 
 AdapterProxy::~AdapterProxy()
 {
-    if(_trans)
-    {
-        delete _trans;
-        _trans = NULL;
-    }
-
-    if(_timeoutQueue)
-    {
-        delete _timeoutQueue;
-        _timeoutQueue = NULL;
-    }
 }
 
 string AdapterProxy::getSlaveName(const string& sSlaveName)
@@ -166,7 +156,14 @@ int AdapterProxy::invoke(ReqMessage * msg)
         msg->request.iRequestId = _objectProxy->generateId();
     }
 
-    _objectProxy->getProxyProtocol().requestFunc(msg->request,msg->sReqData);
+#if TARS_HTTP2
+    if (getObjProxy()->getProtoName() == HTTP2)
+    {
+        msg->request.iRequestId = getId(); // session Id
+    }
+#endif
+
+    _objectProxy->getProxyProtocol().requestFunc(msg->request, msg->sReqData);
 
     //交给连接发送数据,连接连上,buffer不为空,直接发送数据成功
     if(_timeoutQueue->sendListEmpty() && _trans->sendRequest(msg->sReqData.c_str(),msg->sReqData.size()) != Transceiver::eRetError)
@@ -237,7 +234,7 @@ void AdapterProxy::doInvoke()
         //请求发送成功了 处理采样
         //...
 
-        //发送完成，要从队列里面清掉
+        //发送完成
         _timeoutQueue->popSend(msg->eType == ReqMessage::ONE_WAY);
         if(msg->eType == ReqMessage::ONE_WAY)
         {
@@ -476,30 +473,6 @@ void AdapterProxy::finishInvoke(ResponsePacket & rsp)
     TLOGINFO("[TARS][AdapterProxy::finishInvoke(ResponsePacket) objname:" << _objectProxy->name() << ",desc:" << _endpoint.desc() 
         << ",id:" << rsp.iRequestId << endl);
 
-    if (_trans->getAuthState() != AUTH_SUCC)
-    {
-        std::string ret(rsp.sBuffer.begin(), rsp.sBuffer.end());
-        tars::AUTH_STATE tmp = AUTH_SUCC;
-        tars::stoe(ret, tmp);
-        int newstate = tmp;
-
-        TLOGINFO("[TARS]AdapterProxy::finishInvoke from state " << _trans->getAuthState() << " to " << newstate << endl);
-        _trans->setAuthState(newstate);
-
-        if (newstate == AUTH_SUCC)
-        {
-            // flush old buffered msg when auth is not complete
-            doInvoke();
-        }
-        else
-        {
-            TLOGERROR("newstate is " << newstate << ", error close!\n");
-            _trans->close();
-        }
-
-        return;
-    }
-
     ReqMessage * msg = NULL;
 
     //requestid 为0 是push消息
@@ -649,8 +622,6 @@ void AdapterProxy::finishInvoke(ReqMessage * msg)
 
 void AdapterProxy::doTimeout()
 {
-    TLOGINFO("[TARS][AdapterProxy::doTimeout objname:" << _objectProxy->name() << ",desc:" << _endpoint.desc() << endl);
-
     ReqMessage * msg;
     while(_timeoutQueue->timeout(msg))
     {
@@ -681,12 +652,11 @@ void AdapterProxy::doTimeout()
 
 void AdapterProxy::sample(ReqMessage * msg)
 {
-    map<string,vector<StatSampleMsg> >::iterator iter = _sample.find(msg->request.sFuncName);
+    auto iter = _sample.find(msg->request.sFuncName);
     if(iter == _sample.end())
     {
         vector<StatSampleMsg> vBuf;
-        pair<map<string,vector<StatSampleMsg> >::iterator, bool> result ;
-        result = _sample.insert(make_pair(msg->request.sFuncName,vBuf));
+        auto result = _sample.insert(make_pair(msg->request.sFuncName,vBuf));
         assert(result.second);
         iter = result.first;
     }
@@ -741,7 +711,7 @@ void AdapterProxy::stat(ReqMessage * msg)
         body.execCount = 1;
     }
 
-    map<string,StatMicMsgBody>::iterator it = _statBody.find(msg->request.sFuncName);
+    auto it = _statBody.find(msg->request.sFuncName);
     if(it != _statBody.end())
     {
         merge(body,it->second);
@@ -788,23 +758,21 @@ void AdapterProxy::doStat(map<StatMicMsgHead, StatMicMsgBody> & mStatMicMsg)
 {
     TLOGINFO("[TARS][AdapterProxy::doStat objname:" << _objectProxy->name() << ",desc:" << _endpoint.desc() << endl);
 
-    map<string,StatMicMsgBody>::iterator iter = _statBody.begin();
-
-    for(; iter != _statBody.end(); ++iter)
+    for (const auto& kv : _statBody)
     {
-        _statHead.interfaceName = iter->first;
+        _statHead.interfaceName = kv.first;
         //有数据就放到map里面
-        if(iter->second.count != 0 || iter->second.timeoutCount != 0 || iter->second.execCount != 0)
+        if(kv.second.count != 0 || kv.second.timeoutCount != 0 || kv.second.execCount != 0)
         {
             //判断是否已经有相同的数据了，需要汇总
-            StatReport::MapStatMicMsg::iterator it = mStatMicMsg.find(_statHead);
+            auto it = mStatMicMsg.find(_statHead);
             if(it != mStatMicMsg.end())
             {
-                merge(iter->second,it->second);
+                merge(kv.second, it->second);
             }
             else
             {
-                mStatMicMsg[_statHead] = iter->second;
+                mStatMicMsg[_statHead] = kv.second;
             }
         }
     }

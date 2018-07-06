@@ -64,10 +64,7 @@ void TC_Epoller::create(int max_connections)
 
     _iEpollfd = epoll_create(_max_connections + 1);
 
-    if(_pevs != NULL)
-    {
-        delete[] _pevs;
-    }
+    delete[] _pevs;
 
     _pevs = new epoll_event[_max_connections + 1];
 }

@@ -20,7 +20,7 @@
 #include "util/tc_thread.h"
 #include "util/tc_thread_queue.h"
 #include "util/tc_monitor.h"
-#include "util/tc_functor.h"
+#include <functional>
 
 #include <vector>
 #include <set>
@@ -105,15 +105,13 @@ public:
     /**
      * @brief 启动所有线程并, 执行初始化对象. 
      *  
-     * @param ParentFunctor
      * @param tf
      */
-    template<class ParentFunctor>
-    void start(const TC_FunctorWrapper<ParentFunctor> &tf)
+    void start(std::function<void ()> tf)
     {
         for(size_t i = 0; i < _jobthread.size(); i++)
         {
-            _startqueue.push_back(new TC_FunctorWrapper<ParentFunctor>(tf));
+            _startqueue.push_back(std::move(tf));
         }
 
         start();
@@ -123,10 +121,9 @@ public:
      * @brief 添加对象到线程池执行，该函数马上返回， 
      *        线程池的线程执行对象
      */
-    template<class ParentFunctor>
-    void exec(const TC_FunctorWrapper<ParentFunctor> &tf)
+    void exec(std::function<void ()> tf)
     {
-        _jobqueue.push_back(new TC_FunctorWrapper<ParentFunctor>(tf));
+        _jobqueue.push_back(std::move(tf));
     }
 
     /**
@@ -293,14 +290,14 @@ protected:
      *
      * @return TC_FunctorWrapperInterface*
      */
-    TC_FunctorWrapperInterface *get(ThreadWorker *ptw);
+    std::function<void ()> get(ThreadWorker *ptw);
 
     /**
      * @brief 获取启动任务.
      *
      * @return TC_FunctorWrapperInterface*
      */
-    TC_FunctorWrapperInterface *get();
+    std::function<void ()> get();
 
     /**
      * @brief 空闲了一个线程. 
@@ -332,12 +329,12 @@ protected:
     /**
      * 任务队列
      */
-    TC_ThreadQueue<TC_FunctorWrapperInterface*> _jobqueue;
+    TC_ThreadQueue<std::function<void ()>> _jobqueue;
 
     /**
      * 启动任务
      */
-    TC_ThreadQueue<TC_FunctorWrapperInterface*> _startqueue;
+    TC_ThreadQueue<std::function<void ()>> _startqueue;
 
     /**
      * 工作线程

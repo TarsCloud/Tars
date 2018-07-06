@@ -103,22 +103,16 @@ int main(int argc, char *argv[])
         tpoolB.start();
 
         {
-            TC_Functor<void> functor(testAdd);
-            TC_Functor<void>::wrapper_type wt(functor);
-
             for(size_t i = 0; i < tpoolA.getThreadNum(); i++)
             {
-                tpoolA.exec(wt);
+                tpoolA.exec(testAdd);
             }
         }
 
         {
-            TC_Functor<void> functor(testDel);
-            TC_Functor<void>::wrapper_type wt(functor);
-
             for(size_t i = 0; i < tpoolB.getThreadNum(); i++)
             {
-                tpoolB.exec(wt);
+                tpoolB.exec(testDel);
             }
         }
 

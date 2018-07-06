@@ -25,8 +25,7 @@
 #include "util/tc_fcontext.h"
 #include "util/tc_thread_queue.h"
 #include "util/tc_monitor.h"
-#include "util/tc_callback.h"
-#include "util/tc_bind.h"
+#include <functional>
 #include "util/tc_thread.h"
 
 using namespace std;
@@ -221,7 +220,7 @@ public:
     /**
      * 注册协程实际的处理函数
      */
-    void registerFunc(const tars::TC_Callback<void ()> &callback);
+    void registerFunc(const std::function<void ()> &callback);
 
     /**
      * 设置协程的内存空间
@@ -314,7 +313,7 @@ private:
     /*
      * 协程具体执行函数
      */
-    tars::TC_Callback<void ()>    _callback;
+    std::function<void ()> _callback;
 };
 
 ///////////////////////////////////////////
@@ -343,7 +342,7 @@ public:
     /**
      * 创建协程
      */
-    uint32_t createCoroutine(const tars::TC_Callback<void ()> &callback);
+    uint32_t createCoroutine(const std::function<void ()> &callback);
 
     /**
      * 在用户自己起的线程中使用协程时，用到的协程调度
@@ -632,7 +631,7 @@ public:
      * 创建协程，在已经创建的协程中使用
      * 返回值为协程的id，大于0，表示成功，，小于等于0，表示失败
      */
-    uint32_t createCoroutine(const tars::TC_Callback<void ()> &coroFunc);
+    uint32_t createCoroutine(const std::function<void ()> &coroFunc);
 
     /**
      * 当前协程自己放弃执行,会自动被调度器唤醒

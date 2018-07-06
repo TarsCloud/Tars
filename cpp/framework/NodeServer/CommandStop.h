@@ -123,8 +123,43 @@ inline int CommandStop::execute(string& sResult)
 
         string sStopScript   = _serverObjectPtr->getStopScript();
         //配置了脚本或者非tars服务
-        if (!sStopScript.empty() || _serverObjectPtr->isTarsServer() == false)
-        {
+        if( TC_Common::lower(TC_Common::trim(_desc.serverType)) == "tars_php" ){
+            //生成停止shell脚本 
+            string sConfigFile      = _serverObjectPtr->getConfigFile();
+            string sLogPath         = _serverObjectPtr->getLogPath();
+            string sServerDir       = _serverObjectPtr->getServerDir();
+            string sLibPath         = _serverObjectPtr->getLibPath();
+            string sExePath         = _serverObjectPtr->getExePath();
+            string sLogRealPath     = sLogPath + _desc.application +"/" + _desc.serverName + "/" ;
+            string sLogRealPathFile = sLogRealPath +_serverObjectPtr->getServerId() +".log";
+
+            TC_Config conf;
+            conf.parseFile(sConfigFile);
+            string phpexecPath = "";
+            string entrance = "";
+            try{
+                phpexecPath = TC_Common::strto<string>(conf["/tars/application/server<php>"]);
+                entrance =  TC_Common::strto<string>(conf["/tars/application/server<entrance>"]);
+            } catch (...){}
+            entrance = entrance=="" ? sServerDir+"/bin/src/index.php" : entrance;
+
+            std::ostringstream osStopStcript;
+            osStopStcript << "#!/bin/sh" << std::endl;
+            osStopStcript << "if [ ! -d \"" << sLogRealPath << "\" ];then mkdir -p \"" << sLogRealPath << "\"; fi" << std::endl;
+            osStopStcript << phpexecPath << " " << entrance <<" --config=" << sConfigFile << " stop  >> " << sLogRealPathFile << " 2>&1 " << std::endl;
+            osStopStcript << "echo \"end-tars_stop.sh\"" << std::endl;
+
+            TC_File::save2file(sExePath + "/tars_stop.sh", osStopStcript.str());
+            TC_File::setExecutable(sExePath + "/tars_stop.sh", true);
+
+            sStopScript = sStopScript=="" ? _serverObjectPtr->getExePath() + "/tars_stop.sh" : sStopScript;
+
+            map<string, string> mResult;
+            string sServerId     = _serverObjectPtr->getServerId();
+            _serverObjectPtr->getActivator()->doScript(sServerId, sStopScript, sResult, mResult);
+            needWait = true;
+
+        }else if (!sStopScript.empty() || _serverObjectPtr->isTarsServer() == false) {
             map<string, string> mResult;
             string sServerId     = _serverObjectPtr->getServerId();
             _serverObjectPtr->getActivator()->doScript(sServerId, sStopScript, sResult, mResult);

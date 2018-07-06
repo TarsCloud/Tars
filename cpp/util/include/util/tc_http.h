@@ -997,7 +997,8 @@ public:
         REQUEST_OPTIONS,
         REQUEST_HEAD,
         REQUEST_PUT,
-        REQUEST_DELETE
+        REQUEST_DELETE,
+        REQUEST_PATCH,
     };
 
     /**
@@ -1071,6 +1072,15 @@ public:
     void encode(vector<char> &buffer);
 
     /**
+     * @brief 设置请求包.
+     *  
+     * @param sUrl         例如:http://www.qq.com/query?a=b&c=d
+     * @param bCreateHost  是否新创建头部的Host信息
+     *                     (默认, 如果有Host信息了, 就不创建)
+     *                     (注意, 是在encode的时候创建的)
+     */
+    void setRequest(const string& method, const string &sUrl, const std::string& body = "", bool bNewCreateHost = false);
+    /**
      * @brief 设置Get请求包.
      *  
      * @param sUrl         例如:http://www.qq.com/query?a=b&c=d
@@ -1113,6 +1123,7 @@ public:
     void setPostRequest(const string &sUrl, const char *sBuffer, size_t iLength, bool bNewCreateHost = false);
 
     void setPutRequest(const string &sUrl, const string &sPostBody, bool bNewCreateHost = false);
+    void setPatchRequest(const string &sUrl, const string &sPostBody, bool bNewCreateHost = false);
 
     void setDeleteRequest(const string &sUrl, const string &sPostBody, bool bNewCreateHost = false);
 
@@ -1144,6 +1155,11 @@ public:
     int doRequest(TC_HttpResponse &stHttpRep, int iTimeout = 3000);
 
     /**
+     * @brief 请求类型.
+     */
+    int requestType() const { return _requestType ; }
+
+    /**
      * @brief 是否是GET请求.
      *
      * @return 是GET请求返回true，否则返回false
@@ -1170,6 +1186,13 @@ public:
      * @return 是GET请求返回true，否则返回false
      */
     bool isOPTIONS() const { return _requestType == REQUEST_OPTIONS; }
+
+    /**
+     * @brief 是否是Delete请求.
+     *
+     * @return 是delete请求返回true，否则返回false
+     */
+    bool isDELETE() const { return _requestType == REQUEST_DELETE; }
 
     /**
      * @brief 获取请求的URL.

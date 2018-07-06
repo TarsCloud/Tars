@@ -16,6 +16,12 @@
 
 package com.qq.tars.server.core;
 
+import java.util.List;
+
+import com.qq.tars.common.Filter;
+import com.qq.tars.common.FilterChain;
+import com.qq.tars.common.FilterKind;
+
 public interface AppContext {
 
     public String getInitParameter(String name);
@@ -25,5 +31,8 @@ public interface AppContext {
     public void stop();
 
     public ServantHomeSkeleton getCapHomeSkeleton(String homeName);
+    
+    public List<Filter> getFilters(FilterKind kind);
+    
 }
 

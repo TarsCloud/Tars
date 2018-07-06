@@ -23,6 +23,7 @@
             <ul class="nav navbar-nav" id="main-nav">
                 <li class="index"><a href="/">服务管理</a></li>
                 <li class="operator"><a href="/pages/op_manage.htm">运维管理</a></li>
+                <li class="version2"><a href="/v2/index.html">新版体验</a></li>
             </ul>
         </div>
     </div>

@@ -292,6 +292,8 @@ struct ReqMessage : public TC_HandleBase
 
 typedef TC_AutoPtr<ReqMessage>          ReqMessagePtr;
 typedef TC_LoopQueue<ReqMessage*,1000>  ReqInfoQueue;
+    
+#define HTTP2 "http2"
 
 }
 

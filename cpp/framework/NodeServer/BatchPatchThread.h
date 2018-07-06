@@ -17,7 +17,6 @@
 #ifndef __BATCH_PATCH_THREAD_H_
 #define __BATCH_PATCH_THREAD_H_
 #include "servant/Application.h"
-#include "Node.h"
 #include "ServerObject.h"
 #include "util/tc_thread_queue.h"
 

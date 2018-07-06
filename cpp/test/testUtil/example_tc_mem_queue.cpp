@@ -92,11 +92,9 @@ int main(int argc, char *argv[])
             twpool.init(4);
             twpool.start();
 
-            TC_Functor<void> w(writeQueue);
-            TC_Functor<void>::wrapper_type iwt(w);
             for(size_t i = 0; i < twpool.getThreadNum(); i++)
             {
-                twpool.exec(iwt);
+                twpool.exec(writeQueue);
             }
 
             twpool.waitForAllDone();
@@ -107,12 +105,9 @@ int main(int argc, char *argv[])
             trpool.init(4);
             trpool.start();
 
-            TC_Functor<void> r(readQueue);
-            TC_Functor<void>::wrapper_type irt(r);
-
             for(size_t i = 0; i < trpool.getThreadNum(); i++)
             {
-                trpool.exec(irt);
+                trpool.exec(readQueue);
             }
 
             trpool.waitForAllDone();

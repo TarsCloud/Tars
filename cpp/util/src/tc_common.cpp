@@ -734,4 +734,24 @@ size_t TC_Common::toSize(const string &s, size_t iDefaultSize)
 
     return iDefaultSize;
 }
+
+// Generate the randome string, a SHA1-sized random number
+void TC_Common::getRandomHexChars(char* p, unsigned int len)
+{
+    const char* const chars = "0123456789abcdef";
+    FILE *fp = fopen("/dev/urandom","r");
+    if (!fp || fread(p,len,1,fp) == 0)
+    {
+        for (unsigned int j = 0; j < len; j++)
+            p[j] ^= rand();
+    }
+
+    if (fp) fclose(fp);
+   
+    for (unsigned int j = 0; j < len; j++)
+        p[j] = chars[p[j] & 0x0F];
+
 }
+
+}
+

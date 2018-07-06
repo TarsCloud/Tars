@@ -23,6 +23,7 @@
 #include <sys/un.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <sys/uio.h>
 #include <sys/types.h>
 #include <net/if_arp.h>
 #include <netinet/tcp.h>
@@ -91,15 +92,14 @@ bool TC_EpollServer::Handle::allAdapterIsEmpty()
 {
     map<string, BindAdapterPtr>& adapters = _handleGroup->adapters;
 
-    for (map<string, BindAdapterPtr>::iterator it = adapters.begin(); it != adapters.end(); ++it)
+    for (const auto& kv : adapters)
     {
-        BindAdapterPtr& adapter = it->second;
-
-        if (adapter->getRecvBufferSize() > 0)
+        if (kv.second->getRecvBufferSize() > 0)
         {
             return false;
         }
     }
+
     return true;
 }
 
@@ -174,9 +174,9 @@ void TC_EpollServer::Handle::handleImp()
 
         map<string, BindAdapterPtr>& adapters = _handleGroup->adapters;
 
-        for (map<string, BindAdapterPtr>::iterator it = adapters.begin(); it != adapters.end(); ++it)
+        for (auto& kv : adapters)
         {
-            BindAdapterPtr& adapter = it->second;
+            BindAdapterPtr& adapter = kv.second;
 
             try
             {
@@ -215,7 +215,7 @@ void TC_EpollServer::Handle::handleImp()
                     {
                         handle(stRecvData);
                     }
-                     handleCustomMessage(false);
+                    handleCustomMessage(false);
 
                     delete recv;
                     recv = NULL;
@@ -357,7 +357,7 @@ bool TC_EpollServer::BindAdapter::waitForRecvQueue(tagRecvData* &recv, uint32_t 
     return bRet;
 }
 
-size_t TC_EpollServer::BindAdapter::getRecvBufferSize()
+size_t TC_EpollServer::BindAdapter::getRecvBufferSize() const
 {
     return _rbuffer.size();
 }
@@ -615,9 +615,6 @@ TC_EpollServer::NetThread::Connection::Connection(TC_EpollServer::BindAdapter *p
 , _pRecvBuffer(NULL)
 , _nRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
 , _authInit(false)
-#if TARS_SSL
-, _openssl(NULL)
-#endif
 
 {
     assert(fd != -1);
@@ -641,9 +638,6 @@ TC_EpollServer::NetThread::Connection::Connection(BindAdapter *pBindAdapter, int
 ,_pRecvBuffer(NULL)
 ,_nRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
 ,_authInit(false)
-#if TARS_SSL
-, _openssl(NULL)
-#endif
 
 {
     _iLastRefreshTime = TNOW;
@@ -665,9 +659,6 @@ TC_EpollServer::NetThread::Connection::Connection(BindAdapter *pBindAdapter)
 ,_pRecvBuffer(NULL)
 ,_nRecvBufferSize(DEFAULT_RECV_BUFFERSIZE)
 ,_authInit(false)
-#if TARS_SSL
-, _openssl(NULL)
-#endif
 
 {
     _iLastRefreshTime = TNOW;
@@ -686,10 +677,6 @@ TC_EpollServer::NetThread::Connection::~Connection()
     {
         assert(!_sock.isValid());
     }
-
-#if TARS_SSL
-    delete _openssl;
-#endif
 }
 
 void TC_EpollServer::NetThread::Connection::tryInitAuthState(int initState)
@@ -709,7 +696,7 @@ void TC_EpollServer::NetThread::Connection::close()
         if (_openssl)
         {
             _openssl->Release();
-            _openssl = NULL;
+            _openssl.reset();
         }
 #endif
         if(_sock.isValid())
@@ -823,7 +810,7 @@ int TC_EpollServer::NetThread::Connection::parseProtocol(recv_queue::queue_type 
                     continue;
 
                 tagRecvData* recv = new tagRecvData();
-                recv->buffer           = ro;
+                recv->buffer           = std::move(ro);
                 recv->ip               = _ip;
                 recv->port             = _port;
                 recv->recvTimeStamp    = TNOWMS;
@@ -1048,9 +1035,9 @@ int TC_EpollServer::NetThread::Connection::send(const string& buffer, const stri
     }
 
     size_t toSendBytes = 0;
-    for (std::vector<TC_Slice>::const_iterator it(_sendbuffer.begin()); it != _sendbuffer.end(); ++ it)
+    for (const auto& slice : _sendbuffer)
     {
-        toSendBytes += it->dataLen;
+        toSendBytes += slice.dataLen;
     }
 
     if (toSendBytes >= 8 * 1024)
@@ -1491,13 +1478,9 @@ TC_EpollServer::NetThread::NetThread(TC_EpollServer *epollServer)
 
 TC_EpollServer::NetThread::~NetThread()
 {
-    map<int, BindAdapterPtr>::iterator it = _listeners.begin();
-
-    while(it != _listeners.end())
+    for (auto& kv : _listeners)
     {
-        ::close(it->first);
-
-        ++it;
+        ::close(kv.first);
     }
     _listeners.clear();
 
@@ -1551,15 +1534,12 @@ int  TC_EpollServer::NetThread::getEmptyConnTimeout() const
 
 int  TC_EpollServer::NetThread::bind(BindAdapterPtr &lsPtr)
 {
-    map<int, BindAdapterPtr>::iterator it = _listeners.begin();
-
-    while (it != _listeners.end())
+    for (const auto& kv : _listeners)
     {
-        if(it->second->getName() == lsPtr->getName())
+        if(kv.second->getName() == lsPtr->getName())
         {
             throw TC_Exception("bind name '" + lsPtr->getName() + "' conflicts.");
         }
-        ++it;
     }
 
     const TC_Endpoint &ep = lsPtr->getEndpoint();
@@ -1575,17 +1555,12 @@ int  TC_EpollServer::NetThread::bind(BindAdapterPtr &lsPtr)
 
 TC_EpollServer::BindAdapterPtr TC_EpollServer::NetThread::getBindAdapter(const string &sName)
 {
-    map<int, BindAdapterPtr>::iterator it = _listeners.begin();
-
-    while(it != _listeners.end())
+    for (const auto& kv : _listeners)
     {
-        if(it->second->getName() == sName)
-        {
-            return it->second;
-        }
-
-        ++it;
+        if(kv.second->getName() == sName)
+            return kv.second;
     }
+
     return NULL;
 }
 
@@ -1643,24 +1618,20 @@ void TC_EpollServer::NetThread::createEpoll(uint32_t iIndex)
         size_t maxAllConn   = 0;
 
         //监听socket
-        map<int, BindAdapterPtr>::iterator it = _listeners.begin();
-
-        while(it != _listeners.end())
+        for (const auto& kv : _listeners)
         {
-            if(it->second->getEndpoint().isTcp())
+            if(kv.second->getEndpoint().isTcp())
             {
                 //获取最大连接数
-                maxAllConn += it->second->getMaxConns();
+                maxAllConn += kv.second->getMaxConns();
 
-                _epoller.add(it->first, H64(ET_LISTEN) | it->first, EPOLLIN);
+                _epoller.add(kv.first, H64(ET_LISTEN) | kv.first, EPOLLIN);
             }
             else
             {
                 maxAllConn++;
                 _hasUdp = true;
             }
-
-            ++it;
         }
 
         if(maxAllConn == 0)
@@ -1685,21 +1656,16 @@ void TC_EpollServer::NetThread::initUdp()
     if(_hasUdp)
     {
         //监听socket
-        map<int, BindAdapterPtr>::iterator it = _listeners.begin();
-
-        while(it != _listeners.end())
+        for (const auto& kv : _listeners)
         {
-            if(!it->second->getEndpoint().isTcp())
+            if (!kv.second->getEndpoint().isTcp())
             {
-                Connection *cPtr = new Connection(it->second.get(), it->first);
+                Connection *cPtr = new Connection(kv.second.get(), kv.first);
                 //udp分配接收buffer
                 cPtr->setRecvBuffer(_nUdpRecvBufferSize);
 
-                //addUdpConnection(cPtr);
-                _epollServer->addConnection(cPtr, it->first, UDP_CONNECTION);
+                _epollServer->addConnection(cPtr, kv.first, UDP_CONNECTION);
             }
-
-            ++it;
         }
     }
 }
@@ -1807,8 +1773,6 @@ void TC_EpollServer::NetThread::addTcpConnection(TC_EpollServer::NetThread::Conn
 
     cPtr->getBindAdapter()->increaseNowConnection();
 
-    //注意epoll add必须放在最后, 否则可能导致执行完, 才调用上面语句
-    _epoller.add(cPtr->getfd(), cPtr->getId(), EPOLLIN | EPOLLOUT);
 #if TARS_SSL
     if (cPtr->getBindAdapter()->getEndpoint().isSSL())
     {
@@ -1823,8 +1787,7 @@ void TC_EpollServer::NetThread::addTcpConnection(TC_EpollServer::NetThread::Conn
             return;
         }
 
-        delete cPtr->_openssl;
-        cPtr->_openssl = new TC_OpenSSL();
+        cPtr->_openssl.reset(new TC_OpenSSL());
         cPtr->_openssl->Init(ssl, true);
         std::string out = cPtr->_openssl->DoHandshake();
         if (cPtr->_openssl->HasError())
@@ -1841,6 +1804,8 @@ void TC_EpollServer::NetThread::addTcpConnection(TC_EpollServer::NetThread::Conn
         }
     }
 #endif
+    //注意epoll add必须放在最后, 否则可能导致执行完, 才调用上面语句
+    _epoller.add(cPtr->getfd(), cPtr->getId(), EPOLLIN | EPOLLOUT);
 }
 
 void TC_EpollServer::NetThread::addUdpConnection(TC_EpollServer::NetThread::Connection *cPtr)
@@ -2095,7 +2060,7 @@ void TC_EpollServer::NetThread::run()
                 case ET_LISTEN:
                     {
                         //监听端口有请求
-                        map<int, BindAdapterPtr>::const_iterator it = _listeners.find(ev.data.u32);
+                        auto it = _listeners.find(ev.data.u32);
                         if( it != _listeners.end())
                         {
                             if(ev.events & EPOLLIN)
@@ -2270,18 +2235,14 @@ void TC_EpollServer::startHandle()
     {
         _handleStarted = true;
 
-        map<string, TC_EpollServer::HandleGroupPtr>::iterator it;
-
-        for (it = _handleGroups.begin(); it != _handleGroups.end(); ++it)
+        for (auto& kv : _handleGroups)
         {
-            vector<TC_EpollServer::HandlePtr>& hds = it->second->handles;
+            auto& hds = kv.second->handles;
 
-            for (uint32_t i = 0; i < hds.size(); ++i)
+            for (auto& handle : hds)
             {
-                if (!hds[i]->isAlive())
-                {
-                    hds[i]->start();
-                }
+                if (!handle->isAlive())
+                    handle->start();
             }
         }
     }
@@ -2289,22 +2250,19 @@ void TC_EpollServer::startHandle()
 
 void TC_EpollServer::stopThread()
 {
-    map<string, TC_EpollServer::HandleGroupPtr>::iterator it;
-
-    for (it = _handleGroups.begin(); it != _handleGroups.end(); ++it)
+    for (auto& kv : _handleGroups)
     {
         {
-            TC_ThreadLock::Lock lock(it->second->monitor);
+            TC_ThreadLock::Lock lock(kv.second->monitor);
 
-            it->second->monitor.notifyAll();
+            kv.second->monitor.notifyAll();
         }
-        vector<TC_EpollServer::HandlePtr>& hds = it->second->handles;
-
-        for (uint32_t i = 0; i < hds.size(); ++i)
+        auto& hds = kv.second->handles;
+        for (auto& handle : hds)
         {
-            if (hds[i]->isAlive())
+            if (handle->isAlive())
             {
-                hds[i]->getThreadControl().join();
+                handle->getThreadControl().join();
             }
         }
     }
@@ -2394,13 +2352,10 @@ map<int, TC_EpollServer::BindAdapterPtr> TC_EpollServer::getListenSocketInfo()
     map<int, TC_EpollServer::BindAdapterPtr> mListen;
     for(size_t i = 0; i < _netThreads.size(); ++i)
     {
-        map<int, TC_EpollServer::BindAdapterPtr> tmp = _netThreads[i]->getListenSocketInfo();
-        map<int, TC_EpollServer::BindAdapterPtr>::const_iterator it = tmp.begin();
-
-        while(it != tmp.end())
+        auto tmp = _netThreads[i]->getListenSocketInfo();
+        for (const auto& kv : tmp)
         {
-            mListen.insert(map<int, TC_EpollServer::BindAdapterPtr>::value_type(it->first, it->second));
-            ++it;
+            mListen.insert(kv);
         }
     }
     return mListen;
@@ -2419,11 +2374,9 @@ size_t TC_EpollServer::getConnectionCount()
 unsigned int TC_EpollServer::getLogicThreadNum()
 {
     unsigned int iNum = 0;
-    map<string, HandleGroupPtr>::iterator iter = _handleGroups.begin();
-    while(iter != _handleGroups.end())
+    for (const auto& kv : _handleGroups)
     {
-        iNum += iter->second->handles.size();
-        ++iter;
+        iNum += kv.second->handles.size();
     }
 
     return iNum;

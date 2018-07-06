@@ -15,7 +15,7 @@
  */
 
 #include "util/tc_logger.h"
-#include "util/tc_functor.h"
+#include <functional>
 #include <iostream>
 #include <string.h>
 
@@ -127,11 +127,10 @@ namespace tars
         _tpool.init(iThreadNum);
         _tpool.start();
 
-        TC_Functor<void> cmd(this, &TC_LoggerThreadGroup::run);
-        TC_Functor<void>::wrapper_type wrapper(cmd);
+        auto func = std::bind(&TC_LoggerThreadGroup::run, this);
         for (size_t i = 0; i < _tpool.getThreadNum(); i++)
         {
-            _tpool.exec(wrapper);
+            _tpool.exec(func);
         }
     }
 

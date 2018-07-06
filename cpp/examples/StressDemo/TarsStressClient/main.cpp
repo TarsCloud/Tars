@@ -108,15 +108,13 @@ int main(int argc,char ** argv)
 
         cout << "init tp succ" << endl;
 
-        typedef void (Test1::*TpMem)(int,int);
-        TC_Functor<void, TL::TLMaker<int,int>::Result> cmd(&tm,static_cast<TpMem>( &Test1::dohandle));
         tars::Int32 times = TC_Common::strto<tars::Int32>(string(argv[2]));
 	tars::Int32 size  = TC_Common::strto<tars::Int32>(string(argv[4]));
         cout << "times:" << times << endl;
 
         for(int i = 0; i<threads; i++) 
         {
-            TC_Functor<void, TL::TLMaker< int,int>::Result>::wrapper_type fw(cmd,times,size);
+            auto fw = std::bind(&Test1::dohandle, &tm, times, size);
             tp.exec(fw);
             cout << "********************" <<endl;
         }

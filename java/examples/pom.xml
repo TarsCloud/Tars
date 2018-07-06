@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>qq-cloud-central</groupId>
+		<groupId>com.tencent.tars</groupId>
 		<artifactId>tars-parent</artifactId>
-		<version>1.0.3</version>
+		<version>1.4.0</version>
 	</parent>
 	<artifactId>tars-examples</artifactId>
 	<name>${project.artifactId}</name>
@@ -14,6 +14,8 @@
 	<modules>
 		<module>quickstart-client</module>
 		<module>quickstart-server</module>
+		<module>tars-spring-cloud-client</module>
+		<module>tars-spring-cloud-server</module>
 	</modules>
 
 	<dependencies>

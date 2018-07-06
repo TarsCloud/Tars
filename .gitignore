@@ -30,3 +30,5 @@
 /java/tools/.settings/org.eclipse.m2e.core.prefs
 
 /php/.idea/*
+.idea/*
+

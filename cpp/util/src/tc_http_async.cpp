@@ -294,36 +294,14 @@ TC_HttpAsync::~TC_HttpAsync()
     terminate();
 
     delete _data;
-/*
-    for(size_t i = 0; i < _npool.size(); i++)
-    {
-        delete _npool[i];
-    }
-    _npool.clear();
-*/
 }
 
 void TC_HttpAsync::start(int iThreadNum)
 {
-//    if(_npool.size() > 0)
-//        throw TC_HttpAsync_Exception("[TC_HttpAsync::start] thread has started.");
-
     _tpool.init(1);
     _tpool.start();
-/*
-    if(iThreadNum <= 0) iThreadNum = 1;
 
-    for(int i = 0; i < iThreadNum; i++)
-    {
-        _npool.push_back(new TC_ThreadPool());
-        _npool.back()->init(1);
-        _npool.back()->start();
-    }
-*/
-    TC_Functor<void> cmd(this, &TC_HttpAsync::run);
-    TC_Functor<void>::wrapper_type wt(cmd);
-
-    _tpool.exec(wt);
+    _tpool.exec(std::bind(&TC_HttpAsync::run, this));
 }
 
 void TC_HttpAsync::waitForAllDone(int millsecond)
@@ -363,12 +341,6 @@ void TC_HttpAsync::erase(uint32_t uniqId)
 void TC_HttpAsync::terminate()
 {
     _terminate = true;
-/*
-    for(size_t i = 0; i < _npool.size(); i++)
-    {
-        _npool[i]->waitForAllDone();
-    }
-*/
     _tpool.waitForAllDone();
 }
 
@@ -477,7 +449,7 @@ void TC_HttpAsync::setProxyAddr(const struct sockaddr* addr)
     memcpy(&_proxyAddr, addr, sizeof(struct sockaddr));
 }
 
-void TC_HttpAsync::process(AsyncRequestPtr &p, int events)
+void TC_HttpAsync::process(AsyncRequestPtr& p, int events)
 {
     if (events & (EPOLLERR | EPOLLHUP))
     {

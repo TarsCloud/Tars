@@ -1,0 +1,32 @@
+{
+  "name": "phptars/tars-monitor",
+  "description": "tars的主调和特性上报",
+  "minimum-stability": "dev",
+  "version":"0.1.1",
+  "authors": [
+    {
+      "name": "Jingfeng Liu",
+      "email": "liujingfeng.a@yuewen.com"
+    },
+    {
+      "name": "Chen liang",
+      "email": "liangchen@yuewen.com"
+    }
+  ],
+  "require":{
+    "php": ">=5.3",
+    "phptars/tars-utils": "~0.1",
+    "phptars/tars-registry": "~0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Tars\\monitor\\": "src/"
+    }
+  },
+  "repositories": {
+    "tars": {
+      "type": "composer",
+      "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/tarsphp.json"
+    }
+  }
+}

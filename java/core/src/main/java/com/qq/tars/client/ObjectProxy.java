@@ -24,8 +24,10 @@ import java.util.concurrent.TimeUnit;
 
 import com.qq.tars.client.support.ServantCacheManager;
 import com.qq.tars.client.util.ClientLogger;
+import com.qq.tars.client.util.ParseTools;
 import com.qq.tars.common.support.ScheduledExecutorManager;
 import com.qq.tars.common.util.StringUtils;
+import com.qq.tars.register.RegisterManager;
 import com.qq.tars.rpc.common.*;
 import com.qq.tars.rpc.common.exc.NoInvokerException;
 import com.qq.tars.rpc.exc.ClientException;
@@ -173,7 +175,13 @@ public final class ObjectProxy<T> implements ServantProxy, InvocationHandler {
         public void run() {
             long begin = System.currentTimeMillis();
             try {
-                String nodes = communicator.getQueryHelper().getServerNodes(servantProxyConfig);
+                String nodes;
+                if (RegisterManager.getInstance().getHandler() != null) {
+                    nodes = ParseTools.parse(RegisterManager.getInstance().getHandler().query(servantProxyConfig.getSimpleObjectName()),
+                            servantProxyConfig.getSimpleObjectName());
+                } else {
+                    nodes = communicator.getQueryHelper().getServerNodes(servantProxyConfig);
+                }
                 if (nodes != null && !nodes.equals(servantProxyConfig.getObjectName())) {
                     servantCacheManager.save(communicator.getId(), servantProxyConfig.getSimpleObjectName(), nodes, communicator.getCommunicatorConfig().getDataPath());
                     servantProxyConfig.setObjectName(nodes);

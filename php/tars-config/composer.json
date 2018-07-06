@@ -1,0 +1,27 @@
+{
+  "name": "phptars/tars-config",
+  "description": "tars的配置拉取",
+  "minimum-stability": "dev",
+  "version":"0.1.2",
+  "authors": [
+    {
+      "name": "Chen liang",
+      "email": "liangchen@yuewen.com"
+    }
+  ],
+  "require":{
+    "php": ">=5.3",
+    "phptars/tars-client": "~0.1"
+  },
+  "autoload" : {
+    "psr-4": {
+      "Tars\\config\\": "src/"
+    }
+  },
+  "repositories": {
+    "tars": {
+      "type": "composer",
+      "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/tarsphp.json"
+    }
+  }
+}

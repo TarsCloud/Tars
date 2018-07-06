@@ -53,6 +53,10 @@
                 <li role="presentation"><a href="#serviceCfg" role="tab" data-active="2" data-toggle="tab">服务配置</a></li>
                 <li role="presentation"><a href="#serviceMonitor" role="tab" data-active="3" data-toggle="tab">服务监控</a></li>
                 <li role="presentation"><a href="#propertyMonitor" role="tab" data-active="4" data-toggle="tab">特性监控</a></li>
+                <li role="presentation"><a href="#token" role="tab" data-active="5" data-toggle="tab">授权管理</a></li>
+                <#if trace_url?? && trace_url?length gt 1>
+                <li role="presentation"><a href="#trace" role="tab" data-active="6" data-toggle="tab">调用链</a></li>
+            	</#if>
             </ul>
 
             <div class="tab-content pt10">
@@ -69,6 +73,12 @@
                     <iframe class="frame" width="100%" frameborder="0"></iframe>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="propertyMonitor" data-url="property_monitor.html">
+                    <iframe class="frame" width="100%" frameborder="0"></iframe>
+                </div>
+		<div role="tabpanel" class="tab-pane" id="token" data-url="token_list.html">
+                    <iframe class="frame" width="100%" frameborder="0"></iframe>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="trace" data-url="pages/trace.htm">
                     <iframe class="frame" width="100%" frameborder="0"></iframe>
                 </div>
             </div>

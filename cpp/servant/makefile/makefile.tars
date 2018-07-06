@@ -9,20 +9,31 @@ TARS_PATH    :=/usr/local/tars/cpp
 
 CC          = gcc
 CXX         = g++
-CFLAGS      += -g -O2 -Wno-deprecated -Wall
+CFLAGS      += -std=c++11 -g -O2 -Wno-deprecated -Wall
 
 #-------------------------------------------------------------------------------
 
 TARS2CPP     := ${TARS_PATH}/tools/tars2cpp ${TARS2CPP_FLAG}
+PROTO2TARS := ${TARS_PATH}/tools/pb2tarscpp 
 
 #-------------------------------------------------------------------------------
 
 TARS_SRC     := $(wildcard *.tars)
 TARS_H       := $(patsubst %.tars,%.h, $(TARS_SRC))
 
-LOCAL_SRC   += $(sort $(wildcard *.cpp *.c))
+PB_SRC     := $(wildcard *.proto)
+PB_H       := $(patsubst %.proto,%.pb.h, $(PB_SRC))
+PB_TARS_H  := $(patsubst %.proto,%.tars.h, $(PB_SRC))
+PB_CPP     := $(patsubst %.proto,%.pb.cc, $(PB_SRC))
+PB_OBJ     := $(patsubst %.proto,%.pb.o, $(PB_SRC))
 
-LOCAL_OBJ   += $(patsubst %.cpp,%.o, $(patsubst %.c,%.o, $(LOCAL_SRC)))
+ifneq ($(PB_SRC),)
+	LIB += -lprotobuf
+endif
+
+LOCAL_SRC   += $(sort $(wildcard *.cpp *.c) $(PB_CPP))
+
+LOCAL_OBJ   += $(patsubst %.cpp,%.o, $(patsubst %.cc,%.o, $(LOCAL_SRC)))
 
 DEP_FILE    := $(foreach obj, $(LOCAL_OBJ), $(dir $(obj)).$(basename $(notdir $(obj))).d)
 
@@ -43,9 +54,15 @@ ifneq ($(TARS_SSL), )
 endif
 endif
 
-#-----------------------------------------------------------------------------
+ifneq ($(TARS_HTTP2), 0)
+ifneq ($(TARS_HTTP2), )
+	#业务编译
+	CFLAGS += -DTARS_HTTP2=1
+	LIB += -lnghttp2
+endif
+endif
 
-#include ${TARS_PATH}/make.rules.lp64
+#-----------------------------------------------------------------------------
 
 TARGET                  := $(strip $(TARGET))
 IS_LIB                  := F
@@ -61,7 +78,7 @@ endif
 
 #-------------------------------------------------------------------------------
 
-all : $(TARS_H) $(LOCAL_OBJ) $(TARGET) FORSTRIP
+all : $(PB_H) $(TARS_H) $(LOCAL_OBJ) $(TARGET) FORSTRIP
 
 #-------------------------------------------------------------------------------
 ifeq ($(IS_LIB),T)
@@ -112,6 +129,10 @@ copyfile = if test -z "$(APP)" || test -z "$(TARGET)"; then \
 			fi;
 #----------------------------------------------------------------------------------
 
+$(PB_H) : $(PB_SRC)
+	rm -vf $(PB_H) $(PB_CPP)
+	protoc --plugin=protoc-gen-custom=${PROTO2TARS} --custom_out=./ ${PB_SRC} --cpp_out=./
+
 #ifneq ($(TARS_SRC),)
 $(TARS_H) : $(TARS_SRC)
 	@echo "tars2cpp ${TARS2CPP_FLAG} "
@@ -158,7 +179,7 @@ clean:
 	rm -vf $(LOCAL_OBJ) $(TARS_H) $(TARGET) $(TARGETS) ${CLEANFILE} .*.d.tmp gmon.out
 
 cleanall:
-	rm -vf $(LOCAL_OBJ) $(TARS_H) $(TARGET) $(TARGETS) $(DEP_FILE) ${CLEANFILE} *.o .*.d.tmp .*.d gmon.out
+	rm -vf $(LOCAL_OBJ) $(PB_TARS_H) $(TARS_H) $(PB_H) $(PB_CPP) $(TARGET) $(TARGETS) $(DEP_FILE) ${CLEANFILE} *.o .*.d.tmp .*.d gmon.out
 	rm -vf $(TARGET)*.tgz
 
 HELP += $(HELP_CLEAN)
@@ -181,7 +202,7 @@ help:
 .%.d: %.cpp
 	@echo "update $@ ..."; \
 	echo -n $< | sed s/\.cpp/\.o:/ > $@; \
-	$(CC) $(INCLUDE) -MM $< | sed '1s/.*.://' >> $@;
+	$(CXX) $(CFLAGS) $(INCLUDE) -MM $< | sed '1s/.*.://' >> $@;
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) $(INCLUDE) -o $@ -c $<

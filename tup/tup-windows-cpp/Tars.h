@@ -587,7 +587,7 @@ public:
     inline T readByType()
     {
         T n;
-        readBuf(&n, sizeof(n));
+        this->readBuf(&n, sizeof(n));
         return n;
     }
 
@@ -1020,7 +1020,7 @@ public:
 						#endif
                     }
                     v.resize(size);
-                    readBuf(&v[0], size);
+                    this->readBuf(&v[0], size);
                 }
                 break;
             case DataHead::eList:
@@ -1328,7 +1328,7 @@ public:
         DataHead::writeTo(*this, DataHead::eChar, 0);
         Int32 n = v.size();
         write(n, 0);
-        writeBuf(&v[0], v.size());
+        this->writeBuf(&v[0], v.size());
     }
 
     template<typename T>

@@ -20,8 +20,7 @@
 #include "servant/Global.h"
 #include "util/tc_thread_queue.h"
 #include "util/tc_thread_mutex.h"
-#include "util/tc_functor.h"
-#include "util/tc_loki.h"
+#include <functional>
 
 namespace tars
 {
@@ -57,7 +56,7 @@ public:
      * bool: true(继续往后通知其他object),false(通知中止)
      * result: 处理结果描述
      */
-    typedef TC_Functor<bool, TL::TLMaker<const string&, const string&, string&>::Result> TAdminFunc;
+    using TAdminFunc = std::function<bool (const string&, const string&, string& )>;
 
     /**
      * 添加Servant管理命令和对应的处理方法

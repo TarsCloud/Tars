@@ -10,9 +10,9 @@ Tars支持使用Spring配置servant，使用此功能需要依赖tars-spring.jar
 
 ```xml
 <dependency>
-      <groupId>qq-cloud-central</groupId>
+      <groupId>com.tencent.tars</groupId>
       <artifactId>tars-spring</artifactId>
-      <version>1.0.3</version>
+      <version>1.4.0</version>
 </dependency>
 ```
 
@@ -59,7 +59,7 @@ listener的配置与servant配置相同，也需要将你的Listener定义为bea
 ```
 ## 1.3.0版本升级指南
 
-如需使用tars-spring等新功能需要将tars升级到1.3.0版本，本次改动相对较大，附上版本升级指南：
+如需使用tars-spring等新功能需要将tars升级到1.3.0版本及以上版本，本次改动相对较大，附上版本升级指南：
 1. 管理平台需要重新编译升级。
 2. tars-node需要升级到新版本。
 3. 在模版管理中修改tars.tarsjava.default模版的classpath配置项，修改为
