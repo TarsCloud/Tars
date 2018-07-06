@@ -20,6 +20,7 @@
 #include "servant/TarsLogger.h"
 //#include "servant/AuthLogic.h"
 #include "servant/Auth.h"
+#include <sys/uio.h>  // readv
 
 #if TARS_SSL
 #include "util/tc_openssl.h"
