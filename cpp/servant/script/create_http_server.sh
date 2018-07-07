@@ -44,9 +44,9 @@ do
 	mv $FILE.tmp $FILE
 done
 
-OS_NAME=$(cat /etc/os-release | grep '^NAME=' | sed 's/NAME="//' | sed 's/ .*$//')
+RENAME_TYPE=$(rename --version | grep -q "util-linux" && echo "true" || echo "false")
 
-if [ "$OS_NAME" != "CentOS" ];
+if [ "$RENAME_TYPE" != "true" ];
 then
 	rename "s/DemoServer/$SERVER/" $SRC_FILE
 	rename "s/DemoServant/$SERVANT/" $SRC_FILE
