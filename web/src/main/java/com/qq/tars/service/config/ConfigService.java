@@ -252,9 +252,11 @@ public class ConfigService {
                 .forEach(server -> {
                     ConfigFile newone = new ConfigFile();
                     newone.setServerName(String.format("%s.%s", application, serverName));
+                    if(enableSet){
                     newone.setSetName(setName);
                     newone.setSetArea(setArea);
                     newone.setSetGroup(setGroup);
+                    }
                     newone.setHost(server.getNodeName());
                     newone.setFilename(configFile.getFilename());
                     newone.setConfig("");
