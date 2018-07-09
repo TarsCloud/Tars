@@ -1,29 +1,29 @@
-﻿# 其他协议支持
+﻿# Other protocol support
+ 
+## Overview
+The TARS service framework only supports TARS's own tars protocol by default. However, in actual application scenarios, other protocols, such as HTTP, need to be supported in the TARS service framework. In this case, the communicator cannot be used to send data. The business itself need to implement this part of the code. For custom protocols, the processing is similar.
 
-## 概述
-TARS服务框架默认情况下只支持TARS自有的tars协议，但是在实际的应用场景中，需要在TARS服务框架中支持其他协议，例如HTTP，这种情况下就不能用通信器来发送据，需要业务自己来实现这部分代码。对于自定义的协议， 处理方式也类似
+For specific program examples, see cpp/examples/httpDemo/.
 
-具体程序示例，参见cpp/examples/httpDemo/.
-
-开发第三方协议服务端,要实现协议解析器并将其加载到服务中,同时需要建立一个非TAF框架的服务对象,该类继承于Servant类,通过重载Servant类中的doRequest方法来建立协议处理器。
-而客户端要访问服务，需要通过调用proxy的rpc函数，在调用之前，要为proxy设置请求包编码函数和响应包解码函数。
+To develop a third-party protocol server end: you need to implement the protocol parser and load it into the service, and establish a non-TAF framework service object meanwhile, this class inherits from the Servant class and establishes the protocol processor by reloading the doRequest method in the Servant class. 
+To access the service, the client needs to call the rpc function of proxy, before calling, set the request packet encoding function and the response packet decoding function for the proxy.
 
 ![tars](images/tars_cpp_third_protocol.png)
 
-图中的黑色线代表了数据流向：数据（客户端）-〉请求包的编码器（客户端）-〉协议解析器（服务端）-〉doRequest协议处理器（服务端）-〉生成返回数据（服务端）-〉响应包的解码器（客户端）-〉响应数据（客户端）
+The black line in the figure represents the data flow direction: data (client) -> encoder of the request packet (client) -> protocol parser (server) -> doRequest protocol processor (server) -> generate return data (server) -> decoder of the response packet (client) -> response data (client)
 
-其中请求包的编码器（客户端）负责对客户端发送的数据进行打包，协议解析器（服务端）负责对收到的数据进行解析并交给协议处理器（服务端）去处理并生成返回数据，而响应包的解码器（客户端）负责对返回的数据进行解码。
+The encoder of the request packet (client) is responsible for packaging the data sent by the client, and the protocol parser (server) is responsible for parsing the received data and sending to the protocol processor (server) for processing and generating the return data, and the decoder of the response packet (client) is responsible for decoding the returned data.
 
-## 	服务端Http协议实例
+## 	Server Http protocol instance
 
 
 /usr/local/tars/cpp/script/create_tars_server.sh TestApp HttpServer Http
 
-在目录下会生成六个文件，将http.tars 删除（因为不是tars协议），然后手动的实现一些方法
+Six files will be generated in the directory, delete http.tars (because it is not a tars protocol), and then some methods are manually implemented.
 
-以HelloServer为例，需要支持http协议
+Take HelloServer as an example. You need to support the http protocol.
 
-在HttpImp中修改继承自Servant类的doRequest方法，该方法为第三方服务的处理器，该处理器负责处理协议解析器传送给其的数据，并负责生成返回给客户端的response
+Modify the doRequest method inherited from the Servant class in HttpImp, which is the processor of the third-party service, this processor is responsible for processing the data sent to it by the protocol parser and generating the response returned to the client.
 
 HttpImp.h
 ```cpp
@@ -101,8 +101,7 @@ int HttpImp::doRequest(TarsCurrentPtr current, vector<char> &buffer)
 ```
 
 
-在其中HttpServer类的initialize()，加载服务对象HttpImp，并设置第三方协议解析器parse。
-我们在函数中实现HttpProtocol::parse函数，用于解析协议。
+In initialize() of the HttpServer class, load the service object HttpImp, and set the third-party protocol parser parse. We implement the HttpProtocol::parse function in the function to be applied in the parse protocol.
 ```cpp
 #ifndef _HttpServer_H_
 #define _HttpServer_H_
@@ -152,7 +151,7 @@ HttpServer g_app;
 struct HttpProtocol
 {
     /**
-     * 解析http请求
+     * parse the heep request
      * @param in
      * @param out
      *
@@ -162,9 +161,9 @@ struct HttpProtocol
     {
         try
         {
-            //判断请求是否是HTTP请求
+            //determine whether the request is a http request
             bool b = TC_HttpRequest ::checkRequest(in.c_str(), in.length());
-            //完整的HTTP请求
+            //intact http request
             if(b)
             {
                 out = in;
@@ -182,7 +181,7 @@ struct HttpProtocol
             return TC_EpollServer::PACKET_ERR;
         }
 
-        return TC_EpollServer::PACKET_LESS;             //表示收到的包不完全
+        return TC_EpollServer::PACKET_LESS;             //the packet recieved is defective
     }
 
 };
