@@ -231,12 +231,17 @@ string TC_File::simplifyDirectory(const string& path)
 
 string TC_File::load2str(const string &sFullFileName)
 {
-    ifstream ifs(sFullFileName.c_str(), std::ios_base::binary);
-    if (ifs.bad())
+    FILE* fp = fopen(sFullFileName.data(), "rb");
+    if (!fp)
         return "";
 
-    std::string s((istreambuf_iterator<char>(ifs)), istreambuf_iterator<char>());
-    ifs.close();
+    fseek(fp, 0L, SEEK_END);
+    long size = ftell(fp);
+    fseek(fp, 0L, SEEK_SET);
+
+    string s(size, '\0');
+    fread((void*)s.data(), size, 1, fp);
+    fclose(fp);
 
     return s;
 }
@@ -245,11 +250,17 @@ void TC_File::load2str(const string &sFullFileName, vector<char> &buffer)
 {
     buffer.clear();
 
-    ifstream ifs(sFullFileName.c_str(), std::ios_base::binary);
-    if (ifs.bad())
+    FILE* fp = fopen(sFullFileName.data(), "rb");
+    if (!fp)
         return;
 
-    buffer.insert(buffer.end(), istreambuf_iterator<char>(ifs), istreambuf_iterator<char>());
+    fseek(fp, 0L, SEEK_END);
+    long size = ftell(fp);
+    fseek(fp, 0L, SEEK_SET);
+
+    buffer.resize(size);
+    fread((void*)&buffer[0], size, 1, fp);
+    fclose(fp);
 }
 
 void TC_File::save2file(const string &sFullFileName, const string &sFileData)
