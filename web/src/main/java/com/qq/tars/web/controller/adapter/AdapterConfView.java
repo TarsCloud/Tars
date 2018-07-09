@@ -42,7 +42,7 @@ public class AdapterConfView {
 
     private Integer queuetimeout;
 
-    private String posttime = "0000:00:00 00:00:00";
+    private String posttime = "1970-01-01 00:00:00";
 
     private String protocol = "tars";
 
