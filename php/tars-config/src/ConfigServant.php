@@ -16,9 +16,11 @@ class ConfigServant
     protected $_iTimeout;
     public $_servantName = 'tars.tarsconfig.ConfigObj';
 
-    public function __construct(CommunicatorConfig $config)
+    public function __construct(CommunicatorConfig $config,
+                                $servantName = "tars.tarsconfig.ConfigObj")
     {
         try {
+            $this->_servantName = $servantName;
             $config->setServantName($this->_servantName);
             $this->_communicator = new Communicator($config);
             $this->_iVersion = $config->getIVersion();
