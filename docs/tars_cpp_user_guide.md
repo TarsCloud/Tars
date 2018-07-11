@@ -1253,62 +1253,64 @@ TARS服务框架目前内置了八种命令：
 > * tars.loadproperty	//使配置文件的property信息生效
 > * tars.setdyeing    //设置染色信息 tars.setdyeing key servant [interface]
 
-# 10. 统计上报
-所谓的上报统计信息是Tars框架内部，向tarsstat上报调用耗时等信息的逻辑。不需用户开发，在程序初始化时正确设置相关信息后，框架内部（包括客户端和服务端）即可自动上报。
+# 10. Statistical reporting
+Reporting statistics information is the logic of reporting the time-consuming information and other information to tarsstat inside the Tars framework. No user development is required. After the relevant information is correctly set during program initialization, it can be automatically reported inside the framework (including the client and the server).
 
-客户端调用上报接口后，实际先暂存在内存中，当到达某个时间点后才正式上报到tarsstat服务(默认是1分钟上报一次)。我们称两个上报时间点之间的时间为一个统计区间，在一个统计区间相同key进行累加、对比等操作。
-示例代码如下
+After the client call the reporting interface, it is temporarily stored in memory. When it reaches a certain time point, it is reported to the tarsstat service (the default is once reporting 1 minute). We call the time gap between the two reporting time points as a statistical interval, and perform the operations such as accumulating and comparing the same key in a statistical interval.
+The sample code is as follows:
 ```cpp
-//初始化通信器
+//Initialize the communicator
 CommunicatorPtr pcomm = new Communicator();
-//初始化tarsregistry服务地址
+//Initialize the tarsregistry service address
 pcomm->setProperty("locator", "tars.tarsregistry.QueryObj@tcp -h xxx.xxx.xxx.xx -p xxxx"
-//初始化stat服务
+//Initialize the stat service
 pcomm->setProperty("stat", "tars.tarsstat.StatObj");
-//设置上报间隔
+//Set the reporting interval
 pcomm->setProperty("report-interval", "1000");
-//设置上报主调名称
+//Set the report main call name
 pcomm->setProperty("modulename", "Test.TestServer_Client");
 
 ```
-说明：
-> * 如果主调的服务是在web管理系统上部署的，不需要定义Communicator，也不需要设置tarsregistry、tarsstat等配置，服务会自动上报
-> * 如果主调的服务或程序不是在web管理系统上部署，则需要定义Communicator，设置tarsregistry、tarsstat等配置，这样在web管理系统上才能查看被调服务的服务监控时，才有流量
-> * 上报数据是定时上报的，可以在通信器的配置中设置;
+Description:
+> *  If the main service is deployed on the web management system, you do not need to define Communicator set the configurations of tarsregistry, tarsstat, etc., the service will be automatically reported.
+> * If the main service or program is not deployed on the web management system, you need to define the Communicator, set the tarsregistry, tarsstat, etc., so that you can view the service monitoring of the called service on the web management system.
+> * The reported data is reported regularly and can be set in the configuration of the communicator.
 
-# 11. 异常上报
-为了更好监控，TARS框架支持在程序中将异常直接上报到tarsnotify，并可以在WEB管理页面上查看到。
+# 11. Anormaly reporting
+For better monitoring, the TARS framework supports reporting abnormal situdation directly to tarsnotify in the program and can be viewed on the WEB management page.
 
-框架提供的三种宏用户上报不同种类的异常：
+
+The framework provides three macros to report different kinds of exceptions:
 ```cpp
-//上报普通信息
+// Report ordinary information
 TARS_NOTIFY_NORMAL(info) 
-//上报警告信息
+// Report warning message
 TARS_NOTIFY_WARN(info) 
-//上报错误信息
+// Report error message
 TARS_NOTIFY_ERROR(info)
 ```
-Info为字符串, 可以直接上报字符串到tarsnotify，页面可以看到上报的字符串，后续可以根据上报的信息进行报警。
+Info is a string, which can directly report the string to tarsnotify. The reported string can be seen on the page, subsequently, we can alarm according to the reported information.
 
-# 12. 属性统计
-为了方便业务做统计，TARS框架中也支持能够在web管理平台看上报的信息展示。
+# 12. Attribute Statistics
+In order to facilitate business statistics, the TARS framework also supports the display of information on the web management platform.
 
-目前支持的统计类型包括以下几种：
-> * 求和（sum）
-> * 平均（avg）
-> * 分布（distr）
-> * 最大值（max）
-> * 最小值（min）
-> * 计数（count）
 
-示例代码如下：
+The types of statistics currently supported include the following:
+> * Sum(sum)
+> * Average(avg)
+> * Distribution(distr)
+> * Maximum(max)
+> * Minimum(min)
+> * Count(count)
+
+The sample code is as follows:
 ```cpp
-//初始化通信器
+// Initialize the communicator
 Communicator _comm;
-//初始化property服务地址
+// Initialize the property service address
 _comm.setProperty("property", "tars.tarsproperty.PropertyObj@ tcp -h xxx.xxx.xxx.xxx -p xxxx");
 
-//初始化分布数据范围
+// Initialize the distribution data range
 vector<int> v;
 v.push_back(10);
 v.push_back(30);
@@ -1316,7 +1318,7 @@ v.push_back(50);
 v.push_back(80);
 v.push_back(100);
 
-//创建test1属性，该属性用到了上诉所有的集中统计方式，注意distrv的初始化
+// Create test1 attribute, this attribute uses all the statistics above, and pay attention to the initialization of distrv
 PropertyReportPtr srp = _comm.getStatReport()->createPropertyReport("test1", 
 PropertyReport::sum(), 
 PropertyReport::avg(), 
@@ -1325,7 +1327,7 @@ PropertyReport::max(),
 PropertyReport::min(),
 PropertyReport::distr(v));
 
-//上报数据，property只支持int类型的数据上报
+// Report data, property only supports int type data reporting
 int iValue = 0;
 for ( int i = 0; i < 10000000; i++ )
 {
@@ -1334,8 +1336,7 @@ for ( int i = 0; i < 10000000; i++ )
 }
 ```
 
-说明：
-> * 上报数据是定时上报的，可以在通信器的配置中设置，目前是1分钟一次;
-> * 创建PropertyReportPtr的函数：createPropertyReport的参数可以是任何统计方式的集合，例子中是用到6六种统计方式，通常情况下可能只需要用到一种或两种;
-> * 注意调用createPropertyReport时，必须在服务启动以后创建并保存好创建的对象，后续拿这个对象report即可，不要每次使用的时候create;
-
+Description:
+> * Data is reported regularly, and can be set in the configuration of the communicator, currently once per minute;
+> * Create a PropertyReportPtr function: The parameter createPropertyReport can be any collection of statistical methods, the example uses six statistical methods, usually only need to use one or two;
+> * Note that when you call createPropertyReport, you must create and save the created object after the service is enabled, and then just take the object to report, do not create it each time you use.
