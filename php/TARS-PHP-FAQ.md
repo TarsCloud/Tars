@@ -28,6 +28,10 @@
 
 答案: 一个可能的原因是你使用了format工具,破坏了server端自动生成的注释的结构(比如examples下面的Tars-tcp-server/src/servant/PHPtest/PHPServer/obj/TestTafServiceServant.php)。下载github上面最新的,或者用tars2php重新生成一下server的interface代码都可以解决这个问题。
 
+6. 问题: 调用Java服务, java接收不到参数,表现是报出illegalargumentException 如何解决?
+
+答案: 之前java对tup的支持,没有放出,现在需要重新编译tars-core和maven-tars-plugin两个jar包, 并在项目的pom.xml中的 plugin配置里,添加<tup>true</tup> 的字样,这样生成之后就可以支持php调用默认的tup协议了。
+重新生成后的接口文件会增加注解：@TarsMethodParameter,这样就能正常解析了。
 
 ## 注意点：
 
