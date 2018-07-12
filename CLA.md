@@ -2,7 +2,7 @@
 
 Tencent defines the legal status of the contributed code in a *Contributor License Agreement* (CLA).
 
-Only original source code from CLA signatories can be accepted into xxxx. 
+Only original source code from CLA signatories can be accepted into TARS. 
 
 ------
 
