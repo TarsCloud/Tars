@@ -1,7 +1,9 @@
 # Tars.js
 
 它不是一个玩具！
+
 它是一款在 [Tars 平台](http://tars.tencent.com) 上执行 Node.js 服务的基础架构，并且根据 Node.js 的语言特点与业务特性开发。
+
 它可以帮助您在大型复杂异构系统中快速搭建（迁移） Node.js 服务。
 
 ## 特性
