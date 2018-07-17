@@ -92,7 +92,7 @@ tars:
 ```
 - Start the Application class, open the registry address [http://localhost:8761](http://localhost:8761/)(Based on your actual situation, this is the default address of Eureka), you can see that the Tars service is already registered on Eureka:
 
-![eureka-tars-java](docs/images/eureka-tars-java.png)
+![eureka-tars-java](../docs/images/eureka-tars-java.png)
 
  TESTAPP.HELLOJAVASERVER is the service we just registered, where TESTAPP corresponds to the application name in the configuration file(attributes corresponding to tars.server.application), HELLOJAVASERVER corresponds to the server name in the configuration file(attributes corresponding to tars.server.server-name). The name registered on Eureka is the application name of the configuration file plus the service name, separated by a '.'. The service name displayed on the Eureka page is all uppercase, but it is actually the name filled in our configuration file.
  Eureka.

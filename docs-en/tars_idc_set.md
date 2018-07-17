@@ -29,7 +29,7 @@ The core process is as follows:
 
 ## 1.4. Example
 
-![tars](docs/images/tars_idc_pic.png)
+![tars](../docs/images/tars_idc_pic.png)
 
 The deployment of a service A (A1, A2, A3, A4, A5, A6, A7) in each region is shown in the figure above.
 
@@ -60,17 +60,17 @@ Description
 
 Before the Set group is grouped, as shown below:
 
-![tars](docs/images/tars_set_pic1.png)
+![tars](../docs/images/tars_set_pic1.png)
 
 After the Set group, as shown below:
 
-![tars](docs/images/tars_set_pic2.png)
+![tars](../docs/images/tars_set_pic2.png)
 
 ## 2.3. Calling logic rules for Set grouping
 
 The following figure is an example:
 
-![tars](docs/images/tars_set_pic3.png)
+![tars](../docs/images/tars_set_pic3.png)
 
 The specific deployment situation is as follows:
 

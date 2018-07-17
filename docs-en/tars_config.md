@@ -18,7 +18,7 @@ Priority: Node Configuration > Service Configuration > Set Application Configura
 
 As shown below:
 
-![tars-config](docs/images/tars_config_jiegoutu.png)
+![tars-config](../docs/images/tars_config_jiegoutu.png)
 
 The Tars framework maintains these configuration information through two data tables, t_config_files and t_config_references.
 
@@ -26,13 +26,13 @@ The main information of the t_config_files table: the service configuration file
 
 As shown below:
 
-![tars-config](docs/images/tars_config_table1.png)
+![tars-config](../docs/images/tars_config_table1.png)
 
 The main information of the t_config_references table: the index id of the configuration file and the configuration file index id referenced by the id.
 
 As shown below:
 
-![tars-config](docs/images/tars_config_table2.png)
+![tars-config](../docs/images/tars_config_table2.png)
 
 Note: The reference configuration file referred to in this article all denotes the application configuration file or the corresponding Set configuration file.
 
@@ -52,11 +52,11 @@ Note that the set configuration has a higher priority than the application confi
 
 The main logic is as follows:
 
-![tars-config](docs/images/tars_config_appconfig.png)
+![tars-config](../docs/images/tars_config_appconfig.png)
 
 The result of pulling the application configuration is as follows:
 
-![tars-config](docs/images/tars_config_appconfig_result.png)
+![tars-config](../docs/images/tars_config_appconfig_result.png)
 
 ###1.2.2. Acquire service level configuration
 
@@ -70,7 +70,7 @@ Obtaining service level configuration information is mainly divided into three s
 
 2.Secondly, the relation of obtaining corresponding configuration information index id (reference_id) which is referenced by index id in (1) from data table (t_config_referencses) is as follows:
 
-![tars-config](docs/images/tars_config_references.png)
+![tars-config](../docs/images/tars_config_references.png)
 
 If there is reference information, the configuration information corresponding to the references_id in the data table t_config_files is retrieved, and the configuration file corresponding to the references_id is retrieved whether it contains "set level configuration information", and if so, the set level configuration information is acquired.
 
@@ -86,21 +86,21 @@ If there is reference information, the configuration information corresponding t
 
 Select the corresponding application (service) in the service tree, and select the "Application Configuration" page on the management interface opened on the right to add configuration, edit configuration, and so on. As shown below:
 
-![tars-config](docs/images/tars_config_app1.png)
+![tars-config](../docs/images/tars_config_app1.png)
 
 Add the application configuration Test.conf as shown below:
 
-![tars-config](docs/images/tars_config_app2.png)
+![tars-config](../docs/images/tars_config_app2.png)
 
 ## 2.2. Set configuration
 
 Select the corresponding Set group on the service tree, and select the “Set Configuration” page on the management interface opened on the right side to add configuration, edit configuration, etc., as shown below:
 
-![tars-config](docs/images/tars_config_set1.png)
+![tars-config](../docs/images/tars_config_set1.png)
 
 Add the application configuration Test.conf as shown below:
 
-![tars-config](docs/images/tars_config_set2.png)
+![tars-config](../docs/images/tars_config_set2.png)
 
 > * Note: The corresponding Set configuration can only be added if the corresponding application profile is added.
 
@@ -108,14 +108,14 @@ Add the application configuration Test.conf as shown below:
 
 In the service tree on the left, select the service which need to be maintained. Click the “Service Configuration” page in the management interface on the left to add, edit, and delete the service configuration. As shown below:
 
-![tars-config](docs/images/tars_config_server1.png)
+![tars-config](../docs/images/tars_config_server1.png)
 
 Add the application configuration Test.conf as shown below:
 
-![tars-config](docs/images/tars_config_server2.png)
+![tars-config](../docs/images/tars_config_server2.png)
 
 In the service configuration, you can refer to the configuration content of the upper level (that is, the content of the application configuration of the application (business) and the configuration content of the set) as shown below:
 
-![tars-config](docs/images/tars_config_server3_ref1.png)
+![tars-config](../docs/images/tars_config_server3_ref1.png)
 
-![tars-config](docs/images/tars_config_server3_ref2.png)
+![tars-config](../docs/images/tars_config_server3_ref2.png)

@@ -32,7 +32,7 @@ For Example：TestApp.HelloServer.HelloObj.
 
 When you login successfully, you will enter the Tars management system, as shown below:
 
-![tars](docs/images/tars_web_index.png)
+![tars](../docs/images/tars_web_index.png)
 
 Under the menu tree of the Tars management system, the following functions are available:
 
@@ -46,7 +46,7 @@ Service deployment can actually be done after service development, but it is rec
 
 As shown below：
 
-![tars](docs/images/tars_cpp_quickstart_bushu1.png)
+![tars](../docs/images/tars_cpp_quickstart_bushu1.png)
 
 -	"Application" refers to which application your service program belongs to, for example: "TestApp".
 -   "Service name" refers to the identification name of your service program, for example: "HelloServer".
@@ -66,7 +66,7 @@ As shown below：
 
 Click "Submit", after success, the TestApp application under the menu will display the name of the HelloServer, and you will see the information of the new service program on the right side, as shown below.
 
-![tars](docs/images/tars_cpp_quickstart_bushu2.png)
+![tars](../docs/images/tars_cpp_quickstart_bushu2.png)
 
 The deployment on the management system is temporarily completed, so far, it just makes your service occupy a position on the management system, the real program has not been released yet.
 
@@ -505,14 +505,14 @@ In the menu tree of the management system, find the service you deployed, click 
 
 first Select "Publish Management", then select the node to be published, then click "Publish Selected Node", and finally click "Upload Release Package", select the compiled package. As shown below:
 
-![tars](docs/images/tars_cpp_quickstart_upload.png)
+![tars](../docs/images/tars_cpp_quickstart_upload.png)
 
  After the upload is successful, click the "Select Release Version" drop-down box and the service program you uploaded will appear. Select the top one (latest uploaded). As shown below:
 
- ![tars](docs/images/tars_cpp_quickstart_patch.png)
+ ![tars](../docs/images/tars_cpp_quickstart_patch.png)
 
  Click "Publish", the service starts to be released, after the release is successful, the following interface appears, as shown below:
 
- ![tars](docs/images/tars_cpp_quickstart_patchresult.png)
+ ![tars](../docs/images/tars_cpp_quickstart_patchresult.png)
  
 If it fails, it may be a naming problem, an upload problem, and other environmental issues.

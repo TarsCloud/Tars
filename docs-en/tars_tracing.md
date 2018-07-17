@@ -103,7 +103,7 @@ Description of the operation steps:
 
 1. On the tars management platform, select the service which need to open the call chain and click "Edit".
  
-   ![1](docs/images/trace_1.png)
+   ![1](../docs/images/trace_1.png)
 
 2.Select and edit the private template and fill the following:
 
@@ -194,13 +194,13 @@ trace_html=zipkin_address(include http://)
 - The final result is shown below
 
 
-![2](docs/images/trace_2.png)
+![2](../docs/images/trace_2.png)
 
-![3](docs/images/trace_3.png)
+![3](../docs/images/trace_3.png)
 
 Click on a single call chain to view details:
 
-![5](docs/images/trace_4.png)
+![5](../docs/images/trace_4.png)
 
 
 
@@ -223,5 +223,5 @@ Call chain key-value information description:
 
 Dependency analysis display:
 
-![6](docs/images/trace_5.png)
+![6](../docs/images/trace_5.png)
 
