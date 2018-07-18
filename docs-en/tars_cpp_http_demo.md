@@ -8,7 +8,7 @@ For specific program examples, see cpp/examples/httpDemo/.
 To develop a third-party protocol server end: you need to implement the protocol parser and load it into the service, and establish a non-TAF framework service object meanwhile, this class inherits from the Servant class and establishes the protocol processor by reloading the doRequest method in the Servant class. 
 To access the service, the client needs to call the rpc function of proxy, before calling, set the request packet encoding function and the response packet decoding function for the proxy.
 
-![tars](docs/images/tars_cpp_third_protocol.png)
+![tars](../docs/images/tars_cpp_third_protocol.png)
 
 The black line in the figure represents the data flow direction: data (client) -> encoder of the request packet (client) -> protocol parser (server) -> doRequest protocol processor (server) -> generate return data (server) -> decoder of the response packet (client) -> response data (client)
 

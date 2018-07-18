@@ -33,9 +33,9 @@ module testtafserviceservant
         interface TestTafService
         {
 
-            void testTafServer();
+            void testTafServer ();
 
-            int testLofofTags(LotofTags tags, out LotofTags outtags);
+            int testLofofTags( LotofTags tags, out LotofTags outtags);
 
             void sayHelloWorld(string name, out string outGreetings);
 
@@ -43,9 +43,9 @@ module testtafserviceservant
 
             string testStruct(long a, SimpleStruct b, out OutStruct d);
 
-            string testMap(short a, SimpleStruct b, map<string, string> m1, out OutStruct d, out map<int, SimpleStruct> m2);
+            string testMap( short a, SimpleStruct b, map<string, string> m1, out OutStruct d, out map<int, SimpleStruct> m2);
 
-            string testVector(int a, vector<string> v1, vector<SimpleStruct> v2, out vector<int> v3, out vector<OutStruct> v4);
+            string testVector( int a, vector<string> v1, vector<SimpleStruct> v2, out vector<int> v3, out vector<OutStruct> v4);
 
             SimpleStruct testReturn();
 

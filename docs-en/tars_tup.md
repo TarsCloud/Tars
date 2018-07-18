@@ -382,7 +382,7 @@ struct TestInfo2
 ```
 Among them, the default TestInfo2 structure encoding results are:
 
-![tars](docs/images/tars_tupstruct.png)
+![tars](../docs/images/tars_tupstruct.png)
 
 ## 3.2. Message format
 
@@ -441,7 +441,7 @@ const int TAFSERVERUNKNOWNERR = -99; //The server is in an abnormal position
 
 ## 4.1. Class structure diagram
 
-![tars](docs/images/tars_tupclass.png)
+![tars](../docs/images/tars_tupclass.png)
 
 ## 4.2. Use of classes
 
