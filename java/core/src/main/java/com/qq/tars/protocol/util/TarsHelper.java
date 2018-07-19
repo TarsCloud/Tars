@@ -190,6 +190,9 @@ public class TarsHelper {
             if (annotation.annotationType() == TarsMethodParameter.class) {
                 TarsMethodParameter parameter = (TarsMethodParameter) annotation;
                 return parameter.name();
+            } else if (annotation.annotationType() == TarsHolder.class) {
+                TarsHolder tarsHolder = (TarsHolder) annotation;
+                return tarsHolder.name();
             }
         }
         return null;
