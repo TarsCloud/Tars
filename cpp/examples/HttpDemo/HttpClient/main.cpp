@@ -22,7 +22,6 @@
 #include "tup/Tars.h"
 #include "tup/tup.h"
 #include "util/tc_timeprovider.h"
-#include "util/tc_functor.h"
 using namespace std;
 using namespace tars;
 using namespace tup;
@@ -156,8 +155,7 @@ int main(int argc,char ** argv)
         {
              iSplit = TC_Common::strto<tars::Int32>(string(argv[3]));
         }
-        TC_Functor<void, TL::TLMaker<int,int >::Result> cmd3(th_dohandle);
-        TC_Functor<void, TL::TLMaker<int, int>::Result>::wrapper_type fwrapper3(cmd3, times,iSplit);
+        auto fwrapper3 = std::bind(&th_dohandle, times, iSplit);
         for(int i = 0; i<threads; i++)
         {
             tp.exec(fwrapper3);

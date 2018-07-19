@@ -80,24 +80,24 @@ class Server
 
         if ($this->servType == 'http') {
             $this->sw->on('Request', array($this, 'onRequest'));
-
-            // 判断是否是timer服务
-            if (isset($this->tarsConfig['tars']['application']['server']['isTimer']) &&
-                $this->tarsConfig['tars']['application']['server']['isTimer'] == true) {
-                $timerDir = $this->basePath.'src/timer/';
-                if (is_dir($timerDir)) {
-                    $files = scandir($timerDir);
-                    foreach ($files as $f) {
-                        $fileName = $timerDir.$f;
-                        if (is_file($fileName) && strrchr($fileName, '.php') == '.php') {
-                            $this->timers[] = $fileName;
-                        }
-                    }
-                } else {
-                    error_log('timer dir missing');
-                }
-            }
         }
+		
+		// 判断是否是timer服务
+		if (isset($this->tarsConfig['tars']['application']['server']['isTimer']) &&
+			$this->tarsConfig['tars']['application']['server']['isTimer'] == true) {
+			$timerDir = $this->basePath.'src/timer/';
+			if (is_dir($timerDir)) {
+				$files = scandir($timerDir);
+				foreach ($files as $f) {
+					$fileName = $timerDir.$f;
+					if (is_file($fileName) && strrchr($fileName, '.php') == '.php') {
+						$this->timers[] = $fileName;
+					}
+				}
+			} else {
+				error_log('timer dir missing');
+			}
+		}
 
         $this->sw->set($this->setting);
 
@@ -183,9 +183,9 @@ class Server
                 self::$paramInfos[$method->name]
                     = $this->protocol->parseAnnotation($docblock);
             }
-        } else {
-            $this->namespaceName = $this->servicesInfo['namespaceName'];
         }
+		
+		$this->namespaceName = isset($this->servicesInfo['namespaceName']) ? trim($this->servicesInfo['namespaceName']) : '';
 
         if ($workerId >= $this->worker_num) {
             $this->_setProcessName($this->application.'.'.$this->serverName.': task worker process');

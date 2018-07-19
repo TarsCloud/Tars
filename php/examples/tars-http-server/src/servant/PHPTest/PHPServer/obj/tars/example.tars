@@ -59,6 +59,7 @@ module testtafserviceservant
 
             int testSelf();
 
+            int testProperty();
         };
 
 }

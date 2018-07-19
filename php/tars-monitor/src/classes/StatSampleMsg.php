@@ -24,7 +24,7 @@ class StatSampleMsg extends \TARS_Struct
     public $width;
     public $parentWidth;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::UNID => array(
             'name' => 'unid',
             'required' => true,
@@ -74,6 +74,6 @@ class StatSampleMsg extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('tars_tarsstat_StatObj_StatSampleMsg', self::$__fields);
+        parent::__construct('tars_tarsstat_StatObj_StatSampleMsg', self::$_fields);
     }
 }

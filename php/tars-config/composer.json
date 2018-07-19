@@ -2,7 +2,7 @@
   "name": "phptars/tars-config",
   "description": "tars的配置拉取",
   "minimum-stability": "dev",
-  "version":"0.1.1",
+  "version":"0.1.3",
   "authors": [
     {
       "name": "Chen liang",
@@ -21,7 +21,7 @@
   "repositories": {
     "tars": {
       "type": "composer",
-      "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/tarsphp.json"
+      "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/tarsphp.json"
     }
   }
 }

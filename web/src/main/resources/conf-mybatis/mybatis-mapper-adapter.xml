@@ -93,5 +93,12 @@
         AND node_name = #{nodeName}
         AND adapter_name = concat(application, '.', server_name, '.', #{objName}, 'Adapter')
     </select>
-
+    
+    <select id="getAdapterList" resultType="Map">
+        SELECT distinct  servant
+        FROM db_tars.t_adapter_conf
+        WHERE
+        application = #{application}
+        AND server_name = #{serverName}
+    </select>
 </mapper>

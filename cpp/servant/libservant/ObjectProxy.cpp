@@ -55,6 +55,7 @@ ObjectProxy::ObjectProxy(CommunicatorEpoll * pCommunicatorEpoll, const string & 
 
     _proxyProtocol.requestFunc  = ProxyProtocol::tarsRequest;
     _proxyProtocol.responseFunc = ProxyProtocol::tarsResponse;
+    _protoName = "tars";
 
     _endpointManger.reset(new EndpointManager(this, _communicatorEpoll->getCommunicator(), sObjectProxyName, pCommunicatorEpoll->isFirstNetThread(), setName));
 
@@ -92,18 +93,26 @@ int ObjectProxy::loadLocator()
     return 0;
 }
 
-void ObjectProxy::setProxyProtocol(const ProxyProtocol& protocol)
+void ObjectProxy::setProxyProtocol(const ProxyProtocol& protocol, const std::string& name)
 {
-    if(!_hasSetProtocol)
+    if(_hasSetProtocol)
     {
-        _hasSetProtocol = true;
-        _proxyProtocol  = protocol;
+        return ;
     }
+
+    _hasSetProtocol = true;
+    _proxyProtocol  = protocol;
+    _protoName = name;
 }
 
 ProxyProtocol& ObjectProxy::getProxyProtocol()
 {
     return _proxyProtocol;
+}
+
+const std::string& ObjectProxy::getProtoName() const
+{
+    return _protoName;
 }
 
 void ObjectProxy::setSocketOpt(int level, int optname, const void *optval, socklen_t optlen)

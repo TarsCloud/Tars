@@ -877,7 +877,7 @@ class InterfaceParser
 
         // 有必要先分成三个部分,返回类型、接口名、参数列表
         $tokens = preg_split('/\(/', $line, 2);
-        $mix = $tokens[0];
+        $mix = trim($tokens[0]);
         $rest = $tokens[1];
 
         $pices = preg_split('/\s+/', $mix);
@@ -2269,7 +2269,7 @@ class ServantParser
 
         // 有必要先分成三个部分,返回类型、接口名、参数列表 todo
         $tokens = preg_split('/\(/', $line, 2);
-        $mix = $tokens[0];
+        $mix = trim($tokens[0]);
         $rest = $tokens[1];
 
         $pices = preg_split('/\s+/', $mix);

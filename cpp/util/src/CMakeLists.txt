@@ -19,6 +19,11 @@ if(${TARS_SSL} EQUAL 1)
 else()
     target_link_libraries(tarsutil)
 endif()
+if(${TARS_HTTP2} EQUAL 1)
+    target_link_libraries(tarsutil; nghttp2)
+else()
+    target_link_libraries(tarsutil)
+endif()
 
 install(TARGETS tarsutil
         LIBRARY DESTINATION lib

@@ -172,7 +172,7 @@ id // 服务ID
     "process_id": "",          // 进程ID
     "posttime": ""             // 更新时间
 }
-```	
+```
 
 ## server/api/server_list
 取服务列表
@@ -282,7 +282,7 @@ id // 服务ID
 {
     "realtime_state": ""       // 实时状态
 }
-```	
+```
 
 ## server/api/load_server
 加载服务
@@ -295,7 +295,7 @@ node_name    // 节点
 ### 返回值
 ```javascript
 "" // 执行结果
-```	
+```
 
 ## server/api/expand_server_preview
 预扩容
@@ -433,7 +433,7 @@ id // Adapter ID
 ### 返回值
 ```javascript
 [0] // 删除的Adapter ID
-```	
+```
 
 ## server/api/update_adapter_conf
 修改Adapter
@@ -795,7 +795,7 @@ ids // 配置文件ID，用;分隔
     "ret_code": 0,        // 执行结果，0成功
     "err_msg": ""         // 错误信息
 }]
-```	
+```
 
 # 任务管理
 > 涵盖启动、停止、发布、下线
@@ -909,7 +909,7 @@ to          // 结束日期
         "execute_info": ""       // 执行信息
     }]
 }]
-```	
+```
 
 # 发布包
 ## server/api/upload_patch_package
@@ -929,7 +929,7 @@ comment     // 备注
     "comment": "",  // 备注
     "posttime": ""  // 更新时间
 }
-```	
+```
 
 ## server/api/server_patch_list
 取发布版本列表
@@ -971,7 +971,7 @@ module_name // 模块名
 	"profile": "",            // 模板内容
 	"posttime": ""            // 更新时间
 }
-```	
+```
 
 ## server/api/delete_profile_template
 修改模板
@@ -1004,7 +1004,7 @@ id  // 模板ID
 	"profile": "",            // 模板内容
 	"posttime": ""            // 更新时间
 }
-```	
+```
 
 ## server/api/profile_template
 取模板
@@ -1021,7 +1021,7 @@ template_name // 模板名称
 	"profile": "",            // 模板内容
 	"posttime": ""            // 更新时间
 }
-```	
+```
 
 ## server/api/query_profile_template
 查询模板
@@ -1039,7 +1039,7 @@ parents_name   // 父模板名称
 	"profile": "",            // 模板内容
 	"posttime": ""            // 更新时间
 }]
-```	
+```
 
 # 监控
 ## server/api/tarsstat_monitor_data
@@ -1106,7 +1106,77 @@ policy          // 策略
 }]
 ```
 
+# 鉴权
+
+## server/api/get_tokens
+
+获取鉴权列表
+
+### 参数
+
+```javascript
+application // 应用
+server_name // 模块名
+```
+
+### 返回值
+
+```javascript
+[
+{
+"s_obj_name": "Robin.TestServer2.TestObj",
+"m_tokens": {
+		"application.server_name": "68765dd7b5fe92b3"
+			}
+}
+]
+```
+
+## server/api/add_token
+
+新增鉴权信息
+
+### 参数
+
+```javascript
+obj_name	//需要鉴权的OBJ
+application // 授权的主调应用名
+server_name // 授权的主调服务名
+```
+
+### 返回值
+
+```javascript
+{
+        "s_key": {
+            "s_application": "application",
+            "s_server": "server_name",
+            "s_obj_name": "Robin.TestServer2.TestObj",
+        },
+        "s_token": "4969ebf04a7f82c0",
+    }
+```
+
+## server/api/delete_token
+
+删除鉴权信息
+
+### 参数
+
+```javascript
+obj_name	//需要鉴权的OBJ
+application // 授权的主调应用名
+server_name // 授权的主调服务名
+```
+
+### 返回值
+
+```
+"data":0
+```
+
 # 字典
+
 ## server/api/server_type_list
 取服务类型列表
 ### 参数
@@ -1114,7 +1184,7 @@ policy          // 策略
 ### 返回值
 ```javascript
 ["tars_cpp"]
-```	
+```
 
 ## server/api/template_name_list
 取模板列表
@@ -1156,5 +1226,5 @@ command    // 命令
 	"ret_code": "",    // 返回值
 	"err_msg": ""      // 错误消息
 }]
-```	
+```
 

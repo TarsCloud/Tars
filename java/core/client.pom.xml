@@ -6,11 +6,18 @@
 	<parent>
 		<groupId>com.tencent.tars</groupId>
 		<artifactId>tars-parent</artifactId>
-		<version>1.4.0</version>
+		<version>1.5.0</version>
 	</parent>
 	<artifactId>tars-client</artifactId>
 	<name>${project.artifactId}</name>
 	<packaging>jar</packaging>
+	
+	<properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<brave.version>5.1.0</brave.version>
+    	<brave-opentracing.version>0.31.1</brave-opentracing.version>
+		<zipkin-reporter.version>2.7.4</zipkin-reporter.version>
+    </properties>
 
 	<dependencies>
 		<dependency>
@@ -34,6 +41,26 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+      		<groupId>io.zipkin.reporter2</groupId>
+      		<artifactId>zipkin-sender-kafka11</artifactId>
+      		<version>${zipkin-reporter.version}</version>
+      	</dependency>
+		<dependency>
+    		<groupId>io.opentracing.brave</groupId>
+    		<artifactId>brave-opentracing</artifactId>
+    		<version>${brave-opentracing.version}</version>
+		</dependency>
+		<dependency>
+      		<groupId>io.zipkin.reporter2</groupId>
+      		<artifactId>zipkin-sender-kafka08</artifactId>
+      		<version>${zipkin-reporter.version}</version>
+      	</dependency>
+      	<dependency>
+      		<groupId>io.zipkin.reporter2</groupId>
+      		<artifactId>zipkin-sender-urlconnection</artifactId>
+      		<version>${zipkin-reporter.version}</version>
+    	</dependency>
 	</dependencies>
 
 	<build>

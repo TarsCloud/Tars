@@ -135,7 +135,7 @@ class SimpleStruct extends \TARS_Struct {
 	public $count; 
 	public $page; 
 	
-	protected static $__fields = array(
+	protected static $_fields = array(
 		self::ID => array(
 			'name'=>'id', //tars协议中没个元素的name
 			'required'=>true, //tars协议中是require或者optional
@@ -154,7 +154,7 @@ class SimpleStruct extends \TARS_Struct {
 	);
 
 	public function __construct() {
-		parent::__construct('PHPTest_PHPServer_obj_SimpleStruct', self::$__fields);
+		parent::__construct('PHPTest_PHPServer_obj_SimpleStruct', self::$_fields);
 	}
 }
 ```

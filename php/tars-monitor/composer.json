@@ -2,7 +2,7 @@
   "name": "phptars/tars-monitor",
   "description": "tars的主调和特性上报",
   "minimum-stability": "dev",
-  "version":"0.1.0",
+  "version":"0.1.1",
   "authors": [
     {
       "name": "Jingfeng Liu",
@@ -26,7 +26,7 @@
   "repositories": {
     "tars": {
       "type": "composer",
-      "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/tarsphp.json"
+      "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/tarsphp.json"
     }
   }
 }

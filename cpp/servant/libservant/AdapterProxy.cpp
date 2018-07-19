@@ -24,10 +24,14 @@
 #include "tup/tup.h"
 #include "servant/StatF.h"
 #include "servant/StatReport.h"
+#include "util/tc_nghttp2.h"
+#include "util/tc_http2clientmgr.h"
 
 
 namespace tars
 {
+    
+TC_Atomic AdapterProxy::_idGen;
 
 AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Communicator* pCom)
 : _communicator(pCom)
@@ -49,6 +53,7 @@ AdapterProxy::AdapterProxy(ObjectProxy * pObjectProxy,const EndpointInfo &ep,Com
 , _noSendQueueLimit(1000)
 , _maxSampleCount(1000)
 , _sampleRate(0)
+, _id(_idGen.inc())
 {
     _timeoutQueue.reset(new TC_TimeoutQueueNew<ReqMessage*>());
 
@@ -151,7 +156,14 @@ int AdapterProxy::invoke(ReqMessage * msg)
         msg->request.iRequestId = _objectProxy->generateId();
     }
 
-    _objectProxy->getProxyProtocol().requestFunc(msg->request,msg->sReqData);
+#if TARS_HTTP2
+    if (getObjProxy()->getProtoName() == HTTP2)
+    {
+        msg->request.iRequestId = getId(); // session Id
+    }
+#endif
+
+    _objectProxy->getProxyProtocol().requestFunc(msg->request, msg->sReqData);
 
     //交给连接发送数据,连接连上,buffer不为空,直接发送数据成功
     if(_timeoutQueue->sendListEmpty() && _trans->sendRequest(msg->sReqData.c_str(),msg->sReqData.size()) != Transceiver::eRetError)
@@ -222,7 +234,7 @@ void AdapterProxy::doInvoke()
         //请求发送成功了 处理采样
         //...
 
-        //发送完成，要从队列里面清掉
+        //发送完成
         _timeoutQueue->popSend(msg->eType == ReqMessage::ONE_WAY);
         if(msg->eType == ReqMessage::ONE_WAY)
         {
@@ -461,30 +473,6 @@ void AdapterProxy::finishInvoke(ResponsePacket & rsp)
     TLOGINFO("[TARS][AdapterProxy::finishInvoke(ResponsePacket) objname:" << _objectProxy->name() << ",desc:" << _endpoint.desc() 
         << ",id:" << rsp.iRequestId << endl);
 
-    if (_trans->getAuthState() != AUTH_SUCC)
-    {
-        std::string ret(rsp.sBuffer.begin(), rsp.sBuffer.end());
-        tars::AUTH_STATE tmp = AUTH_SUCC;
-        tars::stoe(ret, tmp);
-        int newstate = tmp;
-
-        TLOGINFO("[TARS]AdapterProxy::finishInvoke from state " << _trans->getAuthState() << " to " << newstate << endl);
-        _trans->setAuthState(newstate);
-
-        if (newstate == AUTH_SUCC)
-        {
-            // flush old buffered msg when auth is not complete
-            doInvoke();
-        }
-        else
-        {
-            TLOGERROR("newstate is " << newstate << ", error close!\n");
-            _trans->close();
-        }
-
-        return;
-    }
-
     ReqMessage * msg = NULL;
 
     //requestid 为0 是push消息
@@ -634,8 +622,6 @@ void AdapterProxy::finishInvoke(ReqMessage * msg)
 
 void AdapterProxy::doTimeout()
 {
-    TLOGINFO("[TARS][AdapterProxy::doTimeout objname:" << _objectProxy->name() << ",desc:" << _endpoint.desc() << endl);
-
     ReqMessage * msg;
     while(_timeoutQueue->timeout(msg))
     {

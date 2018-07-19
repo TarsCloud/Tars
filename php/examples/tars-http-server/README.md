@@ -102,7 +102,7 @@
        "repositories": {
            "tars": {
                "type": "composer",
-               "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/tarsphp.json"
+               "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/tarsphp.json"
            }
        }
    }

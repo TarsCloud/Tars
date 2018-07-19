@@ -1,7 +1,7 @@
 {
     "name": "phptars/tars2php",
     "description": "php代码自动生成工具",
-    "version":"0.1.1",
+    "version":"0.1.2",
     "authors": [
         {
             "name": "Chen Liang",
@@ -15,7 +15,7 @@
     "repositories": {
         "tars": {
             "type": "composer",
-            "url": "https://raw.githubusercontent.com/Tencent/Tars/phptars/php/dist/tarsphp.json"
+            "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/tarsphp.json"
         }
     }
 }

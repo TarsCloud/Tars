@@ -10,7 +10,7 @@ class StatPropInfo extends \TARS_Struct
     public $policy;
     public $value;
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::POLICY => array(
             'name' => 'policy',
             'required' => true,
@@ -25,6 +25,6 @@ class StatPropInfo extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('tars_tarsproperty_PropertyObj_StatPropInfo', self::$__fields);
+        parent::__construct('tars_tarsproperty_PropertyObj_StatPropInfo', self::$_fields);
     }
 }

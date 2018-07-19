@@ -182,7 +182,7 @@ string Tars2Cs::generateCs(const StructPtr &pPtr, const NamespacePtr &nPtr) cons
     INC_TAB;
     s << endl;
 
-    s << TAB << "public sealed class " << pPtr->getId() << " : "TARS_PACKAGE".TarsStruct"<< endl;
+    s << TAB << "public sealed class " << pPtr->getId() << " : " TARS_PACKAGE ".TarsStruct"<< endl;
     s << TAB << "{" << endl;
     INC_TAB;
 
@@ -235,7 +235,7 @@ string Tars2Cs::generateCs(const StructPtr &pPtr, const NamespacePtr &nPtr) cons
     }
 
     //writeTo()
-    s << TAB << "public override void WriteTo("TARS_PACKAGE".TarsOutputStream _os)" << endl;
+    s << TAB << "public override void WriteTo(" TARS_PACKAGE ".TarsOutputStream _os)" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
     for (size_t i = 0; i < member.size(); i++)
@@ -248,7 +248,7 @@ string Tars2Cs::generateCs(const StructPtr &pPtr, const NamespacePtr &nPtr) cons
     s << endl;
 
     //readFrom()
-    s << TAB << "public override void ReadFrom("TARS_PACKAGE".TarsInputStream _is)" << endl;
+    s << TAB << "public override void ReadFrom(" TARS_PACKAGE ".TarsInputStream _is)" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
     for (size_t i = 0; i < member.size(); i++)
@@ -265,7 +265,7 @@ string Tars2Cs::generateCs(const StructPtr &pPtr, const NamespacePtr &nPtr) cons
     s << TAB << "public override void Display(System.Text.StringBuilder _os, int _level)" << endl;
     s << TAB << "{" << endl;
     INC_TAB;
-    s << TAB << TARS_PACKAGE".TarsDisplayer _ds = new "TARS_PACKAGE".TarsDisplayer(_os, _level);" << endl;
+    s << TAB << TARS_PACKAGE ".TarsDisplayer _ds = new " TARS_PACKAGE ".TarsDisplayer(_os, _level);" << endl;
     for (size_t i = 0; i < member.size(); i++)
     {
         s << TAB << "_ds.Display(" << member[i]->getId() << ", \"" << member[i]->getId() << "\");" << endl;

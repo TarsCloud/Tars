@@ -20,9 +20,9 @@ class Stop extends CommandBase
         $tarsConfig = $this->tarsConfig;
 
         //判断master进程是否存在
-        if (empty($tarsConfig['tars']['application']['server']['app'])
+        if(empty($tarsConfig['tars']['application']['server']['app'])
             || empty($tarsConfig['tars']['application']['server']['server'])) {
-            echo 'AppName or ServerName empty! Please check config!'.PHP_EOL;
+            echo "AppName or ServerName empty! Please check config!".PHP_EOL;
             exit;
         }
 
@@ -35,8 +35,8 @@ class Stop extends CommandBase
             return;
         }
 
-        $masterPid = implode(' ', $ret['masterPid']);
-        $cmd = "kill -15 {$masterPid}";
+        $pidList = implode(' ', $ret['pidList']);
+        $cmd = "kill -9 {$pidList}";
         exec($cmd, $output, $r);
 
         if ($r === false) { // kill失败时

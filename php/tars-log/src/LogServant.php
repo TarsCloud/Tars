@@ -15,10 +15,13 @@ class LogServant
     protected $_iTimeout;
     public $_servantName = 'tars.tarslog.LogObj';
 
-    public function __construct(CommunicatorConfig $config)
+    public function __construct(CommunicatorConfig $config,
+                                $servantName = "tars.tarslog.LogObj")
     {
         try {
+            $this->_servantName = $servantName;
             $config->setServantName($this->_servantName);
+
             $this->_communicator = new Communicator($config);
             $this->_iVersion = $config->getIVersion();
             $this->_iTimeout = empty($config->getAsyncInvokeTimeout()) ? 2 : $config->getAsyncInvokeTimeout();

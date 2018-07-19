@@ -77,6 +77,7 @@ add_subdirectory(patchclient)
 add_subdirectory(StatServer)
 add_subdirectory(QueryStatServer)
 add_subdirectory(QueryPropertyServer)
+add_subdirectory(AuthServer)
 ############################################################################################
 # 打包deploy, 用于部署
 
@@ -108,6 +109,9 @@ FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "COMMAND cp -rf ${PROJECT_SOURCE_DIR}/dep
 foreach (MODULE ${DEPENDS_LIST})
     FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "COMMAND cp -rf ${PROJECT_SOURCE_DIR}/deploy/${MODULE} .\n")
 endforeach ()
+FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} ")\n")
+FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "EXECUTE_PROCESS(\n")
+FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/deploy/\n")
 FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "COMMAND tar czfv ${FRAMEWORK-TGZ} ${MODULES}\n")
 #FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} "COMMAND mv ${FRAMEWORK-TGZ} ${CMAKE_BINARY_DIR}/framework.tgz\n")
 FILE(APPEND ${RUN_DEPLOY_COMMAND_FILE} ")\n")
@@ -121,7 +125,7 @@ add_custom_target(framework-tar
         DEPENDS ${FRAMEWORK-TGZ} ${DEPENDS_LIST})
 
 ############################################################################################
-# 打包tarsnotify tarsstat tarsproperty tarslog
+# 打包tarsnotify tarsstat tarsproperty tarslog tarsauth
 set(TARSQUERYSTAT tarsquerystat)
 set(TARSQUERYPROPERTY tarsqueryproperty)
 
@@ -132,6 +136,7 @@ list(APPEND DEPENDS_LIST tarsproperty)
 list(APPEND DEPENDS_LIST tarslog)
 list(APPEND DEPENDS_LIST tarsquerystat)
 list(APPEND DEPENDS_LIST tarsqueryproperty)
+list(APPEND DEPENDS_LIST tarsauth)
 
 
 foreach (MODULE ${DEPENDS_LIST})

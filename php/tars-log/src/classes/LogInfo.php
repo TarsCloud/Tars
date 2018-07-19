@@ -28,7 +28,7 @@ class LogInfo extends \TARS_Struct
     public $sSepar = '|';
     public $sLogType = '';
 
-    protected static $__fields = array(
+    protected static $_fields = array(
         self::APPNAME => array(
             'name' => 'appname',
             'required' => true,
@@ -88,6 +88,6 @@ class LogInfo extends \TARS_Struct
 
     public function __construct()
     {
-        parent::__construct('tars_tarslog_LogObj_LogInfo', self::$__fields);
+        parent::__construct('tars_tarslog_LogObj_LogInfo', self::$_fields);
     }
 }

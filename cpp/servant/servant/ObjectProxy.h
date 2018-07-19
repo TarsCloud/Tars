@@ -90,13 +90,18 @@ public:
      * 设置协议解析器
      * @return UserProtocol&
      */
-    void setProxyProtocol(const ProxyProtocol& protocol);
-
+    void setProxyProtocol(const ProxyProtocol& protocol, const std::string& name = "tars");
     /**
      * 获取协议解析器
      * @return ProxyProtocol&
      */
     ProxyProtocol& getProxyProtocol();
+
+    /**
+     * 获取协议名字
+     * @return ProxyProtocol&
+     */
+    const std::string& getProtoName() const;
 
     /**
      * 设置套接口选项
@@ -287,6 +292,10 @@ private:
      * 请求和响应的协议解析器
      */
     ProxyProtocol                         _proxyProtocol;
+    /*
+     * 协议名称
+     */
+    std::string                           _protoName;
 
     /*
      * 连接超时的时间

@@ -53,20 +53,20 @@ class CommunicatorConfig
 
         $this->localip = $config['tars']['application']['server']['localip'];
         $this->locator = $config['tars']['application']['client']['locator'];
-        $this->logPath = $config['tars']['application']['server']['logPath'];
-        $this->logLevel = $config['tars']['application']['server']['logLevel'];
-        $this->dataPath = $config['tars']['application']['server']['dataPath'];
-        $this->syncInvokeTimeout = $config['tars']['application']['client']['syncInvokeTimeout'];
-        $this->asyncInvokeTimeout = $config['tars']['application']['client']['asyncInvokeTimeout'];
-        $this->refreshEndpointInterval = $config['tars']['application']['client']['refreshEndpointInterval'];
+        $this->logPath = $config['tars']['application']['server']['logpath'];
+        $this->logLevel = $config['tars']['application']['server']['loglevel'];
+        $this->dataPath = $config['tars']['application']['server']['datapath'];
+        $this->syncInvokeTimeout = $config['tars']['application']['client']['sync-invoke-timeout'];
+        $this->asyncInvokeTimeout = $config['tars']['application']['client']['async-invoke-timeout'];
+        $this->refreshEndpointInterval = $config['tars']['application']['client']['refresh-endpoint-interval'];
         $this->stat = $config['tars']['application']['client']['stat'];
         $this->property = $config['tars']['application']['client']['property'];
-        $this->reportInterval = $config['tars']['application']['client']['reportInterval'];
-        $this->sampleRate = $config['tars']['application']['client']['sampleRate'];
-        $this->maxSampleCount = $config['tars']['application']['client']['maxSampleCount'];
-        $this->moduleName = $config['tars']['application']['client']['moduleName'];
+        $this->reportInterval = $config['tars']['application']['client']['report-interval'];
+        $this->sampleRate = $config['tars']['application']['client']['sample-rate'];
+        $this->maxSampleCount = $config['tars']['application']['client']['max-sample-count'];
+        $this->moduleName = $config['tars']['application']['client']['modulename'];
         $enableSetStr = $config['tars']['application']['enableset'];
-        $this->setDivision = $config['tars']['application']['setDivision'];
+        $this->setDivision = $config['tars']['application']['setdivision'];
 
         if ($enableSetStr === 'Y') {
             $this->enableSet = true;
@@ -75,9 +75,9 @@ class CommunicatorConfig
             $this->setDivision = null;
         }
 
-        $this->connectTimeout = $config['tars']['application']['client']['connectTimeout'];
-        $this->keepAliveTime = $config['tars']['application']['client']['keepAliveTime'];
-        $this->charsetName = $config['tars']['application']['client']['charsetName'];
+        //$this->connectTimeout = $config['tars']['application']['client']['connectTimeout'];
+        //$this->keepAliveTime = $config['tars']['application']['client']['keepAliveTime'];
+        //$this->charsetName = $config['tars']['application']['client']['charsetName'];
     }
 
     public function getLocator()

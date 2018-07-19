@@ -48,13 +48,13 @@ public class ServerConf {
 
     private String patchVersion = "";
 
-    private String patchTime = "0000:00:00 00:00:00";
+    private String patchTime = "1970-01-01 00:00:00";
 
     private String patchUser = "";
 
     private String tarsVersion = "";
 
-    private String posttime = "0000:00:00 00:00:00";
+    private String posttime = "1970-01-01 00:00:00";
 
     private String lastuser;
 
