@@ -1,7 +1,7 @@
 # TARS-PHP使用实践
 
 ## 综合资料
-- 源码 https://github.com/Tencent/Tars (最新版在https://github.com/Tencent/Tars/tree/phptars这个分支)
+- 源码 https://github.com/Tencent/Tars
 - 目前支持的开发语言 C++ 、Java、Nodejs、PHP
 - 详细介绍以及架构https://github.com/Tencent/Tars/blob/master/Introduction.md
 - 问题交流QQ群：669339903
@@ -9,7 +9,7 @@
 
 ## 一、安装相关
 1. 安装前请先按照此页面介绍准备好软件https://github.com/Tencent/Tars/tree/master/build
-2. 建议先阅读下文件内容https://github.com/Tencent/Tars/blob/master/build/install.sh（因实际上有些软件依赖在某些脚本中会自动安装，避免重复劳动），熟悉大致的脚本安装过程
+2. 建议先阅读下文件内容https://github.com/Tencent/Tars/blob/master/build/install.sh （因实际上有些软件依赖在某些脚本中会自动安装，避免重复劳动），熟悉大致的脚本安装过程
 3. 参考前两部分内容，接下来按照安装说明进行安装https://github.com/Tencent/Tars/blob/master/Install.md
 4. 注意：请使用服务器内网IP，不要使用127.0.0.1
 5. 安装中遇到的常见问题和注意事项，可阅读https://github.com/Tencent/Tars/blob/master/Install_faq.md
@@ -87,7 +87,7 @@ root       7097   5621  0 11:42 ?        00:00:01 /usr/local/app/tars/tarsnode/d
 
 ### 其他
 - php语言相关 建议安装php7+swoole2
-- php需要安装扩展，请在https://github.com/Tencent/Tars/tree/master/php/tars-extension源码目录进行编译，然后将扩展加入到php.ini中
+- php需要安装扩展，请在 https://github.com/Tencent/Tars/tree/master/php/tars-extension 源码目录进行编译，然后将扩展加入到php.ini中
 
 
 
@@ -196,7 +196,7 @@ module MTT
 php=/usr/bin/php/bin/php
 ```
 
-同时，将tars.tarsphp.default内容复制，新建tcp和http版本的模板
+同时，将tars.tarsphp.default内容复制，新建tcp、http、timer版本的模板
 相比较将tars.tarsphp.default,http模板，差异为：
 
 http模板在server节点增加：
@@ -206,7 +206,6 @@ type=http
 ```
 
 TCP模板在server节点增加：
-
 ```
 package_length_type=N
 open_length_check=1
@@ -217,9 +216,13 @@ protocolName=tars
 type=tcp
 ```
 
+timer模板在server节点增加：
+```
+protocolName=http
+type=http
+isTimer=1
+```
+
 注：
 - 父模板名均选择tars.default即可
 - 文档中protocolName、type的说明缺失，实际使用中发现会报错，保险起见按照以上说明配置
-
-
-
