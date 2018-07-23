@@ -236,7 +236,7 @@ public:
      * @param app:       应用
      * @param servername: server 名
      * @param nodename : node id
-     * @param status  : 状态
+     * @param status  : 流量状态,NORMAL-正常流量,NO_FLOW-无流量
      *
      * @return : 0-成功 others-失败
      */

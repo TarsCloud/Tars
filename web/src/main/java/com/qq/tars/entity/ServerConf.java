@@ -79,6 +79,8 @@ public class ServerConf {
     private String ipGroupName;
 
     private String profile;
+    
+    private String gridflag="NORMAL";
 
     private Integer configCenterPort = 0;
 
@@ -332,6 +334,14 @@ public class ServerConf {
         this.profile = profile;
     }
 
+    public String getGridflag() {
+    	return gridflag;
+    }
+    
+    public void setGridflag(String gridflag) {
+    	this.gridflag = gridflag;
+    }
+    
     public Integer getConfigCenterPort() {
         return configCenterPort;
     }
