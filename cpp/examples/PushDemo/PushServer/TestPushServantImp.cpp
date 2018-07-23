@@ -1,6 +1,7 @@
 #include "TestPushServantImp.h"
 #include "servant/Application.h"
 #include "TestPushThread.h"
+#include "Log.h"
 
 using namespace std;
 
@@ -34,6 +35,7 @@ int TestPushServantImp::doRequest(tars::TarsCurrentPtr current, vector<char>& re
 	const vector<char>& request = current->getRequestBuffer();
 	response = request;
 
+	LOG_DEBUG<<"connect ip: " << current->getIp() << endl;
 	return 0;
 }
 //客户端关闭到服务端的连接，或者服务端发现客户端长时间未发送包过来，然后超过60s就关闭连接

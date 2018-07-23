@@ -1,4 +1,5 @@
 #include "TestPushThread.h"
+#include "Log.h"
 #include <arpa/inet.h>
 
 map<string, TarsCurrentPtr> PushUser::pushUser;
@@ -54,7 +55,7 @@ void PushInfoThread::run(void)
 			for(map<string, TarsCurrentPtr>::iterator it = (PushUser::pushUser).begin(); it != (PushUser::pushUser).end(); ++it)
 			{
 				(it->second)->sendResponse(_sPushInfo.c_str(), _sPushInfo.size());
-				LOG->debug() << "sendResponse: " << _sPushInfo.size() <<endl;
+				LOG_DEBUG << "sendResponse: " << _sPushInfo.size() <<endl;
 			}
 			(PushUser::mapMutex).unlock();
 		}

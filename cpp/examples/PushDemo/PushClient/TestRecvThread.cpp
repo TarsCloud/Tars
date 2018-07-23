@@ -1,4 +1,6 @@
 #include "TestRecvThread.h"
+#include "Log.h"
+#include "Beacon.h"
 #include <iostream>
 #include <arpa/inet.h>
 
@@ -14,8 +16,7 @@ static size_t pushResponse(const char* recvBuffer, size_t length, list<ResponseP
         if(len < sizeof(unsigned int))
         {
             break;
-        }
-
+        } 
         unsigned int iHeaderLen = ntohl(*(unsigned int*)(recvBuffer + pos));
 
         //做一下保护,长度大于M
@@ -68,18 +69,27 @@ static void pushRequest(const RequestPacket& request, string& buff)
     }
 
     string tmp;
-    tmp.assign((const char*)(&request.sBuffer[0]), request.sBuffer.size());
+	Beacon::CSReg req;
+	Beacon::SCReg resp;
+            tars::TarsOutputStream<tars::BufferWriter> _os;
+            _os.write(req, 1);
+            _os.write(resp, 2);
+            tars::ResponsePacket rep;
+    //tmp.assign((const char*)(&request.sBuffer[0]), request.sBuffer.size());
+    tmp.assign(_os.getBuffer(),_os.getLength());
     buff+=tmp;
 }
 
 static void printResult(int iRequestId, const string &sResponseStr)
 {
-	cout << "request id: " << iRequestId << endl;
-	cout << "response str: " << sResponseStr << endl;
+	LOG_DEBUG << "request id: " << iRequestId << endl;
+	LOG_DEBUG <<"response size="<<sResponseStr.size()
+		<<" response str: " << sResponseStr 
+		<< endl;
 }
 static void printPushInfo(const string &sResponseStr)
 {
-	cout << "push message: " << sResponseStr << endl;
+	LOG_DEBUG << "push message: " << sResponseStr << endl;
 }
 
 int TestPushCallBack::onDispatch(ReqMessagePtr msg)
@@ -87,7 +97,7 @@ int TestPushCallBack::onDispatch(ReqMessagePtr msg)
 	if(msg->request.sFuncName == "printResult")
 	{
 		string sRet;
-		cout << "sBuffer: " << msg->response.sBuffer.size() << endl;
+		LOG_DEBUG << "sBuffer: " << msg->response.sBuffer.size() << endl;
 		sRet.assign(&(msg->response.sBuffer[0]), msg->response.sBuffer.size());
 		printResult(msg->request.iRequestId, sRet);
 		return 0;
@@ -101,7 +111,7 @@ int TestPushCallBack::onDispatch(ReqMessagePtr msg)
 	}
 	else
 	{
-		cout << "no match func!" <<endl;
+		LOG_DEBUG << "no match func!" <<endl;
 	}
 	return -3;
 }
@@ -109,7 +119,7 @@ int TestPushCallBack::onDispatch(ReqMessagePtr msg)
 RecvThread::RecvThread():_bTerminate(false)
 {
 	string sObjName = "Test.TestPushServer.TestPushServantObj";
-    string sObjHost = "tcp -h 10.120.129.226 -t 60000 -p 10099";
+    string sObjHost = "tcp -h 127.0.0.1 -t 60000 -p 30099";
 
     _prx = _comm.stringToProxy<ServantPrx>(sObjName+"@"+sObjHost);
 
@@ -139,6 +149,8 @@ void RecvThread::run(void)
 	while(!_bTerminate)
 	{
 		{
+			LOG_DEBUG<<"request buf="<<buf<<endl;
+
 			try
 			{
 				TestPushCallBackPtr cb = new TestPushCallBack();
@@ -146,11 +158,11 @@ void RecvThread::run(void)
 			}
 			catch(TarsException& e)
 			{     
-				cout << "TarsException: " << e.what() << endl;
+				LOG_DEBUG << "TarsException: " << e.what() << endl;
 			}
 			catch(...)
 			{
-				cout << "unknown exception" << endl;
+				LOG_DEBUG << "unknown exception" << endl;
 			}
 		}
 

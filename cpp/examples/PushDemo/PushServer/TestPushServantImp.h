@@ -29,7 +29,10 @@ public:
     /**
      *
      */
-    virtual int test(tars::TarsCurrentPtr current) { return 0;};
+    virtual int printResult(tars::TarsCurrentPtr current) 
+	{ 
+		return 0;
+	};
 
 
     //重载Servant的doRequest方法
