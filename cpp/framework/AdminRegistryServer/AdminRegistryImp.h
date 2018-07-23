@@ -314,6 +314,7 @@ public:
      */
     virtual int getClientIp(std::string &sClientIp,tars::TarsCurrentPtr current);
 
+    virtual int gridPatchServer(const vector<ServerGridDesc> &gridDescList, vector<ServerGridDesc> &gridFailDescList, std::string & resultDesc, tars::TarsCurrentPtr current);
 protected:
 
     //数据库操作类对象

@@ -29,7 +29,7 @@ public class SetGroupValidator implements ConstraintValidator<SetGroup, String> 
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return StringUtils.isNotBlank(value) && (StringUtils.isNumeric(value) || "*".equals(value));
+        return StringUtils.isNotBlank(value) && (StringUtils.isAlphanumeric(value) || "*".equals(value));
     }
 
 

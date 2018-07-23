@@ -141,6 +141,24 @@ module tars
         4 optional EMTaskStatus status; 
     };
 
+	enum ServerGridStatus
+    {
+    	//正常发布服务
+		NORMAL	= 0,
+		//自动扩容时，灰度服务，即部分流量分到灰度节点上
+		GRID	= 1,
+		//发布服务，但是发布后，没用流量过来
+		NO_FLOW = 2	
+    };
+	
+    struct ServerGridDesc
+    {
+    	0 require string			application;
+		1 require string			servername;
+		2 require string			nodename;
+		3 require ServerGridStatus		status;
+    };
+	
     /**
      * admin 管理接口
      */
@@ -458,7 +476,18 @@ module tars
     * @return 0-成功 others-失败
     */
 //    int getServerInfo(srvRequestInfo info,out vector<serverInfo> vServerInfo);
-        
+     
+		/**
+         * 自动伸缩时调用的灰度发布接口
+         *
+         * @param gridDescList: 灰度发布的信息
+         * @param gridFailDescList: 灰度发布节点失败的信息
+         * @param out resultDesc: 结果描述
+         *
+         * @return : 0-成功 others-失败
+         */
+        int gridPatchServer(vector<ServerGridDesc> gridDescList, out vector<ServerGridDesc> gridFailDescList, out string resultDesc);
+	 
     };
 };
 

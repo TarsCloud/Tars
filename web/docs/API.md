@@ -814,7 +814,7 @@ ids // 配置文件ID，用;分隔
     }]
 }
 
-命令字包括restart，stop，undeploy_tars，patch_tars
+命令字包括restart，stop，undeploy_tars，patch_tars，grid_server
 当command!=patch_tars时，parameter为空
 当command=patch_tars时，parameter格式为
 {
@@ -822,6 +822,12 @@ ids // 配置文件ID，用;分隔
     update_text: "",  // 备注
     bak_flag: true    // 备机标识，true：备机，false：主机
 }
+
+当command=grid_server时，表示是否剔除服务节点的流量，parameter格式为
+{
+	grid_status: 0/1/2    //0：正常流量，2：剔除流量
+}
+
 ```
 ### 返回值
 ```javascript
