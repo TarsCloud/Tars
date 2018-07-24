@@ -424,12 +424,13 @@ int TcpTransceiver::doResponse(list<ResponsePacket>& done)
                 {
                     std::string* plainBuf = _openssl->RecvBuffer();
                     plainBuf->erase(0, pos);
+					std::string(*plainBuf).swap(*plainBuf);
                 }
                 else
 #endif
                 {
                     _recvBuffer.Consume(pos);
-                    if (_recvBuffer.Capacity() > 8 * 1024 * 1024)
+                    if (_recvBuffer.Capacity() > 8 * 1024)
                         _recvBuffer.Shrink();
                 }
             }

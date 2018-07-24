@@ -1,8 +1,7 @@
 #ifndef __LOG_MACRO_H__
 #define __LOG_MACRO_H__
 
-//#include "log/taf_logger.h"
-#include "util/tc_logger.h"
+#include "servant/TarsLogger.h"
 //using namespace taf;
 using namespace tars;
 
