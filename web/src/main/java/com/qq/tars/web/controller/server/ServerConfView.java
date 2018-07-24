@@ -66,6 +66,8 @@ public class ServerConfView {
 
     private String posttime;
 
+    private String gridflag;
+    
     public Long getId() {
         return id;
     }
@@ -256,5 +258,13 @@ public class ServerConfView {
 
     public void setPosttime(String posttime) {
         this.posttime = posttime;
+    }
+    
+    public String getGridflag() {
+    	return gridflag;
+    }
+    
+    public void setGridflag(String gridflag) {
+    	this.gridflag = gridflag;
     }
 }

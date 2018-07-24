@@ -262,8 +262,8 @@
                 showErrorMsg($('body'),'Set区域只能为英文字母，且必须小写');
                 return;
             }
-            if(!/^(\d+|\*)$/.test(paramObj.set_group)){
-                showErrorMsg($('body'),'Set组必须为数字或*号');
+            if(!/^([a-z]+|\d+|\*)$/.test(paramObj.set_group)){
+                showErrorMsg($('body'),'Set组必须为数字或*号或者英文小写字母');
                 return;
             }
         }else{

@@ -59,7 +59,7 @@ protected:
     EMTaskItemStatus stop    (const TaskItemReq &req, string &log);
     EMTaskItemStatus patch   (const TaskItemReq &req, string &log);
     EMTaskItemStatus undeploy(const TaskItemReq &req, string &log);
-
+    EMTaskItemStatus gridPatchServer(const TaskItemReq &req, string &log);
     string get(const string &name, const map<string, string> &parameters);
 
 protected:

@@ -276,6 +276,46 @@ EMTaskItemStatus TaskList::patch(const TaskItemReq &req, string &log)
     return EM_I_SUCCESS; 
 }
 
+EMTaskItemStatus TaskList::gridPatchServer(const TaskItemReq &req, string &log)
+{
+    int ret = -1;
+    try
+    {
+        TLOGDEBUG("TaskList::grid_server:" << TC_Common::tostr(req.parameters.begin(), req.parameters.end()) << endl);
+        
+        string status   = get("grid_status", req.parameters);
+
+        vector<ServerGridDesc> gridDescList;
+        
+        tars::ServerGridDesc serverGridDesc;
+        serverGridDesc.application    = req.application;
+        serverGridDesc.servername = req.serverName;
+        serverGridDesc.nodename   = req.nodeName;
+        
+        if(TC_Common::strto<int>(status) == tars::NORMAL)
+            serverGridDesc.status    = tars::NORMAL;
+        else if(TC_Common::strto<int>(status) == tars::NO_FLOW)
+            serverGridDesc.status    = tars::NO_FLOW;
+        else if(TC_Common::strto<int>(status) == tars::GRID)
+            serverGridDesc.status    = tars::GRID;
+        else
+            serverGridDesc.status    = tars::NORMAL;
+        
+        gridDescList.push_back(serverGridDesc);
+        
+        vector<ServerGridDesc> gridFailDescList;
+        ret = _adminPrx->gridPatchServer(gridDescList, gridFailDescList,log);
+        if (ret == 0)
+            return EM_I_SUCCESS;
+    }
+    catch (exception &ex)
+    {
+        log = ex.what();
+        TLOGERROR("TaskList::gridPatchServer error:" << log << endl);
+    }
+
+    return EM_I_FAILED;    
+}
 EMTaskItemStatus TaskList::executeSingleTask(size_t index, const TaskItemReq &req)
 {
     TLOGDEBUG("TaskList::executeSingleTask: taskNo=" << req.taskNo 
@@ -311,6 +351,10 @@ EMTaskItemStatus TaskList::executeSingleTask(size_t index, const TaskItemReq &re
     else if (req.command == "undeploy_tars")
     {
         ret = undeploy(req, log);
+    }
+    else if (req.command == "grid_server")
+    {
+        ret = gridPatchServer(req,log);
     }
     else 
     {

@@ -410,6 +410,7 @@ CREATE TABLE `t_server_conf` (
   `remote_log_reserve_time` varchar(32) NOT NULL DEFAULT '65',
   `remote_log_compress_time` varchar(32) NOT NULL DEFAULT '2',
   `remote_log_type` int(1) NOT NULL DEFAULT '0',
+  `grid_flag` varchar(16) NOT NULL DEFAULT 'NORMAL',
   PRIMARY KEY (`id`),
   UNIQUE KEY `application` (`application`,`server_name`,`node_name`),
   KEY `node_name` (`node_name`),
@@ -424,7 +425,7 @@ CREATE TABLE `t_server_conf` (
 
 LOCK TABLES `t_server_conf` WRITE;
 /*!40000 ALTER TABLE `t_server_conf` DISABLE KEYS */;
-INSERT INTO `t_server_conf` VALUES (1,'tars','tarspatch','','192.168.2.131','2015-11-29 11:08:09','','/usr/local/app/tars/tarspatch/bin/tarspatch','tars.tarspatch',0,'active','active',9855,'','0000-00-00 00:00:00','','1.0.1','2015-08-07 23:57:50','admin','tars_cpp','','','','N','N','','','','','',0,3,'0','65','2',0),(2,'tars','tarsconfig','','192.168.2.131','2015-11-29 11:13:02','','/usr/local/app/tars/tarsconfig/bin/tarsconfig','tars.tarsconfig',0,'active','active',9815,'','0000-00-00 00:00:00','','1.0.1','2015-08-08 10:49:37','admin','tars_cpp','','','','N','N','','','','','',0,3,'0','65','2',0),(20,'tars','tarsnotify','','192.168.2.131','2015-11-29 11:13:02','','','tars.tarsnotify',0,'active','active',9838,'47','2015-11-28 22:26:40','admin','1.0.1','2015-11-28 21:48:13','admin','tars_cpp','','','','N','N','','','','','',0,3,'0','65','2',0);
+INSERT INTO `t_server_conf` VALUES (1,'tars','tarspatch','','192.168.2.131','2015-11-29 11:08:09','','/usr/local/app/tars/tarspatch/bin/tarspatch','tars.tarspatch',0,'active','active',9855,'','0000-00-00 00:00:00','','1.0.1','2015-08-07 23:57:50','admin','tars_cpp','','','','N','N','','','','','',0,3,'0','65','2',0,'NORMAL'),(2,'tars','tarsconfig','','192.168.2.131','2015-11-29 11:13:02','','/usr/local/app/tars/tarsconfig/bin/tarsconfig','tars.tarsconfig',0,'active','active',9815,'','0000-00-00 00:00:00','','1.0.1','2015-08-08 10:49:37','admin','tars_cpp','','','','N','N','','','','','',0,3,'0','65','2',0,'NORMAL'),(20,'tars','tarsnotify','','192.168.2.131','2015-11-29 11:13:02','','','tars.tarsnotify',0,'active','active',9838,'47','2015-11-28 22:26:40','admin','1.0.1','2015-11-28 21:48:13','admin','tars_cpp','','','','N','N','','','','','',0,3,'0','65','2',0,'NORMAL');
 /*!40000 ALTER TABLE `t_server_conf` ENABLE KEYS */;
 UNLOCK TABLES;
 
