@@ -6,14 +6,14 @@
 #
 # Copyright (C) 2016THL A29 Limited, a Tencent company. All rights reserved.
 #
-# Licensed under the BSD 3-Clause License (the "License"); you may not use this file except 
+# Licensed under the BSD 3-Clause License (the "License"); you may not use this file except
 # in compliance with the License. You may obtain a copy of the License at
 #
 # https://opensource.org/licenses/BSD-3-Clause
 #
-# Unless required by applicable law or agreed to in writing, software distributed 
-# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
-# CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+# Unless required by applicable law or agreed to in writing, software distributed
+# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+# CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
 #
 
@@ -25,13 +25,15 @@
 import threading
 import Queue
 from __logger import tarsLogger
-from __packet       import ResponsePacket
-from __rpc import ServantProxy
+from __packet import ResponsePacket
+from __servantproxy import ServantProxy
+
 
 class AsyncProcThread:
     '''
     @brief: 异步调用线程管理类
     '''
+
     def __init__(self):
         tarsLogger.debug('AsyncProcThread:__init__')
         self.__initialize = False
@@ -43,7 +45,7 @@ class AsyncProcThread:
     def __del__(self):
         tarsLogger.debug('AsyncProcThread:__del__')
 
-    def initialize(self, nrunner = 3):
+    def initialize(self, nrunner=3):
         '''
         @brief: 使用AsyncProcThread前必须先调用此函数
         @param nrunner: 异步线程个数
@@ -82,6 +84,7 @@ class AsyncProcThread:
         @rtype: None
         '''
         tarsLogger.debug('AsyncProcThread:put')
+        # 异步请求超时
         if not reqmsg.response:
             reqmsg.response = ResponsePacket()
             reqmsg.response.iVerson = reqmsg.request.iVerson
@@ -97,7 +100,7 @@ class AsyncProcThread:
         @return: ReqMessage
         @rtype: ReqMessage
         '''
-        #tarsLogger.debug('AsyncProcThread:pop')
+        # tarsLogger.debug('AsyncProcThread:pop')
         ret = None
         try:
             ret = self.__queue.get(True, self.__popTimeout)
@@ -123,9 +126,11 @@ class AsyncProcThreadRunner(threading.Thread):
     '''
     @brief: 异步调用线程
     '''
+
     def __init__(self):
         tarsLogger.debug('AsyncProcThreadRunner:__init__')
-        threading.Thread.__init__(self)
+        super(AsyncProcThreadRunner, self).__init__()
+        # threading.Thread.__init__(self)
         self.__terminate = False
         self.__initialize = False
         self.__procQueue = None
@@ -176,10 +181,12 @@ class AsyncProcThreadRunner(threading.Thread):
 
         tarsLogger.debug('AsyncProcThreadRunner:run finished')
 
-class ServantProxyCallback():
+
+class ServantProxyCallback(object):
     '''
     @brief: 异步回调对象基类
     '''
+
     def __init__(self):
         tarsLogger.debug('ServantProxyCallback:__init__')
 

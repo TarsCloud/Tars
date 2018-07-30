@@ -6,14 +6,14 @@
 #
 # Copyright (C) 2016THL A29 Limited, a Tencent company. All rights reserved.
 #
-# Licensed under the BSD 3-Clause License (the "License"); you may not use this file except 
+# Licensed under the BSD 3-Clause License (the "License"); you may not use this file except
 # in compliance with the License. You may obtain a copy of the License at
 #
 # https://opensource.org/licenses/BSD-3-Clause
 #
-# Unless required by applicable law or agreed to in writing, software distributed 
-# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
-# CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+# Unless required by applicable law or agreed to in writing, software distributed
+# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+# CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
 #
 
@@ -26,11 +26,13 @@ import threading
 import time
 import struct
 
-from __logger    import tarsLogger
-from __tars       import TarsInputStream
-from __tars       import TarsOutputStream
-from __packet    import RequestPacket
-from __packet    import ResponsePacket
+from __logger import tarsLogger
+from __tars import TarsInputStream
+from __tars import TarsOutputStream
+from __packet import RequestPacket
+from __packet import ResponsePacket
+from __util import (NewLock, LockGuard)
+
 
 class ReqMessage:
     '''
@@ -39,6 +41,7 @@ class ReqMessage:
     SYNC_CALL = 1
     ASYNC_CALL = 2
     ONE_WAY = 3
+
     def __init__(self):
         self.type = ReqMessage.SYNC_CALL
         self.servant = None
@@ -49,6 +52,9 @@ class ReqMessage:
         self.callback = None
         self.begtime = None
         self.endtime = None
+        self.isHash = False
+        self.isConHash = False
+        self.hashCode = 0
 
     def packReq(self):
         '''
@@ -58,11 +64,11 @@ class ReqMessage:
         '''
         if not self.request:
             return ''
-        oos = TarsOutputStream();
-        RequestPacket.writeTo(oos, self.request);
-        reqpkt = oos.getBuffer();
+        oos = TarsOutputStream()
+        RequestPacket.writeTo(oos, self.request)
+        reqpkt = oos.getBuffer()
         plen = len(reqpkt) + 4
-        reqpkt = struct.pack('!i', plen) + reqpkt;
+        reqpkt = struct.pack('!i', plen) + reqpkt
         return reqpkt
 
     @staticmethod
@@ -84,12 +90,12 @@ class ReqMessage:
         while True:
             if len(buf) - unpacklen < 4:
                 break
-            packsize = buf[unpacklen : unpacklen+4]
+            packsize = buf[unpacklen: unpacklen+4]
             packsize, = struct.unpack_from('!i', packsize)
             if len(buf) < unpacklen + packsize:
                 break
 
-            ios = TarsInputStream(buf[unpacklen+4 : unpacklen+packsize])
+            ios = TarsInputStream(buf[unpacklen+4: unpacklen+packsize])
             rsp = ResponsePacket.readFrom(ios)
             rsplist.append(rsp)
             unpacklen += packsize
@@ -97,15 +103,19 @@ class ReqMessage:
         return rsplist, unpacklen
 
 # 超时队列，加锁，线程安全
+
+
 class TimeoutQueue:
     '''
     @brief: 超时队列，加锁，线程安全
             可以像队列一样FIFO，也可以像字典一样按key取item
     @todo: 限制队列长度
     '''
-    def __init__(self, timeout = 3):
+
+    def __init__(self, timeout=3):
         self.__uniqId = 0
-        self.__lock = threading.Lock()
+        # self.__lock = threading.Lock()
+        self.__lock = NewLock()
         self.__data = {}
         self.__queue = []
         self.__timeout = timeout
@@ -134,9 +144,10 @@ class TimeoutQueue:
         @return: 队列长度
         @rtype: int
         '''
-        self.__lock.acquire()
+        # self.__lock.acquire()
+        lock = LockGuard(self.__lock)
         ret = len(self.__data)
-        self.__lock.release()
+        # self.__lock.release()
         return ret
 
     def generateId(self):
@@ -145,16 +156,17 @@ class TimeoutQueue:
         @return: id
         @rtype: int
         '''
-        self.__lock.acquire()
+        # self.__lock.acquire()
+        lock = LockGuard(self.__lock)
         ret = self.__uniqId
         ret = (ret + 1) % 0x7FFFFFFF
         while ret <= 0:
             ret = (ret + 1) % 0x7FFFFFFF
         self.__uniqId = ret
-        self.__lock.release()
+        # self.__lock.release()
         return ret
 
-    def pop(self, uniqId = 0, erase = True):
+    def pop(self, uniqId=0, erase=True):
         '''
         @brief: 弹出item
         @param uniqId: item的id，如果为0，按FIFO弹出
@@ -166,7 +178,8 @@ class TimeoutQueue:
         '''
         ret = None
 
-        self.__lock.acquire()
+        # self.__lock.acquire()
+        lock = LockGuard(self.__lock)
 
         if not uniqId:
             if len(self.__queue):
@@ -177,7 +190,7 @@ class TimeoutQueue:
             else:
                 ret = self.__data.get(uniqId, None)
 
-        self.__lock.release()
+        # self.__lock.release()
 
         return ret[0] if ret else None
 
@@ -191,13 +204,15 @@ class TimeoutQueue:
         '''
         begtime = time.time()
         ret = True
-        self.__lock.acquire()
-        if self.__data.has_key(uniqId):
+        # self.__lock.acquire()
+        lock = LockGuard(self.__lock)
+
+        if uniqId in self.__data:
             ret = False
         else:
             self.__data[uniqId] = [item, begtime]
             self.__queue.append(uniqId)
-        self.__lock.release()
+        # self.__lock.release()
         return ret
 
     def peek(self, uniqId):
@@ -208,9 +223,11 @@ class TimeoutQueue:
         @return: item
         @rtype: any type
         '''
-        self.__lock.acquire()
+        # self.__lock.acquire()
+        lock = LockGuard(self.__lock)
+
         ret = self.__data.get(uniqId, None)
-        self.__lock.release()
+        # self.__lock.release()
         if not ret:
             return None
         return ret[0]
@@ -222,7 +239,9 @@ class TimeoutQueue:
         @rtype: None
         '''
         endtime = time.time()
-        self.__lock.acquire()
+        # self.__lock.acquire()
+        lock = LockGuard(self.__lock)
+
         # 处理异常情况，防止死锁
         try:
             new_data = {}
@@ -231,17 +250,22 @@ class TimeoutQueue:
                     new_data[uniqId] = item
                 else:
                     tarsLogger.debug(
-                        'TimeoutQueue:timeout remove id : %d' % uniqId )
+                        'TimeoutQueue:timeout remove id : %d' % uniqId)
             self.__data = new_data
         finally:
-            self.__lock.release()
+            # self.__lock.release()
+            pass
+
 
 class QueueTimeout(threading.Thread):
     """
     超时线程，定时触发超时事件
     """
-    def __init__(self, timeout = 0.1):
-        threading.Thread.__init__(self)
+
+    def __init__(self, timeout=0.1):
+        # threading.Thread.__init__(self)
+        tarsLogger.debug('QueueTimeout:__init__')
+        super(QueueTimeout, self).__init__()
         self.timeout = timeout
         self.__terminate = False
         self.__handler = None
@@ -270,6 +294,7 @@ class QueueTimeout(threading.Thread):
                 tarsLogger.error('QueueTimeout:run exception : %s', msg)
 
         tarsLogger.debug('QueueTimeout:run finished')
+
 
 if __name__ == '__main__':
     pass
