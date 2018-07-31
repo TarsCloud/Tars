@@ -40,15 +40,26 @@ add_custom_target(COPY-SERVENT-TARS ALL DEPENDS TUP-TARS ${OUT_DEPENDS_LIST})
 
 set(TARSPROTOCOLS
 AdminF.tars
+AdminF.h
 Auth.tars
+Auth.h
 BaseF.tars
+BaseF.h
 ConfigF.tars
+ConfigF.h
 EndpointF.tars
+EndpointF.h
 LogF.tars
+LogF.h
 NodeF.tars
+NodeF.h
 NotifyF.tars
+NotifyF.h
 PropertyF.tars
+PropertyF.h
 QueryF.tars
-StatF.tars)
+QueryF.h
+StatF.tars
+StatF.h)
                       
 INSTALL(FILES ${TARSPROTOCOLS} DESTINATION   /home/tars/protocol/)
