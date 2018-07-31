@@ -62,4 +62,4 @@ QueryF.h
 StatF.tars
 StatF.h)
                       
-INSTALL(FILES ${TARSPROTOCOLS} DESTINATION   /home/tars/protocol/)
+INSTALL(FILES ${TARSPROTOCOLS} DESTINATION   /home/tarsproto/protocol/)
