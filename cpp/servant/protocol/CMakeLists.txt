@@ -37,3 +37,18 @@ endforeach ()
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${CLEAN_LIST}")
 
 add_custom_target(COPY-SERVENT-TARS ALL DEPENDS TUP-TARS ${OUT_DEPENDS_LIST})
+
+set(TARSPROTOCOLS
+AdminF.tars
+Auth.tars
+BaseF.tars
+ConfigF.tars
+EndpointF.tars
+LogF.tars
+NodeF.tars
+NotifyF.tars
+PropertyF.tars
+QueryF.tars
+StatF.tars)
+                      
+INSTALL(FILES ${TARSPROTOCOLS} DESTINATION   /home/tars/protocol/)
