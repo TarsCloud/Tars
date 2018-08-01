@@ -1,7 +1,7 @@
 {
   "name": "phptars/tars-registry",
   "description": "tars的php主控寻址相关",
-  "version":"0.1.0",
+  "version":"0.1.1",
   "authors": [
     {
       "name": "Chen Liang",
