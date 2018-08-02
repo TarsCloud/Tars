@@ -7,15 +7,19 @@ MysqlIncludePath=
 MysqlLibPath=
 
 
-##°²×°glibc-devel
+##å®‰è£…glibc-devel
 
 yum install -y glibc-devel
 
-##°²×°flex¡¢bison
+##å®‰è£…flexã€bison
 
 yum install -y flex bison
 
-##°²×°cmake
+##å®‰è£…gcc-c++
+
+yum install gcc-c++
+
+##å®‰è£…cmake
 
 tar zxvf cmake-2.8.8.tar.gz
 cd cmake-2.8.8
@@ -24,7 +28,7 @@ make
 make install
 cd -
 
-##°²×°java jdk
+##å®‰è£…java jdk
 tar zxvf jdk-8u111-linux-x64.tar.gz
 echo "export JAVA_HOME=${PWD_DIR}/jdk1.8.0_111" >> /etc/profile
 echo "CLASSPATH=\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >> /etc/profile
@@ -35,7 +39,7 @@ source /etc/profile
 
 java -version
 
-##°²×°maven
+##å®‰è£…maven
 tar zxvf apache-maven-3.3.9-bin.tar.gz
 echo "export MAVEN_HOME=${PWD_DIR}/apache-maven-3.3.9/" >> /etc/profile
 echo "export PATH=\$PATH:\$MAVEN_HOME/bin" >> /etc/profile
@@ -44,7 +48,7 @@ source /etc/profile
 
 mvn -v
 
-##°²×°resin
+##å®‰è£…resin
 
 cp resin-4.0.49.tar.gz /usr/local/
 cd /usr/local/
@@ -56,14 +60,14 @@ make install
 cd ${PWD_DIR}
 ln -s /usr/local/resin-4.0.49 /usr/local/resin
 
-##°²×°rapidjson
+##å®‰è£…rapidjson
 yum install -y git
 
 git clone https://github.com/Tencent/rapidjson.git
 
 cp -r ./rapidjson ../cpp/thirdparty/
 
-## °²×°mysql
+## å®‰è£…mysql
 yum install -y ncurses-devel
 yum install -y zlib-devel
 
@@ -77,7 +81,7 @@ if [   ! -n "$MysqlIncludePath"  ]
 	ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
 	cd -
   else
-  	## ¸ù¾İmysql ¿âÂ·¾¶ ÅäÖÃ ÉèÖÃcpp/build/CMakeLists.txt
+  	## æ ¹æ®mysql åº“è·¯å¾„ é…ç½® è®¾ç½®cpp/build/CMakeLists.txt
   	sed -i "s@/usr/local/mysql/include@${MysqlIncludePath}@g" ../cpp/build/CMakeLists.txt
   	sed -i "s@/usr/local/mysql/lib@${MysqlLibPath}@g" ../cpp/build/CMakeLists.txt
 
@@ -101,41 +105,41 @@ cd -
 sed -i "s/192.168.2.131/${MachineIp}/g" `grep 192.168.2.131 -rl ./conf/*`
 cp ./conf/my.cnf /usr/local/mysql/
 
-##Æô¶¯mysql
+##å¯åŠ¨mysql
 service mysql start
 chkconfig mysql on
 
-##Ìí¼ÓmysqlµÄbinÂ·¾¶
+##æ·»åŠ mysqlçš„binè·¯å¾„
 echo "PATH=\$PATH:/usr/local/mysql/bin" >> /etc/profile
 echo "export PATH" >> /etc/profile
 source /etc/profile
 
-##ĞŞ¸Ämysql rootÃÜÂë
+##ä¿®æ”¹mysql rootå¯†ç 
 cd /usr/local/mysql/
 ./bin/mysqladmin -u root password 'root@appinside'
 ./bin/mysqladmin -u root -h ${MachineName} password 'root@appinside'
 cd -
 
-##Ìí¼ÓmysqlµÄ¿âÂ·¾¶
+##æ·»åŠ mysqlçš„åº“è·¯å¾„
 echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf
 ldconfig
 
 
-##°²×°javaÓïÑÔ¿ò¼Ü
+##å®‰è£…javaè¯­è¨€æ¡†æ¶
 cd ../java/
 mvn clean install 
 mvn clean install -f core/client.pom.xml 
 mvn clean install -f core/server.pom.xml
 cd -
 
-##°²×°c++ÓïÑÔ¿ò¼Ü
+##å®‰è£…c++è¯­è¨€æ¡†æ¶
 cd ../cpp/build/
 chmod u+x build.sh
 ./build.sh all
 ./build.sh install
 cd -
 
-##TarsÊı¾İ¿â»·¾³³õÊ¼»¯
+##Tarsæ•°æ®åº“ç¯å¢ƒåˆå§‹åŒ–
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;"
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'localhost' identified by 'tars2015' with grant option;"
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'${MachineName}' identified by 'tars2015' with grant option;"
@@ -148,7 +152,7 @@ chmod u+x exec-sql.sh
 ./exec-sql.sh
 cd -
 
-##´ò°ü¿ò¼Ü»ù´¡·şÎñ
+##æ‰“åŒ…æ¡†æ¶åŸºç¡€æœåŠ¡
 cd ../cpp/build/
 make framework-tar
 
@@ -160,7 +164,7 @@ make tarsquerystat-tar
 make tarsqueryproperty-tar
 cd -
 
-##°²×°ºËĞÄ»ù´¡·şÎñ
+##å®‰è£…æ ¸å¿ƒåŸºç¡€æœåŠ¡
 mkdir -p /usr/local/app/tars/
 cd ../cpp/build/
 cp framework.tgz /usr/local/app/tars/
@@ -177,7 +181,7 @@ chmod u+x tars_install.sh
 
 ./tarspatch/util/init.sh
 
-##°²×°web¹ÜÀíÏµÍ³
+##å®‰è£…webç®¡ç†ç³»ç»Ÿ
 cd ${PWD_DIR}
 cd ../web/
 sed -i "s/db.tars.com/${MachineIp}/g" `grep db.tars.com -rl ./src/main/resources/*`
