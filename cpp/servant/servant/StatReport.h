@@ -195,7 +195,7 @@ public:
      * @return PropertyReportPtr
      */
     template<typename... Args>
-    PropertyReportPtr createPropertyReport(const string& strProperty, Args&&... args)
+    PropertyReportPtr createPropertyReport(const string& strProperty, Args... args)
     {
         Lock lock(*this);
 
@@ -204,7 +204,7 @@ public:
             return _statPropMsg[strProperty];
         }
 
-         PropertyReportPtr srPtr = new PropertyReportImp<decltype(std::forward<Args>(args))...>(std::forward<Args>(args)...);
+         PropertyReportPtr srPtr = new PropertyReportImp<decltype(args)...>(std::forward<Args>(args)...);
 
          _statPropMsg[strProperty] = srPtr;
 
