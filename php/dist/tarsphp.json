@@ -315,6 +315,23 @@
             "Tars\\registry\\": "src/"
           }
         }
+      },
+      "0.1.1": {
+        "name": "phptars/tars-registry",
+        "version": "0.1.1",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-registry-0.1.1.zip?raw=true",
+          "type": "zip"
+        },
+        "require": {
+          "php": ">=5.3",
+          "phptars/tars-utils": "~0.1"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\registry\\": "src/"
+          }
+        }
       }
     },
     "phptars/tars-report": {

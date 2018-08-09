@@ -21,6 +21,7 @@ class Utils
 
     public static $wholeTypeMap = array(
         'bool' => '\TARS::BOOL',
+        'boolean' => '\TARS::BOOL',
         'byte' => '\TARS::CHAR',
         'char' => '\TARS::CHAR',
         'unsigned byte' => '\TARS::UINT8',
@@ -39,6 +40,7 @@ class Utils
 
     public static $typeMap = array(
         'bool' => '\TARS::BOOL',
+        'boolean' => '\TARS::BOOL',
         'byte' => '\TARS::CHAR',
         'char' => '\TARS::CHAR',
         'unsigned byte' => '\TARS::UINT8',
@@ -61,6 +63,7 @@ class Utils
     {
         $packMethods = [
             'bool' => 'putBool',
+            'boolean' => 'putBool',
             'byte' => 'putChar',
             'char' => 'putChar',
             'unsigned byte' => 'putUInt8',
@@ -77,6 +80,7 @@ class Utils
             'map' => 'putMap',
             'vector' => 'putVector',
             'Bool' => 'putBool',
+            'Boolean' => 'putBool',
             'Byte' => 'putChar',
             'Char' => 'putChar',
             'Unsigned byte' => 'putUInt8',
@@ -105,6 +109,7 @@ class Utils
     {
         $unpackMethods = [
             'bool' => 'getBool',
+            'boolean' => 'getBool',
             'byte' => 'getChar',
             'char' => 'getChar',
             'unsigned byte' => 'getUInt8',
@@ -121,6 +126,7 @@ class Utils
             'map' => 'getMap',
             'vector' => 'getVector',
             'Bool' => 'getBool',
+            'Boolean' => 'getBool',
             'Byte' => 'getChar',
             'Char' => 'getChar',
             'Unsigned byte' => 'getUInt8',
@@ -174,7 +180,7 @@ class Utils
     public static function isBasicType($word)
     {
         $basicTypes = [
-            'bool', 'byte', 'char', 'unsigned byte', 'unsigned char', 'short', 'unsigned short',
+            'bool', 'boolean', 'byte', 'char', 'unsigned byte', 'unsigned char', 'short', 'unsigned short',
             'int', 'unsigned int', 'long', 'float', 'double', 'string', 'void',
         ];
 
