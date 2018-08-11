@@ -58,7 +58,7 @@ public class ParseTools {
     }
 
     public static String parse(List<EndpointF> list, String objName) {
-        StringBuffer value = new StringBuffer();
+        StringBuilder value = new StringBuilder();
         for (EndpointF endpointF : list) {
             if (value.length() > 0) {
                 value.append(":");
@@ -74,7 +74,7 @@ public class ParseTools {
     }
 
     public static String toFormatString(EndpointF endpointF, boolean active) {
-        StringBuffer value = new StringBuffer();
+        StringBuilder value = new StringBuilder();
         if (!(StringUtils.isEmpty(endpointF.host) || endpointF.port <= 0)) {
             value.append(endpointF.istcp == 0 ? "udp" : "tcp").append(" ");
             value.append("-h").append(" ").append(endpointF.host).append(" ");

@@ -125,7 +125,7 @@ public final class Url implements Comparable<Url>, Serializable {
         if (identity != null) {
             return identity;
         }
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         s.append(this.protocol).append("://").append(this.host).append(":").append(this.port).append(getAbsolutePath());
         identity = s.toString();
         return identity;

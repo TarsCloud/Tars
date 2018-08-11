@@ -79,7 +79,7 @@ public class BasicClassTypeUtil {
     }
 
     public static String transTypeList(ArrayList<String> listTpye) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < listTpye.size(); i++) {
             listTpye.set(i, java2UniType(listTpye.get(i)));
         }
