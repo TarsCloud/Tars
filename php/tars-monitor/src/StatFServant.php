@@ -5,23 +5,22 @@ namespace Tars\monitor;
 use Tars\monitor\client\CommunicatorMonitor;
 use Tars\monitor\client\RequestPacketMonitor;
 use Tars\monitor\client\TUPAPIWrapperMonitor;
+
 use Tars\monitor\classes\StatMicMsgHead;
 use Tars\monitor\classes\StatMicMsgBody;
 use Tars\monitor\classes\StatSampleMsg;
 
-class StatFServant
-{
+class StatFServant {
     protected $_communicator;
     protected $_iVersion;
     protected $_iTimeout;
-    public $_servantName = 'tars.tarsstat.StatObj';
+    public $_servantName = "tars.tarsstat.StatObj";
 
-    public function __construct($locator, $socketMode, $statServantName)
-    {
+    public function __construct($locator,$socketMode,$statServantName) {
         try {
             $this->_servantName = $statServantName;
             $this->_communicator = new CommunicatorMonitor($locator,
-                $this->_servantName, $socketMode);
+                $this->_servantName,$socketMode);
             $this->_iVersion = 3;
             $this->_iTimeout = 2;
         } catch (\Exception $e) {
@@ -29,8 +28,7 @@ class StatFServant
         }
     }
 
-    public function reportMicMsg($msg, $bFromClient)
-    {
+    public function reportMicMsg($msg,$bFromClient) {
         try {
             $requestPacket = new RequestPacketMonitor();
             $requestPacket->_iVersion = $this->_iVersion;
@@ -38,26 +36,27 @@ class StatFServant
             $requestPacket->_servantName = $this->_servantName;
             $encodeBufs = [];
 
-            $msg_map = new \TARS_Map(new StatMicMsgHead(), new StatMicMsgBody(), 1);
-            foreach ($msg as $value) {
+            $msg_map = new \TARS_Map(new StatMicMsgHead(),new StatMicMsgBody(),1);
+            foreach($msg as $value) {
                 $msg_map->pushBack($value);
             }
-            $buffer = TUPAPIWrapperMonitor::putMap('msg', 1, $msg_map, $this->_iVersion);
+            $buffer = TUPAPIWrapperMonitor::putMap("msg",1,$msg_map,$this->_iVersion);
             $encodeBufs['msg'] = $buffer;
-            $buffer = TUPAPIWrapperMonitor::putBool('bFromClient', 2, $bFromClient, $this->_iVersion);
+            $buffer = TUPAPIWrapperMonitor::putBool("bFromClient",2,$bFromClient,$this->_iVersion);
             $encodeBufs['bFromClient'] = $buffer;
             $requestPacket->_encodeBufs = $encodeBufs;
 
-            $this->_communicator->invoke($requestPacket, $this->_iTimeout);
+            $this->_communicator->invoke($requestPacket,$this->_iTimeout);
 
             return;
-        } catch (\Exception $e) {
+
+        }
+        catch (\Exception $e) {
             throw $e;
         }
     }
 
-    public function reportSampleMsg($msg)
-    {
+    public function reportSampleMsg($msg) {
         try {
             $requestPacket = new RequestPacketMonitor();
             $requestPacket->_iVersion = $this->_iVersion;
@@ -66,18 +65,22 @@ class StatFServant
             $encodeBufs = [];
 
             $msg_vec = new \TARS_Vector(new StatSampleMsg());
-            foreach ($msg as $singlemsg) {
+            foreach($msg as $singlemsg) {
                 $msg_vec->pushBack($singlemsg);
             }
-            $buffer = TUPAPIWrapperMonitor::putVector('msg', 1, $msg_vec, $this->_iVersion);
+            $buffer = TUPAPIWrapperMonitor::putVector("msg",1,$msg_vec,$this->_iVersion);
             $encodeBufs['msg'] = $buffer;
             $requestPacket->_encodeBufs = $encodeBufs;
 
-            $this->_communicator->invoke($requestPacket, $this->_iTimeout);
+            $this->_communicator->invoke($requestPacket,$this->_iTimeout);
 
             return;
-        } catch (\Exception $e) {
+
+        }
+        catch (\Exception $e) {
             throw $e;
         }
     }
+
 }
+

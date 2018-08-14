@@ -19,7 +19,7 @@ class CommunicatorConfig
     protected $syncInvokeTimeout = 3000;
     protected $asyncInvokeTimeout = 3000;
     protected $refreshEndpointInterval = 60;
-    protected $reportInterval = 60;
+    protected $reportInterval = 60000;
     protected $stat = 'tars.tarsstat.StatObj';
     protected $property = 'tars.tarsproperty.PropertyObj';
     protected $sampleRate = 0;
