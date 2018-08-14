@@ -103,6 +103,25 @@
             "Tars\\client\\": "src/"
           }
         }
+      },
+      "0.1.4": {
+        "name": "phptars/tars-client",
+        "version": "0.1.4",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-client-0.1.4.zip?raw=true",
+          "type": "zip"
+        },
+        "require": {
+          "php": ">=5.3",
+          "phptars/tars-registry": "~0.1",
+          "phptars/tars-monitor": "^0.1.2",
+          "phptars/tars-utils": "~0.1"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\client\\": "src/"
+          }
+        }
       }
     },
     "phptars/tars-config": {
@@ -296,6 +315,24 @@
             "Tars\\monitor\\": "src/"
           }
         }
+      },
+      "0.1.2": {
+        "name": "phptars/tars-monitor",
+        "version": "0.1.2",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-monitor-0.1.2.zip?raw=true",
+          "type": "zip"
+        },
+        "require":{
+          "php": ">=5.3",
+          "phptars/tars-utils": "~0.1",
+          "phptars/tars-registry": "~0.1"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\monitor\\": "src/"
+          }
+        }
       }
     },
     "phptars/tars-registry": {
@@ -419,6 +456,26 @@
           "phptars/tars-client": "~0.1",
           "phptars/tars-report": "~0.1",
           "phptars/tars-config": "~0.1"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\": "src/"
+          }
+        }
+      },
+      "0.1.4": {
+        "name": "phptars/tars-server",
+        "version": "0.1.4",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-server-0.1.4.zip?raw=true",
+          "type": "zip"
+        },
+        "require": {
+          "php": ">=5.6",
+          "phptars/tars-client": "~0.1",
+          "phptars/tars-report": "~0.1",
+          "phptars/tars-config": "~0.1",
+          "phptars/tars-monitor": "^0.1.2"
         },
         "autoload": {
           "psr-4": {
