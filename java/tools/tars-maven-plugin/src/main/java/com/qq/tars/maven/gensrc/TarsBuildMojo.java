@@ -404,7 +404,7 @@ public class TarsBuildMojo extends AbstractMojo implements Contextualizable {
 
             context.put("CONFIG", configFile.getAbsolutePath());
 
-            StringBuffer suf = new StringBuffer();
+            StringBuilder suf = new StringBuilder();
             for (XMLConfigElement element : elements) {
                 if ("servant".equals(element.getName())) {
                     if (suf.length() > 0) {

@@ -142,7 +142,7 @@ public class EurekaRegisterHandler implements RegisterHandler {
         if (parts.length < 3) {
             return name;
         }
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(parts[0]).append(".").append(parts[1]);
         return buffer.toString();
     }

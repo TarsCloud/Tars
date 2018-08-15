@@ -62,7 +62,7 @@ public final class QueryHelper {
             return null;
         }
 
-        StringBuffer value = new StringBuffer();
+        StringBuilder value = new StringBuilder();
         if (activeEp.value != null && !activeEp.value.isEmpty()) {
             for (EndpointF endpointF : activeEp.value) {
                 if (value.length() > 0) {

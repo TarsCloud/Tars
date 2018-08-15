@@ -289,7 +289,7 @@ public class StringUtils {
             replacement = "";
         }
 
-        StringBuffer dest = new StringBuffer();
+        StringBuilder dest = new StringBuilder();
 
         try {
             maxlen = maxlen - computeDisplayLen(replacement);
