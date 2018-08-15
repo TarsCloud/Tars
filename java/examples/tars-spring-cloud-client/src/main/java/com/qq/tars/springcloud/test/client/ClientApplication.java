@@ -19,7 +19,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
-import com.qq.tars.server.annotation.EnableTarsConfiguration;
+import com.qq.tars.spring.annotation.EnableTarsConfiguration;
 
 @SpringBootApplication
 public class ClientApplication {

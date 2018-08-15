@@ -17,7 +17,7 @@ package com.qq.tars.springcloud.test.client;
 
 import org.springframework.stereotype.Component;
 
-import com.qq.tars.server.annotation.TarsClient;
+import com.qq.tars.spring.annotation.TarsClient;
 
 @Component
 public class Client {

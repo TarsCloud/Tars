@@ -15,12 +15,11 @@
  */
 package com.qq.tars.springcloud.test.server;
 
-import com.qq.tars.server.annotation.EnableTarsConfiguration;
+import com.qq.tars.spring.annotation.EnableTarsConfiguration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @EnableTarsConfiguration

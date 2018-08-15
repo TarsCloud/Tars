@@ -16,55 +16,37 @@
 
 package com.qq.tars.server.apps;
 
-import java.lang.reflect.Constructor;
-import java.util.Map;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.qq.tars.common.util.StringUtils;
 import com.qq.tars.net.core.Processor;
 import com.qq.tars.protocol.annotation.Servant;
 import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.rpc.protocol.Codec;
-import com.qq.tars.server.config.ConfigurationManager;
-import com.qq.tars.server.config.ListenerConfig;
-import com.qq.tars.server.config.ServantAdapterConfig;
-import com.qq.tars.server.config.ServantConfig;
-import com.qq.tars.server.config.ServerConfig;
-import com.qq.tars.server.core.Adapter;
+import com.qq.tars.server.config.*;
 import com.qq.tars.server.core.AppContextListener;
-import com.qq.tars.server.core.AppService;
 import com.qq.tars.server.core.ServantAdapter;
 import com.qq.tars.server.core.ServantHomeSkeleton;
+import com.qq.tars.spring.config.ListenerConfig;
+import com.qq.tars.spring.config.ServantConfig;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.Map;
 
 public class SpringAppContext extends BaseAppContext {
 
     private ApplicationContext applicationContext = null;
 
     public SpringAppContext() {
-        try {
-            initFromConfigFile();
-            injectAdminServant();
-            initServants();
-            appContextStarted();
-            setAppContext();
-            System.out.println("[SERVER] The application started successfully.  {appname=}");
-        } catch (Exception ex) {
-            ready = false;
-            System.err.println("[SERVER] failed to start the applicaton. {appname=}");
-            ex.printStackTrace();
-        }
     }
 
-    private void initFromConfigFile() {
+    @Override
+    protected void loadServants() {
         this.applicationContext = new ClassPathXmlApplicationContext("servants-spring.xml");
 
         loadAppContextListeners(this.applicationContext);
         loadAppServants(this.applicationContext);
         loadDefaultFilter();
         loadAppFilters(this.applicationContext);
-        
     }
 
     private void loadAppContextListeners(ApplicationContext applicationContext) {
@@ -80,51 +62,19 @@ public class SpringAppContext extends BaseAppContext {
     private void loadAppServants(ApplicationContext applicationContext) {
         Map<String, ServantConfig> servantMap = applicationContext.getBeansOfType(ServantConfig.class);
         for (Map.Entry<String, ServantConfig> entry : servantMap.entrySet()) {
-            if (StringUtils.isEmpty(entry.getValue().getProtocol()) || !entry.getValue().getProtocol().equals("rest")) {
-                try {
-                    ServantHomeSkeleton skeleton = loadServant(entry.getValue());
-                    skeletonMap.put(skeleton.name(), skeleton);
-                    appServantStarted(skeleton);
-                } catch (Exception e) {
-                    System.err.println("init a service failed");
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    AppService appService = loadRestServant(entry.getValue());
-                    appServantStarted(appService);
-                } catch (Exception e) {
-                    System.err.println("init a service failed");
-                    e.printStackTrace();
-                }
+            try {
+                ServantHomeSkeleton skeleton = loadServant(entry.getValue());
+                skeletonMap.put(skeleton.name(), skeleton);
+                appServantStarted(skeleton);
+            } catch (Exception e) {
+                System.err.println("init a service failed");
+                e.printStackTrace();
             }
         }
     }
 
     private void loadAppFilters(ApplicationContext applicationContext) {
     	
-    }
-    private AppService loadRestServant(ServantConfig servantConfig) throws Exception {
-        String homeName = servantConfig.getName();
-
-        ServerConfig serverCfg = ConfigurationManager.getInstance().getServerConfig();
-
-        if (StringUtils.isEmpty(homeName)) {
-            throw new RuntimeException("servant name is null.");
-        }
-        homeName = String.format("%s.%s.%s", serverCfg.getApplication(), serverCfg.getServerName(), homeName);
-
-        ServantAdapterConfig servantAdapterConfig = serverCfg.getServantAdapterConfMap().get(homeName);
-
-        Class clazz = Class.forName("com.qq.tars.rest.RestServantAdapter");
-        Constructor constructor = clazz.getConstructor(ServantAdapterConfig.class);
-        Adapter adapter = (Adapter) constructor.newInstance(servantAdapterConfig);
-        RestService restService = new RestService(homeName, servantConfig.getSrc(), this.applicationContext);
-        restService.setAppContext(this);
-        adapter.bind(restService);
-        servantAdapterMap.put(homeName, adapter);
-
-        return null;
     }
 
     private ServantHomeSkeleton loadServant(ServantConfig servantConfig) throws Exception {
@@ -163,9 +113,5 @@ public class SpringAppContext extends BaseAppContext {
         ServerAdapter.bind(skeleton);
         servantAdapterMap.put(homeName, ServerAdapter);
         return skeleton;
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return this.applicationContext;
     }
 }

@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         CommunicatorConfig cfg = new CommunicatorConfig();
         Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(cfg);
-        HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj@tcp -h 127.0.0.1 -p 18600 -t 60000");
+        HelloPrx proxy = communicator.stringToProxy(HelloPrx.class, "TestApp.HelloServer.HelloObj@tcp -h 127.0.0.1 -p 18601 -t 60000");
         //同步调用
         String ret = proxy.hello(1000, "Hello World");
         System.out.println(ret);

@@ -16,10 +16,7 @@
 
 package com.qq.tars.server.apps;
 
-import com.qq.tars.client.rpc.tars.TarsCallbackFilterChain;
-import com.qq.tars.client.rpc.tars.TarsClientFilterChain;
 import com.qq.tars.common.Filter;
-import com.qq.tars.common.FilterChain;
 import com.qq.tars.common.FilterKind;
 import com.qq.tars.rpc.protocol.ext.ExtendedServant;
 import com.qq.tars.rpc.protocol.tars.support.AnalystManager;
@@ -27,7 +24,6 @@ import com.qq.tars.server.config.ConfigurationManager;
 import com.qq.tars.server.config.ServantAdapterConfig;
 import com.qq.tars.server.config.ServerConfig;
 import com.qq.tars.server.core.*;
-import com.qq.tars.server.core.AppContext;
 import com.qq.tars.support.admin.AdminFServant;
 import com.qq.tars.support.admin.impl.AdminFServantImpl;
 import com.qq.tars.support.om.OmConstants;
@@ -35,12 +31,7 @@ import com.qq.tars.support.trace.TraceCallbackFilter;
 import com.qq.tars.support.trace.TraceClientFilter;
 import com.qq.tars.support.trace.TraceServerFilter;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class BaseAppContext implements AppContext {
@@ -57,6 +48,31 @@ public abstract class BaseAppContext implements AppContext {
 
 
     BaseAppContext() {
+    }
+
+    @Override
+    public void init() {
+        try {
+            loadServants();
+            //inject om admin servant
+            injectAdminServant();
+            initServants();
+            appContextStarted();
+            System.out.println("[SERVER] The application started successfully.");
+        } catch (Exception ex) {
+            ready = false;
+            ex.printStackTrace();
+            System.out.println("[SERVER] failed to start the applicaton.");
+        }
+    }
+
+    protected abstract void loadServants() throws Exception;
+
+    @Override
+    public void stop() {
+        for (Adapter servantAdapter : servantAdapterMap.values()) {
+            servantAdapter.stop();
+        }
     }
 
     void injectAdminServant() {
@@ -139,13 +155,6 @@ public abstract class BaseAppContext implements AppContext {
     @Override
     public String name() {
         return "";
-    }
-
-    @Override
-    public void stop() {
-        for (Adapter servantAdapter : servantAdapterMap.values()) {
-            servantAdapter.stop();
-        }
     }
 
     @Override

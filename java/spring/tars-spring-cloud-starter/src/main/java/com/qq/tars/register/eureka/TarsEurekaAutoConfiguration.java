@@ -16,6 +16,7 @@
 
 package com.qq.tars.register.eureka;
 
+import com.qq.tars.spring.TarsConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -38,7 +39,6 @@ import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.DiscoveryClient.DiscoveryClientOptionalArgs;
 import com.netflix.discovery.EurekaClient;
 import com.qq.tars.register.RegisterHandler;
-import com.qq.tars.server.TarsConfiguration;
 
 @Configuration
 @EnableConfigurationProperties({ TarsEurekaClientConfig.class, TarsEurekaInstance.class })
