@@ -114,6 +114,14 @@
         <div class="col-sm-4">
             <input type="text" class="form-control num-input" id="u-async-thread" placeholder="NodeJS的>=1，其他>=3">
         </div>
+		
+        <div class="col-sm-2"><label class="tr wp100 control-label">流量设置</label></div>
+        <div class="col-sm-4">
+            <select name="" id="u-grid_flag" class="form-control">
+                <option value="NORMAL">NORMAL</option>
+                <option value="NO_FLOW">NO_FLOW</option>
+            </select>
+        </div>
     </div>
     <div class="form-group">
         <div class="col-sm-2"><label class="tr wp100 control-label">缺省路径</label></div>
@@ -301,6 +309,7 @@
                 <th>Set组</th>
                 <th>设置状态</th>
                 <th>当前状态</th>
+				<th>流量状态</th>
                 <th>进程ID</th>
                 <th>版本</th>
                 <th>发布时间</th>
@@ -319,11 +328,12 @@
             <td>{{it.set_group}}</td>
             <td>{{if it.setting_state=='active'}}<span class="label label-success">active</span>{{else}}<span class="label label-danger">inactive</span>{{/if}}</td>
             <td class="get_curr_status" data-serviceid="{{it.id}}"></td>
+			<td>{{if it.gridflag=='NORMAL'}}<span class="label label-success">正常</span>{{else}}<span class="label label-danger">无流量</span>{{/if}}</td>
             <td>{{it.process_id}}</td>
             <td>{{it.patch_version}}</td>
             <td>{{it.patch_time}}</td>
             <td>
-                <a href="#;" onclick="updateServer('{{it.id}}','{{it.server_name}}','{{it.node_name}}','{{it.bak_flag}}','{{it.template_name}}','{{it.server_type}}','{{it.enable_set}}','{{it.set_name}}','{{it.set_area}}','{{it.set_group}}','{{it.async_thread_num}}','{{it.base_path}}','{{it.exe_path}}','{{it.start_script_path}}','{{it.stop_script_path}}','{{it.monitor_script_path}}')">编辑</a> |
+                <a href="#;" onclick="updateServer('{{it.id}}','{{it.server_name}}','{{it.node_name}}','{{it.bak_flag}}','{{it.template_name}}','{{it.server_type}}','{{it.enable_set}}','{{it.set_name}}','{{it.set_area}}','{{it.set_group}}','{{it.async_thread_num}}','{{it.base_path}}','{{it.exe_path}}','{{it.start_script_path}}','{{it.stop_script_path}}','{{it.monitor_script_path}}','{{it.gridflag}}')">编辑</a> |
                 <a href="#;" onclick="undeployServer({{it.id}},'{{it.setting_state}}')">下线</a> |
                 <a href="#;" onclick="restartServer({{it.id}})">重启</a> |
                 <a href="#;" onclick="stopServer({{it.id}})">停止</a> |

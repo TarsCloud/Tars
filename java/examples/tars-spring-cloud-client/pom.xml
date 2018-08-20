@@ -4,7 +4,7 @@
 
   <groupId>com.tencent.tars</groupId>
   <artifactId>tars-spring-cloud-client</artifactId>
-  <version>1.4.0</version>
+  <version>1.6.0</version>
   <packaging>war</packaging>
 
   <name>tars-spring-cloud-client</name>
@@ -23,22 +23,22 @@
     <dependency>
       <groupId>com.tencent.tars</groupId>
       <artifactId>tars-core</artifactId>
-      <version>1.4.0</version>
+      <version>1.6.0</version>
     </dependency>
     <dependency>
       <groupId>com.tencent.tars</groupId>
       <artifactId>tars-spring</artifactId>
-      <version>1.4.0</version>
+      <version>1.6.0</version>
     </dependency>
     <dependency>
       <groupId>com.tencent.tars</groupId>
       <artifactId>tars-protobuf</artifactId>
-      <version>1.4.0</version>
+      <version>1.6.0</version>
     </dependency>
         <dependency>
       <groupId>com.tencent.tars</groupId>
       <artifactId>tars-spring-cloud-starter</artifactId>
-      <version>1.4.0</version>
+      <version>1.6.0</version>
     </dependency>
   </dependencies>
 </project>

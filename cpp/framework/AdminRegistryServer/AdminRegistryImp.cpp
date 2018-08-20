@@ -687,6 +687,69 @@ int AdminRegistryImp::getClientIp(std::string &sClientIp,tars::TarsCurrentPtr cu
     return 0;
 }
 
+int AdminRegistryImp::gridPatchServer(const vector<ServerGridDesc> &gridDescList, vector<ServerGridDesc> &gridFailDescList, std::string & resultDesc, tars::TarsCurrentPtr current)
+{
+	TLOGDEBUG(__FUNCTION__ << "|gridDescList size:" << gridDescList.size() << endl);
+
+	int iRet = 0;
+
+	try
+	{
+		gridFailDescList.clear();
+
+		for(size_t i = 0; i < gridDescList.size(); ++i)
+		{
+			if(gridDescList[i].application != "" && gridDescList[i].servername != "" && gridDescList[i].nodename != "")
+			{
+				string status("");
+
+				if(gridDescList[i].status == NORMAL)
+				{
+					status = "NORMAL";
+				}
+				else if(gridDescList[i].status == GRID)
+				{
+					status = "GRID";
+				}
+				else
+				{
+					status = "NO_FLOW";
+				}
+
+				int ret = _db.gridPatchServer(gridDescList[i].application, gridDescList[i].servername, gridDescList[i].nodename, status);
+
+				if(ret < 0)
+				{	
+					gridFailDescList.push_back(gridDescList[i]);
+					iRet = -1;
+					TLOGERROR(__FUNCTION__ << "|app:" << gridDescList[i].application << "|servername:" << gridDescList[i].servername << "|node:" << gridDescList[i].nodename  << "|state:" << status << "|ret:" << ret << endl);
+					DLOG<<__FUNCTION__ << "|app:" << gridDescList[i].application << "|servername:" << gridDescList[i].servername << "|node:" << gridDescList[i].nodename  << "|state:" << status << "|ret:" << ret << endl;
+				}
+				else
+				{
+					TLOGDEBUG(__FUNCTION__ << "|app:" << gridDescList[i].application << "|servername:" << gridDescList[i].servername << "|node:" << gridDescList[i].nodename  << "|state:" << status << "|ret:" << ret << endl);
+					DLOG<<__FUNCTION__ << "|app:" << gridDescList[i].application << "|servername:" << gridDescList[i].servername << "|node:" << gridDescList[i].nodename  << "|state:" << status << "|ret:" << ret << endl;
+				}
+			}
+			else
+			{
+				TLOGERROR(__FUNCTION__ << "|app:" << gridDescList[i].application << "|servername:" << gridDescList[i].servername << "|node:" << gridDescList[i].nodename << endl);
+				DLOG<<__FUNCTION__ << "|app:" << gridDescList[i].application << "|servername:" << gridDescList[i].servername << "|node:" << gridDescList[i].nodename << endl;
+			}
+		}
+
+		return iRet;
+	}
+	catch(exception & ex)
+	{
+		iRet = EM_TARS_UNKNOWN_ERR;
+		resultDesc = string(__FUNCTION__) + "|exception:" + ex.what();
+		TLOGERROR(resultDesc << endl);
+		DLOG<<resultDesc << endl;
+	}
+    
+    return iRet;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void PatchProCallbackImp::callback_patchPro(tars::Int32 ret,

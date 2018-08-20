@@ -52,6 +52,7 @@ public class UpdateServer {
     private String monitorScriptPath;
 
     private String profile;
+    private String gridflag;
 
     public long getId() {
         return id;
@@ -171,5 +172,11 @@ public class UpdateServer {
 
     public void setProfile(String profile) {
         this.profile = profile;
+    }
+    public String getGridflag() {
+    	return gridflag;
+    }
+    public void setGridflag(String gridflag) {
+    	this.gridflag = gridflag;
     }
 }

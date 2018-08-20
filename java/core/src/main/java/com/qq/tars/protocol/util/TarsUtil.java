@@ -390,7 +390,7 @@ public final class TarsUtil {
         if (size == 0) {
             return "empty";
         }
-        StringBuffer out = new StringBuffer((in.remaining() * 3) - 1);
+        StringBuilder out = new StringBuilder((in.remaining() * 3) - 1);
         int mark = in.position();
         int byteValue = in.get() & 0xFF;
         out.append((char) highDigits[byteValue]);

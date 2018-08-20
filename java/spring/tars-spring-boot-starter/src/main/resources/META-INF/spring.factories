@@ -1,0 +1,3 @@
+org.springframework.context.ApplicationListener=\
+com.qq.tars.spring.bean.ManageServiceListener,\
+com.qq.tars.spring.bean.PropertiesListener

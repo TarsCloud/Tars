@@ -148,7 +148,7 @@ public class Platform {
 
     public String getClassPath(List<? extends ClasspathElement> classpath) throws Exception {
 
-        StringBuffer classpathBuffer = new StringBuffer();
+        StringBuilder classpathBuffer = new StringBuilder();
 
         for (ClasspathElement classpathElement : classpath) {
             if (classpathBuffer.length() > 0) {

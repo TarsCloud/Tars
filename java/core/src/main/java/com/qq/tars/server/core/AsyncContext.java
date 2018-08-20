@@ -16,19 +16,15 @@
 
 package com.qq.tars.server.core;
 
-import java.io.IOException;
-
 import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
-import com.qq.tars.server.apps.AppContextImpl;
 import com.qq.tars.support.log.Logger;
 import com.qq.tars.support.log.Logger.LogType;
 
+import java.io.IOException;
+
 public final class AsyncContext {
-
-    private static final AppContainer container = ContainerManager.getContainer(AppContainer.class);
-
     public static final String PORTAL_CAP_ASYNC_CONTEXT_ATTRIBUTE = "internal.asynccontext";
 
     private Context<TarsServantRequest, TarsServantResponse> context = null;
@@ -47,7 +43,7 @@ public final class AsyncContext {
     }
 
     private ServantHomeSkeleton getCapHomeSkeleton() {
-        AppContext appContext = container.getDefaultAppContext();
+        AppContext appContext = AppContextManager.getInstance().getAppContext();
         return appContext.getCapHomeSkeleton(this.context.request().getServantName());
     }
 

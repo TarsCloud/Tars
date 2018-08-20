@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.qq.tars.spring.config.TarsClientProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.ContextStoppedEvent;
@@ -31,7 +32,7 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.appinfo.InstanceInfo.InstanceStatus;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
-import com.qq.tars.client.config.TarsClientProperties;
+
 import com.qq.tars.register.RegisterHandler;
 import com.qq.tars.support.query.prx.EndpointF;
 
@@ -142,7 +143,7 @@ public class EurekaRegisterHandler implements RegisterHandler {
         if (parts.length < 3) {
             return name;
         }
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(parts[0]).append(".").append(parts[1]);
         return buffer.toString();
     }

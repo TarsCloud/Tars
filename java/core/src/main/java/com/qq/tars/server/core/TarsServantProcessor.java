@@ -16,10 +16,6 @@
 
 package com.qq.tars.server.core;
 
-import java.util.List;
-import java.util.Random;
-
-import com.qq.tars.common.AbstractFilterChain;
 import com.qq.tars.common.Filter;
 import com.qq.tars.common.FilterChain;
 import com.qq.tars.common.FilterKind;
@@ -38,7 +34,6 @@ import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.rpc.exc.TarsException;
 import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
-import com.qq.tars.server.apps.AppContextImpl;
 import com.qq.tars.server.config.ConfigurationManager;
 import com.qq.tars.server.config.ServantAdapterConfig;
 import com.qq.tars.server.config.ServerConfig;
@@ -47,6 +42,9 @@ import com.qq.tars.support.log.Logger.LogType;
 import com.qq.tars.support.om.OmServiceMngr;
 import com.qq.tars.support.stat.InvokeStatHelper;
 import com.qq.tars.support.trace.TraceManager;
+
+import java.util.List;
+import java.util.Random;
 
 public class TarsServantProcessor extends Processor {
 

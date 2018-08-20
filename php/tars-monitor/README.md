@@ -22,16 +22,38 @@
 * socketMode 设置为 1 使用 socket 方式进行上报
    socketMode 设置为 2 使用 swoole tcp client方式进行上报（需要swoole支持）
    socketMode 设置为 3 使用 swoole tcp coroutine client协程方式进行上报（需要swoole2.0以上支持）
-* reportInterval 为 定时上报间隔
-* enableTimer 为 是否开启定时上报
 
-> 启用定时上报需要 swoole_table支持，开启定时上报后，调用addStat上报信息会暂存到swoole_table中，服务会搜集一段时间内统一打包上报，可以减少上报请求
+#### 定时上报(默认)
+> 使用定时上报需要 swoole_table支持，通过调用addStat将上报信息暂存，tars-server的task进程会搜集一段时间内（上报时间间隔由服务器下发，一般为60s）统一打包上报，可以减少上报请求
 ```php
 $locator = "tars.tarsregistry.QueryObj@tcp -h 172.16.0.161 -p 17890";
 $socketMode = 1;
 $statfWrapper  = new \Tars\monitor\StatFWrapper($locator,$socketMode);  
-$statfWrapper->monitorStat("PHPTest.helloTars.obj","test","172.16.0.116",51003,200,0,0);  
-$statfWrapper->monitorStat("PHPTest.helloTars.obj","test","172.16.0.116",51003,200,0,0);  
+$statfWrapper->addStat("PHPTest.helloTars.obj","test","172.16.0.116",51003,200,0,0);  
+$statfWrapper->addStat("PHPTest.helloTars.obj","test","172.16.0.116",51003,200,0,0);  
+$statfWrapper->addStat("PHPTest.helloTars.obj","test","172.16.0.116",51003,200,0,0);
+```
+
+上报数据可使用多种存储方式，cache中提供了`swoole_table`与`redis`的实现方式，用户也可以自己实现`contract/StoreCacheInterface`，配置存储方式参考demo `tars-http-server` 中`src/services.php` 的配置。
+```php
+return array(
+    'namespaceName' => 'HttpServer\\',
+    'monitorStoreConf' => [
+        'className' => Tars\monitor\cache\SwooleTableStoreCache::class,
+        'config' => []
+    ]
+);
+```
+`monitorStoreConf` 为存储方式的配置，其中`className`为实现类，`config` 为对应的配置，如使用redis存储方式时，config中需要配置redis的host、port、以及key的前缀等。
+未配置`monitorStoreConf`时默认使用`SwooleTableStoreCache`进行存储。
+
+
+#### 单次上报
+> 同时`tars-monitor`也提供了单次上报的接口`monitorStat`，即每次tars请求调用均会进行一次上报，该方式不建议使用
+```php
+$locator = "tars.tarsregistry.QueryObj@tcp -h 172.16.0.161 -p 17890";
+$socketMode = 1;
+$statfWrapper  = new \Tars\monitor\StatFWrapper($locator,$socketMode);  
 $statfWrapper->monitorStat("PHPTest.helloTars.obj","test","172.16.0.116",51003,200,0,0);
 ```
 

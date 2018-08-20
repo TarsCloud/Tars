@@ -17,9 +17,7 @@
 package com.qq.tars.springcloud.test.server;
 
 
-import com.qq.tars.common.support.Holder;
-import com.qq.tars.protocol.tars.annotation.TarsHolder;
-import com.qq.tars.server.annotation.TarsServant;
+import com.qq.tars.spring.annotation.TarsServant;
 
 @TarsServant(name="HelloObj")
 public class HelloServantImpl implements HelloServant {

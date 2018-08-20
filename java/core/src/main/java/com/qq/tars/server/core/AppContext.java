@@ -33,6 +33,7 @@ public interface AppContext {
     public ServantHomeSkeleton getCapHomeSkeleton(String homeName);
     
     public List<Filter> getFilters(FilterKind kind);
-    
+
+    public void init();
 }
 

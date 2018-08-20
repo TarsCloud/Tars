@@ -25,7 +25,6 @@ import com.qq.tars.net.core.Session;
 import com.qq.tars.rpc.exc.TarsException;
 import com.qq.tars.rpc.protocol.ext.ExtendedServantRequest;
 import com.qq.tars.rpc.protocol.ext.ExtendedServantResponse;
-import com.qq.tars.server.apps.AppContextImpl;
 import com.qq.tars.server.config.ConfigurationManager;
 import com.qq.tars.support.om.OmServiceMngr;
 
@@ -39,12 +38,11 @@ public abstract class ExtendedServantProcessor<RES extends ExtendedServantReques
 
     @Override
     public Response process(Request req, Session session) {
-        AppContainer container = null;
         RES request = null;
         RESP response = null;
 
         ServantHomeSkeleton skeleton = null;
-        AppContextImpl appContext = null;
+        AppContext appContext = null;
         ClassLoader oldClassLoader = null;
         int waitingTime = -1;
         long startTime = req.getProcessTime();
@@ -64,21 +62,15 @@ public abstract class ExtendedServantProcessor<RES extends ExtendedServantReques
             }
 
             // 3. Register the context for the business layer.
-            container = ContainerManager.getContainer(AppContainer.class);
+            appContext = AppContextManager.getInstance().getAppContext();
+            if (appContext == null) throw new RuntimeException("failed to find the application named:[ROOT]");
             Context<?, ?> context = ContextManager.registerContext(request, response);
             context.setAttribute(Context.INTERNAL_START_TIME, startTime);
             context.setAttribute(Context.INTERNAL_CLIENT_IP, session.getRemoteIp());
-            context.setAttribute(Context.INTERNAL_APP_NAME, container.getDefaultAppContext().name());
+            context.setAttribute(Context.INTERNAL_APP_NAME, appContext.name());
             context.setAttribute(Context.INTERNAL_SERVICE_NAME, request.getServantName());
             context.setAttribute(Context.INTERNAL_METHOD_NAME, request.getFunctionName());
             context.setAttribute(Context.INTERNAL_SESSION_DATA, session);
-
-            // 4. Get the AppContext
-            appContext = (AppContextImpl) container.getDefaultAppContext();
-            if (appContext == null) throw new RuntimeException("failed to find the application named:[ROOT]");
-
-            // 5. Set the AppClassLoader
-            Thread.currentThread().setContextClassLoader(appContext.getAppContextClassLoader());
 
             // 6. Find the skeleton
             skeleton = servantAdapter.getSkeleton();

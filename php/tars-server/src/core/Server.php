@@ -10,6 +10,7 @@ namespace Tars\core;
 
 use Tars\Consts;
 use Tars\config\ConfigServant;
+use Tars\monitor\StatFWrapper;
 use Tars\protocol\ProtocolFactory;
 use Tars\report\ServerFSync;
 use Tars\report\ServerInfo;
@@ -224,6 +225,7 @@ class Server
                     'port' => $result['port'],
                     'timeout' => $result['timeout'],
                     'objName' => $result['objName'],
+                    'client' => $this->tarsConfig['tars']['application']['client']
                 ], 0);
         }
     }
@@ -265,6 +267,23 @@ class Server
                     $adminServerInfo->pid = $masterPid;
                     $serverF->keepAlive($adminServerInfo);
                 });
+
+                //主调定时上报
+                $locator = $data['client']['locator'];
+                $socketMode = 2;
+                $statServantName = $data['client']['stat'];
+                $reportInterval = $data['client']['report-interval'];
+                \swoole_timer_tick($reportInterval,
+                    function () use ($locator, $socketMode, $statServantName, $serverName, $reportInterval) {
+                        try {
+                            $statFWrapper = new StatFWrapper($locator, $socketMode, $statServantName, $serverName,
+                                $reportInterval);
+                            $statFWrapper->sendStat();
+                        } catch (\Exception $e) {
+                            var_dump((string) $e);
+                        }
+                    });
+
                 break;
             }
             default:{

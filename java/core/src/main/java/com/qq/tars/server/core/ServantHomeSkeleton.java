@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
 
 import com.qq.tars.net.core.Processor;
 import com.qq.tars.rpc.protocol.Codec;
-import com.qq.tars.server.apps.AppContextImpl;
 
 public class ServantHomeSkeleton extends AppService {
 

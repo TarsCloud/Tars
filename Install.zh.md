@@ -250,18 +250,53 @@ mvn clean install -f core/server.pom.xml
 通过IDE或者maven创建一个maven web项目，
 这里以eclipse为例，File -> New -> Project -> Maven Project -> maven-archetype-webapp，再输入groupId、artifactId，生成完成之后可以通过eclipse进行导入，目录结构如下
 
-![tars](docs/images/tars_java_evn1.png)
+```
+├── pom.xml
+└── src
+   ├── main
+   │   ├── java
+   │   │   └── tars
+   │   ├── resources
+   │   └── webapp
+   └── test
+       ├── java
+       └── resources
+```
 
 
 增加Maven依赖配置
 使用Tars框架时，需要依赖框架提供的jar包依赖，以及工具插件。在工程项目pom.xml文件中增加如下依赖配置。
 框架依赖配置
-
-![tars](docs/images/tars_java_evn2.png)
+```xml
+<dependency>
+	<groupId>com.tencent.tars</groupId>
+     <artifactId>tars-server</artifactId>
+     <version>1.4.0</version>
+     <type>jar</type>
+</dependency>
+```
 
 插件依赖配置
 
-![tars](docs/images/tars_java_evn3.png)
+```xml
+<plugin>
+	<groupId>com.tencent.tars</groupId>
+   	<artifactId>tars-maven-plugin</artifactId>
+   	<version>1.4.0</version>
+  	<configuration>
+   		<tars2JavaConfig>
+  			<tarsFiles>
+   				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+   			</tarsFiles>
+  			<tarsFileCharset>UTF-8</tarsFileCharset>
+   			<servant>true</servant>
+  			<srcPath>${basedir}/src/main/java</srcPath>
+  			<charset>UTF-8</charset>
+   			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
+  		</tars2JavaConfig>
+   	</configuration>
+</plugin>
+```
 
 ## 2.3. c++ 开发环境安装
 下载tars源码，首先进入cpp/thirdparty目录，执行thirdparty.sh脚本，下载依赖的rapidjson

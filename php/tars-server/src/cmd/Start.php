@@ -10,6 +10,7 @@ namespace Tars\cmd;
 
 use Tars\Conf;
 use Tars\core\Server;
+use Tars\monitor\StatFWrapper;
 
 class Start extends CommandBase
 {
@@ -59,6 +60,11 @@ class Start extends CommandBase
         // 把配置对应的swooleTable对象设置到swoole serv里,从而全局使用
         $table = Conf::getInstance();
         $server = new Server($tarsConfig, $table);
+
+        $monitorStoreClassName = isset($servicesInfo['monitorStoreConf']['className']) ? $servicesInfo['monitorStoreConf']['className'] : \Tars\monitor\cache\SwooleTableStoreCache::class;
+        $monitorStoreConfig = isset($servicesInfo['monitorStoreConf']['config']) ? $servicesInfo['monitorStoreConf']['config'] : [];
+        $storeCache = new $monitorStoreClassName($monitorStoreConfig);
+        StatFWrapper::initStoreCache($storeCache);
 
         //创建成功
         echo "{$name} start  \033[32;40m [SUCCESS] \033[0m".PHP_EOL;

@@ -84,10 +84,10 @@
        "name" : "tars-http-server-demo",
        "description": "tars http server",
        "require": {
-           "phptars/tars-server": "0.1.0",
-           "phptars/tars-deploy": "0.1.0",
-           "phptars/tars2php": "0.1.0",
-           "phptars/tars-log": "0.1.0",
+           "phptars/tars-server": "~0.1.0",
+           "phptars/tars-deploy": "~0.1.0",
+           "phptars/tars2php": "~0.1.0",
+           "phptars/tars-log": "~0.1.0",
            "ext-zip" : ">=0.0.1"
        },
        "autoload": {
@@ -132,14 +132,29 @@ $class->run();
 这个文件负责进行启动和入口加载工作
 
 5. 新建services.php文件,内容如下:
-```
-<?php
-// 以namespace的方式,在psr4的框架下对代码进行加载
-return array(
-    'namespaceName' => 'HttpServer\\',
-);
-```
-namespaceName为业务实际使用的namespaceName,必须与composer.json中的配置相互对应
+```  
+<?php  
+// 以namespace的方式,在psr4的框架下对代码进行加载  
+return array(  
+ 'namespaceName' => 'HttpServer\\', 
+ 'monitorStoreConf' => [
+	 //'className' => Tars\monitor\cache\RedisStoreCache::class,
+	 //'config' => [
+		// 'host' => '127.0.0.1',  
+		// 'port' => 6379,  
+		// 'password' => ':'
+	 //],
+	 'className' => Tars\monitor\cache\SwooleTableStoreCache::class,
+	 'config' => [
+		 'size' => 40960
+	 ]
+ ]
+);  
+```  
+namespaceName为业务实际使用的namespaceName,必须与composer.json中的配置相互对应  
+monitorStoreConf为主调上报信息的存储配置
+ - *className* 为主调上报信息的存储实现类的类名，默认为 *\Tars\monitor\cache\SwooleTableStoreCache::class*  使用*swoole_table*存储，*tars-monitor*中还提供了*redis*的存储方式，用户也可以自定义新的实现，但是必须实现 *\Tars\monitor\contract\StoreCacheInterface* 接口 
+ - *config* 为主调上报信息的存储实现类的配置信息，在实现类初始化时作为参数传入，默认对应*swoole_table*的size
 
 6. composer install,加载对应的依赖包
 

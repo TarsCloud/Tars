@@ -79,7 +79,7 @@
             <div class="col-sm-3"><label class="checkbox-inline"> <input type="checkbox" id="enable-set" name="enable_set"> 启用Set</label></div>
             <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set名,全英文小写" title="Set名,全英文小写" name="set_name" id="set-name" disabled></div>
             <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set地区,全英文小写" title="Set地区,全英文小写" name="set_area" id="set-area" disabled></div>
-            <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set组名,数字或*号" title="Set组名,数字或*号" name="set_group" id="set-group" disabled></div>
+            <div class="col-sm-3"><input type="text" class="form-control" placeholder="Set组名,数字或*号或英文字母，且必须小写" title="Set组名,数字或*号或英文字母，且必须小写" name="set_group" id="set-group" disabled></div>
         </div>
     </div>
 </form>
@@ -96,7 +96,7 @@
                 <th>线程数<span class="text-danger">*</span></th>
                 <th>最大连接数<span class="text-danger">*</span></th>
                 <th>队列最大长度<span class="text-danger">*</span></th>
-                <th>队列超时(ms)<span class="text-danger">*</span></th>
+                <th>队列超时时间(ms)<span class="text-danger">*</span></th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -262,8 +262,8 @@
                 showErrorMsg($('#main_title'),'Set组名不能为空');
                 return;
             }
-            if(!/^(\d+|\*)$/.test(paramObj.set_group)){
-                showErrorMsg($('#main_title'),'Set组名只能是数字或*号');
+            if(!/^([a-z]+|\d+|\*)$/.test(paramObj.set_group)){
+                showErrorMsg($('#main_title'),'Set组名只能是数字或*号或英文字母，且必须小写');
                 return;
             }
         }else{

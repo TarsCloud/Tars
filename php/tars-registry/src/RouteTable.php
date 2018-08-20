@@ -12,9 +12,9 @@ class RouteTable
     // routeInfo由一个结构体组成
     private function __construct()
     {
-        //100个服务,每个长度30*5 需要15000个字节,这里申请64k
-        self::$_swooleTable = new \swoole_table(65536);
-        self::$_swooleTable->column('routeInfo', \swoole_table::TYPE_STRING, 300);
+        //100个服务,每个长度1000 需要100000个字节,这里申请256k
+        self::$_swooleTable = new \swoole_table(262144);
+        self::$_swooleTable->column('routeInfo', \swoole_table::TYPE_STRING, 1000);
         self::$_swooleTable->column('timestamp', \swoole_table::TYPE_INT, 4);
         self::$_swooleTable->create();
     }

@@ -89,7 +89,8 @@
             stop_script_path    = #{stopScriptPath},
             monitor_script_path = #{monitorScriptPath},
             profile             = #{profile},
-            posttime            = #{posttime}
+            posttime            = #{posttime},
+	    grid_flag           = #{gridflag}
         WHERE
             id = #{id}
     </update>

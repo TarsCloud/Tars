@@ -1,4 +1,4 @@
-[µãÎÒ²é¿´ÖĞÎÄ°æ](Install.zh.md)
+[ç‚¹æˆ‘æŸ¥çœ‹ä¸­æ–‡ç‰ˆ](Install.zh.md)
 
 # Contents
 > * [Environment Dependence](#chapter-1)
@@ -16,15 +16,15 @@ If you use Tars for production environment, the deployment steps is similar, but
 Software | Software requirements
 ------|--------
 linux kernel version:   |	2.6.18 or later (Dependent OS)
-gcc version:            |   4.8.2 or later¡¢glibc-devel£¨Dependent c++ framework tools£©
-bison version:          |	2.5 or later£¨Dependent c++ framework tools£©
-flex version:           |	2.5 or later£¨Dependent c++ framework tools£©
-cmake version:          |   2.8.8 or later£¨Dependent c++ framework tools£©
-resin version:          |   4.0.49 or later£¨Dependent web management system£©
-Java JDK version:       | 	JDK1.6 or later; For web management system,£¨JDK 1.8 or later£©
-Maven version:          |   2.2.1 or later web management system¡¢dependency of java framework£©
-mysql version:          |   4.1.17 or later£¨dependency of framework running£©
-rapidjson version:      |   1.0.2 or later£¨dependency of C++ framework£©
+gcc version:            |   4.8.2 or laterã€glibc-develï¼ˆDependent c++ framework toolsï¼‰
+bison version:          |	2.5 or laterï¼ˆDependent c++ framework toolsï¼‰
+flex version:           |	2.5 or laterï¼ˆDependent c++ framework toolsï¼‰
+cmake version:          |   2.8.8 or laterï¼ˆDependent c++ framework toolsï¼‰
+resin version:          |   4.0.49 or laterï¼ˆDependent web management systemï¼‰
+Java JDK version:       | 	JDK1.6 or later; For web management system,ï¼ˆJDK 1.8 or laterï¼‰
+Maven version:          |   2.2.1 or later web management systemã€dependency of java frameworkï¼‰
+mysql version:          |   4.1.17 or laterï¼ˆdependency of framework runningï¼‰
+rapidjson version:      |   1.0.2 or laterï¼ˆdependency of C++ frameworkï¼‰
 
 Hardware requirements: a machine running Linux.
 
@@ -183,7 +183,7 @@ show slave status\G;
 
 # 2. <a id="chapter-2"></a>Install develop environment for Tars
 ## 2.1. Install develop environment for web management system
-For linux£º
+For linuxï¼š
 Download JDK, unzip and install.
 
 Configure environment.
@@ -241,18 +241,54 @@ mvn clean install -f core/server.pom.xml
 
 ```
 Build web project
-Use IDE or maven to create a maven web project, use eclipse as example, choose File -> New -> Project -> Maven Project -> maven-archetype-webapp£¬then enter groupId, artifactId£¬when finished use eclipse to import, the directory architecture is as following:
+Use IDE or maven to create a maven web project, use eclipse as example, choose File -> New -> Project -> Maven Project -> maven-archetype-webappï¼Œthen enter groupId, artifactIdï¼Œwhen finished use eclipse to import, the directory architecture is as following:
 
-![tars](docs/images/tars_java_evn1.png)
+```
+â”œâ”€â”€ pom.xml
+â””â”€â”€ src
+   â”œâ”€â”€ main
+   â”‚   â”œâ”€â”€ java
+   â”‚   â”‚   â””â”€â”€ tars
+   â”‚   â”œâ”€â”€ resources
+   â”‚   â””â”€â”€ webapp
+   â””â”€â”€ test
+       â”œâ”€â”€ java
+       â””â”€â”€ resources
+```
 
 
 Add dependency configuration in Maven
 
-![tars](docs/images/tars_java_evn2.png)
+```xml
+<dependency>
+	<groupId>com.tencent.tars</groupId>
+     <artifactId>tars-server</artifactId>
+     <version>1.4.0</version>
+     <type>jar</type>
+</dependency>
+```
 
 Plugin dependency configuration
 
-![tars](docs/images/tars_java_evn3.png)
+```xml
+<plugin>
+	<groupId>com.tencent.tars</groupId>
+   	<artifactId>tars-maven-plugin</artifactId>
+   	<version>1.4.0</version>
+  	<configuration>
+   		<tars2JavaConfig>
+  			<tarsFiles>
+   				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
+   			</tarsFiles>
+  			<tarsFileCharset>UTF-8</tarsFileCharset>
+   			<servant>true</servant>
+  			<srcPath>${basedir}/src/main/java</srcPath>
+  			<charset>UTF-8</charset>
+   			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
+  		</tars2JavaConfig>
+   	</configuration>
+</plugin>
+```
 
 ## 2.3. Install develop environment for C++
 Download tars source, change to directory `cpp/thirdparty`, execute `thirdparty.sh` script to download rapidjson.
@@ -284,9 +320,9 @@ installation
 cd {$source_folder}/cpp/build
 ./build.sh install or make install
 ```
-**The default install path is /usr/local/tars/cpp¡£**
+**The default install path is /usr/local/tars/cppã€‚**
 
-**If you want to install on different path£º**
+**If you want to install on different pathï¼š**
 ```
 **modify build/CMakeLists.txt**
 **modify TARS_PATH in servant/makefile/makefile.tars**
@@ -337,7 +373,7 @@ The other is basic general service, must be patched by management system.
 The basic core services: 
 tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig, tarspatch
 The basic general services:
-tarsstat, tarsproperty,tarsnotify, tarslog£¬tarsquerystat£¬tarsqueryproperty
+tarsstat, tarsproperty,tarsnotify, tarslogï¼Œtarsquerystatï¼Œtarsqueryproperty
 ```
 First get the core services package, change to cpp/build directory and input:
 ```
@@ -464,7 +500,7 @@ upload.tgz.path=/usr/local/app/patchs/tars.upload/
 ```
 
 - tars.conf  
-   Substitute registry1.tars.com£¬registry2.tars.com with real ip, concatenate multiple address with colon.
+   Substitute registry1.tars.comï¼Œregistry2.tars.com with real ip, concatenate multiple address with colon.
 
 ```xml
 <tars>
@@ -533,7 +569,7 @@ By default, tarsnofity is ready when install core basic service:
 
 ![tars](docs/images/tars_tarsnotify_bushu_en.png)
 
-Upload patch package£º
+Upload patch packageï¼š
 
 ![tars](docs/images/tars_tarsnotify_patch_en.png)
 
@@ -543,7 +579,7 @@ Deploy message:
 
 ![tars](docs/images/tars_tarsstat_bushu_en.png)
 
-Upload patch package£º
+Upload patch packageï¼š
 
 ![tars](docs/images/tars_tarsstat_patch_en.png)
 
@@ -553,7 +589,7 @@ Deployment message:
 
 ![tars](docs/images/tars_tarsproperty_bushu_en.png)
 
-Upload patch package£º
+Upload patch packageï¼š
 
 ![tars](docs/images/tars_tarsproperty_patch_en.png)
 
@@ -563,7 +599,7 @@ Deployment message:
 
 ![tars](docs/images/tars_tarslog_bushu_en.png)
 
-Upload patch package£º
+Upload patch packageï¼š
 
 ![tars](docs/images/tars_tarslog_patch_en.png)
 
@@ -575,7 +611,7 @@ Deployment message:
 
 **Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**
 
-Upload patch package£º
+Upload patch packageï¼š
 
 ![tars](docs/images/tars_tarsquerystat_patch_en.png)
 
@@ -587,6 +623,6 @@ Deployment message:
 
 **Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**
 
-Upload patch package£º
+Upload patch packageï¼š
 
 ![tars](docs/images/tars_tarsqueryproperty_patch_en.png)

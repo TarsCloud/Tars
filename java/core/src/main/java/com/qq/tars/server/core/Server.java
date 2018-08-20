@@ -38,24 +38,23 @@ import com.qq.tars.support.om.OmServiceMngr;
 
 public class Server {
 
-    private Container container = null;
-    private int sessionTimeOut;
-    private int sessionCheckInterval;
+    private AppContext appContext = null;
+    private ServerConfig serverConfig;
 
-    public Server() {
-        loadServerConfig();
+    public Server(ServerConfig config) {
+        this.serverConfig = config;
     }
 
-    public void startUp(String args[]) {
+    public void startUp(AppContext appContext) {
         try {
 
-            initCommunicator();
+//            initCommunicator();
+//
+//            configLogger();
+//
+//            startManagerService();
 
-            configLogger();
-
-            startManagerService();
-
-            startAppContainer();
+            startAppContext(appContext);
 
             startSessionManager();
 
@@ -71,25 +70,23 @@ public class Server {
         }
     }
 
-    protected void startAppContainer() throws Exception {
-        this.container = new AppContainer();
-        ContainerManager.registerContainer(this.container);
-        this.container.start();
+    private void startAppContext(AppContext appContext) throws Exception {
+        AppContextManager.getInstance().setAppContext(appContext);
+        this.appContext = appContext;
+        appContext.init();
     }
 
-    private void startManagerService() {
+    public static void startManagerService() {
         OmServiceMngr.getInstance().initAndStartOmService();
     }
 
-    private void initCommunicator() {
+    public static void initCommunicator() {
         CommunicatorConfig config = ConfigurationManager.getInstance().getServerConfig().getCommunicatorConfig();
         Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(config);
         BeanAccessor.setBeanValue(CommunicatorFactory.getInstance(), "communicator", communicator);
     }
 
-    private void configLogger() {
-        Communicator communicator = CommunicatorFactory.getInstance().getCommunicator();
-
+    public static void configLogger() {
         String objName = ConfigurationManager.getInstance().getServerConfig().getLog();
         String appName = ConfigurationManager.getInstance().getServerConfig().getApplication();
         String serviceName = ConfigurationManager.getInstance().getServerConfig().getServerName();
@@ -98,19 +95,36 @@ public class Server {
         String defaultRoot = ConfigurationManager.getInstance().getServerConfig().getLogPath();
         String dataPath = ConfigurationManager.getInstance().getServerConfig().getDataPath();
 
-        LoggerFactory.config(communicator, objName, appName, serviceName, defaultLevel, defaultRoot);
+        LoggerFactory.config(CommunicatorFactory.getInstance().getCommunicator()
+                , objName, appName, serviceName, defaultLevel, defaultRoot);
 
         LogConfCacheMngr.getInstance().init(dataPath);
         if (StringUtils.isNotEmpty(LogConfCacheMngr.getInstance().getLevel())) {
             LoggerFactory.setDefaultLoggerLevel(LogConfCacheMngr.getInstance().getLevel());
         }
+
         ServerLogger.init();
     }
 
-    protected void startSessionManager() throws IOException {
+    public static void loadServerConfig() {
+        try {
+            ConfigurationManager.getInstance().init();
+
+            ServerConfig cfg = ConfigurationManager.getInstance().getServerConfig();
+            ServerLogger.initNamiCoreLog(cfg.getLogPath(), cfg.getLogLevel());
+            System.setProperty("com.qq.nami.server.udp.bufferSize", String.valueOf(cfg.getUdpBufferSize()));
+            System.setProperty("server.root", cfg.getBasePath());
+        } catch (Throwable ex) {
+            ex.printStackTrace(System.err);
+            System.err.println("The exception occured at load server config");
+            System.exit(2);
+        }
+    }
+
+    private void startSessionManager() throws IOException {
         SessionManager sessionManager = SessionManager.getSessionManager();
-        sessionManager.setTimeout(sessionTimeOut);
-        sessionManager.setCheckInterval(sessionCheckInterval);
+        sessionManager.setTimeout(serverConfig.getSessionTimeOut());
+        sessionManager.setCheckInterval(serverConfig.getSessionCheckInterval());
 
         int connCount = 0;
         for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getServerConfig().getServantAdapterConfMap().entrySet()) {
@@ -125,32 +139,14 @@ public class Server {
         sessionManager.start();
     }
 
-    protected void loadServerConfig() {
-        try {
-            ConfigurationManager.getInstance().init();
-
-            ServerConfig cfg = ConfigurationManager.getInstance().getServerConfig();
-            ServerLogger.initNamiCoreLog(cfg.getLogPath(), cfg.getLogLevel());
-            System.setProperty("com.qq.nami.server.udp.bufferSize", String.valueOf(cfg.getUdpBufferSize()));
-            System.setProperty("server.root", cfg.getBasePath());
-
-            sessionTimeOut = cfg.getSessionTimeOut();
-            sessionCheckInterval = cfg.getSessionCheckInterval();
-        } catch (Throwable ex) {
-            ex.printStackTrace(System.err);
-            System.err.println("The exception occured at load server config");
-            System.exit(2);
-        }
-    }
-
     private void registerServerHook() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             @Override
             public void run() {
                 try {
-                    if (container != null) {
-                        container.stop();
+                    if (appContext != null) {
+                        appContext.stop();
                     }
                 } catch (Exception ex) {
                     System.err.println("The exception occured at stopping server...");
