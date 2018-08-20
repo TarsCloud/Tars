@@ -171,7 +171,8 @@ public @interface TarsClient {
 1. 管理平台需要重新编译升级。
 2. tars-node需要升级到新版本。
 3. 模板选择需要选tars.tarsjava.springboot模版。如果不是重新搭建环境可自行添加模板，父模板选择tars.tarsjava.default，内容如下：
-> <tars>
+```
+<tars>
 <application>
 <server>
 packageFormat=jar
@@ -179,3 +180,4 @@ mainclass=-jar ${basepath}/${app}.${server}.jar
 </server>
 </application>
 </tars>
+```
