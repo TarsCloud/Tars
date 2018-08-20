@@ -170,4 +170,12 @@ public @interface TarsClient {
 如需使用tars-spring-boot的新功能需要将tars升级到1.5.0版本及以上版本，本次改动相对较大，附上版本升级指南：
 1. 管理平台需要重新编译升级。
 2. tars-node需要升级到新版本。
-3. 模板选择需要选tars.tarsjava.springboot模版
+3. 模板选择需要选tars.tarsjava.springboot模版。如果不是重新搭建环境可自行添加模板，父模板选择tars.tarsjava.default，内容如下：
+> <tars>
+<application>
+<server>
+packageFormat=jar
+mainclass=-jar ${basepath}/${app}.${server}.jar
+</server>
+</application>
+</tars>
