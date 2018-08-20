@@ -88,6 +88,12 @@ public class UploadController extends WrappedController {
                 // 发布包上传目录中的发布包文件名
                 String uploadTgzName = application + "." + moduleName + "_" + packageType + "_" + System.currentTimeMillis() + ".tgz";
 
+                if(originalName.endsWith(".jar")){
+                	uploadTgzName = application + "." + moduleName + "_" + packageType + "_" + System.currentTimeMillis() + ".jar";
+                }
+                if(originalName.endsWith(".war")){
+                	uploadTgzName = application + "." + moduleName + "_" + packageType + "_" + System.currentTimeMillis() + ".jar";
+                }
                 // 发布包上传目录中的发布包文件路径
                 String uploadTgzFullPath = updateTgzPath + "/" + uploadTgzName;
 
