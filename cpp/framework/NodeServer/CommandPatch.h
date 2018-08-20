@@ -352,6 +352,8 @@ inline int CommandPatch::execute(string &sResult)
                         <<"|"<<sResult << "|" << iRet << endl;
                 iRet -= 100;
             }
+            
+
         }
         else
         {
@@ -365,6 +367,8 @@ inline int CommandPatch::execute(string &sResult)
                         <<"|"<<sResult << "|" << iRet << endl;
                 iRet -= 100;
             }
+            
+
         }
 
         string sLocalTgzFile = sLocalTgzPath + "/" + sShortFile;
@@ -401,19 +405,31 @@ inline int CommandPatch::execute(string &sResult)
         }
 
         //解压
-        string cmd,sLocalTgzFile_bak;
-		if (_serverObjectPtr->getServerType() == "tars_java") //如果是tars_java，使用war 方法
+        //
 
+        TC_Config conf;
+        conf.parseFile(_serverObjectPtr->getConfigFile());
+	string packageFormat= conf.get("/tars/application/server<packageFormat>","war");
+        string cmd,sLocalTgzFile_bak;
+        if (_serverObjectPtr->getServerType() == "tars_java") //如果是tars_java，使用war 方法
         {
-            sLocalTgzFile_bak=TC_Common::replace(sLocalTgzFile,".tgz",".war");
-            cmd +=" mv "+sLocalTgzFile+" "+sLocalTgzFile_bak+";";
-            cmd += "unzip -oq  " + sLocalTgzFile_bak+ " -d "+ sLocalExtractPach+"/"+sServerName;
+            //NODE_LOG("patchPro")->error() <<"tgz file name"<<FILE_FUN<<sLocalTgzFile<<endl;
+	       if(packageFormat=="jar")
+	       {
+	           sLocalTgzFile_bak=TC_Common::replace(sLocalTgzFile,".tgz",".jar"); 
+		   cmd +=" mv "+sLocalTgzFile+" "+sLocalTgzFile_bak+";";
+	       }
+	       else
+	       {
+                    sLocalTgzFile_bak=TC_Common::replace(sLocalTgzFile,".tgz",".war");
+                    cmd +=" mv "+sLocalTgzFile+" "+sLocalTgzFile_bak+";";
+                    cmd += "unzip -oq  " + sLocalTgzFile_bak+ " -d "+ sLocalExtractPach+"/"+sServerName;
+               }
         }
-		else
-		{
-			cmd = "tar xzfv " + sLocalTgzFile + " -C " + sLocalExtractPach;
-		}	
-      //  string cmd = "tar xzfv " + sLocalTgzFile + " -C " + sLocalExtractPach;
+        else
+        {
+                 cmd = "tar xzfv " + sLocalTgzFile + " -C " + sLocalExtractPach;
+        }	
         if(iRet == 0)
         {
             system(cmd.c_str());
@@ -421,13 +437,16 @@ inline int CommandPatch::execute(string &sResult)
              * 有可能system这里解压失败了，
              * 这里通过遍历解压目录下有没有文件来判断是否解压成功,因为解压之前这个目录是空的
              */
-            vector<string> files;
-            tars::TC_File::listDirectory(sLocalExtractPach, files, true);
-            if(files.empty())
-            {
-                sResult = cmd + ",error!";
-                NODE_LOG("patchPro")->error() <<FILE_FUN<<sResult<< endl;
-                iRet = -6;
+            if(packageFormat!="jar")
+	    {
+               vector<string> files;
+               tars::TC_File::listDirectory(sLocalExtractPach, files, true);
+               if(files.empty())
+               {
+                   sResult = cmd + ",error!";
+                   NODE_LOG("patchPro")->error() <<FILE_FUN<<sResult<< endl;
+                   iRet = -6;
+                }
             }
         }
 
@@ -436,18 +455,21 @@ inline int CommandPatch::execute(string &sResult)
             NODE_LOG("patchPro")->debug() << FILE_FUN << "unzip:" << cmd <<endl;
 
             //移动目录重新命名文件
-            string sSrcFile     = sLocalExtractPach + "/" + sServerName + "/" + sServerName;
-            string sDstFile     = sLocalExtractPach + "/" + sServerName + "/" + _patchRequest.servername;
+               if(packageFormat!="jar")
+       {
+                 string sSrcFile     = sLocalExtractPach + "/" + sServerName + "/" + sServerName;
+                 string sDstFile     = sLocalExtractPach + "/" + sServerName + "/" + _patchRequest.servername;
 
-            rename(sSrcFile.c_str(), sDstFile.c_str());
-            NODE_LOG("patchPro")->debug() <<FILE_FUN<< "rename:" << sSrcFile << " " << sDstFile << endl;
+                 rename(sSrcFile.c_str(), sDstFile.c_str());
+                 NODE_LOG("patchPro")->debug() <<FILE_FUN<< "rename:" << sSrcFile << " " << sDstFile << endl;
 
             //检查是否需要备份bin目录下的文件夹，针对java服务
-            if(backupfiles(sResult) != 0)
-            {
-                NODE_LOG("patchPro")->error() << FILE_FUN << sResult << endl;
-                iRet = -7;
-            }
+                if(backupfiles(sResult) != 0)
+                {
+                   NODE_LOG("patchPro")->error() << FILE_FUN << sResult << endl;
+                   iRet = -7;
+                }
+           }
         }
 
         //对于tars_nodejs需要先删除exepath下的文件
@@ -472,7 +494,16 @@ inline int CommandPatch::execute(string &sResult)
             else 
             { 
                 //如果出错，这里会抛异常
-                TC_File::copyFile(sLocalExtractPach + "/" + sServerName, _serverObjectPtr->getExePath(), true); 
+                if(packageFormat!="jar")
+	        {
+                        TC_File::copyFile(sLocalExtractPach + "/" + sServerName, _serverObjectPtr->getExePath(), true); 
+                }
+		else
+		 {
+		       //	TC_File::copyFile( sLocalTgzFile_bak , _serverObjectPtr->getExePath(), true);
+			  string  cpCmd =" cp -f "+sLocalTgzFile_bak+" "+_serverObjectPtr->getExePath()+";";
+			  system(cpCmd.c_str());
+		 }
             }
 
             //设置发布状态到主控
