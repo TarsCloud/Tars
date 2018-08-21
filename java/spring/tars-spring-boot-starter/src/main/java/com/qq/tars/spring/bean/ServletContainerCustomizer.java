@@ -16,7 +16,6 @@
 
 package com.qq.tars.spring.bean;
 
-import com.qq.tars.rpc.exc.TarsException;
 import com.qq.tars.server.config.ConfigurationManager;
 import com.qq.tars.server.config.ServantAdapterConfig;
 import com.qq.tars.server.config.ServerConfig;
@@ -28,6 +27,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.annotation.AnnotationUtils;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 public class ServletContainerCustomizer implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>, ApplicationContextAware {
@@ -42,6 +43,7 @@ public class ServletContainerCustomizer implements WebServerFactoryCustomizer<Co
     public void customize(ConfigurableServletWebServerFactory factory) {
         Map<String, Object> beans = applicationContext.getBeansWithAnnotation(TarsHttpService.class);
         int port = 8080;
+        String host = null;
         ServerConfig serverCfg = ConfigurationManager.getInstance().getserverConfig();
 
         try {
@@ -50,19 +52,24 @@ public class ServletContainerCustomizer implements WebServerFactoryCustomizer<Co
                 String homeName = String.format("%s.%s.%s", serverCfg.getApplication(), serverCfg.getServerName(), objName);
 
                 ServantAdapterConfig adapterConfig = ConfigurationManager.getInstance()
-                        .getserverConfig().getServantAdapterConfMap().get(homeName);
+                        .getServerConfig().getServantAdapterConfMap().get(homeName);
 
-                if (adapterConfig.getProtocol().equals("tars")) {
-                    throw new TarsException("[TARS] http servant can not use tars protocol");
-                }
                 port = adapterConfig.getEndpoint().port();
+                host = adapterConfig.getEndpoint().host();
             }
         } catch (Exception e) {
             System.err.println("[TARS] load http servant failed");
             e.printStackTrace();
         }
 
-        factory.setPort(port);
+        if (host != null) {
+            try {
+                factory.setAddress(InetAddress.getByName(host));
+                factory.setPort(port);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        }
 
         System.out.println("[TARS] http server start at " + port);
     }
