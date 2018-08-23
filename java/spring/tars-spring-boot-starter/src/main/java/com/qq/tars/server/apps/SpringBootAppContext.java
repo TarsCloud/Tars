@@ -29,6 +29,7 @@ import com.qq.tars.server.core.ServantAdapter;
 import com.qq.tars.server.core.ServantHomeSkeleton;
 import com.qq.tars.spring.annotation.TarsListener;
 import com.qq.tars.spring.annotation.TarsServant;
+import org.springframework.aop.framework.Advised;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
@@ -95,7 +96,13 @@ public class SpringBootAppContext extends BaseAppContext {
             throw new RuntimeException("servant name is null.");
         }
         homeName = String.format("%s.%s.%s", serverCfg.getApplication(), serverCfg.getServerName(), homeName);
-        for (Class clazz : bean.getClass().getInterfaces()) {
+        Class implClass = bean.getClass();
+
+        if (bean instanceof Advised) {
+            implClass = ((Advised) bean).getTargetSource().getTargetClass();
+        }
+
+        for (Class clazz : implClass.getInterfaces()) {
             if (clazz.isAnnotationPresent(Servant.class)) {
                 homeApiClazz = clazz;
                 break;
