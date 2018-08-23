@@ -9,6 +9,8 @@
 // 以namespace的方式,在psr4的框架下对代码进行加载
 return array(
     'namespaceName' => 'HttpServer\\',
+    'saveTarsConfigFileDir' => 'src/conf/', //从tarsconfig拉下来的文件保存目录 默认src目录下的conf
+    'saveTarsConfigFileName' => [ '',], //需要从tarsconfig拉下来的文件名 在web上配置
     'monitorStoreConf' => [
         //使用redis缓存主调上报信息
         //'className' => Tars\monitor\cache\RedisStoreCache::class,
