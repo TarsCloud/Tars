@@ -482,6 +482,26 @@
             "Tars\\": "src/"
           }
         }
+      },
+      "0.1.5": {
+        "name": "phptars/tars-server",
+        "version": "0.1.4",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-server-0.1.5.zip?raw=true",
+          "type": "zip"
+        },
+        "require": {
+          "php": ">=5.6",
+          "phptars/tars-client": "~0.1",
+          "phptars/tars-report": "~0.1",
+          "phptars/tars-config": "~0.1",
+          "phptars/tars-monitor": "^0.1.2"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\": "src/"
+          }
+        }
       }
     },
     "phptars/tars-utils": {
