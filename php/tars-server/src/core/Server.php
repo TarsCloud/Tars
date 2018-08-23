@@ -157,6 +157,9 @@ class Server
 
         // 初始化的一次上报
         $this->keepaliveinit();
+
+        //拉取配置
+        $this->loadTarsConfig();
     }
 
     public function onManagerStart($server)
@@ -376,6 +379,50 @@ class Server
         $event->onRequest($req, $resp);
 
         $req->unsetGlobal();
+    }
+
+    //拉取配置到指定目录
+    public function loadTarsConfig(){
+        try{
+            $servicesInfo = $this->servicesInfo;
+            if( !empty($servicesInfo) && isset($servicesInfo['saveTarsConfigFileDir']) && isset($servicesInfo['saveTarsConfigFileName']) ){
+                $fileNameArr = array_filter($servicesInfo['saveTarsConfigFileName']);
+                $app = $this->tarsConfig['tars']['application']['server']['app'];
+                $server = $this->tarsConfig['tars']['application']['server']['server'];
+
+                if( !empty($fileNameArr) && $app!='' && $server!='' ){
+                    $config = new \Tars\client\CommunicatorConfig();
+                    $locator = $this->tarsConfig['tars']['application']['client']['locator'];
+                    $moduleName = $this->tarsConfig['tars']['application']['client']['modulename'];
+                    $config->setLocator($locator);
+                    $config->setModuleName($moduleName);
+                    $config->setSocketMode(2);
+
+                    $conigServant = new \Tars\config\ConfigServant($config);
+
+                    foreach ( $fileNameArr as $filename ){
+                        $savefile = $filename;
+                        if( substr($filename,0,1) != DIRECTORY_SEPARATOR ){
+                            //相对路径转绝对路径
+                            $basePath = $this->tarsConfig['tars']['application']['server']['basepath'];
+                            $savefile = $basePath.$servicesInfo['saveTarsConfigFileDir'].$filename;
+                        }
+
+                        $configStr = '';
+                        $conigServant->loadConfig($app, $server, $filename, $configStr);
+                        if( $configStr!='' ){ //保存文件
+                            $file = fopen($savefile, "w");
+                            fwrite($file, $configStr);
+                            fclose($file);
+                            var_dump("loadTarsConfig success : ".$savefile);
+                        }
+                    }
+                }
+            }
+        }catch (\Exception $e){
+            var_dump((string) $e);
+            return false;
+        }
     }
 
     // 这个东西需要单列出去
