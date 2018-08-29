@@ -21,7 +21,7 @@ class StatFWrapper
     protected $_reportInterval;
     protected $_cache;
     /** @var  StoreCacheInterface */
-    protected static $cacheInstance;
+    protected static $cacheInstance = null;
 
 
     public function __construct(
@@ -47,6 +47,11 @@ class StatFWrapper
     public static function initStoreCache(StoreCacheInterface $storeCache)
     {
         self::$cacheInstance = $storeCache;
+    }
+
+    public static function getStoreCache()
+    {
+        return self::$cacheInstance;
     }
 
     /**
@@ -80,6 +85,9 @@ class StatFWrapper
         $slaveSetID = ''
     ) {
         $table = $this->_cache;
+        if (!$table instanceof StoreCacheInterface) {
+            return $this->monitorStat(...func_get_args());
+        }
         $timeSlice = $this->getTimeSlice($this->_reportInterval);
         $headInfo = compact('masterName', 'slaveName', 'interfaceName', 'masterIp', 'slaveIp', 'slavePort',
             'returnValue', 'slaveSetName', 'slaveSetArea', 'slaveSetID', 'tarsVersion', 'timeSlice');

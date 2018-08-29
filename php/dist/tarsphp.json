@@ -333,6 +333,24 @@
             "Tars\\monitor\\": "src/"
           }
         }
+      },
+      "0.1.3": {
+        "name": "phptars/tars-monitor",
+        "version": "0.1.3",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/Tencent/Tars/master/php/dist/phptars-tars-monitor-0.1.3.zip?raw=true",
+          "type": "zip"
+        },
+        "require":{
+          "php": ">=5.3",
+          "phptars/tars-utils": "~0.1",
+          "phptars/tars-registry": "~0.1"
+        },
+        "autoload": {
+          "psr-4": {
+            "Tars\\monitor\\": "src/"
+          }
+        }
       }
     },
     "phptars/tars-registry": {
