@@ -6,14 +6,14 @@
 #
 # Copyright (C) 2016THL A29 Limited, a Tencent company. All rights reserved.
 #
-# Licensed under the BSD 3-Clause License (the "License"); you may not use this file except 
+# Licensed under the BSD 3-Clause License (the "License"); you may not use this file except
 # in compliance with the License. You may obtain a copy of the License at
 #
 # https://opensource.org/licenses/BSD-3-Clause
 #
-# Unless required by applicable law or agreed to in writing, software distributed 
-# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
-# CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+# Unless required by applicable law or agreed to in writing, software distributed
+# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+# CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
 #
 
@@ -28,8 +28,9 @@ import select
 import errno
 import threading
 
-from __logger       import tarsLogger
+from __logger import tarsLogger
 from __TimeoutQueue import ReqMessage
+
 
 class EndPointInfo:
     '''
@@ -37,10 +38,20 @@ class EndPointInfo:
     '''
     SOCK_TCP = 'TCP'
     SOCK_UDP = 'UDP'
-    def __init__(self, ip = '', port = 0, connType = SOCK_TCP):
+
+    def __init__(self,
+                 ip='',
+                 port=0,
+                 timeout=-1,
+                 weight=0,
+                 weightType=0,
+                 connType=SOCK_TCP):
         self.__ip = ip
         self.__port = port
+        self.__timeout = timeout
         self.__connType = connType
+        self.__weightType = weightType
+        self.__weight = weight
 
     def getIp(self):
         return self.__ip
@@ -55,8 +66,15 @@ class EndPointInfo:
         '''
         return self.__connType
 
+    def getWeightType(self):
+        return self.__weightType
+
+    def getWeight(self):
+        return self.__weight
+
     def __str__(self):
-        return '%s %s:%s' % (self.__connType, self.__ip, self.__port)
+        return '%s %s:%s %d:%d' % (self.__connType, self.__ip, self.__port, self.__weightType, self.__weight)
+
 
 class Transceiver:
     '''
@@ -65,6 +83,7 @@ class Transceiver:
     CONNECTED = 0
     CONNECTING = 1
     UNCONNECTED = 2
+
     def __init__(self, endPointInfo):
         tarsLogger.debug('Transceiver:__init__, %s', endPointInfo)
         self.__epi = endPointInfo
@@ -109,7 +128,7 @@ class Transceiver:
         @return: 是否创建了socket
         @rtype: bool
         '''
-        return self.__sock != None
+        return self.__sock is not None
 
     def hasConnected(self):
         '''
@@ -179,10 +198,10 @@ class Transceiver:
         '''
         self._sendBuff += msg
 
-    def recv(self, bufsize, flag = 0):
+    def recv(self, bufsize, flag=0):
         raise NotImplementedError()
 
-    def send(self, buf, flag = 0):
+    def send(self, buf, flag=0):
         raise NotImplementedError()
 
     def doResponse(self):
@@ -209,6 +228,7 @@ class Transceiver:
             else:
                 break
 
+        # 发送前面的字节后将后面的字节拷贝上来
         self._sendBuff = buf[nbytes:]
         return nbytes
 
@@ -219,7 +239,7 @@ class Transceiver:
         @rtype: int
         '''
         tarsLogger.debug('Transceiver:reInit')
-        assert(self.isValid() == False)
+        assert(self.isValid() is False)
         if self.__epi.getConnType() != EndPointInfo.SOCK_TCP:
             return -1
         try:
@@ -233,11 +253,11 @@ class Transceiver:
                 self.__connStatus = Transceiver.CONNECTING
             else:
                 tarsLogger.info('reInit, %s, faild!, %s',
-                               self.__epi, msg)
+                                self.__epi, msg)
                 self.__sock = None
                 return -1
         tarsLogger.info('reInit, connect: %s, fd: %d',
-                       self.__epi, self.getFd())
+                        self.__epi, self.getFd())
         return 0
 
 
@@ -245,7 +265,8 @@ class TcpTransceiver(Transceiver):
     '''
     @brief: TCP传输实现
     '''
-    def send(self, buf, flag = 0):
+
+    def send(self, buf, flag=0):
         '''
         @brief: 实现tcp的发送
         @param buf: 发送的数据
@@ -263,16 +284,16 @@ class TcpTransceiver(Transceiver):
         try:
             nbytes = self.getSock().send(buf, flag)
             tarsLogger.info('tcp send, fd: %d, %s, len: %d',
-                      self.getFd(), self.getEndPointInfo(), nbytes)
+                            self.getFd(), self.getEndPointInfo(), nbytes)
         except socket.error, msg:
             if msg.errno != errno.EAGAIN:
                 tarsLogger.error('tcp send, fd: %d, %s, fail!, %s, close',
-                          self.getFd(), self.getEndPointInfo(), msg)
+                                 self.getFd(), self.getEndPointInfo(), msg)
                 self.close()
                 return 0
         return nbytes
 
-    def recv(self, bufsize, flag = 0):
+    def recv(self, bufsize, flag=0):
         '''
         @brief: 实现tcp的recv
         @param bufsize: 接收大小
@@ -290,18 +311,18 @@ class TcpTransceiver(Transceiver):
             buf = self.getSock().recv(bufsize, flag)
             if len(buf) == 0:
                 tarsLogger.info('tcp recv, fd: %d, %s, recv 0 bytes, close',
-                          self.getFd(), self.getEndPointInfo())
+                                self.getFd(), self.getEndPointInfo())
                 self.close()
                 return None
         except socket.error, msg:
             if msg.errno != errno.EAGAIN:
                 tarsLogger.info('tcp recv, fd: %d, %s, faild!, %s, close',
-                          self.getFd(), self.getEndPointInfo(), msg)
+                                self.getFd(), self.getEndPointInfo(), msg)
                 self.close()
                 return None
 
         tarsLogger.info('tcp recv, fd: %d, %s, nbytes: %d',
-                       self.getFd(), self.getEndPointInfo(), len(buf))
+                        self.getFd(), self.getEndPointInfo(), len(buf))
         return buf
 
     def doResponse(self):
@@ -322,7 +343,7 @@ class TcpTransceiver(Transceiver):
             bufs.append(buf)
         self._recvBuf = ''.join(bufs)
         tarsLogger.info('tcp doResponse, fd: %d, recvbuf: %d',
-                       self.getFd(), len(self._recvBuf))
+                        self.getFd(), len(self._recvBuf))
 
         if not self._recvBuf:
             return None
@@ -339,16 +360,20 @@ class TcpTransceiver(Transceiver):
 
         return rsplist
 
+
 class FDReactor(threading.Thread):
     '''
     @brief: 监听FD事件并解发注册的handle
     '''
+
     def __init__(self):
         tarsLogger.debug('FDReactor:__init__')
-        threading.Thread.__init__(self)
+        # threading.Thread.__init__(self)
+        super(FDReactor, self).__init__()
         self.__terminate = False
         self.__ep = None
         self.__shutdown = None
+        # {fd : adapterproxy}
         self.__adapterTab = {}
 
     def __del__(self):
@@ -367,8 +392,10 @@ class FDReactor(threading.Thread):
         tarsLogger.debug('FDReactor:initialize')
         self.__ep = select.epoll()
         self.__shutdown = socket.socket()
-        self.__ep.register(self.__shutdown.fileno(), select.EPOLLET | select.EPOLLIN)
-        tarsLogger.debug('FDReactor init, shutdown fd : %d', self.__shutdown.fileno())
+        self.__ep.register(self.__shutdown.fileno(),
+                           select.EPOLLET | select.EPOLLIN)
+        tarsLogger.debug('FDReactor init, shutdown fd : %d',
+                         self.__shutdown.fileno())
 
     def terminate(self):
         '''
@@ -400,13 +427,13 @@ class FDReactor(threading.Thread):
 
             if events & (select.EPOLLERR | select.EPOLLHUP):
                 tarsLogger.debug('FDReactor::handle EPOLLERR or EPOLLHUP: %s',
-                                adapter.trans().getEndPointInfo())
+                                 adapter.trans().getEndPointInfo())
                 adapter.trans().close()
                 return
 
             if adapter.shouldCloseTrans():
                 tarsLogger.debug('FDReactor::handle should close trans: %s',
-                                adapter.trans().getEndPointInfo())
+                                 adapter.trans().getEndPointInfo())
                 adapter.setCloseTrans(False)
                 adapter.trans().close()
                 return
@@ -456,7 +483,7 @@ class FDReactor(threading.Thread):
         '''
         tarsLogger.debug('FDReactor:handleOutput')
         if not adapter.trans().isValid():
-            return ;
+            return
         while adapter.trans().doRequest() >= 0 and adapter.sendRequest():
             pass
 
@@ -515,8 +542,10 @@ class FDReactor(threading.Thread):
             try:
                 eplist = self.__ep.poll(1)
                 if eplist:
-                    tarsLogger.debug('FDReactor run get eplist : %s, terminate : %s', str(eplist), self.__terminate)
+                    tarsLogger.debug('FDReactor run get eplist : %s, terminate : %s', str(
+                        eplist), self.__terminate)
                 if self.__terminate:
+                    tarsLogger.debug('FDReactor terminate')
                     break
                 for fd, events in eplist:
                     adapter = self.__adapterTab.get(fd, None)
@@ -528,9 +557,10 @@ class FDReactor(threading.Thread):
 
         tarsLogger.debug('FDReactor:run finished')
 
+
 if __name__ == '__main__':
     print 'hello world'
-    epi = EndPointInfo('127.0.0.1', 1313, EndPointInfo.SOCK_TCP)
+    epi = EndPointInfo('127.0.0.1', 1313)
     print epi
     trans = TcpTransceiver(epi)
     print trans.getSock()
