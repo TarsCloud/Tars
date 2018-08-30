@@ -356,13 +356,13 @@ class TARSProtocol implements Protocol
                 // 如果是结构体
                 if ($type === 'map' || $type === 'vector') {
                     $$protoName = $this->createInstance($outParam['proto']);
-                    $args[] = &$$protoName;
+                    $args[] = $$protoName;
                 } elseif ($type === 'struct') {
                     $$protoName = new $outParam['proto']();
-                    $args[] = &$$protoName;
+                    $args[] = $$protoName;
                 } else {
                     $protoName = null;
-                    $args[] = &$protoName;
+                    $args[] = $protoName;
                 }
             }
 

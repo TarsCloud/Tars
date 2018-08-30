@@ -105,6 +105,10 @@ class Event
             return;
         }
         $obj = new $class($request, $response);
-        $obj->$fun();
+        if (method_exists(($class), ('run'))) {
+            $obj->run($fun);
+        } else {
+            $obj->$fun();
+        }
     }
 }
