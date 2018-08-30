@@ -18,7 +18,7 @@ static std::string GenMethods(const ::google::protobuf::MethodDescriptor* method
 
     out += "virtual " + pkg + "::" + method->output_type()->name() + " " + method->name() +
            "(const " + pkg + "::" + method->input_type()->name() + "& , tars::TarsCurrentPtr current) = 0;" + LineFeed(indent);
-    out += "static void async_response_" + method->name() + "(tars::TarsCurrentPtr current, const TestApp::PbResponse &_ret)" + LineFeed(indent);
+    out += "static void async_response_" + method->name() + "(tars::TarsCurrentPtr current, const " + pkg + "::" + method->output_type()->name() + "&_ret)" + LineFeed(indent);
     out += "{" + LineFeed(++indent);
     out += "std::string _os;" + LineFeed(indent) +
            " _ret.SerializeToString(&_os);" + LineFeed(indent) + 
