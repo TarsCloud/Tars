@@ -572,6 +572,15 @@ void TC_EpollServer::BindAdapter::setProtocol(const TC_EpollServer::protocol_fun
 
     _iHeaderLen = iHeaderLen;
 }
+    
+void TC_EpollServer::BindAdapter::setConnProtocol(const TC_EpollServer::conn_protocol_functor& cpf, int iHeaderLen, const TC_EpollServer::header_filter_functor &hf) 
+{
+    _cpf = cpf; 
+
+    _hf = hf;
+
+    _iHeaderLen = iHeaderLen;
+}
 
 TC_EpollServer::protocol_functor& TC_EpollServer::BindAdapter::getProtocol()
 {
