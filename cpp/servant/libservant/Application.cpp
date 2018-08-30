@@ -844,6 +844,31 @@ void Application::addServantProtocol(const string& servant, const TC_EpollServer
     getEpollServer()->getBindAdapter(adapterName)->setProtocol(protocol);
 }
 
+void Application::addServantConnProtocol(const string& servant, const TC_EpollServer::conn_protocol_functor& protocol)
+{
+    string adapterName = ServantHelperManager::getInstance()->getServantAdapter(servant);
+
+    if (adapterName.empty())
+    {
+        throw runtime_error("[TAF]addServantConnProtocol fail, no found adapter for servant:" + servant);
+    }
+
+    getEpollServer()->getBindAdapter(adapterName)->setConnProtocol(protocol);
+}
+
+void Application::addServantOnClose(const string& servant, const TC_EpollServer::close_functor& cf)
+{
+    string adapterName = ServantHelperManager::getInstance()->getServantAdapter(servant);
+
+    if (adapterName.empty())
+    {
+        throw runtime_error("[TAF]setServantOnClose fail, no found adapter for servant:" + servant);
+    }
+
+    getEpollServer()->getBindAdapter(adapterName)->setOnClose(cf);
+}
+
+
 void Application::initializeServer()
 {
     cout << OUT_LINE << "\n" << outfill("[server config]:") << endl;

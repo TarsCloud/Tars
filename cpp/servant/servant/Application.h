@@ -342,6 +342,17 @@ protected:
      */
     void addServantProtocol(const string& servant, const TC_EpollServer::protocol_functor& protocol);
 
+    /**
+     * 非taf协议server，设置Servant的协议解析器,带有连接信息
+     * @param protocol
+     * @param servant
+     */
+    void addServantConnProtocol(const string& servant, const TC_EpollServer::conn_protocol_functor& protocol);
+    /**
+     *设置Servant的连接断开回调
+     */
+    void addServantOnClose(const string& servant, const TC_EpollServer::close_functor& f);
+
 protected:
     /**
      * 读取基本信息
