@@ -89,6 +89,7 @@ public:
      */
     using protocol_functor = std::function<int (string&, string&)>;
     using header_filter_functor = std::function<int (int, string&)>;
+    using conn_protocol_functor = std::function<int (string&, string&, void*)>;
 
     class NetThread;
 
@@ -334,6 +335,8 @@ public:
 
     };
 
+
+    using close_functor = std::function<void (void*, EM_CLOSE_T )>;
     using auth_process_wrapper_functor = std::function<bool (void*, const std::string& )>;
 
     ////////////////////////////////////////////////////////////////////////////
@@ -682,7 +685,19 @@ public:
          * 获取服务端回包缓存的大小限制
          */
         size_t getBackPacketBuffLimit();
-
+        /**  
+         * 设置close回调函数 
+         */
+        void setOnClose(const close_functor& f) { _closeFunc = f; } 
+        /**  
+         * 注册协议解析器 
+         */
+        void setConnProtocol(const conn_protocol_functor& cpf, int iHeaderLen = 0, const header_filter_functor& hf = echo_header_filter);
+        /**  
+         * 获取协议解析器 
+         * @return conn_protocol_functor& 
+         */
+        conn_protocol_functor& getConnProtocol() { return _cpf; }
         /**
          * 注册鉴权包裹函数
          * @param apwf
@@ -819,6 +834,12 @@ public:
          */
         std::string                 _accessKey;
         std::string                 _secretKey;
+        
+        //连接关闭的回调函数 
+        close_functor           _closeFunc;
+
+        // 协议解析
+        conn_protocol_functor   _cpf;
     };
 
     ////////////////////////////////////////////////////////////////////////////
