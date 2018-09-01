@@ -52,7 +52,7 @@ class QueryFWrapper
 
             // 这里你能起一个定时器么,i think not, 但是可以起swooletable
             // 然后在server里面轮询,再去刷swooletable里面缓存的数据
-            if (class_exists('swoole_table')) {
+            if (class_exists('swoole_table') && php_sapi_name() !== "apache" && php_sapi_name() !== "fpm-fcgi") {
                 RouteTable::getInstance();
                 RouteTable::setRouteInfo($id, $routeInfo);
             }

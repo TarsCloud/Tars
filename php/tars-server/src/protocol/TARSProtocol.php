@@ -179,7 +179,6 @@ class TARSProtocol implements Protocol
                 // 完成所有的打包之后,开始编码
                 $cPacketType = 0;
                 $iMessageType = 0;
-                $iRequestId = 1; // 使用协程的id
                 $statuses = [];
 
                 $servantName = $unpackResult['sServantName'];

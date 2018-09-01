@@ -452,7 +452,7 @@ class TUPAPIWrapper
         }
     }
 
-    public function getMap($name, $tag, $obj, $sBuffer, $iVersion)
+    public static function getMap($name, $tag, $obj, $sBuffer, $iVersion)
     {
         try {
             if ($iVersion === Consts::TARSVERSION) {
