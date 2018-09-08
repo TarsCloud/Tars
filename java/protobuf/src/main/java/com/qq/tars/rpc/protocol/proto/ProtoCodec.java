@@ -16,7 +16,9 @@
 
 package com.qq.tars.rpc.protocol.proto;
 
-import com.google.protobuf.GeneratedMessage;
+import java.util.List;
+
+import com.google.protobuf.Message;
 import com.qq.tars.common.util.Constants;
 import com.qq.tars.net.protocol.ProtocolException;
 import com.qq.tars.protocol.tars.support.TarsMethodInfo;
@@ -25,8 +27,6 @@ import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.rpc.protocol.tars.TarsCodec;
 import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
-
-import java.util.List;
 
 public class ProtoCodec extends TarsCodec {
     public ProtoCodec(String charsetName) {
@@ -41,7 +41,7 @@ public class ProtoCodec extends TarsCodec {
             return result;
         }
 
-        result = ((GeneratedMessage) response.getResult()).toByteArray();
+        result = ((Message) response.getResult()).toByteArray();
         return result;
     }
 
@@ -49,9 +49,9 @@ public class ProtoCodec extends TarsCodec {
     protected byte[] encodeRequestParams(TarsServantRequest request, String charsetName) throws ProtocolException {
         Object[] parameter = request.getMethodParameters();
         if (TarsHelper.isCallback(request.getMethodInfo().getParametersList().get(0).getAnnotations())) {
-            return ((GeneratedMessage) parameter[1]).toByteArray();
+            return ((Message) parameter[1]).toByteArray();
         }
-        return ((GeneratedMessage) parameter[0]).toByteArray();
+        return ((Message) parameter[0]).toByteArray();
     }
 
     @Override
