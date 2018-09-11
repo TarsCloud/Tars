@@ -65,7 +65,7 @@ def doCmdIgnoreException(cmd):
 def getCommProperties(paramsKey):
     baseDir = getBaseDir()
     cf = ConfigParser.ConfigParser()
-    propertiesDir =baseDir+"/tars_deploy/comm.properties"
+    propertiesDir =baseDir+"/deploy/comm.properties"
     cf.read(propertiesDir)
     log.info(" commProperties is {} ".format(propertiesDir))
     cf.sections()
