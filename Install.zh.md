@@ -19,11 +19,10 @@ gcc版本:          	|   4.8.2及以上版本、glibc-devel（c++语言框架依
 bison工具版本:      |	2.5及以上版本（c++语言框架依赖）
 flex工具版本:       |	2.5及以上版本（c++语言框架依赖）
 cmake版本：       	|   2.8.8及以上版本（c++语言框架依赖）
-resin版本：       	|   4.0.49及以上版本（web管理系统依赖）
-Java JDK版本：      | 	java语言框架（最低1.6），web管理系统（最低1.8）
-Maven版本：			|   2.2.1及以上版本（web管理系统、java语言框架依赖）
 mysql版本:          |   4.1.17及以上版本（框架运行依赖）
 rapidjson版本:      |   1.0.2版本（c++语言框架依赖）
+nvm版本：           |   0.33.11及以上版本（web管理系统依赖）
+node版本：          |   8.11.3及以上版本（web管理系统依赖）
 
 运行服务器要求：1台普通安装linux系统的机器即可。
 
@@ -54,16 +53,7 @@ make
 make install(如果make install失败，一般是权限不够，切换root进行安装)
 ```
 
-## 1.3. resin安装介绍
-resin是Tars管理系统**推荐**的运行环境（如果没有安装java jdk，先需要安装，具体可以参见2.1章节）。
-> 以resin-4.0.49，安装在/usr/local/resin下为例
-```
-cd /usr/local/
-tar zxvf resin-4.0.49.tar.gz
-ln -s resin-4.0.49 resin
-```
-
-## 1.4. mysql 安装介绍
+## 1.3. mysql 安装介绍
 安装前，确定系统是否安装了ncurses、zlib，若没有，可以执行：
 ```
 yum install ncurses-devel
@@ -190,121 +180,28 @@ show slave status\G;
 ## 2.1. web管理系统开发环境安装
 以linux环境为例：
 
-下载java jdk，解压安装
+以官网提供的nvm脚本安装
 
-配置环境环境
+执行以下命令：
 ```
-vim /etc/profile
-```
-添加如下内容：
-```
-export JAVA_HOME=${jdk source dir}
-CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-PATH=$JAVA_HOME/bin:$PATH
-export PATH JAVA_HOME CLASSPATH
-```
-执行命令
-```
-source /etc/profile
-```
-测试
-```
-java -version
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+source ~/.bashrc
 ```
 
-maven安装
-下载maven，解压安装
-配置环境变量
+node和带有负载功能的node应用的进程管理器pm2安装
 ```
-vim /etc/profile
-```
-添加如下内容：
-```
-export MAVEN_HOME=${maven source dir}
-export PATH=$PATH:$MAVEN_HOME/bin
-```
-执行命令
-```
-source /etc/profile
-```
-测试
-```
-mvn -v
-```
-**注意，如有需要，修改本地仓库的位置和maven的源**
-
-## 2.2. java语言框架开发环境安装
-
-java jdk和maven环境配置与上面web管理系统的类似
-
-**注意，java框架安装前，需要保证机器能联网，同时修改maven安装目录下的conf目录的setting.xml，尽量使用国内的maven镜像，具体操作可以网上查看**
-
-下载tars源码，进入java源码目录，并安装在本地仓库
-```
-mvn clean install 
-mvn clean install -f core/client.pom.xml 
-mvn clean install -f core/server.pom.xml
-
-```
-构建web工程项目
-通过IDE或者maven创建一个maven web项目，
-这里以eclipse为例，File -> New -> Project -> Maven Project -> maven-archetype-webapp，再输入groupId、artifactId，生成完成之后可以通过eclipse进行导入，目录结构如下
-
-```
-├── pom.xml
-└── src
-   ├── main
-   │   ├── java
-   │   │   └── tars
-   │   ├── resources
-   │   └── webapp
-   └── test
-       ├── java
-       └── resources
+nvm install v8.11.3
+npm install -g pm2 --registry=https://registry.npm.taobao.org
 ```
 
+## 2.2. c++ 开发环境安装
+下载TarsFramework源码
 
-增加Maven依赖配置
-使用Tars框架时，需要依赖框架提供的jar包依赖，以及工具插件。在工程项目pom.xml文件中增加如下依赖配置。
-框架依赖配置
-```xml
-<dependency>
-	<groupId>com.tencent.tars</groupId>
-     <artifactId>tars-server</artifactId>
-     <version>1.4.0</version>
-     <type>jar</type>
-</dependency>
+然后进入build源码目录
 ```
-
-插件依赖配置
-
-```xml
-<plugin>
-	<groupId>com.tencent.tars</groupId>
-   	<artifactId>tars-maven-plugin</artifactId>
-   	<version>1.4.0</version>
-  	<configuration>
-   		<tars2JavaConfig>
-  			<tarsFiles>
-   				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-   			</tarsFiles>
-  			<tarsFileCharset>UTF-8</tarsFileCharset>
-   			<servant>true</servant>
-  			<srcPath>${basedir}/src/main/java</srcPath>
-  			<charset>UTF-8</charset>
-   			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
-  		</tars2JavaConfig>
-   	</configuration>
-</plugin>
-```
-
-## 2.3. c++ 开发环境安装
-下载tars源码，首先进入cpp/thirdparty目录，执行thirdparty.sh脚本，下载依赖的rapidjson
-
-然后进入cpp/build源码目录
-```
-cd {$source_folder}/cpp/build
+cd {$source_folder}/build
 chmod u+x build.sh
+./build.sh prepare
 ./build.sh all
 ```
 
@@ -325,16 +222,16 @@ chown ${普通用户}:${普通用户} ./tars/
 
 安装
 ```
-cd {$source_folder}/cpp/build
+cd {$source_folder}/build
 ./build.sh install或者make install
 ```
 **默认的安装路径为/usr/local/tars/cpp。**
 
 **如要修改安装路径：**
 ```
-**需要修改build目录下CMakeLists.txt文件中的安装路径。**
-**需要修改servant/makefile/makefile.tars文件中的TARS_PATH的路径**
-**需要修改servant/script/create_tars_server.sh文件中的DEMO_PATH的路径**
+**需要修改tarscpp目录下CMakeLists.txt文件中的安装路径。**
+**需要修改tarscpp/servant/makefile/makefile.tars文件中的TARS_PATH的路径**
+**需要修改tarscpp/servant/script/create_tars_server.sh文件中的DEMO_PATH的路径**
 ```
 
 # 3. <a id="chapter-3"></a>Tars数据库环境初始化
@@ -348,7 +245,7 @@ flush privileges;
 **注意${主机名}需要修改成自身机器的名称，可以通过查看/etc/hosts
 
 ## 3.2. 创建数据库
-sql脚本在cpp/framework/sql目录下，修改部署的ip信息
+sql脚本在framework/sql目录下，修改部署的ip信息
 ```
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`
@@ -390,7 +287,7 @@ tars_property是服务属性监控数据存储的数据库；
 通过管理平台部署的普通基础服务：tarsstat, tarsproperty,tarsnotify, tarslog，tarsquerystat，tarsqueryproperty
 ```
 
-首先准备第一种服务的安装包，在cpp/build/目录下输入：
+首先准备第一种服务的安装包，在build/目录下输入：
 ```
 make framework-tar
 ```
@@ -517,57 +414,20 @@ chmod u+x tarsnode_install.sh
 
 ## 4.3. 安装web管理系统
 
->**执行之前先安装tars java语言框架到本地仓库，参见2.2章节**
 >管理系统源代码目录名称为**web**
 
-修改配置文件，文件存放的路径在web/src/main/resources/目录下。
-- app.config.properties  
-  修改为实际的数据库配置
-
-```ini
-# 数据库(db_tars)
-tarsweb.datasource.tars.addr={$your_db_ip}:3306
-tarsweb.datasource.tars.user=tars
-tarsweb.datasource.tars.pswd=tars2015
-
-# 发布包存储路径
-upload.tgz.path=/usr/local/app/patchs/tars.upload/
+修改配置文件，将配置文件中的ip地址修改为本机ip地址，如下：
+```
+cd web
+sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js
+sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf
 ```
 
-- tars.conf  
-  替换registry1.tars.com，registry2.tars.com为实际IP。可以只配置一个地址，多个地址用冒号“:”连接
-
-```xml
-<tars>
-    <application>
-        #proxy需要的配置
-        <client>
-            #地址
-            locator = tars.tarsregistry.QueryObj@tcp -h registry1.tars.com -p 17890:tars.tarsregistry.QueryObj@tcp -h registry2.tars.com -p 17890
-            sync-invoke-timeout = 30000
-            #最大超时时间(毫秒)
-            max-invoke-timeout = 30000
-            #刷新端口时间间隔(毫秒)
-            refresh-endpoint-interval = 60000
-            #模块间调用[可选]
-            stat = tars.tarsstat.StatObj
-            #网络异步回调线程个数
-            asyncthread = 3
-            modulename = tars.system
-        </client>
-    </application>
-</tars>
+安装web管理页面依赖，启动web
 ```
-
-打包，在web目录下执行命令，会在web/target目录下生成tars.war
-```
-mvn clean package
-```
-
-web发布
-将tars.war放置到/usr/local/resin/webapps/中
-```
-cp ./target/tars.war /usr/local/resin/webapps/
+cd web
+npm install --registry=https://registry.npm.taobao.org
+npm run prd
 ```
 
 创建日志目录
@@ -575,25 +435,8 @@ cp ./target/tars.war /usr/local/resin/webapps/
 mkdir -p /data/log/tars
 ```
 
-修改Resin安装目录下的conf/resin.xml配置文件
-将默认的配置
-```xml
-<host id="" root-directory=".">
-    <web-app id="/" root-directory="webapps/ROOT"/>
-</host>
-```
-修改为
-```xml
-<host id="" root-directory=".">
-    <web-app id="/" document-directory="webapps/tars"/>
-</host>
-```
-
-启动resin
-/usr/local/resin/bin/resin.sh start
-
 访问站点
-浏览器输入${your machine ip}:8080，即可看到，如下：
+浏览器输入${your machine ip}:3000，即可看到，如下：
 
 ![tars](docs/images/tars_web_system_index.png)
 

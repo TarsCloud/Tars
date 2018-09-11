@@ -1,3 +1,21 @@
+[submodule "framework"]
+	path = framework
+	url = https://github.com/TarsCloud/TarsFramework
+[submodule "cpp"]
+	path = cpp
+	url = https://github.com/TarsCloud/TarsCpp
+[submodule "java"]
+	path = java
+	url = https://github.com/TarsCloud/TarsJava
 [submodule "nodejs"]
 	path = nodejs
-	url = https://github.com/tars-node/Tars.js.git
+	url = https://github.com/tars-node/Tars.js
+[submodule "php"]
+	path = php
+	url = https://github.com/TarsPHP/TarsPHP
+[submodule "tup"]
+	path = tup
+	url = https://github.com/TarsCloud/TarsTup
+[submodule "web"]
+	path = web
+	url = https://github.com/TarsCloud/TarsWeb

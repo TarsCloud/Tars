@@ -36,6 +36,19 @@ Tars详细介绍参见[Introduction.md](Introduction.md)。
 
 参见[ docs/tars_performce.md](docs/tars_performce.md)。
 
+## 子项目
+
+目录名称 |功能
+------------------|----------------
+framework         |C++语言框架基础服务的源码实现
+cpp               |C++语言框架rpc的源码实现
+java              |java语言框架rpc的源码实现
+go                |go语言框架rpc的源码实现
+nodejs            |nodejs语言框架rpc的源码实现
+php               |php语言框架rpc的源码实现
+tup               |tup组包协议各个语言的源码实现
+web               |管理tars的web源码实现
+
 ## 开发技术文档
 
 参见[docs](docs)目录。

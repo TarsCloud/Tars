@@ -24,6 +24,7 @@ For now it supports following languages:
 - Java
 - Nodejs
 - PHP
+- Go
  
 ## Installation 
 
@@ -32,7 +33,20 @@ If you are familar to Tars, refer to scripts in directory [build](build), may so
 
 ## Performance
 
-See [ docs/tars_performce.md](docs/tars_performce.md).
+See [tars_performce.md](docs/tars_performce.md).
+
+## Submodule
+
+Directory         |Features
+------------------|----------------
+framework         |Source code implementation of C++ language framework basic service
+cpp               |C++ language framework rpc source code implementation
+java              |java language framework rpc source code implementation
+go                |go language framework rpc source code implementation
+nodejs            |nodejs language framework rpc source code implementation
+php               |php language framework rpc source code implementation
+tup               |source code implementation of tup group protocol in each language
+web               |manage tars web source implementation
 
 ## Developer's documentation
 

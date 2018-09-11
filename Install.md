@@ -20,11 +20,10 @@ gcc version:            |   4.8.2 or later、glibc-devel（Dependent c++ framewo
 bison version:          |	2.5 or later（Dependent c++ framework tools）
 flex version:           |	2.5 or later（Dependent c++ framework tools）
 cmake version:          |   2.8.8 or later（Dependent c++ framework tools）
-resin version:          |   4.0.49 or later（Dependent web management system）
-Java JDK version:       | 	JDK1.6 or later; For web management system,（JDK 1.8 or later）
-Maven version:          |   2.2.1 or later web management system、dependency of java framework）
 mysql version:          |   4.1.17 or later（dependency of framework running）
 rapidjson version:      |   1.0.2 or later（dependency of C++ framework）
+nvm version:            |   0.33.11 or later（Dependent web management system）
+node version:           |   8.11.3 or later（Dependent web management system）
 
 Hardware requirements: a machine running Linux.
 
@@ -56,15 +55,7 @@ make
 make install
 ```
 
-## 1.3. Install resin
-resin is the **recommended** running environment for Tars management system.(JDK is needed)
-```
-cd /usr/local/
-tar zxvf resin-4.0.49.tar.gz
-ln -s resin-4.0.49 resin
-```
-
-## 1.4. Install mysql
+## 1.3. Install mysql
 Before installation, check whether ncurses and zlib have been installed. Execute these commands if not exist:
 ```
 yum install ncurses-devel
@@ -184,119 +175,29 @@ show slave status\G;
 # 2. <a id="chapter-2"></a>Install develop environment for Tars
 ## 2.1. Install develop environment for web management system
 For linux：
-Download JDK, unzip and install.
 
-Configure environment.
+Nvm script installation provided by the official website
+
+Execute the following command
 ```
-vim /etc/profile
-```
-Add following contents to /etc/profile:
-```
-export JAVA_HOME=${jdk source dir}
-CLASSPATH=$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-PATH=$JAVA_HOME/bin:$PATH
-export PATH JAVA_HOME CLASSPATH
-```
-Execute command:
-```
-source /etc/profile
-```
-Test:
-```
-java -version
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+source ~/.bashrc
 ```
 
-Install maven
-Download maven, unzip and install:
-
-Configure environment variables
+Install node and process manager pm2 for node applications with load function
 ```
-vim /etc/profile
-```
-Add these lines:
-```
-export MAVEN_HOME=${maven source dir}
-export PATH=$PATH:$MAVEN_HOME/bin
-```
-Execute command
-```
-source /etc/profile
-```
-Test
-```
-mvn -v
+nvm install v8.11.3
+npm install -g pm2 --registry=https://registry.npm.taobao.org
 ```
 
-## 2.2. Install develop environment for java language framework
+## 2.2. Install develop environment for C++
+Download TarsFramework source
 
-Environment configuration for JDK and maven is similar to that of web management system.
-
-**Attention: Make sure that your machine can access to internet, then modify file setting.xml from conf directory in the installed path of maven.**
-
-Download tars code, change to java source directory, and install:
+Then change to build.
 ```
-mvn clean install 
-mvn clean install -f core/client.pom.xml 
-mvn clean install -f core/server.pom.xml
-
-```
-Build web project
-Use IDE or maven to create a maven web project, use eclipse as example, choose File -> New -> Project -> Maven Project -> maven-archetype-webapp，then enter groupId, artifactId，when finished use eclipse to import, the directory architecture is as following:
-
-```
-├── pom.xml
-└── src
-   ├── main
-   │   ├── java
-   │   │   └── tars
-   │   ├── resources
-   │   └── webapp
-   └── test
-       ├── java
-       └── resources
-```
-
-
-Add dependency configuration in Maven
-
-```xml
-<dependency>
-	<groupId>com.tencent.tars</groupId>
-     <artifactId>tars-server</artifactId>
-     <version>1.4.0</version>
-     <type>jar</type>
-</dependency>
-```
-
-Plugin dependency configuration
-
-```xml
-<plugin>
-	<groupId>com.tencent.tars</groupId>
-   	<artifactId>tars-maven-plugin</artifactId>
-   	<version>1.4.0</version>
-  	<configuration>
-   		<tars2JavaConfig>
-  			<tarsFiles>
-   				<tarsFile>${basedir}/src/main/resources/hello.tars</tarsFile>
-   			</tarsFiles>
-  			<tarsFileCharset>UTF-8</tarsFileCharset>
-   			<servant>true</servant>
-  			<srcPath>${basedir}/src/main/java</srcPath>
-  			<charset>UTF-8</charset>
-   			<packagePrefixName>com.qq.tars.quickstart.server.</packagePrefixName>
-  		</tars2JavaConfig>
-   	</configuration>
-</plugin>
-```
-
-## 2.3. Install develop environment for C++
-Download tars source, change to directory `cpp/thirdparty`, execute `thirdparty.sh` script to download rapidjson.
-
-Then change to cpp/build.
-```
-cd {$source_folder}/cpp/build
+cd {$source_folder}/build
 chmod u+x build.sh
+./build.sh prepare
 ./build.sh all
 ```
 **Be care that the default mysql lib path which Tars use is /usr/local/mysql/ .
@@ -317,16 +218,16 @@ chown ${normal user}:${normal user} ./tars/
 
 installation
 ```
-cd {$source_folder}/cpp/build
+cd {$source_folder}/build
 ./build.sh install or make install
 ```
 **The default install path is /usr/local/tars/cpp。**
 
 **If you want to install on different path：**
 ```
-**modify build/CMakeLists.txt**
-**modify TARS_PATH in servant/makefile/makefile.tars**
-**modify DEMO_PATH in servant/script/create_tars_server.sh**
+**modify tarscpp/CMakeLists.txt**
+**modify TARS_PATH in tarscpp/servant/makefile/makefile.tars**
+**modify DEMO_PATH in tarscpp/servant/script/create_tars_server.sh**
 ```
 
 # 3. <a id="chapter-3"></a>Initialize the db environment for Tars
@@ -340,7 +241,7 @@ flush privileges;
 **Attention: Modify ${'localhost'} to real hostname from /etc/hosts.**
 
 ## 3.2. Create DB
-Search the ip in the script under `cpp/framework/sql`,and replace with the above ip.
+Search the ip in the script under `framework/sql`,and replace with the above ip.
 
 ```
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`
@@ -375,7 +276,7 @@ tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig, tarspatch
 The basic general services:
 tarsstat, tarsproperty,tarsnotify, tarslog，tarsquerystat，tarsqueryproperty
 ```
-First get the core services package, change to cpp/build directory and input:
+First get the core services package, change to build directory and input:
 ```
 make framework-tar
 ```
@@ -481,58 +382,20 @@ Configure a checking crontab for tarsnode,ensuring it's always alive:
 
 ## 4.3. Install web management system
 
->** Install tars java framework first, see section 2.2**
-
 > The name of the directory where management system source code in is **web**
 
-Modify the configuration file, save it to the path web/src/main/resources/
-- app.config.properties  
-  Modify DB configuration
-
-```ini
-# db_tars
-tarsweb.datasource.tars.addr={$your_db_ip}:3306
-tarsweb.datasource.tars.user=tars
-tarsweb.datasource.tars.pswd=tars2015
-
-# Public package store path
-upload.tgz.path=/usr/local/app/patchs/tars.upload/
+Modify the configuration file and change the IP address in the configuration file to the local IP address, as follows:
+```
+cd web
+sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js
+sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf
 ```
 
-- tars.conf  
-   Substitute registry1.tars.com，registry2.tars.com with real ip, concatenate multiple address with colon.
-
-```xml
-<tars>
-    <application>
-        #proxy config
-        <client>
-            #address
-            locator = tars.tarsregistry.QueryObj@tcp -h registry1.tars.com -p 17890:tars.tarsregistry.QueryObj@tcp -h registry2.tars.com -p 17890
-            sync-invoke-timeout = 30000
-            #timeout(ms)
-            max-invoke-timeout = 30000
-            #interval for refresh endpoint(ms)
-            refresh-endpoint-interval = 60000
-            #invoke between modules [optional]
-            stat = tars.tarsstat.StatObj
-            #async thread
-            asyncthread = 3
-            modulename = tars.system
-        </client>
-    </application>
-</tars>
+Install web management page dependencies, start web
 ```
-
-Package: execute following command in web directory, then tars.war will be created in web/target.
-```
-mvn clean package
-```
-
-Web patch
-Put tars.war into /usr/local/resin/webapps/
-```
-cp ./target/tars.war /usr/local/resin/webapps/
+cd web
+npm install --registry=https://registry.npm.taobao.org
+npm run prd
 ```
 
 Create log directory
@@ -540,25 +403,7 @@ Create log directory
 mkdir -p /data/log/tars
 ```
 
-Modify conf/resin.xml in Resin directory
-
-Modify the default configuration
-```xml
-<host id="" root-directory=".">
-    <web-app id="/" root-directory="webapps/ROOT"/>
-</host>
-```
-to
-```xml
-<host id="" root-directory=".">
-    <web-app id="/" document-directory="webapps/tars"/>
-</host>
-```
-
-Launch resin
-/usr/local/resin/bin/resin.sh start
-
-Visit the website, input ${your machine ip}:8080 into browser:
+Visit the website, input ${your machine ip}:3000 into browser:
 
 ![tars](docs/images/tars_web_system_index_en.png)
 

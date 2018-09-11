@@ -24,45 +24,6 @@ make
 make install
 cd -
 
-##安装java jdk
-tar zxvf jdk-8u111-linux-x64.tar.gz
-echo "export JAVA_HOME=${PWD_DIR}/jdk1.8.0_111" >> /etc/profile
-echo "CLASSPATH=\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >> /etc/profile
-echo "PATH=\$JAVA_HOME/bin:\$PATH" >> /etc/profile
-echo "export PATH JAVA_HOME CLASSPATH" >> /etc/profile
-
-source /etc/profile
-
-java -version
-
-##安装maven
-tar zxvf apache-maven-3.3.9-bin.tar.gz
-echo "export MAVEN_HOME=${PWD_DIR}/apache-maven-3.3.9/" >> /etc/profile
-echo "export PATH=\$PATH:\$MAVEN_HOME/bin" >> /etc/profile
-
-source /etc/profile
-
-mvn -v
-
-##安装resin
-
-cp resin-4.0.49.tar.gz /usr/local/
-cd /usr/local/
-tar zxvf resin-4.0.49.tar.gz
-cd resin-4.0.49
-./configure --prefix=/usr/local/resin-4.0.49
-make
-make install
-cd ${PWD_DIR}
-ln -s /usr/local/resin-4.0.49 /usr/local/resin
-
-##安装rapidjson
-yum install -y git
-
-git clone https://github.com/Tencent/rapidjson.git
-
-cp -r ./rapidjson ../cpp/thirdparty/
-
 ## 安装mysql
 yum install -y ncurses-devel
 yum install -y zlib-devel
@@ -77,12 +38,13 @@ if [   ! -n "$MysqlIncludePath"  ]
 	ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
 	cd -
   else
-  	## 根据mysql 库路径 配置 设置cpp/build/CMakeLists.txt
-  	sed -i "s@/usr/local/mysql/include@${MysqlIncludePath}@g" ../cpp/build/CMakeLists.txt
-  	sed -i "s@/usr/local/mysql/lib@${MysqlLibPath}@g" ../cpp/build/CMakeLists.txt
+  	## 根据mysql 库路径 配置 设置framework/CMakeLists.txt tarscpp/CMakeList.txt
+  	sed -i "s@/usr/local/mysql/include@${MysqlIncludePath}@g" ../framework/CMakeLists.txt
+  	sed -i "s@/usr/local/mysql/lib@${MysqlLibPath}@g" ../framework/CMakeLists.txt
+  	sed -i "s@/usr/local/mysql/include@${MysqlIncludePath}@g" ../framework/tarscpp/CMakeLists.txt
+  	sed -i "s@/usr/local/mysql/lib@${MysqlLibPath}@g" ../framework/tarscpp/CMakeLists.txt
 
 fi
-
 
 
 yum install -y perl
@@ -120,16 +82,14 @@ cd -
 echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf
 ldconfig
 
-
-##安装java语言框架
-cd ../java/
-mvn clean install 
-mvn clean install -f core/client.pom.xml 
-mvn clean install -f core/server.pom.xml
+##下载C++基础服务框架
+yum install -y git
+cd ../
+git submodule update --init --recursive framework
 cd -
 
 ##安装c++语言框架
-cd ../cpp/build/
+cd ../framework/build/
 chmod u+x build.sh
 ./build.sh all
 ./build.sh install
@@ -141,7 +101,7 @@ mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'localhost' identif
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'${MachineName}' identified by 'tars2015' with grant option;"
 mysql -uroot -proot@appinside -e "flush privileges;"
 
-cd ../cpp/framework/sql/
+cd ../framework/sql/
 sed -i "s/192.168.2.131/${MachineIp}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${MachineIp}/g" `grep db.tars.com -rl ./*`
 chmod u+x exec-sql.sh
@@ -149,7 +109,7 @@ chmod u+x exec-sql.sh
 cd -
 
 ##打包框架基础服务
-cd ../cpp/build/
+cd ../framework/build/
 make framework-tar
 
 make tarsstat-tar
@@ -162,7 +122,7 @@ cd -
 
 ##安装核心基础服务
 mkdir -p /usr/local/app/tars/
-cd ../cpp/build/
+cd ../framework/build/
 cp framework.tgz /usr/local/app/tars/
 cd /usr/local/app/tars
 tar xzfv framework.tgz
@@ -177,19 +137,22 @@ chmod u+x tars_install.sh
 
 ./tarspatch/util/init.sh
 
-##安装web管理系统
-cd ${PWD_DIR}
-cd ../web/
-sed -i "s/db.tars.com/${MachineIp}/g" `grep db.tars.com -rl ./src/main/resources/*`
-sed -i "s/registry1.tars.com/${MachineIp}/g" `grep registry1.tars.com -rl ./src/main/resources/*`
-sed -i "s/registry2.tars.com/${MachineIp}/g" `grep registry2.tars.com -rl ./src/main/resources/*`
+##安装nodejs环境
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+source ~/.bashrc
+nvm install v8.11.3
 
-mvn clean package
-cp ./target/tars.war /usr/local/resin/webapps/
+##安装web管理系统
+cd ../
+git submodule update --init --recursive web
+cd web/
+npm install -g pm2 --registry=https://registry.npm.taobao.org
+sed -i "s/registry.tars.com/${MachineIp}/g" `grep registry1.tars.com -rl ./config/*`
+sed -i "s/db.tars.com/${MachineIp}/g" `grep db.tars.com -rl ./config/*`
+npm install --registry=https://registry.npm.taobao.org
+npm run prd
 
 cd -
 
 mkdir -p /data/log/tars/
-cp ./conf/resin.xml /usr/local/resin/conf/
 
-/usr/local/resin/bin/resin.sh start
