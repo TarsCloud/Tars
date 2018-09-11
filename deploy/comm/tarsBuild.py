@@ -13,7 +13,7 @@ def do():
     pullRapidjson()
     log.infoPrint("pullRapidjson success")
     log.infoPrint("pullWeb start ...")
-    pullRapidjson()
+    pullWeb()
     log.infoPrint("pullWeb success")
     log.infoPrint("build start ...")
     build()
