@@ -63,7 +63,7 @@ def updateConf(server):
     replaceConf("/usr/local/app/tars/{}/conf/tars.{}.config.conf".format(server, server), "db.tars.com1", mysqlHost)
     replaceConf("/usr/local/app/tars/{}/conf/tars.{}.config.conf".format(server, server), "registry.tars.com", localIp)
     replaceConf("/usr/local/app/tars/{}/conf/tars.{}.config.conf".format(server, server), "10.120.129.226", localIp)
-    replaceConf("/usr/local/app/tars/{}/util/start.sh".format(server, server), "registry.tars.com", localIp)
+    replaceConf("/usr/local/app/tars/{}/util/execute.sh".format(server, server), "registry.tars.com", localIp)
     return
 
 def deployWeb():
