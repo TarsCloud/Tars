@@ -29,7 +29,7 @@ def getDBDir():
 
 def deployFrameServer():
     for server in tarsDeployFrameBasicServerList:
-        srcDir = "{}/TarsFramework/build/framework/deploy/{}".format(baseDir,server)
+        srcDir = "{}/TarsFramework/build/deploy/{}".format(baseDir,server)
         confDir = "{}/TarsFramework/deploy/{}".format(baseDir,server)
         dstDir = "/usr/local/app/tars/{}".format(server)
         log.infoPrint(" deploy {} start srcDir is {} , confDir is {} , dstDir is {}  ".format(server,srcDir,confDir,dstDir))
@@ -41,7 +41,7 @@ def deployFrameServer():
         log.infoPrint(" deploy {}  sucess".format(server))
 
     for server in tarsDeployFrameCommServerList:
-        srcDir = "{}/TarsFramework/build/framework/deploy/{}".format(baseDir,server)
+        srcDir = "{}/TarsFramework/build/deploy/{}".format(baseDir,server)
         confDir = "{}/TarsFramework/deploy/{}".format(baseDir, server)
         dstDir = "/usr/local/app/tars/{}".format(server)
         dstBinDir = "/usr/local/app/tars/{}/bin/".format(server)
