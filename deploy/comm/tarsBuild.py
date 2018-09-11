@@ -23,19 +23,22 @@ def do():
 def pullFramework():
     baseDir = getBaseDir()
     if not os.path.exists("{}/TarsFramework/RegistryServer/".format(baseDir)):
-        doCmd("git clone https://github.com/TarsCloud/TarsFramework.git {}/TarsFramework ".format(baseDir))
+        log.infoPrint(" git clone TarsFramework")
+        os.system("git clone https://github.com/TarsCloud/TarsFramework.git {}/TarsFramework ".format(baseDir))
     return
 
 def pullWeb():
     baseDir = getBaseDir()
     if not os.path.exists("/usr/local/app/web".format(baseDir)):
-        doCmd("git clone https://github.com/TarsCloud/TarsWeb.git /usr/local/app/web")
+        log.infoPrint(" git clone TarsWeb")
+        os.system("git clone https://github.com/TarsCloud/TarsWeb.git /usr/local/app/web")
     return
 
 def pullRapidjson():
     baseDir = getBaseDir()
     if not os.path.exists("{}/TarsFramework/thirdparty/rapidjson/bin".format(baseDir)):
-        doCmd("git clone https://github.com/Tencent/rapidjson.git {}/TarsFramework/thirdparty/rapidjson ".format(baseDir))
+        log.infoPrint(" git clone rapidjson")
+        os.system("git clone https://github.com/Tencent/rapidjson.git {}/TarsFramework/thirdparty/rapidjson ".format(baseDir))
     return
 
 
