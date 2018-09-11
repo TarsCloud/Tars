@@ -9,12 +9,6 @@ def do():
     log.infoPrint("pullFramework start ...")
     pullFramework()
     log.infoPrint("pullFramework success")
-    log.infoPrint("pullCpp start ...")
-    pullCpp()
-    log.infoPrint("pullCpp success")
-    log.infoPrint("pullRapidjson start ...")
-    pullRapidjson()
-    log.infoPrint("pullRapidjson success")
     log.infoPrint("pullWeb start ...")
     pullWeb()
     log.infoPrint("pullWeb success")
@@ -27,16 +21,10 @@ def pullFramework():
     baseDir = getBaseDir()
     if not os.path.exists("{}/TarsFramework/RegistryServer/".format(baseDir)):
         log.infoPrint(" git clone TarsFramework")
-        os.system("git clone https://github.com/TarsCloud/TarsFramework.git {}/TarsFramework ".format(baseDir))
+        os.system("git clone https://github.com/TarsCloud/TarsFramework.git --recursive {}/TarsFramework ".format(baseDir))
     return
 
 
-def pullCpp():
-    baseDir = getBaseDir()
-    if not os.path.exists("{}/TarsFramework/tarscpp/servant".format(baseDir)):
-        log.infoPrint(" git clone TarsFramework")
-        os.system("git clone https://github.com/TarsCloud/TarsCpp.git {}/TarsFramework/tarscpp".format(baseDir))
-    return
 
 def pullWeb():
     baseDir = getBaseDir()
@@ -44,15 +32,6 @@ def pullWeb():
         log.infoPrint(" git clone TarsWeb")
         os.system("git clone https://github.com/TarsCloud/TarsWeb.git /usr/local/app/web")
     return
-
-def pullRapidjson():
-    baseDir = getBaseDir()
-    if not os.path.exists("{}/TarsFramework/thirdparty/rapidjson/bin".format(baseDir)):
-        log.infoPrint(" git clone rapidjson")
-        os.system("git clone https://github.com/Tencent/rapidjson.git {}/TarsFramework/thirdparty/rapidjson ".format(baseDir))
-    return
-
-
 
 def build():
     baseDir = getBaseDir()
