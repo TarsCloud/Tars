@@ -24,7 +24,7 @@ def do():
     return
 
 def getDBDir():
-    dbDir = baseDir+"/cpp/framework/sql/"
+    dbDir = baseDir+"/TarsFramework/sql/"
     return dbDir
 
 def deployFrameServer():
