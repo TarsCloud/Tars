@@ -27,6 +27,14 @@ def pullFramework():
         os.system("git clone https://github.com/TarsCloud/TarsFramework.git {}/TarsFramework ".format(baseDir))
     return
 
+
+def pullCpp():
+    baseDir = getBaseDir()
+    if not os.path.exists("{}/TarsFramework/tarscpp/servant".format(baseDir)):
+        log.infoPrint(" git clone TarsFramework")
+        os.system("git clone https://github.com/TarsCloud/TarsCpp.git {}/TarsFramework/tarscpp".format(baseDir))
+    return
+
 def pullWeb():
     baseDir = getBaseDir()
     if not os.path.exists("/usr/local/app/web".format(baseDir)):
