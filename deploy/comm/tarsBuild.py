@@ -43,7 +43,7 @@ def pullRapidjson():
 def build():
     baseDir = getBaseDir()
     doCmd("{}/TarsFramework/build/build.sh cleanall".format(baseDir))
-    rCode = buildCmd("{}/cpp/build/build.sh all".format(baseDir))
+    rCode = buildCmd("{}/TarsFramework/build/build.sh all".format(baseDir))
     if rCode == 0:
         log.info(" build success !!!")
     else:
