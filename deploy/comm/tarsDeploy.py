@@ -88,7 +88,6 @@ def deployWeb():
         doCmd("export NVM_DIR=\"$HOME/.nvm\";[ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\";source /etc/profile &&  npm install -g pm2 --registry=https://registry.npm.taobao.org")
     else:
         log.infoPrint(" pm2 version  is {}".format(result["output"]))
-    doCmd("git clone https://github.com/TarsCloud/TarsWeb.git /data/test/web")
 
     replaceConf("/usr/local/app/web/config/tars.conf", "registry.tars.com", localIp)
     replaceConf("/usr/local/app/web/config/webConf.js", "db.tars.com", mysqlHost)

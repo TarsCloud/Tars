@@ -6,19 +6,39 @@ import os
 from tarsUtil import *
 log = tarsLog.getLogger()
 def do():
+    log.infoPrint("pullFramework start ...")
+    pullFramework()
+    log.infoPrint("pullFramework success")
     log.infoPrint("pullRapidjson start ...")
     pullRapidjson()
     log.infoPrint("pullRapidjson success")
+    log.infoPrint("pullWeb start ...")
+    pullRapidjson()
+    log.infoPrint("pullWeb success")
     log.infoPrint("build start ...")
     build()
     log.infoPrint("build sucess")
     return
 
+def pullFramework():
+    baseDir = getBaseDir()
+    if not os.path.exists("{}/TarsFramework/RegistryServer/".format(baseDir)):
+        buildCmd("git clone https://github.com/TarsCloud/TarsFramework.git {}/TarsFramework ".format(baseDir))
+    return
+
+def pullWeb():
+    baseDir = getBaseDir()
+    if not os.path.exists("/usr/local/app/web".format(baseDir)):
+        doCmd("git clone https://github.com/TarsCloud/TarsWeb.git /usr/local/app/web")
+    return
+
 def pullRapidjson():
     baseDir = getBaseDir()
     if not os.path.exists("{}/TarsFramework/thirdparty/rapidjson/bin".format(baseDir)):
-        buildCmd("git clone https://github.com/Tencent/rapidjson.git {}/cpp/thirdparty/rapidjson ".format(baseDir))
+        buildCmd("git clone https://github.com/Tencent/rapidjson.git {}/TarsFramework/thirdparty/rapidjson ".format(baseDir))
     return
+
+
 
 def build():
     baseDir = getBaseDir()
