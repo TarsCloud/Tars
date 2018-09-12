@@ -16,3 +16,6 @@
 [submodule "tup"]
 	path = tup
 	url = https://github.com/TarsCloud/TarsTup
+[submodule "web"]
+	path = web
+	url = https://github.com/TarsCloud/TarsWeb
