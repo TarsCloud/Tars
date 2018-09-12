@@ -106,7 +106,7 @@ def initDB():
     log.info(" the mysqlHost is {} , mysqlPort is {},  mysqlRootPassWord is {}".format(mysqlHost,mysqlPort,mysqlRootPassWord))
 
     replaceConfDir(dbDir, "192.168.2.131", localIp)
-    replaceConfDir(dbDir, "db.tars.com", localIp)
+    replaceConfDir(dbDir, "db.tars.com", mysqlHost)
     replaceConfDir(dbDir, "10.120.129.226", localIp)
 
 
