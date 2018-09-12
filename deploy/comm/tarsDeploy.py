@@ -24,13 +24,13 @@ def do():
     return
 
 def getDBDir():
-    dbDir = baseDir+"/TarsFramework/sql/"
+    dbDir = baseDir+"/framework/sql/"
     return dbDir
 
 def deployFrameServer():
     for server in tarsDeployFrameBasicServerList:
-        srcDir = "{}/TarsFramework/build/deploy/{}".format(baseDir,server)
-        confDir = "{}/TarsFramework/deploy/{}".format(baseDir,server)
+        srcDir = "{}/framework/build/deploy/{}".format(baseDir,server)
+        confDir = "{}/framework/deploy/{}".format(baseDir,server)
         dstDir = "/usr/local/app/tars/{}".format(server)
         log.infoPrint(" deploy {} start srcDir is {} , confDir is {} , dstDir is {}  ".format(server,srcDir,confDir,dstDir))
         copytree(srcDir,dstDir)
@@ -41,8 +41,8 @@ def deployFrameServer():
         log.infoPrint(" deploy {}  sucess".format(server))
 
     for server in tarsDeployFrameCommServerList:
-        srcDir = "{}/TarsFramework/build/deploy/{}".format(baseDir,server)
-        confDir = "{}/TarsFramework/deploy/{}".format(baseDir, server)
+        srcDir = "{}/framework/build/deploy/{}".format(baseDir,server)
+        confDir = "{}/framework/deploy/{}".format(baseDir, server)
         dstDir = "/usr/local/app/tars/{}".format(server)
         dstBinDir = "/usr/local/app/tars/{}/bin/".format(server)
         log.infoPrint(" deploy {} start srcDir is {} , confDir is {} , dstDir is {}  ".format(server, srcDir, confDir, dstDir))

@@ -19,9 +19,9 @@ def do():
 
 def pullFramework():
     baseDir = getBaseDir()
-    if not os.path.exists("{}/TarsFramework/RegistryServer/".format(baseDir)):
+    if not os.path.exists("{}/framework/RegistryServer/".format(baseDir)):
         log.infoPrint(" git clone TarsFramework")
-        os.system("git clone https://github.com/TarsCloud/TarsFramework.git --recursive {}/TarsFramework ".format(baseDir))
+        os.system("git clone https://github.com/TarsCloud/TarsFramework.git --recursive {}/framework ".format(baseDir))
     return
 
 
@@ -35,8 +35,8 @@ def pullWeb():
 
 def build():
     baseDir = getBaseDir()
-    doCmd("{}/TarsFramework/build/build.sh cleanall".format(baseDir))
-    rCode = buildCmd("{}/TarsFramework/build/build.sh all".format(baseDir))
+    doCmd("{}/framework/build/build.sh cleanall".format(baseDir))
+    rCode = buildCmd("{}/framework/build/build.sh all".format(baseDir))
     if rCode == 0:
         log.info(" build success !!!")
     else:
