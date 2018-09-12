@@ -60,7 +60,7 @@ def updateConf(server):
     localIp = getLocalIp()
     replaceConf("/usr/local/app/tars/{}/conf/tars.{}.config.conf".format(server,server),"localip.tars.com",localIp)
     replaceConf("/usr/local/app/tars/{}/conf/tars.{}.config.conf".format(server, server), "192.168.2.131", localIp)
-    replaceConf("/usr/local/app/tars/{}/conf/tars.{}.config.conf".format(server, server), "db.tars.com1", mysqlHost)
+    replaceConf("/usr/local/app/tars/{}/conf/tars.{}.config.conf".format(server, server), "db.tars.com", mysqlHost)
     replaceConf("/usr/local/app/tars/{}/conf/tars.{}.config.conf".format(server, server), "registry.tars.com", localIp)
     replaceConf("/usr/local/app/tars/{}/conf/tars.{}.config.conf".format(server, server), "10.120.129.226", localIp)
     replaceConf("/usr/local/app/tars/{}/util/execute.sh".format(server, server), "registry.tars.com", localIp)
