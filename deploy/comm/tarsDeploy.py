@@ -117,6 +117,7 @@ def initDB():
     doCmd("mysql -utars -ptars2015 -e 'drop database if exists db_tars_web;create database db_tars_web'")
 
     doCmd("mysql -utars -ptars2015 db_tars < {}/db_tars.sql".format(dbDir))
+    doCmd("mysql -utars -ptars2015 db_tars -e 'truncate table t_server_conf;truncate table t_adapter_conf;truncate table t_node_info;truncate table t_registry_info '")
     doCmd("mysql -utars -ptars2015 db_tars < {}/tarsconfig.sql".format(dbDir))
     doCmd("mysql -utars -ptars2015 db_tars < {}/tarslog.sql".format(dbDir))
     doCmd("mysql -utars -ptars2015 db_tars < {}/tarspatch.sql".format(dbDir))
