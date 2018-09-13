@@ -1,7 +1,7 @@
 ```
 Step:
 1.install mysql on your machine 
-2.use this code to checkout the code
+2.use this script to checkout the code
 	cd /data
 	git clone https://github.com/Tencent/Tars.git --recursive
 	cd /data/Tars/deploy
