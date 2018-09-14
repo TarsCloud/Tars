@@ -7,3 +7,4 @@ tars_idc_set.md             |Tars框架IDC分组和Set分组说明文档
 tars_openssl.md             |Tars框架支持https协议功能说明
 tars_performce.md           |Tars框架性能测试说明文档
 tars_tracing.md             |Tars框架调用链使用说明
+tars_auth.md                |Tars鉴权功能
