@@ -3,7 +3,7 @@ Step:
 1.install mysql on your machine 
 2.use this script to checkout the code
 	cd /data
-	git clone https://github.com/Tencent/Tars.git --recursive
+	git clone https://github.com/TarsCloud/Tars.git --recursive
 	cd /data/Tars/deploy
 	python ./deploy.py all
 
