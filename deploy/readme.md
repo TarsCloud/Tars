@@ -1,6 +1,6 @@
 ```
 Step:
-1.install mysql on your machine 
+1.install mysql on your machine, and change the db infomation in comm.properties.
 2.use this script to checkout the code
 	cd /data
 	git clone https://github.com/TarsCloud/Tars.git --recursive
