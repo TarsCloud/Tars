@@ -97,6 +97,7 @@ vim /usr/local/mysql/my.cnf
 ```
 Here is an example of my.cnf:
 
+Tips: As the system will load /etc/my.cnf first,you may delect the /etc/my.cnf or copy the essential information from the following example and paste to /ect/my.cnf. Otherwise it will not work.
 ```cnf
 [mysqld]
 
@@ -246,6 +247,7 @@ Search the ip in the script under `framework/sql`,and replace with the above ip.
 ```
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`
+sed -i "s/10.120.129.226/${your machine ip}/g" `grep 10.120.129.226 -rl ./*`
 ```
 
 Execute
@@ -260,6 +262,32 @@ db_tars is the core database for framework, it consists of services info, servic
 tars_stat is the database for service monitor data.
 
 tars_property is the database for service properties monitor data.
+
+After created these three databases,two tables are missing. Is it possible to create this table(t_server_notifys) for db_tars at the same time? Add the following sql script into db_tars.sql file can solve this problem.
+
+DROP TABLE IF EXISTS `t_server_notifys`;
+CREATE TABLE `t_server_notifys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,  
+  `application` varchar(128) DEFAULT '',  
+  `server_name` varchar(128) DEFAULT NULL, 
+  `container_name` varchar(128) DEFAULT '' , 
+  `node_name` varchar(128) NOT NULL DEFAULT '',  
+  `set_name` varchar(16) DEFAULT NULL,  
+  `set_area` varchar(16) DEFAULT NULL,  
+  `set_group` varchar(16) DEFAULT NULL,  
+  `server_id` varchar(100) DEFAULT NULL,  
+  `thread_id` varchar(20) DEFAULT NULL,  
+  `command` varchar(50) DEFAULT NULL,  
+  `result` text,  
+  `notifytime` datetime DEFAULT NULL,  
+  PRIMARY KEY (`id`),  
+  KEY `index_name` (`server_name`),  
+  KEY `servernoticetime_i_1` (`notifytime`),  
+  KEY `indx_1_server_id` (`server_id`),  
+  KEY `query_index` (`application`,`server_name`,`node_name`,`set_name`,`set_area`,`set_group`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+And append the following command in exec-sql.sh file.
+
+mysql -uroot -proot@appinside db_tas_web < db_tars_web.sql
 
 # 4. <a id="chapter-4"></a>Build runtime environment for Tars framework
 
@@ -295,6 +323,8 @@ make tarsqueryproperty-tar
 The patch package can be deploy after the patch of management platform, see details in chapter 4.4
 
 ## 4.2. Install basic core service for framework
+Tips:There are some *.tgz files under the path of /usr/local/app/TarsFramework/build,such as tarslog.tgz, tarsnotify.tgz and so on. There are the patch package for the following services.
+
 ## 4.2.1. Install basic core service
 
 Change to user root, and create the deploy directory for basic service:
@@ -471,3 +501,7 @@ Deployment message:
 Upload patch package：
 
 ![tars](docs/images/tars_tarsqueryproperty_patch_en.png)
+
+Finally,there are some paths you may need to check for troubleshooting once the system doesn't work as you wish. 
+(1) /usr/local/app/TarsWeb/log 
+(2) /usr/local/app/tars/app_log/tars
