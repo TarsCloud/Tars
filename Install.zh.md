@@ -249,6 +249,7 @@ sql脚本在framework/sql目录下，修改部署的ip信息
 ```
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`
+sed -i "s/10.120.129.226/${your machine ip}/g" `grep 10.120.129.226 -rl ./*`
 ```
 **注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可,不要是127.0.0.1**
 
@@ -270,6 +271,35 @@ chmod u+x exec-sql.sh
 tars_stat是服务监控数据存储的数据库；
 
 tars_property是服务属性监控数据存储的数据库；
+
+创建这3个数据库后，搭建环境过程中会发现还有2个表没有被创建，建议把下表的语句加入db_tars.sql文件中
+```
+DROP TABLE IF EXISTS `t_server_notifys`;
+CREATE TABLE `t_server_notifys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,  
+  `application` varchar(128) DEFAULT '',  
+  `server_name` varchar(128) DEFAULT NULL, 
+  `container_name` varchar(128) DEFAULT '' , 
+  `node_name` varchar(128) NOT NULL DEFAULT '',  
+  `set_name` varchar(16) DEFAULT NULL,  
+  `set_area` varchar(16) DEFAULT NULL,  
+  `set_group` varchar(16) DEFAULT NULL,  
+  `server_id` varchar(100) DEFAULT NULL,  
+  `thread_id` varchar(20) DEFAULT NULL,  
+  `command` varchar(50) DEFAULT NULL,  
+  `result` text,  
+  `notifytime` datetime DEFAULT NULL,  
+  PRIMARY KEY (`id`),  
+  KEY `index_name` (`server_name`),  
+  KEY `servernoticetime_i_1` (`notifytime`),  
+  KEY `indx_1_server_id` (`server_id`),  
+  KEY `query_index` (`application`,`server_name`,`node_name`,`set_name`,`set_area`,`set_group`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+同时希望在exec-sql.sh文件中增加这句语句
+```
+mysql -uroot -proot@appinside db_tars_web < db_tars_web.sql
+```
 
 # 4. <a id="chapter-4"></a>Tars框架运行环境搭建
 
@@ -442,6 +472,8 @@ mkdir -p /data/log/tars
 
 ## 4.4. 安装框架普通基础服务
 **平台部署的端口号仅供参考，保证端口无冲突即可**
+在执行上述的make语句后，/usr/local/app/TarsFramework/build就会生成几个*.tgz文件，例如tarslog.tgz, tarsnotify.tgz等等，这些文件就是下面章节中所需要部署的包文件。
+
 ### 4.4.1 tarsnotify部署发布
 
 默认tarsnotify在安装核心基础服务时，部署信息已初始化了，安装完管理平台后，就可以看到，如下：
@@ -505,3 +537,7 @@ mkdir -p /data/log/tars
 上传发布包后，发布如下：
 
 ![tars](docs/images/tars_tarsqueryproperty_patch.png)
+
+最后，在安装环境过程中，如果系统仍有问题，请到以下的目录查找日志文件分析问题所在：
+(1) /usr/local/app/TarsWeb/log 
+(2) /usr/local/app/tars/app_log/tars
