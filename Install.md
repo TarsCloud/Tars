@@ -96,6 +96,7 @@ perl scripts/mysql_install_db --user=mysql
 vim /usr/local/mysql/my.cnf
 ```
 Here is an example of my.cnf:
+**Tips: As the system will load /etc/my.cnf first,you may delect the /etc/my.cnf or copy the essential information from the following example and paste to /ect/my.cnf. Otherwise it will not work.
 
 ```cnf
 [mysqld]
@@ -246,6 +247,7 @@ Search the ip in the script under `framework/sql`,and replace with the above ip.
 ```
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`
+sed -i "s/10.120.129.226/${your machine ip}/g" `grep 10.120.129.226 -rl ./*`
 ```
 
 Execute
@@ -408,6 +410,9 @@ Visit the website, input ${your machine ip}:3000 into browser:
 ![tars](docs/images/tars_web_system_index_en.png)
 
 ## 4.4. Install general basic service for framework
+
+**Tips:There are some *.tgz files under the path of /usr/local/app/TarsFramework/build,such as tarslog.tgz, tarsnotify.tgz and so on. There are the patch package for the following services.
+
 ### 4.4.1 Deploy and patch tarsnotify
 
 By default, tarsnofity is ready when install core basic service:
@@ -451,10 +456,10 @@ Upload patch package：
 ### 4.4.4 Deploy and patch tarsquerystat
 
 Deployment message:
+**Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**
 
 ![tars](docs/images/tars_tarsquerystat_bushu_en.png)
 
-**Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**
 
 Upload patch package：
 
@@ -463,11 +468,15 @@ Upload patch package：
 ### 4.4.4 Deploy and patch tarsqueryproperty
 
 Deployment message:
+**Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**
 
 ![tars](docs/images/tars_tarsqueryproperty_bushu_en.png)
 
-**Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**
 
 Upload patch package：
 
 ![tars](docs/images/tars_tarsqueryproperty_patch_en.png)
+
+Finally,there are some paths you may need to check for troubleshooting once the system doesn't work as you wish. 
+(1) /usr/local/app/TarsWeb/log 
+(2) /usr/local/app/tars/app_log/tars
