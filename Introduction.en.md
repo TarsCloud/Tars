@@ -10,24 +10,31 @@ Tars is a open-source microservice platform. It contains a high-performance RPC 
 Based on Tars, you can develop a reliable microservice system efficiently.
 
 Tars is an open-source version of TAF which has being used in Tencent for years.
-The name, Tars, comes from the robot in the Interstellar movie, the robot Tars in movie has friendly interactive mode, everyone who first meet him can interact with him
-easily. It can accomplish missions efficiently, even under hard conditions.
-The open-source project Tars carries the same mission as robot Tars does. 
-It is designed for high reliability, high performance, efficient service management.
-By reducing system operation work sharply, developers focus on business logic and meet fast changes of user requirements.
+The name, Tars, comes from the robot in the movie Interstellar.
+In the movie, Tars has a friendly interactive mode - everyone who first meets him can interact with him easily.
+The robot Tars can accomplish missions efficiently, even under hard conditions.
+
+The open-source project Tars carries the same mission as robot Tars does.
+It is designed for high reliability, high performance, and efficient service management.
+By significantly reducing system operation work, developers can focus on business logic and meet fast changes of user requirements.
 
 Right now, thousands of services in Tencent have been developed with TAF, running on tens of thousands of machines.
 
 
 # 2. <a id="main-chapter-2"></a>Design Principles
 
-Tars manages services in microservice style. Tars partitions the system into abstraction layers:
+Tars manages services in microservice style.
+Tars partitions the system into abstraction layers:
 
 ![tars](docs/images/tars-en.png)
 
-As shown in the picture, the bottom layer is protocol layer which unifies bussiness communication protocols by providing IDL(Interface Definition Language) file. 
-The goal of protocol layer is the interoperability of diverse communication with standard protocols. we design this conceptual framework that characterizes and standardizes the communication functions of a framework without regard to their underlying network  structure and technology. 
-Tools are provided to compile IDL files to auto generate cross-platform, extensible protocol codes. Then, developers can focus on protocol field content to describe the business logic. No need to consider the implement details such as cross-platform ability, compatibility and extensibility.
+As shown in the picture, the bottom layer is the protocol layer which unifies bussiness communication protocols by providing an IDL (Interface Definition Language) file. 
+The goal of the protocol layer is the interoperability of diverse communication with standard protocols.
+The design of this conceptual framework characterizes and standardizes the communication functions of frameworks without regard to their underlying network structure and technology.
+
+Tars supplies tools to compile IDL files and auto generate cross-platform, extensible protocol codes.
+Now developers can focus on protocol field content to describe the business logic.
+They're more productive because there's no need to consider the implement details such as cross-platform ability, compatibility, and extensibility.
 
 Platform layer in the middle provides common-used libraries and RPC framework.
 Developers can use them to implement systems with high-performance and high-availability.
@@ -104,7 +111,7 @@ Client visit server: When a client try to visit a service, it needs to connect t
 
 It contains function as below:
 
-- bussiness management: Service management, deploy, publish, monitor, property monitor.
+- business management: Service management, deploy, publish, monitor, property monitor.
 - operation management: service deploy, scale up, templates management.
 
 ## 3.4. service architecture
@@ -116,25 +123,25 @@ The core server and client architecture:
 Server side:
 NetThread: It receives and sends packets. It manages connections and works in multiple threads using EPOLL ET mode. Both TCP and UDP connection are supported.
 
-BindAdapter£∫  It binds port for the server. It also manages binding info for servant.
+BindAdapterÔºö  It binds port for the server. It also manages binding info for servant.
 
-ServantHandle£∫ Bussiness threads, dispatch message for servant object according to object name.
+ServantHandleÔºö Business threads, dispatch message for servant object according to object name.
 
-AdminServant£∫ The servant for Administration.
+AdminServantÔºö The servant for Administration.
 
-ServantImp£∫the basic class for bussiness logic which inherited from Servant.
+ServantImpÔºöThe basic class for business logic which inherited from Servant.
 
 NetThread: It receives and sends packets. It manages connections and works in multiple threads using EPOLL ET mode. Both TCP and UDP connection are supported.
                 
-AdapterProxy£∫The proxy for a specific server. It maintains a connection to a server and manage requests.
+AdapterProxyÔºöThe proxy for a specific server. It maintains a connection to a server and manage requests.
 
-ObjectProxy£∫  The proxy for a remote object. It is responsible for routing, load balancing and fault tolerance.
+ObjectProxyÔºö  The proxy for a remote object. It is responsible for routing, load balancing and fault tolerance.
 
-ServantProxy£∫ The proxy for remote calls, supports sync, asynchronous, one-way request. It also supports tars procotol and non-tars protocol.
+ServantProxyÔºö The proxy for remote calls, supports sync, asynchronous, one-way request. It also supports tars procotol and non-tars protocol.
 
-AsyncThread£∫  The thread that process response for asynchronous requests.
+AsyncThreadÔºö  The thread that process response for asynchronous requests.
 
-Callback£∫Base class for callback of client logic.
+CallbackÔºöBase class for callback of client logic.
 
 # 4. <a id="main-chapter-4"></a>Characters
 ## 4.1. tars protocol
@@ -142,11 +149,11 @@ Callback£∫Base class for callback of client logic.
 Tars protocol is an implementation for IDL language. It is binary, extensible and cross-platform. Thus, servant objects implemented in different languages can communicate with each other through RPC calls.
 
 It supports two data types: basic type and composite type
-–≠“È÷ß≥÷µƒ¿‡–Õ∑÷¡Ω÷÷£¨ª˘±æ¿‡–Õ∫Õ∏¥‘”¿‡–Õ°£
+ÂçèËÆÆÊîØÊåÅÁöÑÁ±ªÂûãÂàÜ‰∏§ÁßçÔºåÂü∫Êú¨Á±ªÂûãÂíåÂ§çÊùÇÁ±ªÂûã„ÄÇ
 
-Basic type include: void°¢bool°¢byte°¢short°¢int°¢long°¢float°¢double°¢string°¢unsigned byte°¢unsigned short°¢unsigned int;
+Basic type include: void, bool, byte, short, int, long, float, double, string, unsigned byte, unsigned short, and unsigned int.
 
-Composite type include: enum°¢const°¢struct°¢vector°¢map.
+Composite type include: enum, const, struct, vector, and map.
 
 For example:
 
@@ -186,7 +193,7 @@ In order to exclude failed server more timely, client shields servers based on r
 
 
 ## 4.5. overload protection
-To avoid system from being overloaded because of burst requests or machine fault, tars handles this scenario in the framework. In order to improve system throughput, server uses request queue to process request asynchronously. Server monitors the length of the queue. If the length exceeds a threshold, the server refuses new requests. If a request stays in the queue for a long time, the server drops the request, too.
+To avoid overloading the system because of burst requests or machine fault, tars handles this scenario in the framework. In order to improve system throughput, server uses request queue to process request asynchronously. Server monitors the length of the queue. If the length exceeds a threshold, the server refuses new requests. If a request stays in the queue for a long time, the server drops the request, too.
 
 
 ![tars](docs/images/tars_overload_en.png)
