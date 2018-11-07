@@ -7,15 +7,15 @@ MysqlIncludePath=
 MysqlLibPath=
 
 
-##°²×°glibc-devel
+##å®‰è£…glibc-devel
 
 yum install -y glibc-devel
 
-##°²×°flex¡¢bison
+##å®‰è£…flexã€bison
 
 yum install -y flex bison
 
-##°²×°cmake
+##å®‰è£…cmake
 
 tar zxvf cmake-2.8.8.tar.gz
 cd cmake-2.8.8
@@ -24,7 +24,7 @@ make
 make install
 cd -
 
-## °²×°mysql
+## å®‰è£…mysql
 yum install -y ncurses-devel
 yum install -y zlib-devel
 
@@ -38,7 +38,7 @@ if [   ! -n "$MysqlIncludePath"  ]
 	ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
 	cd -
   else
-  	## ¸ù¾İmysql ¿âÂ·¾¶ ÅäÖÃ ÉèÖÃframework/CMakeLists.txt tarscpp/CMakeList.txt
+  	## æ ¹æ®mysql åº“è·¯å¾„ é…ç½® è®¾ç½®framework/CMakeLists.txt tarscpp/CMakeList.txt
   	sed -i "s@/usr/local/mysql/include@${MysqlIncludePath}@g" ../framework/CMakeLists.txt
   	sed -i "s@/usr/local/mysql/lib@${MysqlLibPath}@g" ../framework/CMakeLists.txt
   	sed -i "s@/usr/local/mysql/include@${MysqlIncludePath}@g" ../framework/tarscpp/CMakeLists.txt
@@ -63,39 +63,39 @@ cd -
 sed -i "s/192.168.2.131/${MachineIp}/g" `grep 192.168.2.131 -rl ./conf/*`
 cp ./conf/my.cnf /usr/local/mysql/
 
-##Æô¶¯mysql
+##å¯åŠ¨mysql
 service mysql start
 chkconfig mysql on
 
-##Ìí¼ÓmysqlµÄbinÂ·¾¶
+##æ·»åŠ mysqlçš„binè·¯å¾„
 echo "PATH=\$PATH:/usr/local/mysql/bin" >> /etc/profile
 echo "export PATH" >> /etc/profile
 source /etc/profile
 
-##ĞŞ¸Ämysql rootÃÜÂë
+##ä¿®æ”¹mysql rootå¯†ç 
 cd /usr/local/mysql/
 ./bin/mysqladmin -u root password 'root@appinside'
 ./bin/mysqladmin -u root -h ${MachineName} password 'root@appinside'
 cd -
 
-##Ìí¼ÓmysqlµÄ¿âÂ·¾¶
+##æ·»åŠ mysqlçš„åº“è·¯å¾„
 echo "/usr/local/mysql/lib/" >> /etc/ld.so.conf
 ldconfig
 
-##ÏÂÔØC++»ù´¡·şÎñ¿ò¼Ü
+##ä¸‹è½½C++åŸºç¡€æœåŠ¡æ¡†æ¶
 yum install -y git
 cd ../
 git submodule update --init --recursive framework
 cd -
 
-##°²×°c++ÓïÑÔ¿ò¼Ü
+##å®‰è£…c++è¯­è¨€æ¡†æ¶
 cd ../framework/build/
 chmod u+x build.sh
 ./build.sh all
 ./build.sh install
 cd -
 
-##TarsÊı¾İ¿â»·¾³³õÊ¼»¯
+##Tarsæ•°æ®åº“ç¯å¢ƒåˆå§‹åŒ–
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;"
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'localhost' identified by 'tars2015' with grant option;"
 mysql -uroot -proot@appinside -e "grant all on *.* to 'tars'@'${MachineName}' identified by 'tars2015' with grant option;"
@@ -108,7 +108,7 @@ chmod u+x exec-sql.sh
 ./exec-sql.sh
 cd -
 
-##´ò°ü¿ò¼Ü»ù´¡·şÎñ
+##æ‰“åŒ…æ¡†æ¶åŸºç¡€æœåŠ¡
 cd ../framework/build/
 make framework-tar
 
@@ -120,10 +120,12 @@ make tarsquerystat-tar
 make tarsqueryproperty-tar
 cd -
 
-##°²×°ºËĞÄ»ù´¡·şÎñ
+##å®‰è£…æ ¸å¿ƒåŸºç¡€æœåŠ¡
 mkdir -p /usr/local/app/tars/
 cd ../framework/build/
 cp framework.tgz /usr/local/app/tars/
+cd -
+
 cd /usr/local/app/tars
 tar xzfv framework.tgz
 
@@ -137,12 +139,14 @@ chmod u+x tars_install.sh
 
 ./tarspatch/util/init.sh
 
-##°²×°nodejs»·¾³
+##å®‰è£…nodejsç¯å¢ƒ
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 source ~/.bashrc
 nvm install v8.11.3
 
-##°²×°web¹ÜÀíÏµÍ³
+cd -
+
+##å®‰è£…webç®¡ç†ç³»ç»Ÿ
 cd ../
 git submodule update --init --recursive web
 cd web/
