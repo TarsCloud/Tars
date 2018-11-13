@@ -25,6 +25,7 @@ Tars详细介绍参见[Introduction.md](Introduction.md)。
 - Java
 - Nodejs
 - PHP
+- Go
 
 ## 安装说明
 
