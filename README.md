@@ -59,4 +59,5 @@ The open-source protocol Tars used is BSD-3-Clause, see [LICENSE.TXT](LICENSE.TX
 ## Contacts
 
 qq group code：579079160
+WeChat：TARS01
 
