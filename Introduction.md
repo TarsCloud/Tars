@@ -188,14 +188,14 @@ Client主动屏蔽：
 
 ![tars](docs/images/tars_idc.png)
 
-详细介绍参见docs目录下的tars_idc_set.md
+详细介绍参见docs目录下的[tars_idc_set.md](docs/tars_idc_set.md#1-idc分组逻辑介绍-)
 
 ## 4.8. SET分组
 为了方便对业务服务部署管理进行标准化和容量化，框架提供了Set部署能力，set之间没有调用关系，互不干扰，故障隔离，提高运维效率和服务可用性。
 
 ![tars](docs/images/tars_set.png)
 
-详细介绍参见docs目录下的tars_idc_set.md
+详细介绍参见docs目录下的[tars_idc_set.md](docs/tars_idc_set.md#2-set分组逻辑介绍-)
 
 ## 4.9. 数据监控
 为了更好反映和监控小到服务进程、大到业务的运行质量情况，框架支持以下数据上报的功能:
@@ -204,7 +204,7 @@ Client主动屏蔽：
 
 ![tars](docs/images/tars_stat.png)
 
-2.提供了用户自定义属性数据上报的功能，方便用户查看服务的某些纬度或者指标，比如内存使用情况、队列大小、cache命中率等；
+2.提供了用户自定义属性数据上报的功能，方便用户查看服务的某些维度或者指标，比如内存使用情况、队列大小、cache命中率等；
 
 ![tars](docs/images/tars_property.png)
 
@@ -224,6 +224,3 @@ Set配置是具体一个Set分组下所有服务的公共配置，在应用配�
 服务配置是具体一个服务下所有节点的公共配置，可以引用应用配置。
 
 节点配置是一个应用节点的个性化配置，它和服务配置合并成为具体一个服务节点的配置。
-
-详细介绍可以参见docs目录下的tars_config.md
-
