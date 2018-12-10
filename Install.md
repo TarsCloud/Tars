@@ -482,5 +482,5 @@ Finally,there are some paths you may need to check for troubleshooting once the 
 (1) /usr/local/app/TarsWeb/log 
 (2) /usr/local/app/tars/app_log/tars
 
-# 1. <a id="chapter-5"></a>Quick installation of Tars
+# 5. <a id="chapter-5"></a>Quick installation of Tars
 Please refer to https://github.com/TarsCloud/Tars/tree/master/deploy
