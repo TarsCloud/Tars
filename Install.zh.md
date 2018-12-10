@@ -5,6 +5,7 @@
 > * [Tars开发环境安装介绍](#chapter-2)
 > * [Tars数据库环境初始化](#chapter-3)
 > * [Tars框架运行环境搭建](#chapter-4)
+> * [Tars一键化部署方案](#chapter-5)
 
 本安装文档仅描述了在一台服务器上安装搭建整个Tars框架的过程，目的是为了让用户对Tars框架的部署搭建、运行、测试等有个整体的认识。
 
@@ -513,3 +514,6 @@ mkdir -p /data/log/tars
 最后，在安装环境过程中，如果系统仍有问题，请到以下的目录查找日志文件分析问题所在：
 (1) /usr/local/app/TarsWeb/log 
 (2) /usr/local/app/tars/app_log/tars
+
+# 5. <a id="chapter-5"></a>Tars一键化部署方案
+请参考 https://github.com/TarsCloud/Tars/tree/master/deploy
