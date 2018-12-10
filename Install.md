@@ -5,7 +5,7 @@
 > * [Introduction of Tars's development environment installation](#chapter-2)
 > * [Installation of Tars's DB environment](#chapter-3)
 > * [Deploymen of the runtime environment for Tars framework](#chapter-4)
-> * [Quick installation of software](#chapter-5)
+> * [Quick installation of Tars](#chapter-5)
 
 
 This doc described the steps of deploying Tars framework, aimed to make users have a whole cognition of deploy, running and test Tars framework.
@@ -482,5 +482,5 @@ Finally,there are some paths you may need to check for troubleshooting once the 
 (1) /usr/local/app/TarsWeb/log 
 (2) /usr/local/app/tars/app_log/tars
 
-# 1. <a id="chapter-5"></a>Quick installation of software  
+# 1. <a id="chapter-5"></a>Quick installation of Tars
 Please refer to https://github.com/TarsCloud/Tars/tree/master/deploy
