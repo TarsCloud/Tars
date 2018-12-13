@@ -103,13 +103,13 @@ web管理系统主要包含以下功能：
 
 NetThread：    收发包，连接管理，多线程(可配置），采用epoll ET触发实现，支持tcp/udp；
 
-BindAdapter：  绑定端口类，用于管理servent对应的绑定端口的信息操作；
+BindAdapter：  绑定端口类，用于管理Servant对应的绑定端口的信息操作；
 
 ServantHandle：业务线程类，根据对象名分派Servant的对象和接口调用；
 
 AdminServant： 管理端口的对象；
 
-ServantImp：   继承Servant的业务处理基类（Servent：服务端接口对象的基类）；
+ServantImp：   继承Servant的业务处理基类（Servant：服务端接口对象的基类）；
 
 客户端：
 
