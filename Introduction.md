@@ -224,3 +224,5 @@ Set配置是具体一个Set分组下所有服务的公共配置，在应用配�
 服务配置是具体一个服务下所有节点的公共配置，可以引用应用配置。
 
 节点配置是一个应用节点的个性化配置，它和服务配置合并成为具体一个服务节点的配置。
+
+详细介绍可以参见docs目录下的[tars_config.md](https://github.com/TarsCloud/TarsFramework/blob/master/docs/tars_config.md)
