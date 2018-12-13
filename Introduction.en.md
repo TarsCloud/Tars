@@ -210,12 +210,14 @@ tars groups server according to their locations. When a client queries servers o
 
 ![tars](docs/images/tars_idc_en.png)
 
-See details in tars_idc_set.md
+See details in [tars_idc_set.md](docs/tars_idc_set.md#1-idc分组逻辑介绍-)
 
 ## 4.8. SET group
 To facilitate service management, tars groups servers into sets. Clients in a set can only send request to servers in the same set. Thus, servers in different sets can be isolated and operators can manage user requests in a finer way.
 
 ![tars](docs/images/tars_set_en.png)
+
+See details in [tars_idc_set.md](docs/tars_idc_set.md#2-set分组逻辑介绍-)
 
 ## 4.9. Monitor data
 
