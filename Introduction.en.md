@@ -210,12 +210,14 @@ tars groups server according to their locations. When a client queries servers o
 
 ![tars](docs/images/tars_idc_en.png)
 
-See details in tars_idc_set.md
+See details in [tars_idc_set.md](docs-en/tars_idc_set.md#1-idc-grouping-logic-introduction-).
 
 ## 4.8. SET group
 To facilitate service management, tars groups servers into sets. Clients in a set can only send request to servers in the same set. Thus, servers in different sets can be isolated and operators can manage user requests in a finer way.
 
 ![tars](docs/images/tars_set_en.png)
+
+See details in [tars_idc_set.md](docs-en/tars_idc_set.md#2-set-grouping-logic-introduction-).
 
 ## 4.9. Monitor data
 
@@ -246,4 +248,4 @@ Service configuration is for all server of a specific service, it can refer to a
 
 Server configuration is a specified server. Service configuration and server configuration are combined together and use by the server.
 
-See details in [Tars Config](docs/tars_config.md)
+See details in [tars_config.md](https://github.com/TarsCloud/TarsFramework/blob/master/docs-en/tars_config.md).
