@@ -111,5 +111,8 @@ make framework-tar这个命令打包的是tars核心基础服务，核心基础�
 修改 src/main/resources/conf-spring/spring-context-mvc.xml   
 中的maxUploadSize 大小，然后重启resein就ok了
 
+## 20 老版本升级到支持IPv6版本(v1.6.0及以上)，数据库升级方法
+
+执行TarsFramework/sql/upgrade2IPv6.sh的数据库升级脚本，注意保证数据库密码正确性
 
 
