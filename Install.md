@@ -393,6 +393,7 @@ cd web
 sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js
 sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf
 ```
+Execute the TarsWeb SQL script in mysql: TarsWeb/sql/db_tars_web.sql
 
 Install web management page dependencies, start web
 ```
