@@ -424,6 +424,7 @@ cd web
 sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js
 sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf
 ```
+执行TarsWeb的SQL脚本：TarsWeb/sql/db_tars_web.sql
 
 安装web管理页面依赖，启动web
 ```
