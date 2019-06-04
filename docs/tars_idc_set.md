@@ -75,9 +75,9 @@
 
 Set名 |Set地区 |Set组名 |服务列表
 ------|-----|------|----
-APP |SZ |1 |A,B,C
+APP |SZ |1 |A,B,C,F
 APP |SZ |2 |A,B,C
-APP |SZ |\*(通配符) |C,E,D 
+APP |SZ |\*(通配符) |C,E,D,F 
 APP |SH |1 |A,B,C
 APP |SH |2 |A,B,C
 
