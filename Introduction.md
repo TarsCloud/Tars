@@ -121,6 +121,7 @@ The core server and client architecture:
 ![tars](docs/images/tars_server_client.png)
 
 Server side:
+
 NetThread: It receives and sends packets. It manages connections and works in multiple threads using EPOLL ET mode. Both TCP and UDP connection are supported.
 
 BindAdapter：  It binds port for the server. It also manages binding info for servant.
@@ -131,8 +132,6 @@ AdminServant： The servant for Administration.
 
 ServantImp：The basic class for business logic which inherited from Servant.
 
-NetThread: It receives and sends packets. It manages connections and works in multiple threads using EPOLL ET mode. Both TCP and UDP connection are supported.
-                
 AdapterProxy：The proxy for a specific server. It maintains a connection to a server and manage requests.
 
 ObjectProxy：  The proxy for a remote object. It is responsible for routing, load balancing and fault tolerance.
