@@ -8,7 +8,7 @@ Only original source code from CLA signatories can be accepted into TARS.
 
 ## What am I agreeing to? 
 
-This CLA allows either an individual or an entity (the "**Corporation**") to Submit Contributions to Tencent, to authorize Contributions Submitted by its employees or agents to Tencent (in the case of a Corporation), and to grant copyright and patent licenses thereto. 
+This CLA allows either an individual or an entity (the "**Corporation**") to Submit Contributions to Tars Project, to authorize Contributions Submitted by its employees or agents to Tencent (in the case of a Corporation), and to grant copyright and patent licenses thereto. 
 
 It is important to read and understand this legal agreement.
 
