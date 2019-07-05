@@ -1,4 +1,4 @@
-[点我查看中文版](Install.zh.md)
+[点我查看中文版](Install_faq.zh.md)
 
 ## 1. You can't deploy service on IP `127.0.0.1` for the following reasons:
 

@@ -1,4 +1,4 @@
-[Click me switch to English version](Install_faq.en.md)
+[Click me switch to English version](Install_faq.md)
 
 ## 1. 部署ip不能为`127.0.0.1`，原因如下：
 
@@ -24,7 +24,8 @@
 
 (注意，有些低版本的mysql安装后，include 的路径为 `/usr/local/mysql/include/mysql`，lib 的路径为 `/usr/local/mysql/lib/mysql/`，也需要改CMakeLists.txt)。
 
-## 6. 执行tars_start.sh脚本后，需要确定一下tars核心基础服务的进程是否是活的，可以使用命令:`ps -ef|grep tars`，看看 tarsregistry、tarsAdminRegistry、tarsnode、tarsconfig、tarspatch进程是否存在
+## 6. 执行tars_start.sh脚本后，需要确定一下tars核心基础服务的进程是否是活的
+可以使用命令:`ps -ef|grep tars`，看看 tarsregistry、tarsAdminRegistry、tarsnode、tarsconfig、tarspatch进程是否存在
 
 ## 7. 没有对mysql使用的`my.cnf`的sql_mode进行设置的话，在tars web前台部署时，会出现"部署申请失败!请联系管理员"的提示信息。
 
@@ -60,27 +61,27 @@
 ## 10. 服务部署的相关路径，如下
 
 服务打的日志路径在
-`/usr/local/app/tars/app_log/服务的应用名/服务的服务名/`
+`/usr/local/app/tars/app_log/${服务的应用名}/${服务的服务名}/`
 目录下，例如: 
 ```
 /usr/local/app/tars/app_log/Test/HelloServer/
 ```
 
 服务的可执行文件在
-`/usr/local/app/tars/tarsnode/data/服务的应用名.服务的服务名/bin/`
+`/usr/local/app/tars/tarsnode/data/${服务的应用名}.${服务的服务名}/bin/`
 下,例如:
 ```
 /usr/local/app/tars/tarsnode/data/Test.HelloServer/bin/
 ```
 服务的模版配置文件在 
-`/usr/local/app/tars/tarsnode/data/服务的应用名.服务的服务名/conf/`
+`/usr/local/app/tars/tarsnode/data/${服务的应用名}.${服务的服务名}/conf/`
 下,
 例如:
 ```
 /usr/local/app/tars/tarsnode/data/Test.HelloServer/conf/
 ```
 服务的缓存信息文件在
-`/usr/local/app/tars/tarsnode/data/服务的应用名.服务的服务名/data/`
+`/usr/local/app/tars/tarsnode/data/${服务的应用名}.${服务的服务名}/data/`
 下,例如:
 ```
 /usr/local/app/tars/tarsnode/data/Test.HelloServer/data/
