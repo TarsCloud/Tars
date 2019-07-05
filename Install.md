@@ -127,7 +127,8 @@ datadir = /usr/local/mysql/data
 # server_id = .....  
 socket = /tmp/mysql.sock  
   
-bind-address={$your machine ip}  
+bind-address=$
+{your machine ip}  
   
 # Remove leading # to set options mainly useful for reporting servers.  
 # The server defaults are faster for transactions and fast SELECTs.  
@@ -235,7 +236,7 @@ set global validate_password_length=1;
 Now replace the default password with a new password with a six-character minimum restriction.  
 
 ```  sql
-ALTER USER 'root'@'localhost' IDENTIFIED BY '{your passwd}';  
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${your passwd}';  
 flush privileges;  
 ```  
   
@@ -267,15 +268,15 @@ npm i -g pm2
 
 Download **TarsFramework** source code:
 ```  bash
-cd {$source_folder}  
+cd ${source_folder}  
 git clone https://github.com/TarsCloud/TarsFramework.git --recursive  
 ```  
   
 Then change the directory to the build folder:   
 ```  bash
-cd {$source_folder}  
+cd ${source_folder}  
 git clone https://github.com/TarsCloud/TarsFramework.git --recursive  
-cd {$source_folder}/TarsFramework/build  
+cd ${source_folder}/TarsFramework/build  
 chmod u+x build.sh  
 ./build.sh prepare  
 ./build.sh all  
@@ -299,7 +300,7 @@ chown ${normal user}:${normal user} ./tars/
 Installation:
   
 ```  bash
-cd {$source_folder}/build  
+cd ${source_folder}/build  
 ./build.sh install or make install  
 ```  
 
