@@ -18,13 +18,13 @@
 
 ## 4. Tars部署安装步骤要按`Install.md`文档先后顺序进行。
 
-## 5. mysql可以源码安装，也或者通过yum等工具来安装，注意的是Tars编译时默认使用的mysql开发库路径：`include`的路径为`/usr/local/mysql/include`，`lib`的路径为`/usr/local/mysql/lib/`。
+## 5. mysql可以源码安装，也或者通过yum等工具来安装，注意的是Tars编译时默认使用的mysql开发库路径：include 的路径为`/usr/local/mysql/include`，lib 的路径为`/usr/local/mysql/lib/`。
 
 若mysql开发库的安装路径不在默认路径，则需要修改build目录下CMakeLists.txt (`framework/tarscpp/CMakeLists.txt`, `framework/CMakeLists.txt`)文件中的mysql相关的路径，再编译。
 
-(注意，有些低版本的mysql安装后，include的路径为 `/usr/local/mysql/include/mysql`，lib的路径为 `/usr/local/mysql/lib/mysql/`，也需要改CMakeLists.txt)。
+(注意，有些低版本的mysql安装后，include 的路径为 `/usr/local/mysql/include/mysql`，lib 的路径为 `/usr/local/mysql/lib/mysql/`，也需要改CMakeLists.txt)。
 
-## 6. 执行tars_start.sh脚本后，需要确定一下tars核心基础服务的进程是否是活的，可以使用命令:`ps -ef|grep tars`，看看 `tarsregistry`、`tarsAdminRegistry`、`tarsnode`、`tarsconfig`、`tarspatch`进程是否存在：
+## 6. 执行tars_start.sh脚本后，需要确定一下tars核心基础服务的进程是否是活的，可以使用命令:`ps -ef|grep tars`，看看 tarsregistry、tarsAdminRegistry、tarsnode、tarsconfig、tarspatch进程是否存在
 
 ## 7. 没有对mysql使用的`my.cnf`的sql_mode进行设置的话，在tars web前台部署时，会出现"部署申请失败!请联系管理员"的提示信息。
 
@@ -86,7 +86,10 @@
 /usr/local/app/tars/tarsnode/data/Test.HelloServer/data/
 ```
 
-## 11. 查看日志的方法，例如：`/usr/local/app/tars/app_log/Test/HelloServer/` 目录下会有 `Test.HelloServer.log` , 发布失败的话，可以看看里面有什么错误日志，其日志级别为ERROR。
+## 11. 查看日志的方法
+例如：
+
+`/usr/local/app/tars/app_log/Test/HelloServer/` 目录下会有 `Test.HelloServer.log` , 发布失败的话，可以看看里面有什么错误日志，其日志级别为ERROR。
 
 ## 12. java的服务部署时，模版配置要选择 `tars.tarsjava.default`
 
@@ -122,7 +125,7 @@
 
 ![tars](docs/question_images/registry_not_founded.png)
 
-首先，确定核心基础服务tarsregistry、tarsAdminRegistry、tarsnode、tarsconfig、tarspatch的进程是否是活的，比如用ps -ef|grep tars命令查看，如果进程不存在，看看是否是db配置信息有问题
+首先，确定核心基础服务tarsregistry、tarsAdminRegistry、tarsnode、tarsconfig、tarspatch的进程是否是活的，比如用 `ps -ef|grep tars` 命令查看，如果进程不存在，看看是否是db配置信息有问题
 
 然后，确定rsync进程是否存在
 
@@ -149,6 +152,9 @@
 
 ## 20. 老版本升级到支持IPv6版本(v1.6.0及以上)，数据库升级方法
 
-执行 `TarsFramework/sql/upgrade2IPv6.sh` 的数据库升级脚本，注意保证数据库密码正确性
+执行以下数据库升级脚本，注意保证数据库密码正确性
+```
+TarsFramework/sql/upgrade2IPv6.sh
+```
 
 
