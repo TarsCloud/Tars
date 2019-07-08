@@ -566,10 +566,6 @@ mkdir -p /data/log/tars
 
 ![tars](docs/images/tars_tarslog_bushu.png)
 
-tarslog配置的时候参考的截图里的template不应该是tars.default，而是tars.tarslog
-
-
-
 上传发布包后，发布如下：
 
 ![tars](docs/images/tars_tarslog_patch.png)
