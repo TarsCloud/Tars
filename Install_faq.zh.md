@@ -1,4 +1,4 @@
-[Click me switch to English version](Install_faq.en.md)
+[Click me switch to English version](install_faq.md)
 
 ## 1. 部署ip不能为127.0.0.1，原因如下：
 

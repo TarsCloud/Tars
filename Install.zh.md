@@ -78,7 +78,7 @@ ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
 下载mysql源码（这里使用的是mysql-5.6.26）,用utf8的安装方式mysql，解压后编译：
 下面增加了mysql-5.6.26的安装方式
 ```
-cd {mysql下载目录}
+cd ${mysql安装目录}
 wget https://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz
 tar -zxvf mysql-5.6.26.tar.gz
 cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.26 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DMYSQL_USER=mysql -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci
@@ -129,7 +129,7 @@ datadir = /usr/local/mysql/data
 # server_id = .....
 socket = /tmp/mysql.sock
 
-bind-address={$your machine ip}
+bind-address=${your machine ip}
 
 # Remove leading # to set options mainly useful for reporting servers.
 # The server defaults are faster for transactions and fast SELECTs.
@@ -230,7 +230,7 @@ mysql> set global validate_password_length=1;
 修改之后只有6个字符的最小长度限制
 接着修改密码
 ```
-mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '¥{your passwd}';
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '${your password}';
 ```
 
 
@@ -261,14 +261,14 @@ npm i -g pm2
 
 
 ```
-cd {$source_folder}
+cd ${source_folder}
 git clone https://github.com/TarsCloud/TarsFramework.git --recursive
 ```
 
 
 然后进入build源码目录
 ```
-cd {$source_folder}/build
+cd ${source_folder}/build
 chmod u+x build.sh
 ./build.sh prepare
 ./build.sh all
@@ -276,7 +276,7 @@ chmod u+x build.sh
 
 **编译时默认使用的mysql开发库路径：include的路径为/usr/local/mysql/include，lib的路径为/usr/local/mysql/lib/**
 
-若mysql开发库的安装路径不在默认路径需要修改CMakeLists文件中mysql开发库的路径。CMakeLists在`{$source_folder}/TarsFramework/`和`{$source_folder}/TarsFramework/tarscpp/` 目录下各有一个同名文件。
+若mysql开发库的安装路径不在默认路径需要修改CMakeLists文件中mysql开发库的路径。CMakeLists在`${source_folder}/TarsFramework/`和`${source_folder}/TarsFramework/tarscpp/` 目录下各有一个同名文件。
 修改文件中上述路径为本机mysql开发库的路径
 (参考路径：/usr/include/mysql；/usr/lab64/mysql)。
 
@@ -296,7 +296,7 @@ chown ${普通用户}:${普通用户} ./tars/
 
 安装
 ```
-cd {$source_folder}/build
+cd ${source_folder}/build
 ./build.sh install或者make install
 ```
 **默认的安装路径为/usr/local/tars/cpp。**
@@ -503,14 +503,14 @@ git clone https://github.com/TarsCloud/TarsWeb.git
 
 修改配置文件，将配置文件中的ip地址修改为本机ip地址，如下：
 ```
-cd {安装目录}
+cd ${安装目录}
 sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js
 sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf
 ```
 
 安装web管理页面依赖，启动web
 ```
-cd {安装目录}
+cd ${安装目录}
 npm install --registry=https://registry.npm.taobao.org
 npm run prd
 ```
