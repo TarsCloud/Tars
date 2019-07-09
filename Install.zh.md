@@ -279,7 +279,7 @@ chmod u+x build.sh
 
 若mysql开发库的安装路径不在默认路径需要修改CMakeLists文件中mysql开发库的路径。CMakeLists在`${source_folder}/TarsFramework/`和`${source_folder}/TarsFramework/tarscpp/` 目录下各有一个同名文件。
 修改文件中上述路径为本机mysql开发库的路径
-(参考路径：/usr/include/mysql；/usr/lab64/mysql)。
+(参考路径：/usr/include/mysql；/usr/lib64/mysql)。
 
 
 如果需要重新编译
@@ -437,7 +437,7 @@ tarspatch/util/init.sh
 
 在管理平台上面配置tarsconfig，注意需要配置服务的可执行目录(/usr/local/app/tars/tarsconfig/bin/tarsconfig)
 
-tarsnode需要配置监控，避免不小心挂了以后会启动，需要在crontab里面配置
+在crontab配置一个进程监控，确保TARS框架服务在出现异常后能够重新启动。
 ```
 * * * * * /usr/local/app/tars/tarsnode/util/monitor.sh
 ```
@@ -486,7 +486,7 @@ chmod u+x tarsnode_install.sh
 ./tarsnode_install.sh
 ```
 
-配置监控，避免不小心挂了以后会启动，需要在crontab里面配置
+在crontab配置一个进程监控，确保TARS框架服务在出现异常后能够重新启动。
 ```
 * * * * * /usr/local/app/tars/tarsnode/util/monitor.sh
 ```
