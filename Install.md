@@ -417,7 +417,7 @@ tarspatch/util/init.sh
 Deploy tarspatch on management platform.  
 Deploy tarsconfig on management platform.  
   
-you need configure monitor for tarsnode by crontab, ensure it'll be launched after crash:  
+You need to configure monitor for tarsnode by crontab. Ensure that it'll be launched after crash:  
 ```  
 * * * * * /usr/local/app/tars/tarsnode/util/monitor.sh  
 ```  
@@ -457,7 +457,8 @@ chmod u+x tarsnode_install.sh
 tarsnode_install.sh  
 ```  
   
-Configure a checking crontab for tarsnode,ensuring it's always alive:  
+You need to configure monitor for tarsnode by crontab. Ensure that it'll be launched after crash:
+
 ```  
 * * * * * /usr/local/app/tars/tarsnode/util/monitor.sh  
 ```  
