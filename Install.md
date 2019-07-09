@@ -489,9 +489,6 @@ Create log directory
 mkdir -p /data/log/tars  
 ```  
 
-``` bash  
-git clone https://github.com/TarsCloud/TarsWeb.git  
-```  
 visit the website, input`${your machine ip}:3000` into browser.  
   
 ![tars](docs/images/tars_web_system_index_en.png)  
