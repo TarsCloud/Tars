@@ -78,7 +78,7 @@ ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
   
 Download mysql source (mysql-5.6.26), set charset to utf-8.  
 ```  bash
-cd {mysql_folder}  
+cd ${mysql_folder}  
 wget https://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz  
 tar -zxvf mysql-5.6.26.tar.gz  
 cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.26 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DMYSQL_USER=mysql -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci  
@@ -127,8 +127,7 @@ datadir = /usr/local/mysql/data
 # server_id = .....  
 socket = /tmp/mysql.sock  
   
-bind-address=$
-{your machine ip}  
+bind-address=${your machine ip}  
   
 # Remove leading # to set options mainly useful for reporting servers.  
 # The server defaults are faster for transactions and fast SELECTs.  
@@ -473,14 +472,14 @@ git clone https://github.com/TarsCloud/TarsWeb.git
 ```  
 Modify the configuration file and change the IP address in the configuration file to the local IP address, as follows:  
 ```  bash
-cd {install folder}  
+cd ${install folder}  
 sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js  
 sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf  
 ```  
   
 Install web management page dependencies, start web  
 ```  bash
-cd {install folder}  
+cd ${install folder}  
 npm install --registry=https://registry.npm.taobao.org  
 npm run prd  
 ```  
