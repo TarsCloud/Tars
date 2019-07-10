@@ -157,5 +157,10 @@
 ```
 TarsFramework/sql/upgrade2IPv6.sh
 ```
-
-
+## 21. 若需要从其他机器访问TarsWeb，需要开启TCP的3000端口权限，命令如下：
+```
+firewall-cmd --add-port=3000/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --query-port=3000/tcp
+```
+第三行是检测是否开启的语句，如果输出“yes”表示已经开启端口。
