@@ -60,9 +60,10 @@ Tars的开源协议为BSD-3-Clause，详情参见[LICENSE.TXT](LICENSE.TXT)。
 
 ## 联系方式
 
-qq技术交流群1群：579079160（已满）。
+qq技术交流群1群：579079160。
 
 qq技术交流群2群：669339903。
 
 微信号：TARS01
 
+推特地址：https://twitter.com/TarsCloud
