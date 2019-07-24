@@ -149,7 +149,6 @@ Callback：Base class for callback of client logic.
 Tars protocol is an implementation for IDL language. It is binary, extensible and cross-platform. Thus, servant objects implemented in different languages can communicate with each other through RPC calls.
 
 It supports two data types: basic type and composite type
-协议支持的类型分两种，基本类型和复杂类型。
 
 Basic type include: void, bool, byte, short, int, long, float, double, string, unsigned byte, unsigned short, and unsigned int.
 
