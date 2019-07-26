@@ -41,15 +41,15 @@ yum install glibc-devel
 cmake是tars框架服务依赖的编译环境。
 
 下载cmake-2.8.8源码包，解压：
-```
+``` bash
 tar zxvf cmake-2.8.8.tar.gz
-```
+``` 
 进入目录：
-```
+``` bash
 cd cmake-2.8.8
 ```
 进行如下操作：（选择适合自己的操作步骤）
-```
+``` bash
 ./bootstrap(如果系统还没有安装CMake，源码中提供了一个 bootstrap 脚本)
 make
 make install(如果make install失败，一般是权限不够，切换root进行安装)
@@ -62,13 +62,13 @@ make install(如果make install失败，一般是权限不够，切换root进行
 源码安装可以对数据库进行自定义。
 
 安装前，确定系统是否安装了ncurses、zlib，若没有，可以执行：
-```
+``` bash
 yum install ncurses-devel
 yum install zlib-devel
 ```
 
 设置安装目录，切换至root用户
-```
+``` bash
 cd /usr/local
 mkdir mysql-5.6.26
 chown ${普通用户}:${普通用户} ./mysql-5.6.26
@@ -78,7 +78,7 @@ ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
 用utf8的安装方式
 下载mysql源码（这里使用的是mysql-5.6.26）,用utf8的安装方式mysql，解压后编译：
 下面增加了mysql-5.6.26的安装方式
-```
+``` bash
 cd ${mysql安装目录}
 wget https://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz
 tar -zxvf mysql-5.6.26.tar.gz
@@ -92,7 +92,7 @@ make install
 对于在服务器用Tars的c++进行开发编译服务代码而言，经过上面步骤就可以进行编译安装Tars开发框架了。
 
 若要是搭建Tars框架的运行环境，需要以下步骤，切换至root用户，对mysql进行配置。
-```shell
+``` bash
 yum install perl
 cd /usr/local/mysql
 useradd mysql
@@ -112,7 +112,7 @@ rm -rf /etc/my.cnf
 
 给一个my.cnf配置实例：
 
-```cnf
+``` cnf
 [mysqld]
 
 # Remove leading # and set to the amount of RAM for the most important data
@@ -154,13 +154,13 @@ chkconfig mysql on
 service mysql stop
 ```
 添加mysql的bin路径
-```
+``` bash
 vim /etc/profile
 PATH=$PATH:/usr/local/mysql/bin
 export PATH
 ```
 修改root密码(采用root密码)
-```
+``` bash
 ./bin/mysqladmin -u root password 'root@appinside'
 ./bin/mysqladmin -u root -h ${主机名} password 'root@appinside'
 ```
@@ -168,7 +168,7 @@ export PATH
 
 
 添加mysql库路径
-```
+``` bash
 vim /etc/ld.so.conf
 /usr/local/mysql/lib/
 ldconfig
@@ -177,11 +177,11 @@ ldconfig
 mysql主从配置可以参考网上教程
 
 master赋予权限:
-```
+``` sql
 GRANT REPLICATION SLAVE ON *.* to 'mysql-sync'@'%' identified by 'sync@appinside'
 ```
 slave设置主备同步项
-```
+``` bash
 change master to master_host='${备机Ip}',master_user='mysql-sync',master_password='sync@appinside' ,master_log_file='iZ94orl0ix4Z-bin.000004',master_log_pos=611;
 stop slave
 start slave
@@ -195,7 +195,7 @@ show slave status\G;
 在mysql 5.7版本之后删除了源码中的mysql_install_db.sh安装脚本，因此上述方法不适用。
 yum安装相对便捷，但是没办法实现自定义安装。如果对自定义安装有需求的请使用源码安装。
 #### 1.3.2.1 从yum repository安装mysql
-```
+``` bash
 wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
 yum -y install mysql57-community-release-el7-10.noarch.rpm
 yum -y install mysql-community-server
@@ -204,33 +204,33 @@ yum -y install  mysql-devel
 这样mysql就安装好了
 其中wget中的库地址可以根据需要替换版本号
 如果wget无法安装，可以尝试按照下述步骤将mysql repository添加到本地服务，然后再重新执行上述命令
-```
+``` bash
 sudo yum localinstall https://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
 ```
 #### 1.3.2.2 设置mysql
 启动mysql并查看运行状态
 
-```
+``` sql
 systemctl start  mysqld.service
 systemctl status mysqld.service
 ```
 mysql开始运行并通过3306端口进行连接。
 
 通过yum安装mysql的话root账号会默认设置一个密码，可以通过下面的方式获得。
-```
+``` bash
 grep "password" /var/log/mysqld.log
 ```
 使用这个密码登陆root的账户。mysql要求必须更改密码才能做数据库操作。
 如果你安装的mysql版本是5.7及以上，mysql的密码设置有安全性要求(长度、大小写、特殊字符)，以下两种方式可以选择
 1. 设置满足要求的密码
 2. 通过下面的方式降低密码安全性规则
-```
-mysql> set global validate_password_policy=0;
-mysql> set global validate_password_length=1;
+``` set
+set global validate_password_policy=0;
+set global validate_password_length=1;
 ```
 修改之后只有6个字符的最小长度限制
 接着修改密码
-```
+``` sql
 mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '${your password}';
 ```
 
@@ -242,33 +242,33 @@ mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '${your password}';
 以官网提供的nvm脚本安装
 
 执行以下命令：
-```
+``` bash
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 source ~/.bashrc
 ```
 
 node和带有负载功能的node应用的进程管理器pm2安装
-```
+``` bash
 nvm install v8.11.3
 npm install -g pm2 --registry=https://registry.npm.taobao.org
 ```
 如果pm2库无法识别，执行下列命令：
-```
+``` bash
 npm i -g pm2
 ```
 ### 2.2. c++ 开发环境安装
 
-下载TarsFramework源码
+>管理系统源代码目录名称为**framework**
 
+也可以clone TarsFramework文件夹
 
-```
+``` bash
 cd ${source_folder}
 git clone https://github.com/TarsCloud/TarsFramework.git --recursive
 ```
 
-
 然后进入build源码目录
-```
+``` bash
 cd ${source_folder}/build
 chmod u+x build.sh
 ./build.sh prepare
@@ -283,21 +283,21 @@ chmod u+x build.sh
 
 
 如果需要重新编译
-```
+``` bash
 ./build.sh cleanall
 ./build.sh all
 ```
 
 切换至root用户，创建安装目录
-```
+``` bash
 cd /usr/local
 mkdir tars
 chown ${普通用户}:${普通用户} ./tars/
 ```
 
 安装
-```
-cd ${source_folder}/build
+``` bash
+cd ${source_folder}/TarsFramework//build
 ./build.sh install或者make install
 ```
 **默认的安装路径为/usr/local/tars/cpp。**
@@ -323,22 +323,24 @@ flush privileges;
 **注意${主机名}需要修改成自身机器的名称，可以通过查看/etc/hosts
 
 ## 3.2. 创建数据库
-sql脚本在framework/sql目录下，修改部署的ip信息
-```
+sql脚本在TarsFramework/sql目录下，修改部署的ip信息
+``` bash
+cd ${source_folder}/TarsFramework/sql
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`
 sed -i "s/10.120.129.226/${your machine ip}/g" `grep 10.120.129.226 -rl ./*`
 ```
-**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可,不要是127.0.0.1**
+**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，因此要替换成自己数据库的部署地址即可,不要是127.0.0.1**
 
-**注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
+**注意，db.tars.com是tars框架数据库部署的地址信息，因此替换成自己数据库的部署地址即可**
+
+**上述替换只需将${your machine ip}改为部署机器的IP即可**
 
 执行.
-```
+``` bash
 chmod u+x exec-sql.sh
 ./exec-sql.sh
 ```
-**注意将${your machine ip}改为部署机器的IP**
 
 **如果exec-sql.sh脚本执行出错，需要脚本里修改数据库用户名root对应的密码**
 
@@ -367,14 +369,14 @@ tars_property是服务属性监控数据存储的数据库；
 ```
 
 首先准备第一种服务的安装包，在build/目录下输入：
-```
+``` bash
 make framework-tar
 ```
 会在当前目录生成framework.tgz 包
 这个包包含了 tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig, tarspatch 部署相关的文件
 
 第二种服务安装包可以单独准备：
-```
+``` bash
 make tarsstat-tar
 make tarsnotify-tar
 make tarsproperty-tar
@@ -391,22 +393,21 @@ make tarsqueryproperty-tar
 ### 4.2.1. 安装核心基础服务
 
 切换至root用户，创建基础服务的部署目录，如下：
-```  shell
+``` bash
 cd /usr/local/app
 mkdir tars
 chown ${普通用户}:${普通用户} ./tars/
 ```
 
 将已打好的框架服务包复制到/usr/local/app/tars/，然后解压，如下：
-``` shell
-cp build/framework.tgz /usr/local/app/tars/
+``` bash
+cp ${source_folder}/TarsFramework/build/framework.tgz /usr/local/app/tars/
 cd /usr/local/app/tars
 tar xzfv framework.tgz
 ```
 
 修改各个服务对应conf目录下配置文件，注意将配置文件中的ip地址修改为本机ip地址，如下：
-``` shell
-cd /usr/local/app/tars
+``` bash
 sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`
@@ -421,14 +422,14 @@ sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
 **注意，web.tars.com是rsync使用的地址信息，替换成自己的部署机器地址即可**
 
 然后在/usr/local/app/tars/目录下，执行脚本，启动tars框架服务
-```
+``` bash
 chmod u+x tars_install.sh
 ./tars_install.sh
 ```
 **注意如果几个服务不是部署在同一台服务器上，需要自己手工copy以及处理tars_install.sh脚本**
 
 部署管理平台并启动web管理平台(管理平台必须和tarspatch部署在同一台服务器上)部署tarspatch，切换至root用户，并执行
-```
+``` bash
 tarspatch/util/init.sh
 ```
 **注意，上面脚本执行后，看看rsync进程是否起来了，若没有看看rsync使用的配置中的ip是否正确（即把web.tars.com替换成本机ip）
@@ -451,21 +452,21 @@ tarspatch/util/init.sh
 具体步骤跟上一节很像，如下：
 
 切换至root用户，创建基础服务的部署目录，如下：
-```  shell
+``` bash
 cd /usr/local/app
 mkdir tars
 chown ${普通用户}:${普通用户} ./tars/
 ```
 
 将已打好的框架服务包复制到/usr/local/app/tars/，然后解压，如下：
-``` shell
-cp build/framework.tgz /usr/local/app/tars/
+``` bash
+cp ${source_folder}/TarsFramework/build/framework.tgz /usr/local/app/tars/
 cd /usr/local/app/tars
 tar xzfv framework.tgz
 ```
 
 修改各个服务对应conf目录下配置文件，注意将配置文件中的ip地址修改为本机ip地址，如下：
-``` shell
+``` bash
 cd /usr/local/app/tars
 sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
@@ -481,7 +482,7 @@ sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
 **注意，web.tars.com是rsync使用的地址信息，替换成web的部署机器地址即可**
 
 然后在/usr/local/app/tars/目录下，执行脚本，启动tars框架服务
-```
+``` bash
 chmod u+x tarsnode_install.sh
 ./tarsnode_install.sh
 ```
@@ -497,27 +498,26 @@ chmod u+x tarsnode_install.sh
 
 
 也可以clone TarsWeb文件夹
-```
+``` bash
 git clone https://github.com/TarsCloud/TarsWeb.git
 ```
 
 
 修改配置文件，将配置文件中的ip地址修改为本机ip地址，如下：
-```
-cd ${安装目录}
+``` bash
+cd ${安装目录}/TarsWeb
 sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js
 sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf
 ```
 
 安装web管理页面依赖，启动web
-```
-cd ${安装目录}
+``` bash
 npm install --registry=https://registry.npm.taobao.org
 npm run prd
 ```
 
 创建日志目录
-```
+``` bash 
 mkdir -p /data/log/tars
 ```
 

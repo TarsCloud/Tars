@@ -41,15 +41,15 @@ yum install glibc-devel
 Cmake is the tool for compile tars.  
   
 Download cmake-2.8.8 source code, unzip:  
-```  bash
+``` bash
 tar zxvf cmake-2.8.8.tar.gz  
 ```  
 Enter directory:  
-```  bash
+``` bash
 cd cmake-2.8.8  
 ```  
 Steps as following(may `sudo root` first)  
-```  bash
+``` bash
 ./bootstrap  
 make  
 make install  
@@ -63,13 +63,13 @@ There are two ways to install mysql. One is via source code and the other one is
 This step installs mysql via source code in order to set up configurations manually.  
 
 Before installation, check whether ncurses and zlib have been installed. Execute these commands if not exist:  
-```  bash
+``` bash
 yum install ncurses-devel  
 yum install zlib-devel  
 ```  
   
 set the installation directory, switch to user root.  
-```  bash
+``` bash
 cd /usr/local  
 mkdir mysql-5.6.26  
 chown ${normal user}:${normal user} ./mysql-5.6.26  
@@ -77,7 +77,7 @@ ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
 ```  
   
 Download mysql source (mysql-5.6.26), set charset to utf-8.  
-```  bash
+``` bash
 cd ${mysql_folder}  
 wget https://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz  
 tar -zxvf mysql-5.6.26.tar.gz  
@@ -91,7 +91,7 @@ make install
 Now you can compile Tars framework of C++ version.  
   
 If you need build runtime environment for Tars framework, pelease switch to mysql administrator user and config mysql with following steps:  
-```bash  
+``` bash  
 yum install perl  
 cd /usr/local/mysql  
 useradd mysql  
@@ -109,7 +109,7 @@ Here is an example of my.cnf:
 rm -rf /etc/my.cnf  
 my.cnf first,you may delect the /etc/my.cnf or copy the essential information from the following example and paste to /ect/my.cnf. Otherwise it will not work.  
   
-```bash  
+``` cnf  
 [mysqld]  
   
 # Remove leading # and set to the amount of RAM for the most important data  
@@ -140,7 +140,7 @@ sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
   
 ```  
 Start mysql  
-```  sql
+``` sql
 service mysql start  
 chkconfig mysql on  
 ```  
@@ -155,14 +155,14 @@ PATH=$PATH:/usr/local/mysql/bin
 export PATH  
 ```  
 Modify root's password  
-```  bash
+``` bash
 ./bin/mysqladmin -u root password 'root@appinside'  
 ./bin/mysqladmin -u root -h ${hostname} password 'root@appinside'  
 ```  
   
   
 Add mysql dynamic library path to environment variable for path.  
-```  bash
+``` bash
 vim /etc/ld.so.conf  
 /usr/local/mysql/lib/  
 ldconfig  
@@ -176,7 +176,7 @@ Grant authority to master
 GRANT REPLICATION SLAVE ON *.* to 'mysql-sync'@'%' identified by 'sync@appinside'  
 ```  
 Configure slave for replication:  
-```  bash
+``` bash
 change master to master_host='${slave Ip}',master_user='mysql-sync',master_password='sync@appinside' ,master_log_file='iZ94orl0ix4Z-bin.000004',master_log_pos=611;  
 stop slave  
 start slave  
@@ -192,7 +192,7 @@ The install scripts named mysql_install_db.sh included in version 5.6 have been 
 The installation via yum is an easier way but with that you cannot adjust configs manually. If that is not what you want, the source code method is recommended.  
 
 You can download mysql using wget. Below is an example downloading version 5.7, but you can change it to the desired version.
-```  bash
+``` bash
 wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm  
 yum -y install mysql57-community-release-el7-10.noarch.rpm  
 yum -y install mysql-community-server  
@@ -200,7 +200,7 @@ yum -y install mysql-devel
 ```  
 If you have problems to install mysql with the above step, add the new mysql repository to local server with this yum command and then re-run the previous commands.  
 
-```  bash
+``` bash
 sudo yum localinstall https://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm  
 ```  
 ### 1.3.2.1 Configure mysql  
@@ -216,7 +216,7 @@ mysql started and it's using port 3306 for the connection.
   
 Configure the mysql root password. mysql will generate a strong default password when it is started for the first time. The default password is shown in mysqld.log file. You can use the grep command below for showing the default mysql password.  
   
-```  bash
+``` bash
 grep "password" /var/log/mysqld.log  
 ```  
   
@@ -227,7 +227,7 @@ You can't operate until changing the password. If your mysql version is later th
 1. Set up a strong password  
 2. Change the password rules as follows  
    
-```  bash
+``` set
 set global validate_password_policy=0;  
 set global validate_password_length=1;  
 ```  
@@ -246,33 +246,36 @@ For Linux：
   
 Nvm script installation is provided by the official website. Execute the following command:  
 
-```  bash
+``` bash
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash  
 source ~/.bashrc  
 ```  
   
 Install node and process manager pm2 for node applications with load function:  
-```  bash
+``` bash
 nvm install v8.11.3  
 npm install -g pm2 --registry=https://registry.npm.taobao.org  
 ```  
   
 If the pm2 library is not recognized, do the following command:  
   
-```bash
+``` bash
 npm i -g pm2
 ```  
 
 ## 2.2. Install develop environment for C++  
 
-Download **TarsFramework** source code:
-```  bash
+> The name of the directory where management system source code in is **framework**  
+
+You can clone the TarsFramework folder as well.  
+
+``` bash
 cd ${source_folder}  
 git clone https://github.com/TarsCloud/TarsFramework.git --recursive  
 ```  
   
 Then change the directory to the build folder:   
-```  bash
+``` bash
 cd ${source_folder}  
 git clone https://github.com/TarsCloud/TarsFramework.git --recursive  
 cd ${source_folder}/TarsFramework/build  
@@ -298,14 +301,14 @@ chown ${normal user}:${normal user} ./tars/
   
 Installation:
   
-```  bash
-cd ${source_folder}/build  
+``` bash
+cd ${source_folder}/TarsFramework/build  
 ./build.sh install or make install  
 ```  
 
 **The default install path is /usr/local/tars/cpp。**  
   
-If you want to install on different path:  
+**If you want to install on different path:**  
 ```  
 **modify tarscpp/CMakeLists.txt**  
 **modify TARS_PATH in tarscpp/servant/makefile/makefile.tars**  
@@ -323,19 +326,23 @@ flush privileges;
 **Attention: Modify ${'localhost'} to real hostname from /etc/hosts.**  
   
 ### 3.2. Create DB  
-Search the ip in the script under `framework/sql`,and replace with the above ip.  
+Search the ip in the script under `TarsFramework/sql`,and replace with the above ip.  
   
-```bash  
+``` bash  
+cd ${source_folder}/TarsFramework/sql
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`  
 sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`  
 sed -i "s/10.120.129.226/${your machine ip}/g" `grep 10.120.129.226 -rl ./*`  
 ```  
+**Notice, ip 192.168.2.131 and db.tars.com are test ip used by tars develop team. Please replace them with your machine ip, except 127.0.0.1**
+**As mentioned above, you need to change ${your machine ip} into your ip**
   
 Execute  
 ```  
 chmod u+x exec-sql.sh  
 ./exec-sql.sh  
 ```  
+**If errors occure while run exec-sql.sh, you need to change the mysql password in that shell script**
  
 After execution of the script, there will be three databases created: db_tars, tars_stat and tars_property.  
   
@@ -366,7 +373,7 @@ Framework.tgz will be created in current directory.
 It contains tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig and tarspatch deployment files.  
   
 Then make the general service package:  
-```  bash
+``` bash
 make tarsstat-tar  
 make tarsnotify-tar  
 make tarsproperty-tar  
@@ -387,7 +394,7 @@ chown ${normal user}:${normal user} ./tars/
 ```  
 Copy the framework service package to /usr/local/app/tars/ and unzip:  
 ``` bash  
-cp build/framework.tgz /usr/local/app/tars/  
+cp ${source_folder}/TarsFramework/build/framework.tgz /usr/local/app/tars/  
 cd /usr/local/app/tars  
 tar xzfv framework.tgz  
 ```  
@@ -395,14 +402,13 @@ tar xzfv framework.tgz
 Modify the configuration file in corresponding conf directory for each service, pay attention  
 to modify the ip address to your host's address:  
 ``` bash  
-cd /usr/local/app/tars  
 sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`  
 sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`  
 sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`  
 sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`  
 ```  
 Execute tars_install.sh script in directory /usr/local/app/tars/ to start tars framework service:  
-```  bash
+``` bash
 chmod u+x tars_install.sh  
 ./tars_install.sh  
 ```  
@@ -439,7 +445,7 @@ chown ${normal user}:${normal user} ./tars/
   
 Copy the framework service package to /usr/local/app/tars/:  
 ``` bash  
-cp build/framework.tgz /usr/local/app/tars/  
+cp ${source_folder}/TarsFramework/build/framework.tgz /usr/local/app/tars/  
 cd /usr/local/app/tars  
 tar xzfv framework.tgz  
 ```  
@@ -452,6 +458,7 @@ sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
 sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`  
 sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`  
 ```  
+**Notice, please modify ${your_machine_ip} to your ip**
 ``` bash 
 chmod u+x tarsnode_install.sh  
 tarsnode_install.sh  
@@ -467,25 +474,24 @@ Configure a checking crontab for tarsnode,ensuring it's always alive:
 > The name of the directory where management system source code in is **web**  
 >  
 You can clone the TarsWeb folder too.  
-```  bash
+``` bash
 git clone https://github.com/TarsCloud/TarsWeb.git  
 ```  
 Modify the configuration file and change the IP address in the configuration file to the local IP address, as follows:  
-```  bash
-cd ${install folder}  
+``` bash
+cd ${installation folder}/TarsWeb  
 sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js  
 sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf  
 ```  
   
 Install web management page dependencies, start web  
-```  bash
-cd ${install folder}  
+``` bash
 npm install --registry=https://registry.npm.taobao.org  
 npm run prd  
 ```  
   
 Create log directory  
-```  bash
+``` bash
 mkdir -p /data/log/tars  
 ```  
 

@@ -141,7 +141,7 @@ Execute the following update script，and make sure that the password od databas
 ```
 TarsFramework/sql/upgrade2IPv6.sh
 ```
-## 21. If you need to access TarsWeb from other machines, you need to turn on port 3000 of TCP by using the command  as follows：
+## 21. If you need to access TarsWeb from other machines, probably you need to turn on port 3000 of TCP which may has a risk of security, by using the command as follows：
 ```
 firewall-cmd --add-port=3000/tcp --permanent
 firewall-cmd --reload
