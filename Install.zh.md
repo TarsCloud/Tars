@@ -269,7 +269,7 @@ git clone https://github.com/TarsCloud/TarsFramework.git --recursive
 
 然后进入build源码目录
 ```
-cd ${source_folder}/build
+cd ${source_folder}/TarsFramework/build
 chmod u+x build.sh
 ./build.sh prepare
 ./build.sh all
