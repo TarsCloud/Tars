@@ -50,7 +50,13 @@ fi
 yum install -y perl
 cd /usr/local/mysql
 useradd mysql
-rm -rf /usr/local/mysql/data
+## 避免删除mysql中的数据
+## rm -rf /usr/local/mysql/data
+
+## 此前数据存储在data_bak中，用户可以根据需要后续自己恢复
+mv /usr/local/mysql/data /usr/local/mysql/data_bak
+mdkir /usr/local/mysql/data
+
 mkdir -p /data/mysql-data
 ln -s /data/mysql-data /usr/local/mysql/data
 chown -R mysql:mysql /data/mysql-data /usr/local/mysql/data
