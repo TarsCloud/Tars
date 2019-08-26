@@ -55,7 +55,7 @@ useradd mysql
 
 ## 此前数据存储在data_bak中，用户可以根据需要后续自己恢复
 mv /usr/local/mysql/data /usr/local/mysql/data_bak
-mdkir /usr/local/mysql/data
+mkdir /usr/local/mysql/data
 
 mkdir -p /data/mysql-data
 ln -s /data/mysql-data /usr/local/mysql/data
