@@ -23,9 +23,10 @@
 -  该脚本运行时候，需要使用本机的IP地址做为入参，请先查看本机IP地址。如果是云环境的话，请输入小网IP地址。
 -  该脚本中使用Mysql安装环境中的默认密码tars2015作为默认密码，仅供学习和演示使用。实际应用场景，请大家自行修改密码。
 -  运行方式：
-   1. yum install -y git
-   2. git clone https://github.com/qiuxin/Tars.git
-   3. 进入shellDeploy目录执行./shellDeploy $LocalIPAddr, 其中LocalIPAddr为安装机器的IP地址。 例：./shellDeploy 192.168.0.1
--  Tars代码下载路径默认为：/usr/local/tarscode. 如果需要下载到其它路径进行安装，可手动修改shellDeploy中的CodePath=/usr/local/tarscode路径即可。
+   Step1： yum install -y git
+   Step2： mkdir -p /usr/local/tarscode
+   Step3： cd /usr/local/tarscode/
+   Step4： git clone https://github.com/qiuxin/Tars.git
+   Step5： 进入shellDeploy目录执行./shellDeploy $LocalIPAddr, 其中LocalIPAddr为安装机器的IP地址。 例：./shellDeploy 192.168.0.1
 
 
