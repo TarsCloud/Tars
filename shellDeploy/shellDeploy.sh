@@ -69,14 +69,6 @@ source ~/.bashrc
 nvm install v8.11.3
 npm install -g pm2 --registry=https://registry.npm.taobao.org
 
-## 下载Tars代码
-## download Tars code
-#mkdir -p $CodePath
-#cd $CodePath
-#git clone https://github.com/TarsCloud/Tars.git
-#cd Tars
-#git submodule update --init --recursive
-
 ## 编译Tars框架代码
 ## compile Tars framework
 cd $CodePath/Tars/framework
@@ -108,6 +100,7 @@ cd $CodePath/Tars/framework/build
 ##配置Mysql参数
 ##Config Mysql 
 
+cd $CodePath/Tars/shellDeploy
 ##安装过成，需要cp mysqlConfig.sh到目标路径，先检查是否已经存在，如果已经存在，先删除，再cp
 ##check whether mysqlConfig file exist
 checkfile=$CodePath/Tars/framework/sql/mysqlConfig.sh
@@ -158,12 +151,12 @@ chmod u+x tars_install.sh
 
 ##配置tarsweb数据库以及表项
 ##Config Tarsweb database
-cd $CodePath/shellDeploy
+cd $CodePath/Tars/shellDeploy
 cp importTarsWebSql.sh $CodePath/Tars/web/sql
 cd $CodePath/Tars/web/sql
 sed -i 's/db.tars.com/$MachineIp/g' config/webConf.js
 sed -i 's/registry.tars.com/$MachineIp/g' config/tars.conf
-./importTarsWebSql.sh $MysqlDefaultPassword
+./importTarsWebSql.sh root $MysqlDefaultPassword
 
 ## 安装tarsweb使用软件
 ## install tarsweb software
