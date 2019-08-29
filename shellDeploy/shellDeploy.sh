@@ -132,10 +132,7 @@ sed -i "s/10.120.129.226/$MachineIp/g" `grep 10.120.129.226 -rl ./*`
 ## login mysql, configure new password, parameters,database as well as table  
 TempPassword=`cat /var/log/mysqld.log |grep "temporary password" |awk -F ":" '{print $NF}'`
 echo "Temp Password:" $TempPassword
-./mysqlOperation.sh root $TempPassword
-
-
-
+./mysqlConfig.sh root $TempPassword
 
 ##安装核心基础服务
 ##install the service of tars framework
