@@ -71,11 +71,11 @@ npm install -g pm2 --registry=https://registry.npm.taobao.org
 
 ## 下载Tars代码
 ## download Tars code
-mkdir -p $CodePath
-cd $CodePath
-git clone https://github.com/TarsCloud/Tars.git
-cd Tars
-git submodule update --init --recursive
+#mkdir -p $CodePath
+#cd $CodePath
+#git clone https://github.com/TarsCloud/Tars.git
+#cd Tars
+#git submodule update --init --recursive
 
 ## 编译Tars框架代码
 ## compile Tars framework

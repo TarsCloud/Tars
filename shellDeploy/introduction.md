@@ -30,5 +30,3 @@
 - Step5： cd Tars
 - Step6： git submodule update --init --recursive
 - Step7： 进入shellDeploy目录执行./shellDeploy $LocalIPAddr, 其中LocalIPAddr为安装机器的IP地址。 例：./shellDeploy 192.168.0.1
-
-
