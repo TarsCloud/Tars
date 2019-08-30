@@ -57,7 +57,7 @@ yum install -y mysql-community-server
 yum install -y mysql-devel
 
 ## 启动mysql,并设置为开机自启动
-## start mysql, and enable mysql when system restart
+## start mysql
 systemctl status mysqld.service
 systemctl start mysqld.service
 systemctl enable mysqld.service
