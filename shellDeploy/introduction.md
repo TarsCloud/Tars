@@ -32,5 +32,5 @@ Step5： cd Tars
 Step6： git submodule update --init --recursive
 Step7： cd /usr/local/tarscode/Tars/shellDeploy
 Step8:  chmod 777 *
-Step9:  /shellDeploy $LocalIPAddr, 其中LocalIPAddr为安装机器的IP地址。例：./shellDeploy 192.168.0.1
+Step9:  ./shellDeploy $LocalIPAddr, 其中LocalIPAddr为机器IP地址。例：./shellDeploy 192.168.0.1
 ```
