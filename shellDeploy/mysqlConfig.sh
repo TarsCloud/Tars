@@ -1,14 +1,12 @@
 #!/usr/bin/expect
 set timeout 5
 set username [lindex $argv 0]  
-#set password [lindex $argv 1]  
+set password [lindex $argv 1]  
 #set hostname [lindex $argv 2]  
 set tarsDefaultPassword "tars2015"
 
 
-spawn mysql -u $username -p
-send "\r"
-#expect "set global validate_password_policy:"
+spawn mysql -u $username -p$password
 send "set global validate_password_policy=0;\r"
 send "set global validate_password_length=1;\r"
 send "set password='$tarsDefaultPassword';\r"
