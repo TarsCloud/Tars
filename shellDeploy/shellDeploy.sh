@@ -132,6 +132,7 @@ echo "Temp Password:" $TempPassword>>$CodePath/Tars/shellDeploy/deploy_log
 ./mysqlConfig.sh root $TempPassword
 if [ $? -ne 0 ]; then
     echo "config mysql database for tars framework failed">>$CodePath/Tars/shellDeploy/deploy_log
+    exit
 else
     echo "config mysql database for tars framework successfully">>$CodePath/Tars/shellDeploy/deploy_log
 fi
@@ -180,6 +181,7 @@ cd $CodePath/Tars/web/sql
 ./importTarsWebSql.sh root $MysqlDefaultPassword
 if [ $? -ne 0 ]; then
     echo "config mysql database for web failed">>$CodePath/Tars/shellDeploy/deploy_log
+    exit
 else
     echo "config mysql database for web successfully">>$CodePath/Tars/shellDeploy/deploy_log
 fi
