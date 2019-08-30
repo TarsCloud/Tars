@@ -149,13 +149,7 @@ cd /usr/local/app/tars/
 chmod u+x tars_install.sh
 ./tars_install.sh
 
-## 安装tarsweb使用软件
-## install tarsweb software
-npm install --registry=https://registry.npm.taobao.org
-npm run prd
-##创建log日志目录
-## create log folder
-mkdir -p /data/log/tars
+
 
 ##配置tarsweb数据库以及表项
 ##Config Tarsweb database
@@ -164,6 +158,16 @@ cp importTarsWebSql.sh $CodePath/Tars/web/sql
 cd $CodePath/Tars/web/sql
 sed -i 's/db.tars.com/$MachineIp/g' config/webConf.js
 sed -i 's/registry.tars.com/$MachineIp/g' config/tars.conf
+
+## 安装tarsweb使用软件
+## install tarsweb software
+npm install --registry=https://registry.npm.taobao.org
+npm run prd
+##创建log日志目录
+## create log folder
+mkdir -p /data/log/tars
+
+
 ./importTarsWebSql.sh root $MysqlDefaultPassword
 
 pm2 start 0
