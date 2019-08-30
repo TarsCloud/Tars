@@ -26,5 +26,5 @@ send "source db_tars.sql\r"
 
 #interact
 
-expect "set global validate_password_policy:"
+expect "wait 5 seconds:"
 send "exit\r"
