@@ -154,8 +154,8 @@ chmod u+x tars_install.sh
 ##配置tarsweb数据库以及表项
 ##Config Tarsweb database
 cd $CodePath/Tars/web/
-sed -i 's/db.tars.com/$MachineIp/g' config/webConf.js
-sed -i 's/registry.tars.com/$MachineIp/g' config/tars.conf
+sed -i "s/db.tars.com/$MachineIp/g" config/webConf.js
+sed -i "s/registry.tars.com/$MachineIp/g" config/tars.conf
 
 ## 安装tarsweb使用软件
 ## install tarsweb software
@@ -171,10 +171,6 @@ cd $CodePath/Tars/web/sql
 
 cd $CodePath/Tars/web/
 pm2 start 0
-
-
-
-
 
 ##关闭防火墙
 service firewalld status
