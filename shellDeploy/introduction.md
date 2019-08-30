@@ -34,3 +34,6 @@ Step7： cd /usr/local/tarscode/Tars/shellDeploy
 Step8:  chmod 777 *
 Step9:  ./shellDeploy $LocalIPAddr, 其中LocalIPAddr为机器IP地址。例：./shellDeploy 192.168.0.1
 ```
+
+# 5. <a id="main-chapter-4"></a> 故障定位与Log日志
+-  该脚本运行时，会在/usr/local/tarscode/Tars/shellDeploy目录下生成deploy_log文件，该文件中记录了脚本运行过程中的诊断信息，便于故障的定位和解决。
