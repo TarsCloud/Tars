@@ -73,9 +73,9 @@ echo "Finish mysql5.7 installation">>$CodePath/Tars/shellDeploy/deploy_log
 
 ## 启动mysql,并设置为开机自启动
 ## start mysql
-systemctl status mysqld.service
 systemctl start mysqld.service
 systemctl enable mysqld.service
+systemctl status mysqld.service
 echo "start mysql5.7 ...">>$CodePath/Tars/shellDeploy/deploy_log
 
 
