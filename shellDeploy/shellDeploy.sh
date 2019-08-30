@@ -13,6 +13,16 @@ CodePath=/usr/local/tarscode
 ##Some configurations are required to be modified once MysqlDefaultPassword is changed.   
 MysqlDefaultPassword=tars2015
 
+##设置市区为北京时间
+##Set Beijing Time
+TZ='Asia/Shanghai'; 
+export TZ
+
+##显示脚本的运行时间
+##Display the runtime 
+time=$(date "+%Y%m%d-%H%M%S")
+echo "Install Script Run Time : ${time}">>$CodePath/Tars/shellDeploy/deploy_log
+
 touch $CodePath/Tars/shellDeploy/deploy_log
 
 ##检查是否输入IP地址，如果没有输入，则退出脚本
@@ -23,11 +33,6 @@ if [ ! -n "$1" ] ;then
 else
     echo "Input Local IP address is $MachineIp">>$CodePath/Tars/shellDeploy/deploy_log
 fi
-
-##显示脚本的运行时间
-##Display the runtime 
-time=$(date "+%Y%m%d-%H%M%S")
-echo "Install Script Run Time : ${time}">>$CodePath/Tars/shellDeploy/deploy_log
 
 ## 安装部署过程中需要的软件
 ## install basic tools
