@@ -61,6 +61,10 @@ yum install -y mysql-community-server
 yum install -y mysql-devel
 echo "Finish mysql5.7 installation">>$CodePath/Tars/shellDeploy/deploy_log
 
+#disable password for mysql
+echo "# disable password">>/etc/my.cnf
+echo "skip-grant-tables">>/etc/my.cnf
+echo "disable password for mysql">>$CodePath/Tars/shellDeploy/deploy_log
 
 ## 启动mysql,并设置为开机自启动
 ## start mysql
@@ -91,7 +95,7 @@ find . -name 'CMakeLists.txt' | xargs perl -pi -e 's|/usr/local/mysql/include|/u
 find . -name 'CMakeLists.txt' | xargs perl -pi -e 's|/usr/local/mysql/lib|/usr/lib64/mysql|g'
 cd $CodePath/Tars/framework/build
 ./build.sh all
-echo "Finish tars framework compilation">>$CodePath/Tars/shellDeploy/deploy_log
+echo "Finish framework compilation">>$CodePath/Tars/shellDeploy/deploy_log
 
 
 ## Tars安装
@@ -101,7 +105,7 @@ mkdir tars
 chown root:root ./tars/
 cd $CodePath/Tars/framework/build
 ./build.sh install
-echo "Finish tars framework installation">>$CodePath/Tars/shellDeploy/deploy_log
+echo "Finish framework installation">>$CodePath/Tars/shellDeploy/deploy_log
 #fi
 
 ##配置Mysql参数
@@ -127,9 +131,9 @@ sed -i "s/10.120.129.226/$MachineIp/g" `grep 10.120.129.226 -rl ./*`
 
 ## 登入mysql, 配置新的password,参数，数据库以及表项
 ## login mysql, configure new password, parameters,database as well as table  
-TempPassword=`cat /var/log/mysqld.log |grep "temporary password" |awk -F ":" '{print $NF}'`
-echo "Temp Password:" $TempPassword>>$CodePath/Tars/shellDeploy/deploy_log
-./mysqlConfig.sh root $TempPassword
+#TempPassword=`cat /var/log/mysqld.log |grep "temporary password" |awk -F ":" '{print $NF}'`
+#echo "Temp Password:" $TempPassword>>$CodePath/Tars/shellDeploy/deploy_log
+./mysqlConfig.sh root
 if [ $? -ne 0 ]; then
     echo "config mysql database for tars framework failed">>$CodePath/Tars/shellDeploy/deploy_log
     exit
