@@ -136,8 +136,16 @@ sed -i "s/10.120.129.226/$MachineIp/g" `grep 10.120.129.226 -rl ./*`
 
 ## 登入mysql, 配置新的password,参数，数据库以及表项
 ## login mysql, configure new password, parameters,database as well as table  
-TempPassword=`cat /var/log/mysqld.log |grep "temporary password" |awk -F ":" '{print $NF}'`
-echo "Temp Password:" $TempPassword>>$CodePath/Tars/shellDeploy/deploy_log
+
+
+var=`cat /var/log/mysqld.log |grep "temporary password"`
+echo $var>>$CodePath/Tars/shellDeploy/deploy_log
+TempPassword=${var#*root@localhost:}
+echo "Temp Password:"$TempPassword>>$CodePath/Tars/shellDeploy/deploy_log
+
+#TempPassword=`cat /var/log/mysqld.log |grep "temporary password" |awk -F ":" '{print $NF}'`
+#echo "Temp Password:" $TempPassword>>$CodePath/Tars/shellDeploy/deploy_log
+
 ./mysqlConfig.sh root $TempPassword
 if [ $? -ne 0 ]; then
     echo "config mysql database for tars framework failed">>$CodePath/Tars/shellDeploy/deploy_log
