@@ -5,7 +5,7 @@
 > * [4.脚本运行说明](#main-chapter-4)
 
 # 1. <a id="main-chapter-1"></a>脚本实现功能
--  该脚本用于快速部署Tars环境
+-  该脚本用于快速部署Tars环境，用户仅需使用“脚本+IP地址”即可快速构建Tars Framework环境
 
 # 2. <a id="main-chapter-2"></a>软硬件环境要求
 该脚本仅仅使用于物理机部署和虚拟机部署（包括云主机），不适用于容器部署（systemctl start 等语句在容器环境运行会出现错误）
@@ -30,5 +30,7 @@ Step3： cd /usr/local/tarscode/
 Step4： git clone https://github.com/qiuxin/Tars.git
 Step5： cd Tars
 Step6： git submodule update --init --recursive
-Step7： 进入/usr/local/tarscode/Tars/shellDeploy目录, 执行chmod 777 *和./shellDeploy $LocalIPAddr, 其中LocalIPAddr为安装机器的IP地址。 例：./shellDeploy 192.168.0.1
+Step7： cd /usr/local/tarscode/Tars/shellDeploy
+Step8:  chmod 777 *
+Step9:  /shellDeploy $LocalIPAddr, 其中LocalIPAddr为安装机器的IP地址。例：./shellDeploy 192.168.0.1
 ```
