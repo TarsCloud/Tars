@@ -13,7 +13,7 @@ CodePath=/usr/local/tarscode
 ##Some configurations are required to be modified once MysqlDefaultPassword is changed.   
 MysqlDefaultPassword=tars2015
 
-##设置市区为北京时间
+##设置时区为北京时间，避免云主机位于不同时区引发的错误
 ##Set Beijing Time
 TZ='Asia/Shanghai'; 
 export TZ
@@ -21,7 +21,7 @@ export TZ
 ##显示脚本的运行时间
 ##Display the runtime 
 time=$(date "+%Y%m%d-%H%M%S")
-echo "Install Script Run Time : ${time}">>$CodePath/Tars/shellDeploy/deploy_log
+echo "Deploy Script Run Time（Beijing Time） : ${time}">>$CodePath/Tars/shellDeploy/deploy_log
 
 touch $CodePath/Tars/shellDeploy/deploy_log
 
