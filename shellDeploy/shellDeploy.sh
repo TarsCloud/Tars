@@ -157,7 +157,6 @@ cd $CodePath/Tars/web/
 sed -i 's/db.tars.com/$MachineIp/g' config/webConf.js
 sed -i 's/registry.tars.com/$MachineIp/g' config/tars.conf
 
-
 ## 安装tarsweb使用软件
 ## install tarsweb software
 npm install --registry=https://registry.npm.taobao.org
@@ -170,7 +169,9 @@ cp $CodePath/Tars/shellDeploy/importTarsWebSql.sh $CodePath/Tars/web/sql
 cd $CodePath/Tars/web/sql
 ./importTarsWebSql.sh root $MysqlDefaultPassword
 
+cd $CodePath/Tars/web/
 pm2 start 0
+
 
 
 
