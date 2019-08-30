@@ -130,7 +130,11 @@ sed -i "s/10.120.129.226/$MachineIp/g" `grep 10.120.129.226 -rl ./*`
 TempPassword=`cat /var/log/mysqld.log |grep "temporary password" |awk -F ":" '{print $NF}'`
 echo "Temp Password:" $TempPassword>deploy_log
 ./mysqlConfig.sh root $TempPassword
-echo "Finish config mysql database for tars framework">deploy_log
+if [ $? -ne 0 ]; then
+    echo "config mysql database for tars framework failed">deploy_log
+else
+    echo "config mysql database for tars framework successfully">deploy_log
+fi
 
 
 ##安装核心基础服务
@@ -174,7 +178,11 @@ mkdir -p /data/log/tars
 cp $CodePath/Tars/shellDeploy/importTarsWebSql.sh $CodePath/Tars/web/sql
 cd $CodePath/Tars/web/sql
 ./importTarsWebSql.sh root $MysqlDefaultPassword
-echo "Finish config mysql database for web">deploy_log
+if [ $? -ne 0 ]; then
+    echo "config mysql database for web failed">deploy_log
+else
+    echo "config mysql database for web successfully">deploy_log
+fi
 
 cd $CodePath/Tars/web/
 pm2 start 0
@@ -185,8 +193,3 @@ service firewalld status
 systemctl stop firewalld
 systemctl disable firewalld
 echo "shutdown and disable firewall">deploy_log
-
-
-
-
-
