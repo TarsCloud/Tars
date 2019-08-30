@@ -153,11 +153,10 @@ chmod u+x tars_install.sh
 
 ##配置tarsweb数据库以及表项
 ##Config Tarsweb database
-cd $CodePath/Tars/shellDeploy
-cp importTarsWebSql.sh $CodePath/Tars/web/sql
-cd $CodePath/Tars/web/sql
+cd $CodePath/Tars/web/
 sed -i 's/db.tars.com/$MachineIp/g' config/webConf.js
 sed -i 's/registry.tars.com/$MachineIp/g' config/tars.conf
+
 
 ## 安装tarsweb使用软件
 ## install tarsweb software
@@ -167,7 +166,8 @@ npm run prd
 ## create log folder
 mkdir -p /data/log/tars
 
-
+cp $CodePath/Tars/shellDeploy/importTarsWebSql.sh $CodePath/Tars/web/sql
+cd $CodePath/Tars/web/sql
 ./importTarsWebSql.sh root $MysqlDefaultPassword
 
 pm2 start 0
