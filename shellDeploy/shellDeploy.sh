@@ -13,19 +13,21 @@ CodePath=/usr/local/tarscode
 ##Some configurations are required to be modified once MysqlDefaultPassword is changed.   
 MysqlDefaultPassword=tars2015
 
+touch deploy_log
+
 ##检查是否输入IP地址，如果没有输入，则退出脚本
 ##check whether IP address is inputed, exit if not
 if [ ! -n "$1" ] ;then
-    echo "NO Local IP address Input, please input IP address."
+    echo "NO Local IP address Input, please input IP address.">deploy_log
     exit
 else
-    echo "Input Local IP address is $MachineIp"
+    echo "Input Local IP address is $MachineIp">deploy_log
 fi
 
 ##显示脚本的运行时间
 ##Display the runtime 
 time=$(date "+%Y%m%d-%H%M%S")
-echo "Install Script Run Time : ${time}"
+echo "Install Script Run Time : ${time}">deploy_log
 
 ## 安装部署过程中需要的软件
 ## install basic tools
@@ -46,6 +48,8 @@ yum install -y make
 yum install -y git
 yum install -y expect
 yum install -y tar
+echo "Finish basic tool installation">deploy_log
+
 
 ## 安装mysql 5.7
 ## install mysql 5.7
@@ -55,12 +59,16 @@ yum-config-manager --disable mysql80-community
 yum-config-manager --enable mysql57-community
 yum install -y mysql-community-server
 yum install -y mysql-devel
+echo "Finish mysql5.7 installation">deploy_log
+
 
 ## 启动mysql,并设置为开机自启动
 ## start mysql
 systemctl status mysqld.service
 systemctl start mysqld.service
 systemctl enable mysqld.service
+echo "start mysql5.7 ...">deploy_log
+
 
 ## 安装nvm
 ## install nvm
@@ -68,6 +76,8 @@ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh |
 source ~/.bashrc
 nvm install v8.11.3
 npm install -g pm2 --registry=https://registry.npm.taobao.org
+echo "install nvm && pm2">deploy_log
+
 
 ## 编译Tars框架代码
 ## compile Tars framework
@@ -81,6 +91,8 @@ find . -name 'CMakeLists.txt' | xargs perl -pi -e 's|/usr/local/mysql/include|/u
 find . -name 'CMakeLists.txt' | xargs perl -pi -e 's|/usr/local/mysql/lib|/usr/lib64/mysql|g'
 cd $CodePath/Tars/framework/build
 ./build.sh all
+echo "Finish tars framework compilation">deploy_log
+
 
 ## Tars安装
 ## Install Tars
@@ -89,30 +101,23 @@ mkdir tars
 chown root:root ./tars/
 cd $CodePath/Tars/framework/build
 ./build.sh install
-
-
-
-
+echo "Finish tars framework installation">deploy_log
 #fi
-
-
 
 ##配置Mysql参数
 ##Config Mysql 
-
 cd $CodePath/Tars/shellDeploy
 ##安装过成，需要cp mysqlConfig.sh到目标路径，先检查是否已经存在，如果已经存在，先删除，再cp
 ##check whether mysqlConfig file exist
 checkfile=$CodePath/Tars/framework/sql/mysqlConfig.sh
 if [  -f "$checkfile" ]; then 
 rm -rf $CodePath/Tars/framework/sql/mysqlConfig.sh
-echo "delete previous file, copy an new file"
+echo "delete previous file, copy an new file">deploy_log
 fi 
 
-cp -rf mysqlConfig.sh  $CodePath/Tars/framework/sql 
+cp $CodePath/Tars/shellDeploy/mysqlConfig.sh  $CodePath/Tars/framework/sql 
 
-cd  $CodePath/Tars/framework/sql
-pwd
+cd $CodePath/Tars/framework/sql
 
 ##替换本机IP地址
 ##Replace the previous configureation parameter with local IP address
@@ -120,12 +125,13 @@ sed -i "s/192.168.2.131/$MachineIp/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/$MachineIp/g" `grep db.tars.com -rl ./*`
 sed -i "s/10.120.129.226/$MachineIp/g" `grep 10.120.129.226 -rl ./*`
 
-
 ## 登入mysql, 配置新的password,参数，数据库以及表项
 ## login mysql, configure new password, parameters,database as well as table  
 TempPassword=`cat /var/log/mysqld.log |grep "temporary password" |awk -F ":" '{print $NF}'`
-echo "Temp Password:" $TempPassword
+echo "Temp Password:" $TempPassword>deploy_log
 ./mysqlConfig.sh root $TempPassword
+echo "Finish config mysql database for tars framework">deploy_log
+
 
 ##安装核心基础服务
 ##install the service of tars framework
@@ -148,7 +154,7 @@ sed -i "s/web.tars.com/$MachineIp/g" `grep web.tars.com -rl ./*`
 cd /usr/local/app/tars/
 chmod u+x tars_install.sh
 ./tars_install.sh
-
+echo "Finish tars framework service installatin and pull">deploy_log
 
 
 ##配置tarsweb数据库以及表项
@@ -168,14 +174,17 @@ mkdir -p /data/log/tars
 cp $CodePath/Tars/shellDeploy/importTarsWebSql.sh $CodePath/Tars/web/sql
 cd $CodePath/Tars/web/sql
 ./importTarsWebSql.sh root $MysqlDefaultPassword
+echo "Finish config mysql database for web">deploy_log
 
 cd $CodePath/Tars/web/
 pm2 start 0
+echo "start tars web">deploy_log
 
 ##关闭防火墙
 service firewalld status
 systemctl stop firewalld
 systemctl disable firewalld
+echo "shutdown and disable firewall">deploy_log
 
 
 
