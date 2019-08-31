@@ -244,6 +244,13 @@ flush privileges;
 
 For Linux：  
   
+Install npm,pm2
+
+```  bash
+yum install -y npm
+npm i -g pm2
+``` 
+
 Nvm script installation is provided by the official website. Execute the following command:  
 
 ```  bash
@@ -257,11 +264,6 @@ nvm install v8.11.3
 npm install -g pm2 --registry=https://registry.npm.taobao.org  
 ```  
   
-If the pm2 library is not recognized, do the following command:  
-  
-```bash
-npm i -g pm2
-```  
 
 ## 2.2. Install develop environment for C++  
 
