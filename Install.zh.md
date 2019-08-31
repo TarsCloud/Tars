@@ -239,8 +239,13 @@ mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '${your password}';
 ## 2.1. web管理系统开发环境安装
 以linux环境为例：
 
-以官网提供的nvm脚本安装
+安装npm,pm2
+```
+yum install -y npm
+npm i -g pm2
+```
 
+以官网提供的nvm脚本安装
 执行以下命令：
 ```
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
@@ -252,10 +257,7 @@ node和带有负载功能的node应用的进程管理器pm2安装
 nvm install v8.11.3
 npm install -g pm2 --registry=https://registry.npm.taobao.org
 ```
-如果pm2库无法识别，执行下列命令：
-```
-npm i -g pm2
-```
+
 ### 2.2. c++ 开发环境安装
 
 下载TarsFramework源码
