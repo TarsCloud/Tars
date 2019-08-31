@@ -38,7 +38,8 @@ fi
 ## install basic tools
 # if false;then
 yum install -y glibc-devel
-yum install -y flex bison
+yum install -y flex
+yum install -y bison
 yum install -y cmake
 yum install -y ncurses-devel
 yum install -y zlib-devel
@@ -48,11 +49,13 @@ yum install -y net-tools
 yum install -y gcc
 yum install -y gcc-c++
 yum install -y flex
-yum install -y bison
 yum install -y make
 yum install -y git
 yum install -y expect
 yum install -y tar
+yum install -y npm
+#npm install -g n
+npm i -g pm2
 echo "Finish basic tool installation">>$CodePath/Tars/shellDeploy/deploy_log
 
 
@@ -135,9 +138,7 @@ sed -i "s/db.tars.com/$MachineIp/g" `grep db.tars.com -rl ./*`
 sed -i "s/10.120.129.226/$MachineIp/g" `grep 10.120.129.226 -rl ./*`
 
 ## 登入mysql, 配置新的password,参数，数据库以及表项
-## login mysql, configure new password, parameters,database as well as table  
-
-
+## login mysql, configure new password, parameters,database as well as table
 var=`cat /var/log/mysqld.log |grep "temporary password"`
 echo $var>>$CodePath/Tars/shellDeploy/deploy_log
 TempPassword=${var#*root@localhost:}
@@ -145,7 +146,6 @@ echo "Temp Password:"$TempPassword>>$CodePath/Tars/shellDeploy/deploy_log
 
 #TempPassword=`cat /var/log/mysqld.log |grep "temporary password" |awk -F ":" '{print $NF}'`
 #echo "Temp Password:" $TempPassword>>$CodePath/Tars/shellDeploy/deploy_log
-
 ./mysqlConfig.sh root $TempPassword
 if [ $? -ne 0 ]; then
     echo "config mysql database for tars framework failed">>$CodePath/Tars/shellDeploy/deploy_log
