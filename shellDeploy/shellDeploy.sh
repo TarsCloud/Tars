@@ -56,6 +56,7 @@ yum install -y tar
 yum install -y npm
 #npm install -g n
 npm i -g pm2
+yum install -y lrzsz
 echo "Finish basic tool installation">>$CodePath/Tars/shellDeploy/deploy_log
 
 
@@ -208,7 +209,19 @@ pm2 start 0
 echo "start tars web">>$CodePath/Tars/shellDeploy/deploy_log
 
 ##关闭防火墙
+##shutdown firewall
 service firewalld status
 systemctl stop firewalld
 systemctl disable firewalld
 echo "shutdown and disable firewall">>$CodePath/Tars/shellDeploy/deploy_log
+
+##非框架核心服务编译和发布
+##None Core Service Compiple 
+cd $CodePath/Tars/framework/build
+make tarsstat-tar
+make tarsnotify-tar
+make tarsproperty-tar
+make tarslog-tar
+make tarsquerystat-tar
+make tarsqueryproperty-tar
+echo "compile none-core services of framework">>$CodePath/Tars/shellDeploy/deploy_log
