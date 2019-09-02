@@ -216,7 +216,7 @@ systemctl disable firewalld
 echo "shutdown and disable firewall">>$CodePath/Tars/shellDeploy/deploy_log
 
 ##非框架核心服务编译和发布
-##None Core Service Compiple 
+##None Core Service Compiple
 cd $CodePath/Tars/framework/build
 make tarsstat-tar
 make tarsnotify-tar
