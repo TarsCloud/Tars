@@ -53,6 +53,8 @@ yum install -y make
 yum install -y git
 yum install -y expect
 yum install -y tar
+yum install -y epel-release
+yum install -y nodejs
 yum install -y npm
 #npm install -g n
 npm i -g pm2
