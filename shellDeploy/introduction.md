@@ -27,7 +27,7 @@
 Step1： yum install -y git
 Step2： mkdir -p /usr/local/tarscode
 Step3： cd /usr/local/tarscode/
-Step4： git clone https://github.com/qiuxin/Tars.git
+Step4： git clone https://github.com/TarsCloud/Tars.git
 Step5： cd Tars
 Step6： git submodule update --init --recursive
 Step7： cd /usr/local/tarscode/Tars/shellDeploy
