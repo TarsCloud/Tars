@@ -34,6 +34,10 @@ Step7： cd /usr/local/tarscode/Tars/shellDeploy
 Step8:  chmod 777 *
 Step9:  ./shellDeploy $LocalIPAddr, 其中LocalIPAddr为机器IP地址。例：./shellDeploy 192.168.0.1
 ```
+-  执行完如上脚本之后，tars framework的核心组件已经安装完成，已经可以登入web界面（IP：3000）。
+注：启动Tars Web界面后，会遇到错误弹出，发布完tarsnotify即可消失。详见issue: https://github.com/TarsCloud/Tars/issues/456
+-  之后通过web界面来发布tarsstat、tarsnotify、tarsproperty、tarslog、tarsquerystat、tarsqueryproperty等组件即可。
+-  该脚本中使用Mysql安装环境中的默认密码tars2015作为默认密码，仅供学习和演示使用。实际应用场景，请大家自行修改密码。
 
 # 5. <a id="main-chapter-4"></a> 故障定位与Log日志
 -  该脚本运行时，会在/usr/local/tarscode/Tars/shellDeploy目录下生成deploy_log文件，该文件中记录了脚本运行过程中的诊断信息，便于故障的定位和解决。
