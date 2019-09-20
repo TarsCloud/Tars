@@ -5,7 +5,8 @@
 > * [Tars开发环境安装介绍](#chapter-2)
 > * [Tars数据库环境初始化](#chapter-3)
 > * [Tars框架运行环境搭建](#chapter-4)
-> * [Tars一键化部署方案](#chapter-5)
+
+
 
 本安装文档仅描述了在一台服务器上安装搭建整个Tars框架的过程，目的是为了让用户对Tars框架的部署搭建、运行、测试等有个整体的认识。
 
@@ -54,7 +55,12 @@ make
 make install(如果make install失败，一般是权限不够，切换root进行安装)
 ```
 
-## 1.3. mysql 安装介绍
+## 1.3. Mysql安装
+下面提供两种安装方式，源码安装和yum安装
+### 1.3.1 源码安装
+
+源码安装可以对数据库进行自定义。
+
 安装前，确定系统是否安装了ncurses、zlib，若没有，可以执行：
 ```
 yum install ncurses-devel
@@ -71,7 +77,11 @@ ln -s /usr/local/mysql-5.6.26 /usr/local/mysql
 
 用utf8的安装方式
 下载mysql源码（这里使用的是mysql-5.6.26）,用utf8的安装方式mysql，解压后编译：
+下面增加了mysql-5.6.26的安装方式
 ```
+cd ${mysql安装目录}
+wget https://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.26.tar.gz
+tar -zxvf mysql-5.6.26.tar.gz
 cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql-5.6.26 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DMYSQL_USER=mysql -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci
 make
 make install
@@ -92,10 +102,14 @@ ln -s /data/mysql-data /usr/local/mysql/data
 chown -R mysql:mysql /data/mysql-data /usr/local/mysql/data
 cp support-files/mysql.server /etc/init.d/mysql
 **如果/etc/目录下有my.cnf存在，需要把这个配置删除了**
+rm -rf /etc/my.cnf
 yum install -y perl-Module-Install.noarch
 perl scripts/mysql_install_db --user=mysql
 vim /usr/local/mysql/my.cnf
 ```
+补充了上面删除my.cnf的命令
+rm -rf /etc/my.cnf
+
 给一个my.cnf配置实例：
 
 ```cnf
@@ -116,7 +130,7 @@ datadir = /usr/local/mysql/data
 # server_id = .....
 socket = /tmp/mysql.sock
 
-bind-address={$your machine ip}
+bind-address=${your machine ip}
 
 # Remove leading # to set options mainly useful for reporting servers.
 # The server defaults are faster for transactions and fast SELECTs.
@@ -159,7 +173,6 @@ vim /etc/ld.so.conf
 /usr/local/mysql/lib/
 ldconfig
 ```
-========================
 
 mysql主从配置可以参考网上教程
 
@@ -177,12 +190,62 @@ show slave status\G;
 ```
 **注意${备机Ip}需要修改成备机数据库的Ip**
 
+
+### 1.3.2 yum安装
+在mysql 5.7版本之后删除了源码中的mysql_install_db.sh安装脚本，因此上述方法不适用。
+yum安装相对便捷，但是没办法实现自定义安装。如果对自定义安装有需求的请使用源码安装。
+#### 1.3.2.1 从yum repository安装mysql
+```
+wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
+yum -y install mysql57-community-release-el7-10.noarch.rpm
+yum -y install mysql-community-server
+yum -y install  mysql-devel
+```
+这样mysql就安装好了
+其中wget中的库地址可以根据需要替换版本号
+如果wget无法安装，可以尝试按照下述步骤将mysql repository添加到本地服务，然后再重新执行上述命令
+```
+sudo yum localinstall https://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
+```
+#### 1.3.2.2 设置mysql
+启动mysql并查看运行状态
+
+```
+systemctl start  mysqld.service
+systemctl status mysqld.service
+```
+mysql开始运行并通过3306端口进行连接。
+
+通过yum安装mysql的话root账号会默认设置一个密码，可以通过下面的方式获得。
+```
+grep "password" /var/log/mysqld.log
+```
+使用这个密码登陆root的账户。mysql要求必须更改密码才能做数据库操作。
+如果你安装的mysql版本是5.7及以上，mysql的密码设置有安全性要求(长度、大小写、特殊字符)，以下两种方式可以选择
+1. 设置满足要求的密码
+2. 通过下面的方式降低密码安全性规则
+```
+mysql> set global validate_password_policy=0;
+mysql> set global validate_password_length=1;
+```
+修改之后只有6个字符的最小长度限制
+接着修改密码
+```
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '${your password}';
+```
+
+
 # 2. <a id="chapter-2"></a>Tars开发环境安装介绍
 ## 2.1. web管理系统开发环境安装
 以linux环境为例：
 
-以官网提供的nvm脚本安装
+安装npm,pm2
+```
+yum install -y npm
+npm i -g pm2
+```
 
+以官网提供的nvm脚本安装
 执行以下命令：
 ```
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
@@ -195,18 +258,31 @@ nvm install v8.11.3
 npm install -g pm2 --registry=https://registry.npm.taobao.org
 ```
 
-## 2.2. c++ 开发环境安装
+### 2.2. c++ 开发环境安装
+
 下载TarsFramework源码
+
+
+```
+cd ${source_folder}
+git clone https://github.com/TarsCloud/TarsFramework.git --recursive
+```
+
 
 然后进入build源码目录
 ```
-cd {$source_folder}/build
+cd ${source_folder}/TarsFramework/build
 chmod u+x build.sh
 ./build.sh prepare
 ./build.sh all
 ```
 
-**编译时默认使用的mysql开发库路径：include的路径为/usr/local/mysql/include，lib的路径为/usr/local/mysql/lib/，若mysql开发库的安装路径不在默认路径，则需要修改build目录下CMakeLists.txt文件中的mysql相关的路径，再编译**
+**编译时默认使用的mysql开发库路径：include的路径为/usr/local/mysql/include，lib的路径为/usr/local/mysql/lib/**
+
+若mysql开发库的安装路径不在默认路径需要修改CMakeLists文件中mysql开发库的路径。CMakeLists在`${source_folder}/TarsFramework/`和`${source_folder}/TarsFramework/tarscpp/` 目录下各有一个同名文件。
+修改文件中上述路径为本机mysql开发库的路径
+(参考路径："/usr/include/mysql"；"/usr/lib64/mysql")。
+
 
 如果需要重新编译
 ```
@@ -223,7 +299,7 @@ chown ${普通用户}:${普通用户} ./tars/
 
 安装
 ```
-cd {$source_folder}/build
+cd ${source_folder}/build
 ./build.sh install或者make install
 ```
 **默认的安装路径为/usr/local/tars/cpp。**
@@ -235,7 +311,7 @@ cd {$source_folder}/build
 **需要修改tarscpp/servant/script/create_tars_server.sh文件中的DEMO_PATH的路径**
 ```
 
-# 3. <a id="chapter-3"></a>Tars数据库环境初始化
+# 3 <a id="chapter-3"></a>Tars数据库环境初始化
 ## 3.1. 添加用户
 ```sql
 grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;
@@ -243,6 +319,9 @@ grant all on *.* to 'tars'@'localhost' identified by 'tars2015' with grant optio
 grant all on *.* to 'tars'@'${主机名}' identified by 'tars2015' with grant option;
 flush privileges;
 ```
+
+如果mysql版本大于5.7且没有修改密安全性规则，必须将整个项目的所有‘tars2015’一并修改成符合规则的密码。
+
 **注意${主机名}需要修改成自身机器的名称，可以通过查看/etc/hosts
 
 ## 3.2. 创建数据库
@@ -275,7 +354,7 @@ tars_property是服务属性监控数据存储的数据库；
 
 # 4. <a id="chapter-4"></a>Tars框架运行环境搭建
 
-## 4.1. 框架基础服务打包
+## 4.1 框架基础服务打包
 
 框架服务的安装分两种：
 
@@ -309,9 +388,9 @@ make tarsqueryproperty-tar
 
 **注意在管理平台进行部署时，选择正确的服务模板即可（默认是有的，若没有相应的模版，可以在管理平台上创建，具体服务的模版内容可以tars_template.md）!**
 
-## 4.2. 安装框架核心基础服务
+## 4.2 安装框架核心基础服务
 
-## 4.2.1. 安装核心基础服务
+### 4.2.1. 安装核心基础服务
 
 切换至root用户，创建基础服务的部署目录，如下：
 ```  shell
@@ -360,12 +439,12 @@ tarspatch/util/init.sh
 
 在管理平台上面配置tarsconfig，注意需要配置服务的可执行目录(/usr/local/app/tars/tarsconfig/bin/tarsconfig)
 
-tarsnode需要配置监控，避免不小心挂了以后会启动，需要在crontab里面配置
+在crontab配置一个进程监控，确保TARS框架服务在出现异常后能够重新启动。
 ```
 * * * * * /usr/local/app/tars/tarsnode/util/monitor.sh
 ```
 
-## 4.2.2. 服务扩容前安装tarsnode
+### 4.2.2 服务扩容前安装tarsnode
 
 核心基础服务的安装成功后，如果需要在其他机器也能部署基于tars框架的服务，那么在管理平台扩容部署前，需要安装tarsnode服务。
 
@@ -409,25 +488,32 @@ chmod u+x tarsnode_install.sh
 ./tarsnode_install.sh
 ```
 
-配置监控，避免不小心挂了以后会启动，需要在crontab里面配置
+在crontab配置一个进程监控，确保TARS框架服务在出现异常后能够重新启动。
 ```
 * * * * * /usr/local/app/tars/tarsnode/util/monitor.sh
 ```
 
-## 4.3. 安装web管理系统
+## 4.3 安装web管理系统
 
 >管理系统源代码目录名称为**web**
 
+
+也可以clone TarsWeb文件夹
+```
+git clone https://github.com/TarsCloud/TarsWeb.git
+```
+
+
 修改配置文件，将配置文件中的ip地址修改为本机ip地址，如下：
 ```
-cd web
+cd ${安装目录}
 sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js
 sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf
 ```
 
 安装web管理页面依赖，启动web
 ```
-cd web
+cd ${安装目录}
 npm install --registry=https://registry.npm.taobao.org
 npm run prd
 ```
@@ -499,7 +585,10 @@ mkdir -p /data/log/tars
 
 ![tars](docs/images/tars_tarsquerystat_patch.png)
 
-### 4.4.5 tarsqueryproperty部署发布
+
+
+### 4.4.6 tarsqueryproperty部署发布
+<br><span 
 
 部署信息如下：
 
@@ -512,8 +601,6 @@ mkdir -p /data/log/tars
 ![tars](docs/images/tars_tarsqueryproperty_patch.png)
 
 最后，在安装环境过程中，如果系统仍有问题，请到以下的目录查找日志文件分析问题所在：
-(1) /usr/local/app/TarsWeb/log 
+(1) ${安装目录}/log 
 (2) /usr/local/app/tars/app_log/tars
 
-# 5. <a id="chapter-5"></a>Tars一键化部署方案
-请参考 https://github.com/TarsCloud/Tars/tree/master/deploy

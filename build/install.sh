@@ -6,6 +6,8 @@ MachineName=
 MysqlIncludePath=
 MysqlLibPath=
 
+time=$(date "+%Y%m%d-%H%M%S")
+echo "Run Time : ${time}"
 
 ##安装glibc-devel
 
@@ -48,9 +50,25 @@ fi
 
 
 yum install -y perl
+
+#check whether folder /usr/local/mysql/data exist; creat a new folder if it does NOT exist
+if [ ! -d "/usr/local/mysql/data" ]; then
+echo "[Message]/usr/local/mysql/data does not exit"
+mkdir -p /usr/local/mysql/data
+echo "[Message]create a folder for /usr/local/mysql/data"
+fi
+
 cd /usr/local/mysql
 useradd mysql
-rm -rf /usr/local/mysql/data
+## 避免删除mysql中的数据
+## rm -rf /usr/local/mysql/data
+
+#backup mysql data,make sure no data loss in mysql
+datename=$(date +%Y%m%d-%H%M%S)
+mv /usr/local/mysql/data /usr/local/mysql/$datename
+mkdir -p /usr/local/mysql/data
+
+
 mkdir -p /data/mysql-data
 ln -s /data/mysql-data /usr/local/mysql/data
 chown -R mysql:mysql /data/mysql-data /usr/local/mysql/data
