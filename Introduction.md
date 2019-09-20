@@ -1,3 +1,5 @@
+[点我查看中文版](Introduction.zh.md)
+
 # Contents
 > * [1.Introduction ](#main-chapter-1)
 > * [2.Design Principles](#main-chapter-2)
@@ -165,7 +167,7 @@ Developers define service interface via IDL. Tars generates codes for communicat
 The invoke modes split to 3 kinds:
  sync : client issues a request and wait until response arrived or timeout.
  async: client issues a request with a callback and return immediately without waiting, when response arrived, callback is executed.
- one-way: client issues a request withou callback or waiting, it does not care about response.
+ one-way: client issues a request without callback or waiting, it does not care about response.
 
 ## 4.3. load balance
 The framework uses name service for service register and discovery. Client gets server address list via name service, then it uses a specified load balance policy to call servers.
