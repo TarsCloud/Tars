@@ -123,6 +123,7 @@ The core server and client architecture:
 ![tars](docs/images/tars_server_client.png)
 
 Server side:
+
 NetThread: It receives and sends packets. It manages connections and works in multiple threads using EPOLL ET mode. Both TCP and UDP connection are supported.
 
 BindAdapter：  It binds port for the server. It also manages binding info for servant.
@@ -132,6 +133,8 @@ ServantHandle： Business threads, dispatch message for servant object according
 AdminServant： The servant for Administration.
 
 ServantImp：The basic class for business logic which inherited from Servant.
+
+Client side:
 
 NetThread: It receives and sends packets. It manages connections and works in multiple threads using EPOLL ET mode. Both TCP and UDP connection are supported.
                 
