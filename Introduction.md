@@ -1,3 +1,5 @@
+[点我查看中文版](Introduction.zh.md)
+
 # Contents
 > * [1.Introduction ](#main-chapter-1)
 > * [2.Design Principles](#main-chapter-2)
@@ -121,6 +123,7 @@ The core server and client architecture:
 ![tars](docs/images/tars_server_client.png)
 
 Server side:
+
 NetThread: It receives and sends packets. It manages connections and works in multiple threads using EPOLL ET mode. Both TCP and UDP connection are supported.
 
 BindAdapter：  It binds port for the server. It also manages binding info for servant.
@@ -130,6 +133,8 @@ ServantHandle： Business threads, dispatch message for servant object according
 AdminServant： The servant for Administration.
 
 ServantImp：The basic class for business logic which inherited from Servant.
+
+Client side:
 
 NetThread: It receives and sends packets. It manages connections and works in multiple threads using EPOLL ET mode. Both TCP and UDP connection are supported.
                 
@@ -165,7 +170,7 @@ Developers define service interface via IDL. Tars generates codes for communicat
 The invoke modes split to 3 kinds:
  sync : client issues a request and wait until response arrived or timeout.
  async: client issues a request with a callback and return immediately without waiting, when response arrived, callback is executed.
- one-way: client issues a request withou callback or waiting, it does not care about response.
+ one-way: client issues a request without callback or waiting, it does not care about response.
 
 ## 4.3. load balance
 The framework uses name service for service register and discovery. Client gets server address list via name service, then it uses a specified load balance policy to call servers.
