@@ -103,7 +103,7 @@ def initDB():
     mysqlRootPassWord = getCommProperties("mysql.root.password")
     localIp = getLocalIp()
     log.info(" dbDir is{} , mysqlHost is {} , mysqlPort is {} mysqlRootPassWord is {} ,localIp is {} ".format(dbDir,mysqlHost,mysqlPort,mysqlRootPassWord,localIp))
-    doCmd("mysql -uroot -p{}  -e \"grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;flush privileges;\"".format(mysqlRootPassWord))
+    doCmd("mysql -uroot -h{} -P{} -p{}  -e \"grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;flush privileges;\"".format(mysqlHost,mysqlPort,mysqlRootPassWord))
     log.info(" the mysqlHost is {} , mysqlPort is {},  mysqlRootPassWord is {}".format(mysqlHost,mysqlPort,mysqlRootPassWord))
 
     replaceConfDir(dbDir, "192.168.2.131", localIp)
@@ -111,22 +111,22 @@ def initDB():
     replaceConfDir(dbDir, "10.120.129.226", localIp)
 
 
-    doCmd("mysql -utars -ptars2015 -e 'drop database if exists db_tars;create database db_tars'")
-    doCmd("mysql -utars -ptars2015 -e 'drop database if exists tars_stat;create database tars_stat'")
-    doCmd("mysql -utars -ptars2015 -e 'drop database if exists tars_property;create database tars_property'")
-    doCmd("mysql -utars -ptars2015 -e 'drop database if exists db_tars_web;create database db_tars_web'")
+    doCmd("mysql -utars -h{} -P{} -ptars2015 -e 'drop database if exists db_tars;create database db_tars'".format(mysqlHost,mysqlPort))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 -e 'drop database if exists tars_stat;create database tars_stat'".format(mysqlHost,mysqlPort))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 -e 'drop database if exists tars_property;create database tars_property'".format(mysqlHost,mysqlPort))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 -e 'drop database if exists db_tars_web;create database db_tars_web'".format(mysqlHost,mysqlPort))
 
-    doCmd("mysql -utars -ptars2015 db_tars < {}/db_tars.sql".format(dbDir))
-    doCmd("mysql -utars -ptars2015 db_tars -e 'truncate table t_server_conf;truncate table t_adapter_conf;truncate table t_node_info;truncate table t_registry_info '")
-    doCmd("mysql -utars -ptars2015 db_tars < {}/tarsconfig.sql".format(dbDir))
-    doCmd("mysql -utars -ptars2015 db_tars < {}/tarslog.sql".format(dbDir))
-    doCmd("mysql -utars -ptars2015 db_tars < {}/tarspatch.sql".format(dbDir))
-    doCmd("mysql -utars -ptars2015 db_tars < {}/tarsproperty.sql".format(dbDir))
-    doCmd("mysql -utars -ptars2015 db_tars < {}/tarsqueryproperty.sql".format(dbDir))
-    doCmd("mysql -utars -ptars2015 db_tars < {}/tarsquerystat.sql".format(dbDir))
-    doCmd("mysql -utars -ptars2015 db_tars < {}/tarsstat.sql".format(dbDir))
-    doCmd("mysql -utars -ptars2015 db_tars < {}/tarsnotify.sql".format(dbDir))
-    doCmd("mysql -utars -ptars2015 db_tars_web < {}/t_tars_files.sql".format(dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars < {}/db_tars.sql".format(mysqlHost,mysqlPort,dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars -e 'truncate table t_server_conf;truncate table t_adapter_conf;truncate table t_node_info;truncate table t_registry_info '".format(mysqlHost,mysqlPort))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars < {}/tarsconfig.sql".format(mysqlHost,mysqlPort,dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars < {}/tarslog.sql".format(mysqlHost,mysqlPort,dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars < {}/tarspatch.sql".format(mysqlHost,mysqlPort,dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars < {}/tarsproperty.sql".format(mysqlHost,mysqlPort,dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars < {}/tarsqueryproperty.sql".format(mysqlHost,mysqlPort,dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars < {}/tarsquerystat.sql".format(mysqlHost,mysqlPort,dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars < {}/tarsstat.sql".format(mysqlHost,mysqlPort,dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars < {}/tarsnotify.sql".format(mysqlHost,mysqlPort,dbDir))
+    doCmd("mysql -utars -h{} -P{} -ptars2015 db_tars_web < {}/t_tars_files.sql".format(mysqlHost,mysqlPort,dbDir))
     return
 
 if __name__ == '__main__':
