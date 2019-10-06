@@ -56,6 +56,7 @@ yum install -y tar
 yum install -y epel-release
 yum install -y nodejs
 yum install -y npm
+yum install -y yum-utils
 #npm install -g n
 npm i -g pm2
 yum install -y lrzsz
