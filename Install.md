@@ -495,6 +495,8 @@ mkdir -p /data/log/tars
 visit the website, input`${your machine ip}:3000` into browser.  
   
 ![tars](docs/images/tars_web_system_index_en.png)
+
+**Note: In order to provide better security protection after installation, it is strongly recommended to open the user system authentication login module.(https://github.com/TarsCloud/TarsWeb/blob/master/docs/TARS%20%E7%94%A8%E6%88%B7%E4%BD%93%E7%B3%BB%E6%A8%A1%E5%9D%97%2B%E8%B5%84%E6%BA%90%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8%E6%8C%87%E5%BC%95.md)**
   
   
 ### 4.4. Install general basic service for framework  
