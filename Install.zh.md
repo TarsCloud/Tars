@@ -612,6 +612,7 @@ make tarsqueryproperty-tar
 
 ## 5.4. 基础服务手工上传示意图
 
+
 在执行上述的make语句后，/usr/local/app/TarsFramework/build就会生成几个*.tgz文件，例如tarslog.tgz, tarsnotify.tgz等等，这些文件就是下面章节中所需要部署的包文件。
 
 ### 5.4.1 tarsnotify部署发布
@@ -668,7 +669,6 @@ make tarsqueryproperty-tar
 
 
 ### 5.4.6 tarsqueryproperty部署发布
-<br><span 
 
 部署信息如下：
 
