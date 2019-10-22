@@ -528,6 +528,8 @@ mkdir -p /data/log/tars
 
 ![tars](docs/images/tars_web_system_index.png)
 
+**注意：安装后为了提供更好的安全防护，强烈建议开启[用户体系鉴权登陆模块](https://github.com/TarsCloud/TarsWeb/blob/master/docs/TARS%20%E7%94%A8%E6%88%B7%E4%BD%93%E7%B3%BB%E6%A8%A1%E5%9D%97%2B%E8%B5%84%E6%BA%90%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8%E6%8C%87%E5%BC%95.md)。**
+
 ## 4.4. 安装框架普通基础服务
 **平台部署的端口号仅供参考，保证端口无冲突即可**
 
