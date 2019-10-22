@@ -517,7 +517,9 @@ Permissions can be precise to application or service level
 
 # 5. <a id="chapter-5"></a>Tars Framework expansion and  update
 
+
 ## 5.1 tarsnode installation and update
+
 
 After the successful installation of core infrastructure services, if you need to deploy services based on the tar framework on other machines, you need to install tarsnode on other node machines and connect to the framework before expanding and deploying services through the management platform.
 
@@ -623,6 +625,7 @@ See Section 5.4 for details.
 **Note that when deploying the management platform, you can select the correct service template (it is available by default. If there is no corresponding template, you can create it on the management platform. For specific service template content, please refer to the file under the source directory deploy/sql/template)**
 
 ### 5.4. Install general basic service for framework  
+
   
 **Tips:There are some *.tgz files under the path of /usr/local/app/TarsFramework/build,such as tarslog.tgz, tarsnotify.tgz and so on. There are the patch package for the following services.  
   
