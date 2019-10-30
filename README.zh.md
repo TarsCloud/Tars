@@ -30,7 +30,7 @@ Tars详细介绍参见[Introduction.md](Introduction.md)。
 ## 安装说明
 
 1. 初次接触时，建议参考安装说明文档手工[Install.md](Install.md)进行安装。
-2. 对安装比较熟后，可以参考[deploy](deploy)目录下的python脚本进行安装（必要时需要修改）。
+2. 对安装比较熟后，可以参考[framework-install](framework-install)目录下的脚本进行安装（必要时需要修改）。
 3. 也可以选择采用Docker镜像安装的方式进行快捷安装，详细安装说明见[TarsDocker仓库](https://github.com/TarsCloud/TarsDocker)。
 
 ## 性能数据

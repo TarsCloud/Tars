@@ -325,7 +325,7 @@ flush privileges;
 **注意${主机名}需要修改成自身机器的名称，可以通过查看/etc/hosts
 
 ## 3.2. 创建数据库
-sql脚本在framework/sql目录下，修改部署的ip信息
+sql脚本在framework-install/framework/sql目录下，修改部署的ip信息
 ```
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`
 sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`

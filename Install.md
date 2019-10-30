@@ -325,7 +325,7 @@ flush privileges;
 **Attention: Modify ${'localhost'} to real hostname from /etc/hosts.**  
   
 ### 3.2. Create DB  
-Search the ip in the script under `framework/sql`,and replace with the above ip.  
+Search the ip in the script under `framework-install/framework/sql`,and replace with the above ip.  
   
 ```bash  
 sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`  
