@@ -8,7 +8,7 @@
 
 
 
-本安装文档仅描述了在一台服务器上安装搭建整个Tars框架的过程，目的是为了让用户对Tars框架的部署搭建、运行、测试等有个整体的认识。
+本安装文档描述在一台或多台服务器上安装搭建整个Tars框架的过程，目的是为了让用户对Tars框架的部署搭建、运行、测试等有个整体的认识。
 
 如要用于线上环境，部署安装的原理是一样，不过需要更多考虑分布式系统下服务的部署需要有容错、容灾等的能力。若有需要，可以加入tars的qq技术交流群：579079160。
 
@@ -234,31 +234,7 @@ mysql> set global validate_password_length=1;
 mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '${your password}';
 ```
 
-
-# 2. <a id="chapter-2"></a>Tars开发环境安装介绍
-## 2.1. web管理系统开发环境安装
-以linux环境为例：
-
-安装npm,pm2
-```
-yum install -y npm
-npm i -g pm2
-```
-
-以官网提供的nvm脚本安装
-执行以下命令：
-```
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-source ~/.bashrc
-```
-
-node和带有负载功能的node应用的进程管理器pm2安装
-```
-nvm install v8.11.3
-npm install -g pm2 --registry=https://registry.npm.taobao.org
-```
-
-### 2.2. c++ 开发环境安装
+# 2. <a id="chapter-2"></a>Tars C++开发环境安装(源码安装框架必备)
 
 下载TarsFramework源码
 
@@ -311,140 +287,147 @@ cd ${source_folder}/build
 **需要修改tarscpp/servant/script/create_tars_server.sh文件中的DEMO_PATH的路径**
 ```
 
-# 3 <a id="chapter-3"></a>Tars数据库环境初始化
-## 3.1. 添加用户
-```sql
-grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;
-grant all on *.* to 'tars'@'localhost' identified by 'tars2015' with grant option;
-grant all on *.* to 'tars'@'${主机名}' identified by 'tars2015' with grant option;
-flush privileges;
+# 3 <a id="chapter-3"></a>Tars框架安装
+
+## 3.1. 框架安装模式
+
+**框架有两种安装模式: **
+
+- linux(centos7/ubuntu:16.04) 一键部署
+- 制作成docker镜像来完成安装
+
+在部署前, 需要下载tarsweb, 并copy到/usr/local/tars/cpp/deploy目录下:
+
+```
+git clone https://github.com/TarsCloud/TarsWeb.git
+cp -rf TarsWeb /usr/local/tars/cpp/deploy/web
 ```
 
-如果mysql版本大于5.7且没有修改密安全性规则，必须将整个项目的所有‘tars2015’一并修改成符合规则的密码。
-
-**注意${主机名}需要修改成自身机器的名称，可以通过查看/etc/hosts
-
-## 3.2. 创建数据库
-sql脚本在framework-install/framework/sql目录下，修改部署的ip信息
+**例如: **
 ```
-sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`
-sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`
-sed -i "s/10.120.129.226/${your machine ip}/g" `grep 10.120.129.226 -rl ./*`
+[root@cb7ea6560124 data]# ls -l
+total 76
+-rw-r--r--  1 1003 1003  1447 Oct 31 08:34 Dockerfile
+-rw-r--r--  1 1003 1003   191 Oct 30 07:11 MariaDB.repo
+-rw-r--r--  1 1003 1003  1713 Oct 30 10:22 README.md
+-rw-r--r--  1 1003 1003  2758 Oct 30 13:57 README.zh.md
+-rwxr-x---  1 1003 1003  3753 Oct 31 11:00 centos-install.sh
+-rw-r--r--  1 1003 1003  1923 Jul  4 12:02 centos7_base.repo
+-rwxr-x---  1 1003 1003  2664 Oct 31 08:37 docker-init.sh
+-rwxr-x---  1 1003 1003   210 Oct 30 14:15 docker.sh
+-rw-r--r--  1 1003 1003   664 May 11  2018 epel-7.repo
+drwxr-xr-x  4 1003 1003    30 Oct 31 10:33 framework
+-rwxr-x---  1 1003 1003 13527 Oct 30 02:36 nvm-install.sh
+-rwxr-x---  1 1003 1003  8757 Oct 31 10:12 tars-install.sh
+drwxr-xr-x  2 1003 1003    23 Oct 31 10:33 tools
+-rwxr-x---  1 1003 1003  3417 Oct 30 11:01 ubuntu-install.sh
+-rwxr-x---  1 1003 1003   169 Oct 29 09:54 uninstall.sh
+drwxr-xr-x 11 1003 1003  4096 Oct 31 11:01 web
 ```
-**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成自己数据库的部署地址即可,不要是127.0.0.1**
 
-**注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
+## 3.2. 框架部署说明
 
-执行.
-```
-chmod u+x exec-sql.sh
-./exec-sql.sh
-```
-**注意将${your machine ip}改为部署机器的IP**
+框架可以部署在单机或者多机上, 多机是一主多从模式, 通常一主一从足够了:
 
-**如果exec-sql.sh脚本执行出错，需要脚本里修改数据库用户名root对应的密码**
+- 主节点只能有一台, 从节点可以多台
+- 主节点默认会安装:tarsAdminRegistry, tarspatch, tarsweb, tarslog, 这几个服务在从节点上不会安装
+- tarsAdminRegistry只能是单点(带有发布状态) 
+- tarslog也只能是单点, 否则日志会分散在多机上
+- 原则上tarspatch, tarsweb可以是多点, 如果部署成多点, 需要把/usr/local/app/patchs目录做成多机间共享(可以通过NFS), 否则发布会有问题
+- 你可以后续把tarslog部署到大硬盘服务器上
+- 实际使用中, 主从节点其实都挂了, 也不会影响其他节点, 只会影响发布
 
-脚本执行后，会创建3个数据库，分别是db_tars、tars_stat、tars_property。
+脚本执行后，会创建3个数据库，分别是db_tars、db_tars_web、 tars_stat、tars_property。 
 
 其中db_tars是框架运行依赖的核心数据库，里面包括了服务部署信息、服务模版信息、服务配置信息等等；
+
+db_tars_web是tarsweb管理平台用到数据库
 
 tars_stat是服务监控数据存储的数据库；
 
 tars_property是服务属性监控数据存储的数据库；
 
-# 4. <a id="chapter-4"></a>Tars框架运行环境搭建
-
-## 4.1 框架基础服务打包
-
-框架服务的安装分两种：
-
-一种是核心基础服务(必须的)，必须手工部署的，
-
-一种是普通基础服务(可选的)，可以通过管理平台发布的(和普通服务一样）。
+无论哪种安装方式, 如果成功安装, 都会看到类似如下输出:
 
 ```
-手工部署的核心基础服务：tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig, tarspatch
- 
-通过管理平台部署的普通基础服务：tarsstat, tarsproperty,tarsnotify, tarslog，tarsquerystat，tarsqueryproperty
+ 2019-10-31 11:06:13 INSTALL TARS SUCC: http://172.17.0.3:3000/ to open the tars web. 
+ 2019-10-31 11:06:13 If in Docker, please check you host ip and port. 
+ 2019-10-31 11:06:13 You can start tars web manual: cd /usr/local/app/web; npm run prd 
+```
+打开你的浏览器输入: http://172.17.0.3:3000/ 如果顺利, 可以看到web管理平台
+
+## 3.1. linux一键部署
+进入该目录, 执行:
+```
+sh centos-install.sh MYSQL_HOST MYSQL_ROOT_PASSWORD INET REBUILD(false[default]/true) SLAVE(false[default]/true)";
 ```
 
-首先准备第一种服务的安装包，在build/目录下输入：
+MYSQL_HOST: mysql数据库的ip地址
+
+MYSQL_ROOT_PASSWORD: mysql数据库的root密码
+
+INET: 网卡的名称(ifconfig可以看到, 比如eth0), 表示框架希望绑定的本机IP, 注意不能是127.0.0.1
+
+REBUILD: 是否重建数据库,通常为false, 如果中间装出错, 希望重置数据库, 可以设置为true
+
+SLAVE: 是否是从节点
+
+
+举例, 安装两台机器(一主[192.168.7.151], 一从[192.168.7.152], 数据库是:192.168.7.153)
+主节点上执行(192.168.7.151)
 ```
-make framework-tar
+sh centos-install.sh 192.168.7.153 tars2015 eth0 true false
 ```
-会在当前目录生成framework.tgz 包
-这个包包含了 tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig, tarspatch 部署相关的文件
-
-第二种服务安装包可以单独准备：
+主节点执行完毕后, 从节点执行:
 ```
-make tarsstat-tar
-make tarsnotify-tar
-make tarsproperty-tar
-make tarslog-tar
-make tarsquerystat-tar
-make tarsqueryproperty-tar
-```
-生成的发布包，在管理平台部署发布完成后，进行部署发布，具体参见4.4章节。
-
-**注意在管理平台进行部署时，选择正确的服务模板即可（默认是有的，若没有相应的模版，可以在管理平台上创建，具体服务的模版内容可以tars_template.md）!**
-
-## 4.2 安装框架核心基础服务
-
-### 4.2.1. 安装核心基础服务
-
-切换至root用户，创建基础服务的部署目录，如下：
-```  shell
-cd /usr/local/app
-mkdir tars
-chown ${普通用户}:${普通用户} ./tars/
+sh centos-install.sh 192.168.7.153 tars2015 eth0 false false
 ```
 
-将已打好的框架服务包复制到/usr/local/app/tars/，然后解压，如下：
-``` shell
-cp build/framework.tgz /usr/local/app/tars/
-cd /usr/local/app/tars
-tar xzfv framework.tgz
+执行过程中的错误, 参见屏幕输出, 如果出错可以重复执行(一般是下载资源出错)
+
+
+## 3.2. 制作docker一键部署
+
+将支撑框架制作成一个docker, 部署时启动docker即可.
+
+进入该目录, 执行生成docker:
+```
+sh docker.sh v1
+```
+docker制作完毕: tar-docker:v1
+
+可以将你需要的docker发布到你的机器, 然后执行
+
+```
+docker run -d --net=host -e MYSQL_HOST=xxxxx -e MYSQL_ROOT_PASSWORD=xxxxx -eREBUILD=false -eINET=enp3s0 -eSLAVE=false -v/data/log/app_log:/usr/local/app/tars/app_log -v/data/log/web_log:/usr/local/app/web/log -v/data/patchs:/usr/local/app/patchs tars-docker:v1 sh /root/tars-install/docker-init.sh
 ```
 
-修改各个服务对应conf目录下配置文件，注意将配置文件中的ip地址修改为本机ip地址，如下：
-``` shell
-cd /usr/local/app/tars
-sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`
-sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
-sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`
-sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
-```
-**注意，192.168.2.131这个ip是tars开发团队当时部署服务测试的ip信息，替换成本机的部署地址即可，不要是127.0.0.1**
+MYSQL_IP: mysql数据库的ip地址
 
-**注意，db.tars.com是tars框架数据库部署的地址信息，替换成自己数据库的部署地址即可**
+MYSQL_ROOT_PASSWORD: mysql数据库的root密码
 
-**注意，registry.tars.com是tars框架主控tarsregistry服务部署的地址信息，替换成自己主控tarsregistry符的部署地址即可**
+INET: 网卡的名称(ifconfig可以看到, 比如eth0), 表示框架希望绑定的本机IP, 注意不能是127.0.0.1
 
-**注意，web.tars.com是rsync使用的地址信息，替换成自己的部署机器地址即可**
+REBUILD: 是否重建数据库,通常为false, 如果中间装出错, 希望重置数据库, 可以设置为true
 
-然后在/usr/local/app/tars/目录下，执行脚本，启动tars框架服务
-```
-chmod u+x tars_install.sh
-./tars_install.sh
-```
-**注意如果几个服务不是部署在同一台服务器上，需要自己手工copy以及处理tars_install.sh脚本**
+SLAVE: 是否是从节点
 
-部署管理平台并启动web管理平台(管理平台必须和tarspatch部署在同一台服务器上)部署tarspatch，切换至root用户，并执行
-```
-tarspatch/util/init.sh
-```
-**注意，上面脚本执行后，看看rsync进程是否起来了，若没有看看rsync使用的配置中的ip是否正确（即把web.tars.com替换成本机ip）
+映射三个目录到宿主机
+- -v/data/log/app_log:/usr/local/app/tars/app_log, tars应用日志
+- -v/data/log/web_log:/usr/local/app/web/log, web log
+- -v/data/patchs:/usr/local/app/patchs 发布包路径
 
-在管理平台上面配置tarspatch，注意需要配置服务的可执行目录(/usr/local/app/tars/tarspatch/bin/tarspatch)
+**如果希望多节点部署, 则在不同机器上执行docker run ...即可, 注意参数设置!**
+**注意: 这里必须使用 --net=host, 表示docker和宿主机在相同网络** 
 
-在管理平台上面配置tarsconfig，注意需要配置服务的可执行目录(/usr/local/app/tars/tarsconfig/bin/tarsconfig)
+# 4. <a id="chapter-4"></a>其他问题
+
+## 4.1 tarsnode安装和更新
 
 在crontab配置一个进程监控，确保TARS框架服务在出现异常后能够重新启动。
 ```
 * * * * * /usr/local/app/tars/tarsnode/util/monitor.sh
 ```
-
-### 4.2.2 服务扩容前安装tarsnode
 
 核心基础服务的安装成功后，如果需要在其他机器也能部署基于tars框架的服务，那么在管理平台扩容部署前，需要安装tarsnode服务。
 
@@ -459,28 +442,13 @@ mkdir tars
 chown ${普通用户}:${普通用户} ./tars/
 ```
 
-将已打好的框架服务包复制到/usr/local/app/tars/，然后解压，如下：
-``` shell
-cp build/framework.tgz /usr/local/app/tars/
-cd /usr/local/app/tars
-tar xzfv framework.tgz
-```
+将主节点上的tarsnode copy到/usr/local/app/tars/
 
-修改各个服务对应conf目录下配置文件，注意将配置文件中的ip地址修改为本机ip地址，如下：
-``` shell
-cd /usr/local/app/tars
-sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`
-sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`
-sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`
-sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`
-```
-**注意，192.168.2.131这个ip是tars开发团队当时测试的ip信息，替换成自己扩容机器的ip地址即可，不要是127.0.0.1**
+修改/usr/local/app/tars/tarsnode/conf/tars.tarsnode.config.conf
 
-**注意，db.tars.com是tars框架数据库部署的地址信息，替换成数据库的部署ip地址即可**
+将localip换成自己的本机ip即可
 
-**注意，registry.tars.com是tars框架主控tarsregistry服务部署的地址信息，替换成自己主控tarsregistry的部署地址即可**
-
-**注意，web.tars.com是rsync使用的地址信息，替换成web的部署机器地址即可**
+同时将registry的ip换成两台机器的ip
 
 然后在/usr/local/app/tars/目录下，执行脚本，启动tars框架服务
 ```
@@ -493,47 +461,51 @@ chmod u+x tarsnode_install.sh
 * * * * * /usr/local/app/tars/tarsnode/util/monitor.sh
 ```
 
-## 4.3 安装web管理系统
+## 4.2 框架基础服务更新
 
->管理系统源代码目录名称为**web**
+框架服务的安装分两种：
 
+一种是核心基础服务(必须的)，必须手工部署的，
 
-也可以clone TarsWeb文件夹
-```
-git clone https://github.com/TarsCloud/TarsWeb.git
-```
+一种是普通基础服务(可选的)，可以通过管理平台发布的(和普通服务一样）。
 
-
-修改配置文件，将配置文件中的ip地址修改为本机ip地址，如下：
 ```
-cd ${安装目录}
-sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js
-sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf
+手工部署的核心基础服务：tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig, tarspatch
+ 
+通过管理平台部署的普通基础服务：tarsstat, tarsproperty,tarsnotify, tarslog，tarsquerystat，tarsqueryproperty
 ```
-
-安装web管理页面依赖，启动web
+所有服务都可以手工出一个安装包
 ```
-cd ${安装目录}
-npm install --registry=https://registry.npm.taobao.org
-npm run prd
+make tarsAdminRegistry-tar
+make tarsregistry-tar
+make tarsconfig-tar
+make tarspatch-tar
 ```
-
-创建日志目录
+上述包的更新, 比如上传到对应对应服务, 解压以后, 覆盖bin目录下的可执行程序, 比如覆盖tarsregistry:
 ```
-mkdir -p /data/log/tars
+tar xzf tarsregistry.tgz
+cp -rf tarsregistry/bin/tarsregistry /usr/local/app/tars/tarsregistry/bin/tarsregistry
+/usr/local/app/tars/tarsregistry/bin/util/start.sh
 ```
 
-访问站点
-浏览器输入${your machine ip}:3000，即可看到，如下：
+第二种服务可以手工出包以后, 通过管理平台来发布
+```
+make tarsstat-tar
+make tarsnotify-tar
+make tarsproperty-tar
+make tarslog-tar
+make tarsquerystat-tar
+make tarsqueryproperty-tar
+```
+生成的发布包，在管理平台部署发布完成后，进行部署发布，具体参见4.4章节。
 
-![tars](docs/images/tars_web_system_index.png)
+**注意在管理平台进行部署时，选择正确的服务模板即可（默认是有的，若没有相应的模版，可以在管理平台上创建，具体服务的模版内容可以tars_template.md）!**
 
-## 4.4. 安装框架普通基础服务
-**平台部署的端口号仅供参考，保证端口无冲突即可**
+## 4.3. 基础服务手工上传示意图
 
 在执行上述的make语句后，/usr/local/app/TarsFramework/build就会生成几个*.tgz文件，例如tarslog.tgz, tarsnotify.tgz等等，这些文件就是下面章节中所需要部署的包文件。
 
-### 4.4.1 tarsnotify部署发布
+### 4.3.1 tarsnotify部署发布
 
 默认tarsnotify在安装核心基础服务时，部署信息已初始化了，安装完管理平台后，就可以看到，如下：
 
@@ -543,7 +515,7 @@ mkdir -p /data/log/tars
 
 ![tars](docs/images/tars_tarsnotify_patch.png)
 
-### 4.4.2 tarsstat部署发布
+### 4.3.2 tarsstat部署发布
 
 部署信息如下：
 
@@ -553,7 +525,7 @@ mkdir -p /data/log/tars
 
 ![tars](docs/images/tars_tarsstat_patch.png)
 
-### 4.4.3 tarsproperty部署发布
+### 4.3.3 tarsproperty部署发布
 
 部署信息如下：
 
@@ -563,7 +535,7 @@ mkdir -p /data/log/tars
 
 ![tars](docs/images/tars_tarsproperty_patch.png)
 
-### 4.4.4 tarslog部署发布
+### 4.3.4 tarslog部署发布
 
 部署信息如下：
 
@@ -573,7 +545,7 @@ mkdir -p /data/log/tars
 
 ![tars](docs/images/tars_tarslog_patch.png)
 
-### 4.4.5 tarsquerystat部署发布
+### 4.3.5 tarsquerystat部署发布
 
 部署信息如下：
 
@@ -586,8 +558,7 @@ mkdir -p /data/log/tars
 ![tars](docs/images/tars_tarsquerystat_patch.png)
 
 
-
-### 4.4.6 tarsqueryproperty部署发布
+### 4.3.6 tarsqueryproperty部署发布
 <br><span 
 
 部署信息如下：
@@ -601,6 +572,6 @@ mkdir -p /data/log/tars
 ![tars](docs/images/tars_tarsqueryproperty_patch.png)
 
 最后，在安装环境过程中，如果系统仍有问题，请到以下的目录查找日志文件分析问题所在：
-(1) ${安装目录}/log 
-(2) /usr/local/app/tars/app_log/tars
+(1) /usr/local/app/tars/app_log/tars
+
 
