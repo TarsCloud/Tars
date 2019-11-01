@@ -2,14 +2,13 @@
   
 # Content  
 > * [Dependent Environments](#chapter-1)  
-> * [Install develop environment for Tars](#chapter-2)  
-> * [Initialize the db environment for Tars](#chapter-3)  
-> * [Build runtime environment for Tars framework](#chapter-4)  
+> * [Install develop environment for C++](#chapter-2)  
+> * [Tars framework Installation](#chapter-3)  
+> * [Tarsnode expansion and Framework update](#chapter-4)  
 
 This document describes the steps to deploy, run, and test Tars framework.
 
 If you use Tars for production environment, the deployment steps are similar, but you need pay attention to fault-tolerance. You can join us for discussion in the QQ group code 579079160.  
-  
   
 ## 1. <a id="chapter-1"></a>Dependent environments  
   
@@ -29,37 +28,18 @@ Hardware requirements: a machine running Linux.
   
 ### 1.1. Install glibc-devel  
   
-If you don't have glibc, please install it first.  
+Install all dependency: gcc, glibc, bison, flex, cmake. 
   
 For example, run this command in Centos:  
 ``` bash 
-yum install glibc-devel  
+yum install glibc-devel gcc gcc-c++ bison flex cmake
 ```  
   
-### 1.2. Install cmake  
-  
-Cmake is the tool for compile tars.  
-  
-Download cmake-2.8.8 source code, unzip:  
-```  bash
-tar zxvf cmake-2.8.8.tar.gz  
-```  
-Enter directory:  
-```  bash
-cd cmake-2.8.8  
-```  
-Steps as following(may `sudo root` first)  
-```  bash
-./bootstrap  
-make  
-make install  
-```  
-  
-### 1.3. Install mysql  
+### 1.2. Install mysql  
 
 There are two ways to install mysql. One is via source code and the other one is via yum. Both procedures are described below.
 
-### 1.3.1 Install mysql via source code  
+### 1.2.1 Install mysql via source code  
 This step installs mysql via source code in order to set up configurations manually.  
 
 Before installation, check whether ncurses and zlib have been installed. Execute these commands if not exist:  
@@ -184,7 +164,7 @@ show master status\G;
 show slave status\G;  
 ```  
   
-### 1.3.2 Install mysql via yum  
+### 1.2.2 Install mysql via yum  
 This step allows you to download the mysql official yum repository.
   
 The install scripts named mysql_install_db.sh included in version 5.6 have been deleted after version 5.7. Therefore, here comes the yum installation.  
@@ -203,7 +183,7 @@ If you have problems to install mysql with the above step, add the new mysql rep
 ```  bash
 sudo yum localinstall https://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm  
 ```  
-### 1.3.2.1 Configure mysql  
+### 1.2.2.1 Configure mysql  
 
 After installing mysql, start and check its status.  
   
@@ -239,33 +219,9 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY '${your passwd}';
 flush privileges;  
 ```  
   
-# 2. <a id="chapter-2"></a>Install develop environment for Tars  
-## 2.1. Install develop environment for web management system  
+# 2. <a id="chapter-2"></a>Install develop environment for C++(Install TarsFramework necessary)
 
-For Linux：  
-  
-Install npm,pm2
-
-```  bash
-yum install -y npm
-npm i -g pm2
-``` 
-
-Nvm script installation is provided by the official website. Execute the following command:  
-
-```  bash
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash  
-source ~/.bashrc  
-```  
-  
-Install node and process manager pm2 for node applications with load function:  
-```  bash
-nvm install v8.11.3  
-npm install -g pm2 --registry=https://registry.npm.taobao.org  
-```  
-  
-
-## 2.2. Install develop environment for C++  
+**Only install TarsFramework need this step, If you just write c++ service, You only need download tarscpp**
 
 Download **TarsFramework** source code:
 ```  bash
@@ -313,195 +269,247 @@ If you want to install on different path:
 **modify TARS_PATH in tarscpp/servant/makefile/makefile.tars**  
 **modify DEMO_PATH in tarscpp/servant/script/create_tars_server.sh**  
 ```  
-  
-## 3. <a id="chapter-3"></a>Initialize the db environment for Tars  
-### 3.1. Add user  
-```sql  
-grant all on *.* to 'tars'@'%' identified by 'tars2015' with grant option;  
-grant all on *.* to 'tars'@'localhost' identified by 'tars2015' with grant option;  
-grant all on *.* to 'tars'@'${hostname}' identified by 'tars2015' with grant option;  
-flush privileges;  
-```  
-**Attention: Modify ${'localhost'} to real hostname from /etc/hosts.**  
-  
-### 3.2. Create DB  
-Search the ip in the script under `framework-install/framework/sql`,and replace with the above ip.  
-  
-```bash  
-sed -i "s/192.168.2.131/${your machine ip}/g" `grep 192.168.2.131 -rl ./*`  
-sed -i "s/db.tars.com/${your machine ip}/g" `grep db.tars.com -rl ./*`  
-sed -i "s/10.120.129.226/${your machine ip}/g" `grep 10.120.129.226 -rl ./*`  
-```  
-  
-Execute  
-```  
-chmod u+x exec-sql.sh  
-./exec-sql.sh  
-```  
+
  
-After execution of the script, there will be three databases created: db_tars, tars_stat and tars_property.  
+# 3 <a id="chapter-3"></a>Tars framework Installation 
+
+## 3.1. Installation mode
+
+**There are two Installation mode of TarsFramework:**
+
+- centos7 automatic deploy, During the installation process, the network needs to download resources from the outside
+- Make a docker image to complete the installation. The process of making a docker requires network download resources, but no external network is needed to start and run the docker image
+
+**Note: the compilation and installation of tarsframework needs to be completed**
+
+Download tarsweb and copy to /usr/local/tars/cpp/deploy
+
+```
+git clone https://github.com/TarsCloud/TarsWeb.git
+cp -rf TarsWeb /usr/local/tars/cpp/deploy/web
+```
+
+for example, this is my files in /usr/local/tars/cpp/deploy:
+```
+[root@cb7ea6560124 deploy]# ls -l
+total 76
+-rw-r--r--  1 1003 1003  1447 Oct 31 08:34 Dockerfile
+-rw-r--r--  1 1003 1003   191 Oct 30 07:11 MariaDB.repo
+-rw-r--r--  1 1003 1003  1713 Oct 30 10:22 README.md
+-rw-r--r--  1 1003 1003  2758 Oct 30 13:57 README.zh.md
+-rwxr-x---  1 1003 1003  3753 Oct 31 11:00 centos-install.sh
+-rw-r--r--  1 1003 1003  1923 Jul  4 12:02 centos7_base.repo
+-rwxr-x---  1 1003 1003  2664 Oct 31 08:37 docker-init.sh
+-rwxr-x---  1 1003 1003   210 Oct 30 14:15 docker.sh
+-rw-r--r--  1 1003 1003   664 May 11  2018 epel-7.repo
+drwxr-xr-x  4 1003 1003    30 Oct 31 10:33 framework
+-rwxr-x---  1 1003 1003 13527 Oct 30 02:36 nvm-install.sh
+-rwxr-x---  1 1003 1003  8757 Oct 31 10:12 tars-install.sh
+drwxr-xr-x  2 1003 1003    23 Oct 31 10:33 tools
+-rwxr-x---  1 1003 1003  3417 Oct 30 11:01 ubuntu-install.sh
+-rwxr-x---  1 1003 1003   169 Oct 29 09:54 uninstall.sh
+drwxr-xr-x 11 1003 1003  4096 Oct 31 11:01 web
+```
+
+## 3.2. Basic description of TarsFramework
+
+The framework can be deployed on a single machine or multiple machines. Multiple machines are in the mode of one master and many slaves. Generally, one master and one slave are enough:
+
+- There can only be one master node and multiple slave nodes
+- The master node will install by default: tarsadminregistry, tarspatch, tarsweb, and tarslog. These services will not be installed on the slave node
+- The tarsAdminRegistry can only be a single point because it has publishing status)
+- The tarslog can only be a single point, otherwise the remote logs will be scattered on multiple machines
+- In principle, tarspatch and tarsweb can be multi-point. If they are deployed to multi-point, the /usr/local/app/patches directory needs to be shared among multiple computers (for example, through NFS). Otherwise, the service cannot be published normally
+- You can later deploy the tarslog to a large hard disk server
+- In practice, even if the master and slave nodes are hung, the normal operation of services on the framework will not be affected, only the publishing will be affected
+
+After install, there will be four databases created: db_tars, db_tars_web, tars_stat and tars_property.  
   
 - db_tars is the core database for framework, it consists of services info, service templates and service configuration, etc.  
+- db_tars_web is the core database for tars web
 - tars_stat is the database for service monitor data.  
 - tars_property is the database for service properties monitor data.  
-  
-## 4. <a id="chapter-4"></a>Build runtime environment for Tars framework  
-  
-### 4.1. Packing the basic framework service  
-  
-  
-There are two kinds of framework services:  
-One is basic core service (required), must be deployed by yourself.  
-The other is basic general service, must be patched by management system.  
-  
-```  
-The basic core services:  
-tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig, tarspatch  
-The basic general services:  
-tarsstat, tarsproperty,tarsnotify, tarslog，tarsquerystat，tarsqueryproperty  
-```  
-First get the core services package, change to build directory and input:  
-``` bash 
-make framework-tar  
-```  
-Framework.tgz will be created in current directory.  
-It contains tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig and tarspatch deployment files.  
-  
-Then make the general service package:  
-```  bash
-make tarsstat-tar  
-make tarsnotify-tar  
-make tarsproperty-tar  
-make tarslog-tar  
-make tarsquerystat-tar  
-make tarsqueryproperty-tar  
-```  
-The patch package can be deploy after the patch of management platform, see details in chapter 4.4.  
-  
-### 4.2. Install basic core service for framework  
-#### 4.2.1. Install basic core service  
-  
-Change to user root, and create the deploy directory for basic service:  
-``` bash
-cd /usr/local/app  
-mkdir tars  
-chown ${normal user}:${normal user} ./tars/  
-```  
-Copy the framework service package to /usr/local/app/tars/ and unzip:  
-``` bash  
-cp build/framework.tgz /usr/local/app/tars/  
-cd /usr/local/app/tars  
-tar xzfv framework.tgz  
-```  
-  
-Modify the configuration file in corresponding conf directory for each service, pay attention  
-to modify the ip address to your host's address:  
-``` bash  
-cd /usr/local/app/tars  
-sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`  
-sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`  
-sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`  
-sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`  
-```  
-Execute tars_install.sh script in directory /usr/local/app/tars/ to start tars framework service:  
-```  bash
-chmod u+x tars_install.sh  
-./tars_install.sh  
-```  
-**If services are deployed on different machines, you need to deal with tars_install.sh script things manually.**  
-  
-Deploy management platform and launch web management platform to deploy tarspatch (the management platform and tarspatch must in the same machine), change to user root and execute:  
-``` bash
-tarspatch/util/init.sh  
-```  
-**Play attention, after executing of above script, check if rsync alive.**  
-  
-Deploy tarspatch on management platform.  
-Deploy tarsconfig on management platform.  
-  
-You need to configure monitor for tarsnode by crontab. Ensure that it'll be launched after crash:  
-```  
-* * * * * /usr/local/app/tars/tarsnode/util/monitor.sh  
-```  
-  
-#### 4.2.2. Install tarsnode before scale up  
-  
-After success of basic core service installation, if you need to deploy tars-based service on different machine,  
-install tarsnode first.  
-  
-If you only deploy service on a single machine, ignore this section.  
-  
-The details are similar to those described in last section.  
-Change to user root, create the directory for deploy service in, as following:  
-``` bash  
-cd /usr/local/app  
-mkdir tars  
-chown ${normal user}:${normal user} ./tars/  
-```  
-  
-Copy the framework service package to /usr/local/app/tars/:  
-``` bash  
-cp build/framework.tgz /usr/local/app/tars/  
-cd /usr/local/app/tars  
-tar xzfv framework.tgz  
-```  
-Modify the configuration file in corresponding conf directory for each service, don't forget  
-to modify the ip address to your host's address:  
-``` bash  
-cd /usr/local/app/tars  
-sed -i "s/192.168.2.131/${your_machine_ip}/g" `grep 192.168.2.131 -rl ./*`  
-sed -i "s/db.tars.com/${your_machine_ip}/g" `grep db.tars.com -rl ./*`  
-sed -i "s/registry.tars.com/${your_machine_ip}/g" `grep registry.tars.com -rl ./*`  
-sed -i "s/web.tars.com/${your_machine_ip}/g" `grep web.tars.com -rl ./*`  
-```  
-``` bash 
-chmod u+x tarsnode_install.sh  
-tarsnode_install.sh  
-```  
-  
-You need to configure monitor for tarsnode by crontab. Ensure that it'll be launched after crash:
 
-```  
-* * * * * /usr/local/app/tars/tarsnode/util/monitor.sh  
-```  
-  
-### 4.3. Install web management system  
-  
-> The name of the directory where management system source code in is **web**  
->  
-You can clone the TarsWeb folder too.  
-```  bash
-git clone https://github.com/TarsCloud/TarsWeb.git  
-```  
-Modify the configuration file and change the IP address in the configuration file to the local IP address, as follows:  
-```  bash
-cd ${install folder}  
-sed -i 's/db.tars.com/${your_machine_ip}/g' config/webConf.js  
-sed -i 's/registry.tars.com/${your_machine_ip}/g' config/tars.conf  
-```  
-  
-Install web management page dependencies, start web  
-```  bash
-cd ${install folder}  
-npm install --registry=https://registry.npm.taobao.org  
-npm run prd  
-```  
-  
-Create log directory  
-```  bash
-mkdir -p /data/log/tars  
-```  
+After install, you will see the output of the install script:
 
-visit the website, input`${your machine ip}:3000` into browser.  
-  
-![tars](docs/images/tars_web_system_index_en.png)
-  
-  
-### 4.4. Install general basic service for framework  
+```
+ 2019-10-31 11:06:13 INSTALL TARS SUCC: http://xxx.xxx.xxx.xxx:3000/ to open the tars web. 
+ 2019-10-31 11:06:13 If in Docker, please check you host ip and port. 
+ 2019-10-31 11:06:13 You can start tars web manual: cd /usr/local/app/web; npm run prd 
+```
+Open browser: http://xxx.xxx.xxx.xxx:3000/, If it goes well, you can see the web management platform.
+
+## 3.3. centos7 automatic deploy
+
+enter /usr/local/tars/cpp/deploy, run:
+```
+sh centos-install.sh MYSQL_HOST MYSQL_ROOT_PASSWORD INET REBUILD(false[default]/true) SLAVE(false[default]/true)
+```
+
+MYSQL_HOST: mysql ip address
+
+MYSQL_ROOT_PASSWORD: mysql root password
+
+INET: The name of the network interface (as you can see in ifconfig, such as eth0) indicates the native IP bound by the framework. Note that it cannot be 127.0.0.1
+
+REBUILD: Whether to rebuild the database is usually false. If there is an error in the intermediate installation and you want to reset the database, you can set it to true
+
+SLAVE: slave node
+
+
+For example, install three machines and one mysql(suppose: Master [192.168.7.151], slave [192.168.7.152], MySQL: [192.168.7.153])
+
+Execute on the master node (192.168.7.151)
+
+```
+sh centos-install.sh 192.168.7.153 tars2015 eth0 false false
+```
+
+Execute on the slave node (192.168.7.152)
+
+```
+sh centos-install.sh 192.168.7.153 tars2015 eth0 false true
+```
+
+Refer to screen output for errors during execution. If there is an error, it can be executed repeatedly (usually download resource error)
+
+
+## 3.4. Make docker
+
+Objective: make the framework into a docker, and start the docker
+
+make docker:
+```
+sh docker.sh v1
+```
+docker finished, you can see the docker:tar-docker:v1
+
+```
+docker ps
+```
+
+You can publish the docker image to your machine and execute:
+
+```
+docker run -d --net=host -e MYSQL_HOST=xxxxx -e MYSQL_ROOT_PASSWORD=xxxxx \
+        -eREBUILD=false -eINET=enp3s0 -eSLAVE=false \
+        -v/data/log/app_log:/usr/local/app/tars/app_log \
+        -v/data/log/web_log:/usr/local/app/web/log \
+        -v/data/patchs:/usr/local/app/patchs \
+        tars-docker:v1 sh /root/tars-install/docker-init.sh
+```
+
+MYSQL_HOST: mysql ip address
+
+MYSQL_ROOT_PASSWORD: mysql root password
+
+INET: The name of the network interface (as you can see in ifconfig, such as eth0) indicates the native IP bound by the framework. Note that it cannot be 127.0.0.1
+
+REBUILD: Whether to rebuild the database is usually false. If there is an error in the intermediate installation and you want to reset the database, you can set it to true
+
+SLAVE: slave node
+
+Map three directories to the host:
+
+- -v/data/log/app_log:/usr/local/app/tars/app_log, tars application logs
+- -v/data/log/web_log:/usr/local/app/web/log, web log
+- -v/data/patchs:/usr/local/app/patchs, Publish package path
+
+**If you want to deploy multiple nodes, just execute docker run... On different machines. Pay attention to the parameter settings**
+
+**Here, you must use -- net = host to indicate that the docker and the host are on the same network**
+
+
+# 4. <a id="chapter-4"></a>Tarsnode expansion and Framework update
+
+## 4.1 tarsnode installation and update
+
+After the successful installation of core infrastructure services, if you need to deploy services based on the tar framework on other machines, you need to install tarsnode on other node machines and connect to the framework before expanding and deploying services through the management platform.
+
+If the service is only deployed on a machine for testing, this step can be ignored first, and then executed when the capacity needs to be expanded.
+
+Create the deployment directory as follows:
+
+```  shell
+cd /usr/local/app
+mkdir tars
+chown ${normal user}:${normal user} ./tars/
+```
+
+copy tarsnode in master node to /usr/local/app/tars/ in this node
+
+modify /usr/local/app/tars/tarsnode/conf/tars.tarsnode.config.conf
+
+change localip to the ip of this machine
+
+At the same time, change the IP of registry into the IP of TarsFramework machines
+```
+locator=tars.tarsregistry.QueryObj@tcp -h xxx2 -p 17890:tcp -h xxx2 -p 17890
+```
+
+Then execute the script and start the tarsnode
+```
+/usr/local/app/tars/tarsnode/util/start.sh
+```
+
+Configure a process monitoring in crontab to ensure that the tars framework service can be restarted after an exception occurs.
+
+```
+* * * * * /usr/local/app/tars/tarsnode/util/monitor.sh
+```
+
+**Note: the servers of the previously installed framework also needs to increase the monitoring of tarsnode**
+
+## 4.2 Framework basic service update
+
+There are two types of framework service installation:
+
+One is core infrastructure services, which must be deployed manually,
+
+```
+Manually deployed core infrastructure services: tarsAdminRegistry, tarsregistry, tarsnode, tarsconfig, tarspatch
+
+The installation package can be manually released (but cannot be released through the management platform)
+
+make tarsAdminRegistry-tar
+make tarsregistry-tar
+make tarsconfig-tar
+make tarspatch-tar
+
+```
+
+The update of the above package, such as uploading to the corresponding service, after decompression, overwrites the executable program under bin directory, such as updating tarsregistry:
+
+```
+tar xzf tarsregistry.tgz
+cp -rf tarsregistry/bin/tarsregistry /usr/local/app/tars/tarsregistry/bin/tarsregistry
+/usr/local/app/tars/tarsregistry/bin/util/start.sh
+```
+
+One is common basic service, which can be published through the management platform (just like common service).
+
+```
+Common basic services deployed through the management platform:：tarsstat, tarsproperty,tarsnotify, tarslog，tarsquerystat，tarsqueryproperty
+
+After the package is manually released, it is released through the management platform:
+
+make tarsstat-tar
+make tarsnotify-tar
+make tarsproperty-tar
+make tarslog-tar
+make tarsquerystat-tar
+make tarsqueryproperty-tar
+```
+See Section 4.3 for details.
+
+
+**Note that when deploying the management platform, you can select the correct service template (it is available by default. If there is no corresponding template, you can create it on the management platform. For specific service template content, please refer to the file under the source directory deploy/sql/template)**
+
+### 4.3. Install general basic service for framework  
   
 **Tips:There are some *.tgz files under the path of /usr/local/app/TarsFramework/build,such as tarslog.tgz, tarsnotify.tgz and so on. There are the patch package for the following services.  
   
-#### 4.4.1 Deploy and patch tarsnotify  
+#### 4.3.1 Deploy and patch tarsnotify  
   
 By default, tarsnofity is ready when install core basic service:  
   
@@ -511,7 +519,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsnotify_patch_en.png)  
   
-### 4.4.2 Deploy and patch tarsstat  
+### 4.3.2 Deploy and patch tarsstat  
   
 Deploy message:  
   
@@ -521,7 +529,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsstat_patch_en.png)  
   
-### 4.4.3 Deploy and patch tarsproperty  
+### 4.3.3 Deploy and patch tarsproperty  
   
 Deployment message:  
   
@@ -531,7 +539,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsproperty_patch_en.png)  
   
-#### 4.4.4 Deploy and patch tarslog  
+#### 4.3.4 Deploy and patch tarslog  
   
 Deployment message:  
   
@@ -541,7 +549,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarslog_patch_en.png)  
   
-### 4.4.5 Deploy and patch tarsquerystat  
+### 4.3.5 Deploy and patch tarsquerystat  
   
 Deployment message:  
 **Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**  
@@ -553,13 +561,12 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsquerystat_patch_en.png)  
   
-#### 4.4.6 Deploy and patch tarsqueryproperty  
+#### 4.3.6 Deploy and patch tarsqueryproperty  
   
 Deployment message:  
 **Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**  
   
 ![tars](docs/images/tars_tarsqueryproperty_bushu_en.png)  
-  
   
 Upload patch package：  
   
