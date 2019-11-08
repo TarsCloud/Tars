@@ -282,33 +282,31 @@ If you want to install on different path:
 
 **Note: the compilation and installation of tarsframework needs to be completed**
 
-Download tarsweb and copy to /usr/local/tars/cpp/deploy
+Download tarsweb and copy to /usr/local/tars/cpp/deploy  (change dir name TarsWeb to web)
 
 ```
 git clone https://github.com/TarsCloud/TarsWeb.git
-cp -rf TarsWeb /usr/local/tars/cpp/deploy/web
+mv TarsWeb web
+cp -rf web /usr/local/tars/cpp/deploy/
 ```
 
 for example, this is my files in /usr/local/tars/cpp/deploy:
 ```
 [root@cb7ea6560124 deploy]# ls -l
-total 76
--rw-r--r--  1 1003 1003  1447 Oct 31 08:34 Dockerfile
--rw-r--r--  1 1003 1003   191 Oct 30 07:11 MariaDB.repo
--rw-r--r--  1 1003 1003  1713 Oct 30 10:22 README.md
--rw-r--r--  1 1003 1003  2758 Oct 30 13:57 README.zh.md
--rwxr-x---  1 1003 1003  3753 Oct 31 11:00 centos-install.sh
--rw-r--r--  1 1003 1003  1923 Jul  4 12:02 centos7_base.repo
--rwxr-x---  1 1003 1003  2664 Oct 31 08:37 docker-init.sh
--rwxr-x---  1 1003 1003   210 Oct 30 14:15 docker.sh
--rw-r--r--  1 1003 1003   664 May 11  2018 epel-7.repo
-drwxr-xr-x  4 1003 1003    30 Oct 31 10:33 framework
--rwxr-x---  1 1003 1003 13527 Oct 30 02:36 nvm-install.sh
--rwxr-x---  1 1003 1003  8757 Oct 31 10:12 tars-install.sh
-drwxr-xr-x  2 1003 1003    23 Oct 31 10:33 tools
--rwxr-x---  1 1003 1003  3417 Oct 30 11:01 ubuntu-install.sh
--rwxr-x---  1 1003 1003   169 Oct 29 09:54 uninstall.sh
-drwxr-xr-x 11 1003 1003  4096 Oct 31 11:01 web
+total 52
+-rw-rw-r-- 1 tars tars 1923 Nov  2 17:31 centos7_base.repo
+-rwxrwxr-x 1 tars tars 1515 Nov  5 18:21 Dockerfile
+-rwxrwxr-x 1 tars tars 2844 Nov  5 18:21 docker-init.sh
+-rwxrwxr-x 1 tars tars  215 Nov  5 18:21 docker.sh
+-rw-rw-r-- 1 tars tars  664 Nov  2 17:31 epel-7.repo
+drwxrwxr-x 4 tars tars   30 Nov  2 17:31 framework
+-rwxrwxr-x 1 tars tars 4599 Nov  8 09:41 linux-install.sh
+-rw-rw-r-- 1 tars tars  191 Nov  2 17:31 MariaDB.repo
+-rwxrwxr-x 1 tars tars  565 Nov  8 09:23 README.md
+-rwxrwxr-x 1 tars tars  539 Nov  8 09:23 README.zh.md
+-rwxrwxr-x 1 tars tars 9713 Nov  7 09:42 tars-install.sh
+drwxrwxr-x 2 tars tars   44 Nov  7 10:04 tools
+drwxr-xr-x 11 tars tars  4096 Oct 31 11:01 web
 ```
 
 ## 3.2. Basic description of TarsFramework
