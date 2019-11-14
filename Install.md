@@ -344,7 +344,7 @@ Open browser: http://xxx.xxx.xxx.xxx:3000/, If it goes well, you can see the web
 enter /usr/local/tars/cpp/deploy, run:
 ```
 chmod a+x linux-install.sh
-./centos-install.sh MYSQL_HOST MYSQL_ROOT_PASSWORD INET REBUILD(false[default]/true) SLAVE(false[default]/true)
+./linux-install.sh MYSQL_HOST MYSQL_ROOT_PASSWORD INET REBUILD(false[default]/true) SLAVE(false[default]/true)
 ```
 
 MYSQL_HOST: mysql ip address
