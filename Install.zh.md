@@ -334,6 +334,9 @@ tars_property是服务属性监控数据存储的数据库；
  2019-10-31 11:06:13 INSTALL TARS SUCC: http://xxx.xxx.xxx.xxx:3000/ to open the tars web. 
  2019-10-31 11:06:13 If in Docker, please check you host ip and port. 
  2019-10-31 11:06:13 You can start tars web manual: cd /usr/local/app/web; npm run prd 
+ 2019-10-31 11:06:13 If You want to install tarsnode in other machine, do this: 
+ 2019-10-31 11:06:13 wget http://xxx.xxx.xxx.xxx:3000/install.sh
+ 2019-10-31 11:06:13 chmod a+x install.sh; ./install.sh
 ```
 打开你的浏览器输入: http://xxx.xxx.xxx.xxx:3000/ 如果顺利, 可以看到web管理平台
 
@@ -341,12 +344,13 @@ tars_property是服务属性监控数据存储的数据库；
 
 进入/usr/local/tars/cpp/deploy, 执行:
 ```
-sh centos-install.sh MYSQL_HOST MYSQL_ROOT_PASSWORD INET REBUILD(false[default]/true) SLAVE(false[default]/true)
+chmod a+x linux-install.sh
+./linux-install.sh MYSQL_HOST MYSQL_ROOT_PASSWORD INET REBUILD(false[default]/true) SLAVE(false[default]/true)
 ```
 
 MYSQL_HOST: mysql数据库的ip地址
 
-MYSQL_ROOT_PASSWORD: mysql数据库的root密码
+MYSQL_ROOT_PASSWORD: mysql数据库的root密码(注意root不要有太特殊的字符, 例如!, 否则shell脚本识别有问题, 因为是特殊字符)
 
 INET: 网卡的名称(ifconfig可以看到, 比如eth0), 表示框架绑定的本机IP, 注意不能是127.0.0.1
 
@@ -358,11 +362,13 @@ SLAVE: 是否是从节点
 
 主节点上执行(192.168.7.151)
 ```
-sh centos-install.sh 192.168.7.153 tars2015 eth0 false false
+chmod a+x linux-install.sh
+./linux-install.sh 192.168.7.153 tars2015 eth0 false false
 ```
 主节点执行完毕后, 从节点执行:
 ```
-sh centos-install.sh 192.168.7.153 tars2015 eth0 false true
+chmod a+x linux-install.sh
+./linux-install.sh 192.168.7.153 tars2015 eth0 false true
 ```
 
 执行过程中的错误参见屏幕输出, 如果出错可以重复执行(一般是下载资源出错)
@@ -373,7 +379,8 @@ sh centos-install.sh 192.168.7.153 tars2015 eth0 false true
 
 进入该目录, 执行生成docker:
 ```
-sh docker.sh v1
+chmod a+x docker.sh
+./docker.sh v1
 ```
 docker制作完毕: tar-docker:v1
 ```

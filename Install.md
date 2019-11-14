@@ -334,6 +334,8 @@ After install, you will see the output of the install script:
  2019-10-31 11:06:13 INSTALL TARS SUCC: http://xxx.xxx.xxx.xxx:3000/ to open the tars web. 
  2019-10-31 11:06:13 If in Docker, please check you host ip and port. 
  2019-10-31 11:06:13 You can start tars web manual: cd /usr/local/app/web; npm run prd 
+ 2019-10-31 11:06:13 wget http://xxx.xxx.xxx.xxx:3000/install.sh
+ 2019-10-31 11:06:13 chmod a+x install.sh; ./install.sh
 ```
 Open browser: http://xxx.xxx.xxx.xxx:3000/, If it goes well, you can see the web management platform.
 
@@ -341,12 +343,13 @@ Open browser: http://xxx.xxx.xxx.xxx:3000/, If it goes well, you can see the web
 
 enter /usr/local/tars/cpp/deploy, run:
 ```
-sh centos-install.sh MYSQL_HOST MYSQL_ROOT_PASSWORD INET REBUILD(false[default]/true) SLAVE(false[default]/true)
+chmod a+x linux-install.sh
+./centos-install.sh MYSQL_HOST MYSQL_ROOT_PASSWORD INET REBUILD(false[default]/true) SLAVE(false[default]/true)
 ```
 
 MYSQL_HOST: mysql ip address
 
-MYSQL_ROOT_PASSWORD: mysql root password
+MYSQL_ROOT_PASSWORD: mysql root password, note that root should not have special characters, for example: !, otherwise, there is a problem with shell script recognition, because it is a special character.
 
 INET: The name of the network interface (as you can see in ifconfig, such as eth0) indicates the native IP bound by the framework. Note that it cannot be 127.0.0.1
 
@@ -360,13 +363,15 @@ For example, install three machines and one mysql(suppose: Master [192.168.7.151
 Execute on the master node (192.168.7.151)
 
 ```
-sh centos-install.sh 192.168.7.153 tars2015 eth0 false false
+chmod a+x linux-install.sh
+./linux-install.sh 192.168.7.153 tars2015 eth0 false false
 ```
 
 Execute on the slave node (192.168.7.152)
 
 ```
-sh centos-install.sh 192.168.7.153 tars2015 eth0 false true
+chmod a+x linux-install.sh
+./linux-install.sh 192.168.7.153 tars2015 eth0 false true
 ```
 
 Refer to screen output for errors during execution. If there is an error, it can be executed repeatedly (usually download resource error)
@@ -378,7 +383,8 @@ Objective: make the framework into a docker, and start the docker
 
 make docker:
 ```
-sh docker.sh v1
+chmod a+x docker.sh
+./docker.sh v1
 ```
 docker finished, you can see the docker:tar-docker:v1
 
