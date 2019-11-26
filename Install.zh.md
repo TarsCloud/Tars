@@ -1,10 +1,12 @@
 [Click me switch to English version](Install.md)
+[查看变更历史](ChangeList.md)
 
 # 目录
 > * [依赖环境](#chapter-1)
 > * [Tars C++开发环境](#chapter-2)
 > * [Tars框架安装](#chapter-3)
-> * [tarsnode扩容及框架更新](#chapter-4)
+> * [Tars-web说明](#chapter-4)
+> * [框架扩容及更新](#chapter-5)
 
 本安装文档描述在一台或多台服务器上安装搭建整个Tars框架的过程，目的是为了让用户对Tars框架的部署搭建、运行、测试等有个整体的认识。
 
@@ -21,8 +23,8 @@ flex工具版本:       |	2.5及以上版本（c++语言框架依赖）
 cmake版本：       	|   2.8.8及以上版本（c++语言框架依赖）
 mysql版本:          |   4.1.17及以上版本（框架运行依赖）
 rapidjson版本:      |   1.0.2版本（c++语言框架依赖）
-nvm版本：           |   0.33.11及以上版本（web管理系统依赖）
-node版本：          |   8.11.3及以上版本（web管理系统依赖）
+nvm版本：           |   0.35.1及以上版本（web管理系统依赖, 脚本安装过程中自动安装）
+node版本：          |   12.13.0及以上版本（web管理系统依赖, 脚本安装过程中自动安装）
 
 运行服务器要求：1台普通安装linux系统的机器即可。
 
@@ -274,8 +276,14 @@ cd ${source_folder}/build
 
 **框架有两种模式:**
 
-- centos7一键部署(ubuntu类似), 安装过程中需要网络从外部下载资源
+- centos or ubuntu一键部署, 安装过程中需要网络从外部下载资源
 - 制作成docker镜像来完成安装, 制作docker过程需要网络下载资源, 但是启动docker镜像不需要外网
+
+**框架安装注意事项:**
+
+- 安装过程中, 由于tars-web依赖nodejs, 所以会自动下载nodejs, npm, pm2以及相关的依赖, 并设置好环境变量, 保证nodejs生效.
+- nodejs的版本目前默认下载的v12.13.0
+- 如果你本机以及安装了nodejs, 最好卸载掉
 
 **注意:需要完成TarsFramework的编译和安装**
 
@@ -317,12 +325,15 @@ drwxr-xr-x 11 tars tars  4096 Oct 31 11:01 web
 - 原则上tarspatch, tarsweb可以是多点, 如果部署成多点, 需要把/usr/local/app/patchs目录做成多机间共享(可以通过NFS), 否则无法正常发布服务
 - 可以后续把tarslog部署到大硬盘服务器上
 - 实际使用中, 即使主从节点都挂了, 也不会影响框架上服务的正常运行, 只会影响发布
+- 一键部署会自动安装好web(自动下载nodejs, npm, pm2等相关依赖), 同时开启web权限
 
-部署完成后会创建4个数据库，分别是db_tars、db_tars_web、 tars_stat、tars_property。 
+部署完成后会创建4个数据库，分别是db_tars、db_tars_web、db_user_system、 tars_stat、tars_property。 
 
 其中db_tars是框架运行依赖的核心数据库，里面包括了服务部署信息、服务模版信息、服务配置信息等等；
 
 db_tars_web是web管理平台用到数据库
+
+db_user_system是web管理平台用到的权限管理数据库
 
 tars_stat是服务监控数据存储的数据库；
 
@@ -340,7 +351,10 @@ tars_property是服务属性监控数据存储的数据库；
 ```
 打开你的浏览器输入: http://xxx.xxx.xxx.xxx:3000/ 如果顺利, 可以看到web管理平台
 
-## 3.3. centos7一键部署
+**注意: 执行完毕以后, 可以检查nodejs环境变量是否生效: node --version, 如果输出不是v12.13.0, 则表示nodejs环境变量没生效**
+**如果没生效, 手动执行:  centos: source ~/.bashrc or ubuntu: source ~/.profile**
+
+## 3.3. (centos or ubuntu)一键部署
 
 进入/usr/local/tars/cpp/deploy, 执行:
 ```
@@ -417,9 +431,87 @@ SLAVE: 是否是从节点
 
 **这里必须使用 --net=host, 表示docker和宿主机在相同网络** 
 
-# 4. <a id="chapter-4"></a>tarsnode扩容及框架更新
+## 3.5. 核心模块
 
-## 4.1 tarsnode安装和更新
+无论是那种安装方式, 最终Tars Framework都是由几个核心模块组成的, 例如:
+
+```
+[root@VM-0-7-centos deploy]# ps -ef | grep app/tars | grep -v grep
+root       368     1  0 09:20 pts/0    00:00:25 /usr/local/app/tars/tarsregistry/bin/tarsregistry --config=/usr/local/app/tars/tarsregistry/conf/tars.tarsregistry.config.conf
+root      9245 32687  0 09:29 ?        00:00:13 /usr/local/app/tars/tarsstat/bin/tarsstat --config=/usr/local/app/tars/tarsnode/data/tars.tarsstat/conf/tars.tarsstat.config.conf
+root     32585     1  0 09:20 pts/0    00:00:10 /usr/local/app/tars/tarsAdminRegistry/bin/tarsAdminRegistry --config=/usr/local/app/tars/tarsAdminRegistry/conf/tars.tarsAdminRegistry.config.conf
+root     32588     1  0 09:20 pts/0    00:00:20 /usr/local/app/tars/tarslog/bin/tarslog --config=/usr/local/app/tars/tarslog/conf/tars.tarslog.config.conf
+root     32630     1  0 09:20 pts/0    00:00:07 /usr/local/app/tars/tarspatch/bin/tarspatch --config=/usr/local/app/tars/tarspatch/conf/tars.tarspatch.config.conf
+root     32653     1  0 09:20 pts/0    00:00:14 /usr/local/app/tars/tarsconfig/bin/tarsconfig --config=/usr/local/app/tars/tarsconfig/conf/tars.tarsconfig.config.conf
+root     32687     1  0 09:20 ?        00:00:22 /usr/local/app/tars/tarsnode/bin/tarsnode --locator=tars.tarsregistry.QueryObj@tcp -h 172.16.0.7 -p 17890 --config=/usr/local/app/tars/tarsnode/conf/tars.tarsnode.config.conf
+root     32695     1  0 09:20 pts/0    00:00:09 /usr/local/app/tars/tarsnotify/bin/tarsnotify --config=/usr/local/app/tars/tarsnotify/conf/tars.tarsnotify.config.conf
+root     32698     1  0 09:20 pts/0    00:00:14 /usr/local/app/tars/tarsproperty/bin/tarsproperty --config=/usr/local/app/tars/tarsproperty/conf/tars.tarsproperty.config.conf
+root     32709     1  0 09:20 pts/0    00:00:12 /usr/local/app/tars/tarsqueryproperty/bin/tarsqueryproperty --config=/usr/local/app/tars/tarsqueryproperty/conf/tars.tarsqueryproperty.config.conf
+root     32718     1  0 09:20 pts/0    00:00:12 /usr/local/app/tars/tarsquerystat/bin/tarsquerystat --config=/usr/local/app/tars/tarsquerystat/conf/tars.tarsquerystat.config.conf
+```
+
+- 对于主机节点 tarsAdminRegistry  tarsnode  tarsregistry tars-web 必须活着, 其他tars服务会被tarsnode自动拉起
+- 对于从机节点 tarsnode  tarsregistry 必须活着, 其他tars服务会被tarsnode拉起
+- tars-web是nodejs实现的服务, 由两个服务组成, 具体参见后面章节
+- 为了保证核心服务是启动的, 可以通过check.sh来控制, 在crontab 中配置
+
+主机(add to contab):
+
+```
+* * * * * /usr/local/app/tars/check.sh master
+```
+
+从机(add to contab):
+```
+* * * * * /usr/local/app/tars/check.sh 
+```
+
+如果配置了check.sh, 就不需要配置后面章节中的tarsnode的监控了
+
+# 4. <a id="chapter-4"></a>Tars-web说明
+
+## 4.1 模块说明
+
+Tars Framework部署好以后, 在主机节点上会安装tars-web(从机节点不会安装), tars-web采用nodejs实现, 由两个服务组成.
+
+查看tars-web的模块:
+```
+pm2 list
+```
+
+输出如下:
+```
+[root@8a17fab70409 data]# pm2 list
+┌────┬─────────────────────────┬─────────┬─────────┬──────────┬────────┬──────┬──────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name                    │ version │ mode    │ pid      │ uptime │ ↺    │ status   │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────────────────┼─────────┼─────────┼──────────┼────────┼──────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ tars-node-web           │ 0.2.0   │ fork    │ 1602     │ 2m     │ 0    │ online   │ 0.1%     │ 65.1mb   │ root     │ disabled │
+│ 1  │ tars-user-system        │ 0.1.0   │ fork    │ 1641     │ 2m     │ 0    │ online   │ 0.1%     │ 60.1mb   │ root     │ disabled │
+└────┴─────────────────────────┴─────────┴─────────┴──────────┴────────┴──────┴──────────┴──────────┴──────────┴──────────┴──────────┘
+```
+
+**如果找不到pm2, 一般是环境变量没生效, 请先执行: centos: source ~/.bashrc or ubuntu: source ~/.profile, 安装过程中会写这个文件**
+
+**tars-web由两个模块组成**
+- tars-node-web: tars-web主页面服务, 默认绑定3000端口
+- tars-user-system: 权限管理服务, 负责管理所有相关的权限, 默认绑定3001端口
+
+tars-node-web调用tars-user-system来完成相关的权限验证.
+
+## 4.2 权限说明
+
+tar-web默认起来后, 默认有一个admin账号, 第一次登录需要修改admin用户的密码
+
+admin用户可以创建其他用户, 并给其他用户授权(三种权限admin, operator, developer)
+
+三种权限的能力不同, admin权限拥有超级管理权限, operator运维权限(包含developer权限, 能发布), developer(查看)
+
+权限可以精确到应用或者服务级别
+
+
+# 5. <a id="chapter-5/a>框架扩容及更新
+
+## 5.1 tarsnode安装和更新
 
 核心基础服务的安装成功后，如果需要在其他机器也能部署基于tars框架的服务，那么在通过管理平台扩容和部署服务前，需要在其他节点机上安装tarsnode并连接到框架上。
 
@@ -455,9 +547,29 @@ locator=tars.tarsregistry.QueryObj@tcp -h xxx2 -p 17890:tcp -h xxx2 -p 17890
 * * * * * /usr/local/app/tars/tarsnode/util/monitor.sh
 ```
 
-**注意:之前安装的框架的服务器, 也需要增加tarsnode的监控**
+**注意:之前安装的框架的服务器, 如果用check.sh做了监控, 则无需再配置tarsnode的监控了**
 
-## 4.2 框架基础服务更新
+## 5.2 Tar-web更新
+
+**更新步骤**
+- 下载最新的Tars-web的代码, 覆盖 /usr/local/app/web
+- 修改web配置文件: web/config/webConf.js, web/config/tars.conf, 修改db的ip为当前mysql ip, 修改tars的ip为当前环境的registry的ip
+- 修改demo配置文件: web/demo/config/webConf.js, 修改dbip为当前环境的mysql ip
+- cd web; npm install; cd demo; npm install
+- 重启模块: pm2 restart tars-node-web; pm2 restart tars-user-system
+
+**如果数据库中不存在db_tars_web 和 db_user_system, 请先创建db(web/sql/db_tars_web.sql, web/demo/sql/db_user_system.sql)**
+
+```
+mysql -hxxx -pxxx -e 'create database db_tars_web'
+mysql -hxxx -pxxx db_tars_web < web/sql/db_tars_web.sql
+
+mysql -hxxx -pxxx -e 'create database db_user_system'
+mysql -hxxx -pxxx db_user_system < web/sql/db_user_system.sql
+
+```
+
+## 5.3 框架基础服务更新
 
 框架服务的安装分两种：
 
@@ -493,15 +605,15 @@ make tarslog-tar
 make tarsquerystat-tar
 make tarsqueryproperty-tar
 ```
-具体参见4.3章节。
+具体参见5.4章节。
 
 **注意在管理平台进行部署时，选择正确的服务模板即可（默认是有的，若没有相应的模版，可以在管理平台上创建，具体服务的模版内容可以参见源码目录deploy/sql/template目录下的文件）!**
 
-## 4.3. 基础服务手工上传示意图
+## 5.4. 基础服务手工上传示意图
 
 在执行上述的make语句后，/usr/local/app/TarsFramework/build就会生成几个*.tgz文件，例如tarslog.tgz, tarsnotify.tgz等等，这些文件就是下面章节中所需要部署的包文件。
 
-### 4.3.1 tarsnotify部署发布
+### 5.4.1 tarsnotify部署发布
 
 默认tarsnotify在安装核心基础服务时，部署信息已初始化了，安装完管理平台后，就可以看到，如下：
 
@@ -511,7 +623,7 @@ make tarsqueryproperty-tar
 
 ![tars](docs/images/tars_tarsnotify_patch.png)
 
-### 4.3.2 tarsstat部署发布
+### 5.4.2 tarsstat部署发布
 
 部署信息如下：
 
@@ -521,7 +633,7 @@ make tarsqueryproperty-tar
 
 ![tars](docs/images/tars_tarsstat_patch.png)
 
-### 4.3.3 tarsproperty部署发布
+### 5.4.3 tarsproperty部署发布
 
 部署信息如下：
 
@@ -531,7 +643,7 @@ make tarsqueryproperty-tar
 
 ![tars](docs/images/tars_tarsproperty_patch.png)
 
-### 4.3.4 tarslog部署发布
+### 5.4.4 tarslog部署发布
 
 部署信息如下：
 
@@ -541,7 +653,7 @@ make tarsqueryproperty-tar
 
 ![tars](docs/images/tars_tarslog_patch.png)
 
-### 4.3.5 tarsquerystat部署发布
+### 5.4.5 tarsquerystat部署发布
 
 部署信息如下：
 
@@ -554,7 +666,7 @@ make tarsqueryproperty-tar
 ![tars](docs/images/tars_tarsquerystat_patch.png)
 
 
-### 4.3.6 tarsqueryproperty部署发布
+### 5.4.6 tarsqueryproperty部署发布
 <br><span 
 
 部署信息如下：

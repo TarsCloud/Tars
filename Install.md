@@ -1,10 +1,12 @@
 [点我查看中文版](Install.zh.md)  
-  
+[View History](ChangeList.md)
+
 # Content  
 > * [Dependent Environments](#chapter-1)  
 > * [Install develop environment for C++](#chapter-2)  
 > * [Tars framework Installation](#chapter-3)  
-> * [Tarsnode expansion and Framework update](#chapter-4)  
+> * [Tars-web Description ](#chapter-4)
+> * [Tars expansion and update](#chapter-5)  
 
 This document describes the steps to deploy, run, and test Tars framework.
 
@@ -21,8 +23,8 @@ flex version: | 2.5 or later（Dependent c++ framework tools）
 cmake version: | 2.8.8 or later（Dependent c++ framework tools）  
 mysql version: | 4.1.17 or later（dependency of framework running）  
 rapidjson version: | 1.0.2 or later（dependency of C++ framework）  
-nvm version: | 0.33.11 or later（Dependent web management system）  
-node version: | 8.11.3 or later（Dependent web management system）  
+nvm version: | 0.35.1 or later（Dependent web management system, auto install while deploying）  
+node version: | 12.13.0 or later（Dependent web management system, auto install while deploying）  
   
 Hardware requirements: a machine running Linux.  
   
@@ -280,6 +282,12 @@ If you want to install on different path:
 - centos7 automatic deploy, During the installation process, the network needs to download resources from the outside
 - Make a docker image to complete the installation. The process of making a docker requires network download resources, but no external network is needed to start and run the docker image
 
+**Tars Framework Installation Attentions:**
+
+- During the installation process, because the tar web relies on nodejs, it will automatically download nodejs, NPM, PM2 and related dependencies, and set the environment variables to ensure that nodejs takes effect
+- The version of nodejs currently downloads v12.13.0 by default
+- If you have nodejs installed, you'd better uninstall it first
+
 **Note: the compilation and installation of tarsframework needs to be completed**
 
 Download tarsweb and copy to /usr/local/tars/cpp/deploy  (change dir name TarsWeb to web)
@@ -339,7 +347,11 @@ After install, you will see the output of the install script:
 ```
 Open browser: http://xxx.xxx.xxx.xxx:3000/, If it goes well, you can see the web management platform.
 
-## 3.3. centos7 automatic deploy
+**Note: after execution, you can check whether the nodejs environment variable is effective: node -- version. If the output is not v12.13.0, it means that the nodejs environment variable is not effective**
+
+**If not, manually execute in centos: source ~/.bashrc or in ubuntu: source ~/.profile**
+
+## 3.3. centos7 or ubuntu automatic deploy
 
 enter /usr/local/tars/cpp/deploy, run:
 ```
@@ -421,12 +433,90 @@ Map three directories to the host:
 
 **If you want to deploy multiple nodes, just execute docker run... On different machines. Pay attention to the parameter settings**
 
-**Here, you must use -- net = host to indicate that the docker and the host are on the same network**
+**Here, you must use --net=host to indicate that the docker and the host are on the same network**
+
+## 3.5. Core module
+
+Tars Framework is ultimately made up of several core modules, such as:
+
+```
+[root@VM-0-7-centos deploy]# ps -ef | grep app/tars | grep -v grep
+root       368     1  0 09:20 pts/0    00:00:25 /usr/local/app/tars/tarsregistry/bin/tarsregistry --config=/usr/local/app/tars/tarsregistry/conf/tars.tarsregistry.config.conf
+root      9245 32687  0 09:29 ?        00:00:13 /usr/local/app/tars/tarsstat/bin/tarsstat --config=/usr/local/app/tars/tarsnode/data/tars.tarsstat/conf/tars.tarsstat.config.conf
+root     32585     1  0 09:20 pts/0    00:00:10 /usr/local/app/tars/tarsAdminRegistry/bin/tarsAdminRegistry --config=/usr/local/app/tars/tarsAdminRegistry/conf/tars.tarsAdminRegistry.config.conf
+root     32588     1  0 09:20 pts/0    00:00:20 /usr/local/app/tars/tarslog/bin/tarslog --config=/usr/local/app/tars/tarslog/conf/tars.tarslog.config.conf
+root     32630     1  0 09:20 pts/0    00:00:07 /usr/local/app/tars/tarspatch/bin/tarspatch --config=/usr/local/app/tars/tarspatch/conf/tars.tarspatch.config.conf
+root     32653     1  0 09:20 pts/0    00:00:14 /usr/local/app/tars/tarsconfig/bin/tarsconfig --config=/usr/local/app/tars/tarsconfig/conf/tars.tarsconfig.config.conf
+root     32687     1  0 09:20 ?        00:00:22 /usr/local/app/tars/tarsnode/bin/tarsnode --locator=tars.tarsregistry.QueryObj@tcp -h 172.16.0.7 -p 17890 --config=/usr/local/app/tars/tarsnode/conf/tars.tarsnode.config.conf
+root     32695     1  0 09:20 pts/0    00:00:09 /usr/local/app/tars/tarsnotify/bin/tarsnotify --config=/usr/local/app/tars/tarsnotify/conf/tars.tarsnotify.config.conf
+root     32698     1  0 09:20 pts/0    00:00:14 /usr/local/app/tars/tarsproperty/bin/tarsproperty --config=/usr/local/app/tars/tarsproperty/conf/tars.tarsproperty.config.conf
+root     32709     1  0 09:20 pts/0    00:00:12 /usr/local/app/tars/tarsqueryproperty/bin/tarsqueryproperty --config=/usr/local/app/tars/tarsqueryproperty/conf/tars.tarsqueryproperty.config.conf
+root     32718     1  0 09:20 pts/0    00:00:12 /usr/local/app/tars/tarsquerystat/bin/tarsquerystat --config=/usr/local/app/tars/tarsquerystat/conf/tars.tarsquerystat.config.conf
+```
+
+- for master node: tarsAdminRegistry tarsnode tarsregistry tars-web must be alive, Other Tar services will be automatically pulled up by tarsnode
+- For the slave node: tarsnode tarsregistry to be alive, other Tars services will be pulled by tarsnode起
+- Tars web is a service implemented by nodejs, which consists of two services. For details, see the following chapters
+- To ensure that the core service is started, it can be controlled through check.sh and configured in crontab
+
+master:(add to contab)
+
+```
+* * * * * /usr/local/app/tars/check.sh master
+```
+
+slave:(add to contab)
+```
+* * * * * /usr/local/app/tars/check.sh 
+```
+
+**If you configure check.sh, you don't need to configure the tarsnode monitoring in the following chapters**
 
 
-# 4. <a id="chapter-4"></a>Tarsnode expansion and Framework update
+# 4. <a id="chapter-4"></a>Tars-web Description
 
-## 4.1 tarsnode installation and update
+## 4.1 Module description
+
+After the tars framework is deployed, the tar web will be installed on the host node (the slave node will not be installed). The tar web is implemented by nodejs and consists of two services
+
+view the modules of the tar Web:
+
+```
+pm2 list
+```
+
+Output:
+```
+[root@8a17fab70409 data]# pm2 list
+┌────┬─────────────────────────┬─────────┬─────────┬──────────┬────────┬──────┬──────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name                    │ version │ mode    │ pid      │ uptime │ ↺    │ status   │ cpu      │ mem      │ user     │ watching │
+├────┼─────────────────────────┼─────────┼─────────┼──────────┼────────┼──────┼──────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ tars-node-web           │ 0.2.0   │ fork    │ 1602     │ 2m     │ 0    │ online   │ 0.1%     │ 65.1mb   │ root     │ disabled │
+│ 1  │ tars-user-system        │ 0.1.0   │ fork    │ 1641     │ 2m     │ 0    │ online   │ 0.1%     │ 60.1mb   │ root     │ disabled │
+└────┴─────────────────────────┴─────────┴─────────┴──────────┴────────┴──────┴──────────┴──────────┴──────────┴──────────┴──────────┘
+```
+
+**If PM2 cannot be found, the environment variable does not take effect. Please execute: CentOS: source ~ /. Bashrc or Ubuntu: source ~ /. Profile first. This file will be written during installation**
+
+- tars-node-web: Tar Web homepage service, default binding 3000 port
+- tars-user-system: The authority management service is responsible for managing all relevant authorities, and is bound to port 3001 by default
+
+tars-node-web calls tars-user-systemsystem to complete the relevant permission verification
+
+## 4.2 Permission specification
+
+
+After tar web is set up by default, there is an admin account by default. The password of the admin user needs to be changed for the first login.
+
+Admin users can create other users and authorize other users (three kinds of permissions admin, operator, developer)
+
+The capabilities of the three permissions are different. Admin permission has super management permission, operator operation and maintenance permission (including developer permission, which can be published), and developer (view)
+
+Permissions can be precise to application or service level
+
+# 5. <a id="chapter-5"></a>Tars Framework expansion and  update
+
+## 5.1 tarsnode installation and update
 
 After the successful installation of core infrastructure services, if you need to deploy services based on the tar framework on other machines, you need to install tarsnode on other node machines and connect to the framework before expanding and deploying services through the management platform.
 
@@ -464,7 +554,29 @@ Configure a process monitoring in crontab to ensure that the tars framework serv
 
 **Note: the servers of the previously installed framework also needs to increase the monitoring of tarsnode**
 
-## 4.2 Framework basic service update
+
+## 5.2 Tar-web Update
+
+**Update steps**
+
+- Download the latest tars web code, overwrite: /usr/local/app/web
+- modify web config: web/config/webConf.js, web/config/tars.conf, modify mysql host, user, password in dbConf, and registry.tars.com to tars framework ip
+- moidfy demo config: web/demo/config/webConf.js, modify mysql host, user, password in dbConf
+- cd web; npm install; cd demo; npm install
+- restart web modules: pm2 restart tars-node-web; pm2 restart tars-user-system
+
+**If db_tars_web and db_user_system are not exist in db, then create db first by web/sql/db_tars_web.sql and web/demo/sql/db_user_system.sql**
+
+```
+mysql -hxxx -pxxx -e 'create database db_tars_web'
+mysql -hxxx -pxxx db_tars_web < web/sql/db_tars_web.sql
+
+mysql -hxxx -pxxx -e 'create database db_user_system'
+mysql -hxxx -pxxx db_user_system < web/sql/db_user_system.sql
+
+```
+
+## 5.3 Framework basic service update
 
 There are two types of framework service installation:
 
@@ -504,16 +616,16 @@ make tarslog-tar
 make tarsquerystat-tar
 make tarsqueryproperty-tar
 ```
-See Section 4.3 for details.
+See Section 5.4 for details.
 
 
 **Note that when deploying the management platform, you can select the correct service template (it is available by default. If there is no corresponding template, you can create it on the management platform. For specific service template content, please refer to the file under the source directory deploy/sql/template)**
 
-### 4.3. Install general basic service for framework  
+### 5.4. Install general basic service for framework  
   
 **Tips:There are some *.tgz files under the path of /usr/local/app/TarsFramework/build,such as tarslog.tgz, tarsnotify.tgz and so on. There are the patch package for the following services.  
   
-#### 4.3.1 Deploy and patch tarsnotify  
+#### 5.4.1 Deploy and patch tarsnotify  
   
 By default, tarsnofity is ready when install core basic service:  
   
@@ -523,7 +635,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsnotify_patch_en.png)  
   
-### 4.3.2 Deploy and patch tarsstat  
+### 5.4.2 Deploy and patch tarsstat  
   
 Deploy message:  
   
@@ -533,7 +645,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsstat_patch_en.png)  
   
-### 4.3.3 Deploy and patch tarsproperty  
+### 5.4.3 Deploy and patch tarsproperty  
   
 Deployment message:  
   
@@ -543,7 +655,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsproperty_patch_en.png)  
   
-#### 4.3.4 Deploy and patch tarslog  
+#### 5.4.4 Deploy and patch tarslog  
   
 Deployment message:  
   
@@ -553,7 +665,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarslog_patch_en.png)  
   
-### 4.3.5 Deploy and patch tarsquerystat  
+### 5.4.5 Deploy and patch tarsquerystat  
   
 Deployment message:  
 **Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**  
@@ -565,7 +677,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsquerystat_patch_en.png)  
   
-#### 4.3.6 Deploy and patch tarsqueryproperty  
+#### 5.4.6 Deploy and patch tarsqueryproperty  
   
 Deployment message:  
 **Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**  
