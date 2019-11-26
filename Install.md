@@ -502,7 +502,7 @@ Output:
 - tars-node-web: Tar Web homepage service, default binding 3000 port
 - tars-user-system: The authority management service is responsible for managing all relevant authorities, and is bound to port 3001 by default
 
-tars-node-web calls tars-user-systemsystem to complete the relevant permission verification
+tars-node-web calls tars-user-system to complete the relevant permission verification
 
 ## 4.2 Permission specification
 
