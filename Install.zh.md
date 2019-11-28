@@ -607,7 +607,7 @@ mysql -hxxx -pxxx -e 'create database db_tars_web'
 mysql -hxxx -pxxx db_tars_web < web/sql/db_tars_web.sql
 
 mysql -hxxx -pxxx -e 'create database db_user_system'
-mysql -hxxx -pxxx db_user_system < web/sql/db_user_system.sql
+mysql -hxxx -pxxx db_user_system < web/demo/sql/db_user_system.sql
 
 ```
 
