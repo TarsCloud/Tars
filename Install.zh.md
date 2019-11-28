@@ -499,13 +499,23 @@ pm2 list
 
 tars-node-web调用tars-user-system来完成相关的权限验证
 
-web & demo都是采用nodejs+vue来实现, 如果pm2 list中查看模块启动不了, 可以手工启动以便定位提示:
+**web采用nodejs+vue来实现, 最终的安装运行目录如下:**
 
 ```
-cd web; npm run start
-
-cd web/demo; npm run start
+/usr/local/app/web
 ```
+
+如果pm2 list中查看模块启动不了, 可以进入改目录定位问题:
+
+```
+cd /usr/local/app/web/demo; npm run start
+cd /usr/local/app/web; npm run start
+```
+
+npm run start 启动服务, 可以观察控制台的输出, 如果有问题, 会有提示.
+
+**正式运行建议: pm2 start tars-node-web; pm2 start tars-user-system**
+
 
 ## 4.2 权限说明
 
@@ -519,7 +529,7 @@ admin用户可以创建其他用户, 并给其他用户授权(三种权限admin,
 
 ## 4.3 部署说明
 
-web & tars-user-system默认是部署在同一台机器上, 并且都绑定了0.0.0.0 (即也绑定了127.0.0.1)
+tars-node-web & tars-user-system默认是部署在同一台机器上, 并且都绑定了0.0.0.0 (即也绑定了127.0.0.1)
 
 tars-node-web通过localhost(127.0.0.1)来访问tars-user-system, 如果未绑定127.0.0.1, 则无权限, 此时需要修改tars-user-system模块的配置(demo/config/loginConf.js), 开放白名单:ignoreIps
 
@@ -533,8 +543,10 @@ web & demo 的登录态通过cookie传递, 因此需要部署在同一个域名�
 
 ```
 export USER_CENTER_HOST=http://auth.tars.com
-export COOKIE_DOMAIN=tars.com
+export COOKIE_DOMAIN=.tars.com
 ```
+
+**注意COOKIE_DOMAIN不要少了.**
 
 设定环境变量后, 即可正常访问demo
 

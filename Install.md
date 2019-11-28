@@ -507,11 +507,22 @@ tars-node-web calls tars-user-system to complete the relevant permission verific
 
 Both web and demo are implemented by nodejs + Vue. If the viewing module in PM2 list fails to start, you can start it manually to locate the prompt:
 
-```
-cd web; npm run start
+**The web is implemented by nodejs + Vue. The final installation and operation directory is as follows:**
 
-cd web/demo; npm run start
 ```
+/usr/local/app/web
+```
+
+If pm2 list shows that tars-node-web and tars-user-system fail to start, you can enter the directory to locate the problem:
+
+```
+cd /usr/local/app/web/demo; npm run start
+cd /usr/local/app/web; npm run start
+```
+
+npm run start starts the service. You can observe the output of the console. If there is a problem, you will be prompted
+
+**Suggestions for formal operation: pm2 start tars-node-web; pm2 start tars-user-system**
 
 ## 4.2 Permission specification
 
@@ -538,8 +549,10 @@ For example, the web's nginx entry domain name is http://user.tar.com, and the d
 
 ```
 export USER_CENTER_HOST=http://auth.tars.com
-export COOKIE_DOMAIN=tars.com
+export COOKIE_DOMAIN=.tars.com
 ```
+
+**COOKIE_DOMAIN must has .**
 
 After setting the environment variable, you can access the tars-node-web & tars-user-system normally
 
