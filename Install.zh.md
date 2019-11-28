@@ -494,10 +494,18 @@ pm2 list
 **如果找不到pm2, 一般是环境变量没生效, 请先执行: centos: source ~/.bashrc or ubuntu: source ~/.profile, 安装过程中会写这个文件**
 
 **tars-web由两个模块组成**
-- tars-node-web: tars-web主页面服务, 默认绑定3000端口
-- tars-user-system: 权限管理服务, 负责管理所有相关的权限, 默认绑定3001端口
+- tars-node-web: tars-web主页面服务, 默认绑定3000端口, 源码对应web目录
+- tars-user-system: 权限管理服务, 负责管理所有相关的权限, 默认绑定3001端口, 源码对应web/demo目录
 
-tars-node-web调用tars-user-system来完成相关的权限验证.
+tars-node-web调用tars-user-system来完成相关的权限验证
+
+web & demo都是采用nodejs+vue来实现, 如果pm2 list中查看模块启动不了, 可以手工启动以便定位提示:
+
+```
+cd web; npm run start
+
+cd web/demo; npm run start
+```
 
 ## 4.2 权限说明
 
@@ -508,6 +516,27 @@ admin用户可以创建其他用户, 并给其他用户授权(三种权限admin,
 三种权限的能力不同, admin权限拥有超级管理权限, operator运维权限(包含developer权限, 能发布), developer(查看)
 
 权限可以精确到应用或者服务级别
+
+## 4.3 部署说明
+
+web & tars-user-system默认是部署在同一台机器上, 并且都绑定了0.0.0.0 (即也绑定了127.0.0.1)
+
+tars-node-web通过localhost(127.0.0.1)来访问tars-user-system, 如果未绑定127.0.0.1, 则无权限, 此时需要修改tars-user-system模块的配置(demo/config/loginConf.js), 开放白名单:ignoreIps
+
+如果demo未绑定127.0.0.1, 则默认web过来的调用无权限, 此时需要修改demo/config/loginConf.js, 开放白名单:ignoreIps
+
+web & demo 的登录态通过cookie传递, 因此需要部署在同一个域名下面
+
+如果web & demo前面挂了nginx代理, 通过不同域名来访问, 则需要指定两个环境变量, 来方便web&demo互通
+
+比如: web的nginx的入口域名是: http://user.tars.com, demo的nginx域名是: http://auth.tars.com, 那么需要在服务器上设定环境变量:
+
+```
+export USER_CENTER_HOST=http://auth.tars.com
+export COOKIE_DOMAIN=tars.com
+```
+
+设定环境变量后, 即可正常访问demo
 
 
 # 5. <a id="chapter-5"></a>框架扩容及更新

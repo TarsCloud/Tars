@@ -499,10 +499,19 @@ Output:
 
 **If PM2 cannot be found, the environment variable does not take effect. Please execute: CentOS: source ~ /. Bashrc or Ubuntu: source ~ /. Profile first. This file will be written during installation**
 
-- tars-node-web: Tar Web homepage service, default binding 3000 port
-- tars-user-system: The authority management service is responsible for managing all relevant authorities, and is bound to port 3001 by default
+- tars-node-web: Tar Web homepage service, default binding 3000 port, Source code corresponding web directory
+
+- tars-user-system: The authority management service is responsible for managing all relevant authorities, and is bound to port 3001 by default, Source code corresponding web/demo directory
 
 tars-node-web calls tars-user-system to complete the relevant permission verification
+
+Both web and demo are implemented by nodejs + Vue. If the viewing module in PM2 list fails to start, you can start it manually to locate the prompt:
+
+```
+cd web; npm run start
+
+cd web/demo; npm run start
+```
 
 ## 4.2 Permission specification
 
@@ -514,6 +523,25 @@ Admin users can create other users and authorize other users (three kinds of per
 The capabilities of the three permissions are different. Admin permission has super management permission, operator operation and maintenance permission (including developer permission, which can be published), and developer (view)
 
 Permissions can be precise to application or service level
+
+## 4.3 Deployment instructions
+
+The tars-node-web & tars-user-system is deployed on the same machine by default, and both are bound with 0.0.0.0 (that is, 127.0.0.1)
+
+The tars-node-web accesses tar user system through localhost (127.0.0.1). If 127.0.0.1 is not bound, it has no permission. At this time, you need to modify the configuration of tar-user-system module (demo/config/loginConf.js), and open the white list: ignoreips
+
+The login state of tars-node-web & tars-user-system is passed through a cookie, so it needs to be deployed under the same domain name.
+
+If nginx agent is hung in front of the tars-node-web & tars-user-system and accessed through different domain names, two environment variables need to be specified to facilitate web demo interoperability
+
+For example, the web's nginx entry domain name is http://user.tar.com, and the demo's nginx domain name is http://auth.tar.com, so you need to set the environment variable on the server:
+
+```
+export USER_CENTER_HOST=http://auth.tars.com
+export COOKIE_DOMAIN=tars.com
+```
+
+After setting the environment variable, you can access the tars-node-web & tars-user-system normally
 
 # 5. <a id="chapter-5"></a>Tars Framework expansion and  update
 
