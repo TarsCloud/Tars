@@ -31,7 +31,7 @@ If mysql is installed in different path, please modify the CMakeLists.txt (`fram
 
 ![tars](docs/question_images/tars-java-jar.png)
 
-## 9. There are two kinds of framework services: core services(required), must be deployed by yourself. The others are general services, can be published via management system.
+## 9. There are two kinds of framework services: core services(required), must be deployed and updated by yourself. The others are general services, can be update via management system.
 
 The core services: 
 
@@ -140,4 +140,12 @@ change the `的maxUploadSize` in `src/main/resources/conf-spring/spring-context-
 Execute the following update script，and make sure that the password od database is right
 ```
 TarsFramework/sql/upgrade2IPv6.sh
+```
+
+## 21. tarsnode can not run java server: cannot execute java
+
+Please restart tarsnode after install jdk
+
+```
+/usr/local/app/tars/tarsnode/util/start.sh
 ```

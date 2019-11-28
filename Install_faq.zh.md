@@ -35,7 +35,7 @@
 
 ![tars](docs/question_images/tars-java-jar.png)
 
-## 9. 框架服务的安装分两种：一种是核心基础服务(必须的)，必须手工部署; 另一种是普通基础服务，通过管理平台发布的(和普通服务一样）。
+## 9. 框架服务的安装分两种：一种是核心基础服务(必须的)，必须手工部署; 另一种是普通基础服务，初始化时也一并安装了, 后续可以通过管理平台发布更新的的(和普通服务一样）。
 
 手工部署的核心基础服务:
     
@@ -45,7 +45,7 @@
     |-tarsconfig
     |-tarspatch
 
-通过管理平台部署的普通基础服务:
+可以通过管理平台部署的普通基础服务:
 
     |-tarsstat
     |-tarsproperty
@@ -54,7 +54,7 @@
     |-tarsquerystat
     |-tarsqueryproperty
 
-`make framework-tar` 这个命令打包的是tars核心基础服务，核心基础服务除 `tarsconfig` 和 `tarspatch` 可以在管理平台上看到部署情况外，另外几个是看不到的。
+核心基础服务除 `tarsconfig` 和 `tarspatch` 可以在管理平台上看到部署情况外，另外几个是看不到的。
 
 普通基础服务通过web管理平台部署时，要注意部署的Obj名称和协议的选择。
 
@@ -128,8 +128,6 @@
 
 首先，确定核心基础服务tarsregistry、tarsAdminRegistry、tarsnode、tarsconfig、tarspatch的进程是否是活的，比如用 `ps -ef|grep tars` 命令查看，如果进程不存在，看看是否是db配置信息有问题
 
-然后，确定rsync进程是否存在
-
 最后，查看tarsnode的日志，看看有什么错误日志。
 
 ![tars](docs/question_images/registry_not_invoker.png)
@@ -156,6 +154,14 @@
 执行以下数据库升级脚本，注意保证数据库密码正确性
 ```
 TarsFramework/sql/upgrade2IPv6.sh
+```
+
+## 21. tarsnode无法启动java服务, 报错cannot execute java
+
+务必注意安装jdk以后, 需要重启tarsnode, java的环境变量在tarsnode环境中生效
+
+```
+/usr/local/app/tars/tarsnode/util/start.sh
 ```
 
 
