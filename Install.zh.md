@@ -408,7 +408,8 @@ docker ps
 docker run -d --net=host -e MYSQL_HOST=xxxxx -e MYSQL_ROOT_PASSWORD=xxxxx \
         -eREBUILD=false -eINET=enp3s0 -eSLAVE=false \
         -v/data/log/app_log:/usr/local/app/tars/app_log \
-        -v/data/log/web_log:/usr/local/app/web/log \
+        -v/data/log/web/web_log:/usr/local/app/web/log \
+        -v/data/log/auth/web_log:/usr/local/app/web/demo/log \
         -v/data/patchs:/usr/local/app/patchs \
         tars-docker:v1 sh /root/tars-install/docker-init.sh
 ```
@@ -425,7 +426,8 @@ SLAVE: 是否是从节点
 
 映射三个目录到宿主机
 - -v/data/log/app_log:/usr/local/app/tars/app_log, tars应用日志
-- -v/data/log/web_log:/usr/local/app/web/log, web log
+- -v/data/log/web_log/web:/usr/local/app/web/log, web log
+- -v/data/log/web_log/auth:/usr/local/app/web/emo/log, web auth log
 - -v/data/patchs:/usr/local/app/patchs 发布包路径
 
 **如果希望多节点部署, 则在不同机器上执行docker run ...即可, 注意参数设置!**
