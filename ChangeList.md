@@ -10,3 +10,6 @@
 - Add check.sh script to monitor tarsregistry, tarsadminregistry, tarsnode
 - Complete installation documentation
 
+## 20191128
+- Update tars-web,  Support to mount nginx on the front end of tars Web
+- Complete installation documentation
