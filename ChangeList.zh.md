@@ -14,3 +14,7 @@
 ## 20191128
 - 更新tars-web 支持在tars-web前端挂载nginx
 - 完善安装文档说明
+
+
+## 20191130
+- tars-cpp支持tars2json

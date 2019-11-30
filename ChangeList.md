@@ -13,3 +13,6 @@
 ## 20191128
 - Update tars-web,  Support to mount nginx on the front end of tars Web
 - Complete installation documentation
+
+## 20191130
+- tars-cpp support tars2json
