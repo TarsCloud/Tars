@@ -16,3 +16,14 @@
 
 ## 20191130
 - tars-cpp support tars2json
+
+## 20191213
+- protocol: notify.tars 上报增加格式
+- cpp: cgi encode fix
+- framework: patch, adminregistry, node add notify report, show error message in web
+- web: deploy ssl server, support server bind dns
+- web: undeploy check server state
+- web: expand server can bind dns
+- web: fix deploy page
+- web: manage page add refresh
+- web: deploy message, goto manage page

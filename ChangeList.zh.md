@@ -15,6 +15,16 @@
 - 更新tars-web 支持在tars-web前端挂载nginx
 - 完善安装文档说明
 
-
 ## 20191130
 - tars-cpp支持tars2json
+
+## 20191213
+- protocol: notify.tars 上报增加格式
+- cpp: cgi encode函数优化
+- framework: 增加patch, adminregistry, node的notify上报, 记录发布, 重启等错误, 在页面web页面上显示
+- web: 部署ssl服务, 支持服务绑定域名
+- web: 下线时 检查服务active状态
+- web: 服务扩容时, 可以绑定域名
+- web: 调整发布界面, 操作更易于理解
+- web: 服务管理界面增加刷新
+- web: 发布错误的提示, 跳转到服务管理页面
