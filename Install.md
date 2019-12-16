@@ -413,6 +413,7 @@ docker run -d --net=host -e MYSQL_HOST=xxxxx -e MYSQL_ROOT_PASSWORD=xxxxx \
         -v/data/log/app_log:/usr/local/app/tars/app_log \
         -v/data/log/web_log:/usr/local/app/web/log \
         -v/data/patchs:/usr/local/app/patchs \
+        -v/etc/localtime:/etc/localtime \
         tars-docker:v1 sh /root/tars-install/docker-init.sh
 ```
 
@@ -430,6 +431,7 @@ Map three directories to the host:
 
 - -v/data/log/app_log:/usr/local/app/tars/app_log, tars application logs
 - -v/data/log/web_log:/usr/local/app/web/log, web log
+- -v/data/log/web_log/auth:/usr/local/app/web/demo/log, web auth log
 - -v/data/patchs:/usr/local/app/patchs, Publish package path
 
 **If you want to deploy multiple nodes, just execute docker run... On different machines. Pay attention to the parameter settings**

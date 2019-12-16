@@ -28,8 +28,8 @@ For now it supports following languages:
  
 ## Installation 
 
-If you are new to Tars, please read documentation [Install.md](Install.md).
-If you are familar to Tars, refer to scripts in directory [build](build), may some modification needed.
+1. If you are new to Tars, please read documentation [Install.md](Install.md).
+2. Install by docker, detail information: [TarsDocker](https://github.com/TarsCloud/TarsDocker)。
 
 ## Performance
 

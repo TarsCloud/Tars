@@ -27,3 +27,11 @@
 - web: fix deploy page
 - web: manage page add refresh
 - web: deploy message, goto manage page
+
+## 20191214
+- web(1.3.0): add tarsnode list
+- fix web 1.2.0 bug
+
+## 20191216
+- web(1.3.1): add tarsnode install online
+- framework(1.3.0): fix deploy script, during deploy , copy tarsnode.tgz to web/dist/static
