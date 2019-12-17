@@ -35,3 +35,6 @@
 ## 20191216
 - web(1.3.1): add tarsnode install online
 - framework(1.3.0): fix deploy script, during deploy , copy tarsnode.tgz to web/dist/static
+
+## 20191217
+- framework(1.3.1): bug fix, mysql 5.7 auth bug

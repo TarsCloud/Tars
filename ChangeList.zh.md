@@ -36,3 +36,6 @@
 ## 20191216
 - web(1.3.1): 运维管理界面增加tarsnode安装逻
 - framework(1.3.0): 修改部署脚本, 安装时将tarsnode.tgz copy 到web目录下
+
+## 20191217
+- framework(1.3.1): bug fix, mysql 5.7的情况下, 授权有问题,导致安装后web无权限的问题
