@@ -553,10 +553,17 @@ export COOKIE_DOMAIN=.tars.com
 
 设定环境变量后, 即可正常访问demo
 
-
 # 5. <a id="chapter-5"></a>框架扩容及更新
 
-## 5.1 tarsnode安装和更新
+## 5.1 自动更新
+
+- 以docker形式安装的框架, 建议通过docker整体更新的方式来操作, 最为便捷, 只需要升级docker, 重启即可(注意: 务必不要设置REBUILD为true, 数据库会被重置!!!)
+- 通过源码编译的方式使用linux-install.sh安装的框架, 可以重新执行linux-install.sh即可(注意: 务必不要设置REBUILD为true, 数据库会被重置!!!)
+- tarsnode的扩容和更新可以在web平台(>=1.3.1)上在线安装和更新tarsnode
+
+**如果需要手工更新, 可以参考一下章节, 手工更新各个模块**
+
+## 5.2 tarsnode安装和更新(手工)
 
 核心基础服务的安装成功后，如果需要在其他机器也能部署基于tars框架的服务，那么在通过管理平台扩容和部署服务前，需要在其他节点机上安装tarsnode并连接到框架上。
 
@@ -594,7 +601,7 @@ locator=tars.tarsregistry.QueryObj@tcp -h xxx2 -p 17890:tcp -h xxx2 -p 17890
 
 **注意:之前安装的框架的服务器, 如果用check.sh做了监控, 则无需再配置tarsnode的监控了**
 
-## 5.2 Tar-web更新
+## 5.3 Tar-web更新
 
 **更新步骤**
 - 下载最新的Tars-web的代码, 覆盖 /usr/local/app/web
@@ -614,7 +621,7 @@ mysql -hxxx -pxxx db_user_system < web/demo/sql/db_user_system.sql
 
 ```
 
-## 5.3 框架基础服务更新
+## 5.4 框架基础服务更新
 
 框架服务的安装分两种：
 
@@ -650,16 +657,16 @@ make tarslog-tar
 make tarsquerystat-tar
 make tarsqueryproperty-tar
 ```
-具体参见5.4章节。
+具体参见5.5章节。
 
 **注意在管理平台进行部署时，选择正确的服务模板即可（默认是有的，若没有相应的模版，可以在管理平台上创建，具体服务的模版内容可以参见源码目录deploy/sql/template目录下的文件）!**
 
-## 5.4. 基础服务手工上传示意图
+## 5.5. 基础服务手工上传示意图
 
 
 在执行上述的make语句后，/usr/local/app/TarsFramework/build就会生成几个*.tgz文件，例如tarslog.tgz, tarsnotify.tgz等等，这些文件就是下面章节中所需要部署的包文件。
 
-### 5.4.1 tarsnotify部署发布
+### 5.5.1 tarsnotify部署发布
 
 默认tarsnotify在安装核心基础服务时，部署信息已初始化了，安装完管理平台后，就可以看到，如下：
 
@@ -669,7 +676,7 @@ make tarsqueryproperty-tar
 
 ![tars](docs/images/tars_tarsnotify_patch.png)
 
-### 5.4.2 tarsstat部署发布
+### 5.5.2 tarsstat部署发布
 
 部署信息如下：
 
@@ -679,7 +686,7 @@ make tarsqueryproperty-tar
 
 ![tars](docs/images/tars_tarsstat_patch.png)
 
-### 5.4.3 tarsproperty部署发布
+### 5.5.3 tarsproperty部署发布
 
 部署信息如下：
 
@@ -689,7 +696,7 @@ make tarsqueryproperty-tar
 
 ![tars](docs/images/tars_tarsproperty_patch.png)
 
-### 5.4.4 tarslog部署发布
+### 5.5.4 tarslog部署发布
 
 部署信息如下：
 
@@ -699,7 +706,7 @@ make tarsqueryproperty-tar
 
 ![tars](docs/images/tars_tarslog_patch.png)
 
-### 5.4.5 tarsquerystat部署发布
+### 5.5.5 tarsquerystat部署发布
 
 部署信息如下：
 
@@ -712,7 +719,7 @@ make tarsqueryproperty-tar
 ![tars](docs/images/tars_tarsquerystat_patch.png)
 
 
-### 5.4.6 tarsqueryproperty部署发布
+### 5.5.6 tarsqueryproperty部署发布
 
 部署信息如下：
 

@@ -560,9 +560,15 @@ After setting the environment variable, you can access the tars-node-web & tars-
 
 # 5. <a id="chapter-5"></a>Tars Framework expansion and  update
 
+## 5.1 Auto Update
 
-## 5.1 tarsnode installation and update
+- For the framework installed in the form of docker, it is recommended to update the docker as a whole, which is the most convenient way. Just upgrade the docker and restart it (Note: do not set rebuild to true, the database will be reset!!!)
+- Using the linux-install.sh installation framework through source compilation, you can re execute linux-install.sh (Note: do not set rebuild to true, the database will be reset!!!)
+- The expansion and update of tarsnode can be installed and updated online on the web platform (> = 1.3.1)
 
+**If you need to update manually, you can refer to the following chapters to update each module manually**
+
+## 5.2 tarsnode installation and update
 
 After the successful installation of core infrastructure services, if you need to deploy services based on the tar framework on other machines, you need to install tarsnode on other node machines and connect to the framework before expanding and deploying services through the management platform.
 
@@ -601,7 +607,7 @@ Configure a process monitoring in crontab to ensure that the tars framework serv
 **Note: the servers of the previously installed framework also needs to increase the monitoring of tarsnode**
 
 
-## 5.2 Tar-web Update
+## 5.3 Tar-web Update
 
 **Update steps**
 
@@ -622,7 +628,7 @@ mysql -hxxx -pxxx db_user_system < web/sql/db_user_system.sql
 
 ```
 
-## 5.3 Framework basic service update
+## 5.4 Framework basic service update
 
 There are two types of framework service installation:
 
@@ -662,17 +668,15 @@ make tarslog-tar
 make tarsquerystat-tar
 make tarsqueryproperty-tar
 ```
-See Section 5.4 for details.
+See Section 5.5 for details.
 
 
 **Note that when deploying the management platform, you can select the correct service template (it is available by default. If there is no corresponding template, you can create it on the management platform. For specific service template content, please refer to the file under the source directory deploy/sql/template)**
 
-### 5.4. Install general basic service for framework  
+### 5.5. Install general basic service for framework  
 
-  
-**Tips:There are some *.tgz files under the path of /usr/local/app/TarsFramework/build,such as tarslog.tgz, tarsnotify.tgz and so on. There are the patch package for the following services.  
-  
-#### 5.4.1 Deploy and patch tarsnotify  
+
+#### 5.5.1 Deploy and patch tarsnotify  
   
 By default, tarsnofity is ready when install core basic service:  
   
@@ -682,7 +686,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsnotify_patch_en.png)  
   
-### 5.4.2 Deploy and patch tarsstat  
+### 5.5.2 Deploy and patch tarsstat  
   
 Deploy message:  
   
@@ -692,7 +696,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsstat_patch_en.png)  
   
-### 5.4.3 Deploy and patch tarsproperty  
+### 5.5.3 Deploy and patch tarsproperty  
   
 Deployment message:  
   
@@ -702,7 +706,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsproperty_patch_en.png)  
   
-#### 5.4.4 Deploy and patch tarslog  
+#### 5.5.4 Deploy and patch tarslog  
   
 Deployment message:  
   
@@ -712,7 +716,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarslog_patch_en.png)  
   
-### 5.4.5 Deploy and patch tarsquerystat  
+### 5.5.5 Deploy and patch tarsquerystat  
   
 Deployment message:  
 **Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**  
@@ -724,7 +728,7 @@ Upload patch package：
   
 ![tars](docs/images/tars_tarsquerystat_patch_en.png)  
   
-#### 5.4.6 Deploy and patch tarsqueryproperty  
+#### 5.5.6 Deploy and patch tarsqueryproperty  
   
 Deployment message:  
 **Pay attention: please select non-Tars protocol, because web platform use json protocol to get service monitor info.**  
