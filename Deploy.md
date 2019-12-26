@@ -1,4 +1,4 @@
-[View English](README.md)
+[查看中文版本](Deploy.zh.md)
 
 # Directory
 > * [Deployment Brief](#chapter-1)
