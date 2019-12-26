@@ -328,7 +328,7 @@ drwxr-xr-x 11 tars tars  4096 Oct 31 11:01 web
 - 实际使用中, 即使主从节点都挂了, 也不会影响框架上服务的正常运行, 只会影响发布
 - 一键部署会自动安装好web(自动下载nodejs, npm, pm2等相关依赖), 同时开启web权限
 
-部署完成后会创建4个数据库，分别是db_tars、db_tars_web、db_user_system、 tars_stat、tars_property。 
+部署完成后会创建5个数据库，分别是db_tars、db_tars_web、db_user_system、 tars_stat、tars_property。 
 
 其中db_tars是框架运行依赖的核心数据库，里面包括了服务部署信息、服务模版信息、服务配置信息等等；
 
@@ -346,9 +346,6 @@ tars_property是服务属性监控数据存储的数据库；
  2019-10-31 11:06:13 INSTALL TARS SUCC: http://xxx.xxx.xxx.xxx:3000/ to open the tars web. 
  2019-10-31 11:06:13 If in Docker, please check you host ip and port. 
  2019-10-31 11:06:13 You can start tars web manual: cd /usr/local/app/web; npm run prd 
- 2019-10-31 11:06:13 If You want to install tarsnode in other machine, do this: 
- 2019-10-31 11:06:13 wget http://xxx.xxx.xxx.xxx:3000/install.sh
- 2019-10-31 11:06:13 chmod a+x install.sh; ./install.sh
 ```
 打开你的浏览器输入: http://xxx.xxx.xxx.xxx:3000/ 如果顺利, 可以看到web管理平台
 
@@ -407,12 +404,9 @@ docker ps
 ```
 docker run -d --net=host -e MYSQL_HOST=xxxxx -e MYSQL_ROOT_PASSWORD=xxxxx \
         -eREBUILD=false -eINET=enp3s0 -eSLAVE=false \
-        -v/data/log/app_log:/usr/local/app/tars/app_log \
-        -v/data/log/web/web_log:/usr/local/app/web/log \
-        -v/data/log/auth/web_log:/usr/local/app/web/demo/log \
-        -v/data/patchs:/usr/local/app/patchs \
+        -v/data/tars:/data/tars \
         -v/etc/localtime:/etc/localtime \
-        tars-docker:v1 sh /root/tars-install/docker-init.sh
+        tars-docker:v1
 ```
 
 MYSQL_IP: mysql数据库的ip地址
@@ -426,10 +420,7 @@ REBUILD: 是否重建数据库,通常为false, 如果中间装出错, 希望重�
 SLAVE: 是否是从节点
 
 映射三个目录到宿主机
-- -v/data/log/app_log:/usr/local/app/tars/app_log, tars应用日志
-- -v/data/log/web_log/web:/usr/local/app/web/log, web log
-- -v/data/log/web_log/auth:/usr/local/app/web/demo/log, web auth log
-- -v/data/patchs:/usr/local/app/patchs 发布包路径
+- -v/data/tars:/data/tars, 包含了 tars应用日志, web日志, 发布包目录
 
 **如果希望多节点部署, 则在不同机器上执行docker run ...即可, 注意参数设置!**
 
@@ -607,6 +598,8 @@ locator=tars.tarsregistry.QueryObj@tcp -h xxx2 -p 17890:tcp -h xxx2 -p 17890
 - 下载最新的Tars-web的代码, 覆盖 /usr/local/app/web
 - 修改web配置文件: web/config/webConf.js, web/config/tars.conf, 修改db的ip为当前mysql ip, 修改tars的ip为当前环境的registry的ip
 - 修改demo配置文件: web/demo/config/webConf.js, 修改dbip为当前环境的mysql ip
+- 修改web配置文件: web/config/webConf.js, 修改host为当前主机ip
+
 - cd web; npm install; cd demo; npm install
 - 重启模块: pm2 restart tars-node-web; pm2 restart tars-user-system
 

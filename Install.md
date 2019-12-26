@@ -330,10 +330,11 @@ The framework can be deployed on a single machine or multiple machines. Multiple
 - You can later deploy the tarslog to a large hard disk server
 - In practice, even if the master and slave nodes are hung, the normal operation of services on the framework will not be affected, only the publishing will be affected
 
-After install, there will be four databases created: db_tars, db_tars_web, tars_stat and tars_property.  
+After install, there will be five databases created: db_tars, db_tars_web, db_user_system, tars_stat and tars_property.  
   
 - db_tars is the core database for framework, it consists of services info, service templates and service configuration, etc.  
 - db_tars_web is the core database for tars web
+- db_user_sysetm is user auth system for web
 - tars_stat is the database for service monitor data.  
 - tars_property is the database for service properties monitor data.  
 
@@ -343,8 +344,6 @@ After install, you will see the output of the install script:
  2019-10-31 11:06:13 INSTALL TARS SUCC: http://xxx.xxx.xxx.xxx:3000/ to open the tars web. 
  2019-10-31 11:06:13 If in Docker, please check you host ip and port. 
  2019-10-31 11:06:13 You can start tars web manual: cd /usr/local/app/web; npm run prd 
- 2019-10-31 11:06:13 wget http://xxx.xxx.xxx.xxx:3000/install.sh
- 2019-10-31 11:06:13 chmod a+x install.sh; ./install.sh
 ```
 Open browser: http://xxx.xxx.xxx.xxx:3000/, If it goes well, you can see the web management platform.
 
@@ -410,11 +409,9 @@ You can publish the docker image to your machine and execute:
 ```
 docker run -d --net=host -e MYSQL_HOST=xxxxx -e MYSQL_ROOT_PASSWORD=xxxxx \
         -eREBUILD=false -eINET=enp3s0 -eSLAVE=false \
-        -v/data/log/app_log:/usr/local/app/tars/app_log \
-        -v/data/log/web_log:/usr/local/app/web/log \
-        -v/data/patchs:/usr/local/app/patchs \
+        -v/data/tars:/data/tars \
         -v/etc/localtime:/etc/localtime \
-        tars-docker:v1 sh /root/tars-install/docker-init.sh
+        tars-docker:v1
 ```
 
 MYSQL_HOST: mysql ip address
@@ -428,11 +425,7 @@ REBUILD: Whether to rebuild the database is usually false. If there is an error 
 SLAVE: slave node
 
 Map three directories to the host:
-
-- -v/data/log/app_log:/usr/local/app/tars/app_log, tars application logs
-- -v/data/log/web_log:/usr/local/app/web/log, web log
-- -v/data/log/web_log/auth:/usr/local/app/web/demo/log, web auth log
-- -v/data/patchs:/usr/local/app/patchs, Publish package path
+- -v/data/tars:/data/tars, include tars application log, web log, patch directory
 
 **If you want to deploy multiple nodes, just execute docker run... On different machines. Pay attention to the parameter settings**
 
@@ -614,6 +607,7 @@ Configure a process monitoring in crontab to ensure that the tars framework serv
 - Download the latest tars web code, overwrite: /usr/local/app/web
 - modify web config: web/config/webConf.js, web/config/tars.conf, modify mysql host, user, password in dbConf, and registry.tars.com to tars framework ip
 - moidfy demo config: web/demo/config/webConf.js, modify mysql host, user, password in dbConf
+- modify web config: web/config/webConf.js, modify host to local machine ip
 - cd web; npm install; cd demo; npm install
 - restart web modules: pm2 restart tars-node-web; pm2 restart tars-user-system
 

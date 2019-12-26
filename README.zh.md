@@ -29,8 +29,9 @@ Tars详细介绍参见[Introduction.md](Introduction.md)。
 
 ## 安装说明
 
-1. 初次接触时，建议参考安装说明文档手工[Install.md](Install.zh.md)进行安装。
-2. 直接使用制作好的Docker安装，详细安装说明见[TarsDocker仓库](https://github.com/TarsCloud/TarsDocker)。
+1. 初次接触时，请比如首先阅读部署说明, 整体了解部署方式的介绍[Deploy.md](Deploy.zh.md)。
+2. 第一次部署，建议参考安装说明文档手工[Install.md](Install.zh.md)进行安装, 便于对Tars有整体了解。
+3. 直接使用制作好的Docker安装，详细安装说明见[TarsDocker仓库](https://github.com/TarsCloud/TarsDocker)。
 
 ## 性能数据
 

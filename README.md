@@ -28,8 +28,9 @@ For now it supports following languages:
  
 ## Installation 
 
-1. If you are new to Tars, please read documentation [Install.md](Install.md).
-2. Install by docker, detail information: [TarsDocker](https://github.com/TarsCloud/TarsDocker)。
+1. If you are new to Tars, please read documentation [Deploy.md](Deploy.md).
+2. First deploy, please read documentation [Install.md](Install.md).
+3. Install by docker, detail information: [TarsDocker](https://github.com/TarsCloud/TarsDocker)。
 
 ## Performance
 
