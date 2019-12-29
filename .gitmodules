@@ -22,3 +22,6 @@
 [submodule "go"]
 	path = go
 	url = https://github.com/TarsCloud/TarsGo
+[submodule "docs"]
+	path = docs
+	url = https://github.com/TarsCloud/TarsDocs
