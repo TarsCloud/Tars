@@ -1,6 +1,9 @@
-[Click me switch to English version](Install.md)
 
-[查看变更历史](ChangeList.md)
+Tars整体介绍文档请阅读: https://tarscloud.gitbook.io/
+
+该文档是整体文档中的一小节, 请以整体文档为准!
+
+[Click me switch to English version](Install.md)
 
 # 目录
 > * [依赖环境](#chapter-1)
