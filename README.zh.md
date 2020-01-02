@@ -52,7 +52,7 @@ Tars详细介绍参见[Introduction.md](Introduction.md)。
 
 ## 开发技术文档
 
-参见[docs](docs)目录。
+参见[docs](https://github.com/TarsCloud/TarsDocs)目录。
 
 ## License
 
