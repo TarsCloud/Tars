@@ -51,7 +51,7 @@ web               |manage tars web source implementation
 
 ## Developer's documentation
 
-See [docs](docs).
+See [docs](https://github.com/TarsCloud/TarsDocs).
 
 ## License
 
