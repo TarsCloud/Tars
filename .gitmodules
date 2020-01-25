@@ -28,3 +28,6 @@
 [submodule "docker"]
 	path = docker
 	url = https://github.com/TarsCloud/TarsDocker.git
+[submodule "docs_en"]
+	path = docs_en
+	url = https://github.com/TarsCloud/TarsDocs_en
