@@ -9,7 +9,7 @@ It integrated extensible protocol for encoding/decoding, high-performance RPC co
 
 Nowadays it's used by hundreds of bussiness in Tencent, services that developed base on TAF run on 16 thousands of machines.
 
-See the detailed introduction [SUMMARY.md](https://tarscloud.github.io/TarsDocs/SUMMARY.html).
+See the detailed introduction [SUMMARY.md](https://tarscloud.github.io/TarsDocs_en/).
 
 ## Supported platforms
 For now it supports OS as below:
@@ -28,9 +28,9 @@ For now it supports following languages:
  
 ## Installation 
 
-1. If you are new to Tars, please read documentation [anzhuang](https://tarscloud.github.io/TarsDocs/rumen/an-zhuang/).
-2. First deploy, please read documentation [source](https://tarscloud.github.io/TarsDocs/rumen/an-zhuang/source.html).
-3. Install by docker, detail information: [docker](https://tarscloud.github.io/TarsDocs/rumen/an-zhuang/docker.html)。
+1. If you are new to Tars, please read documentation [anzhuang](https://tarscloud.github.io/TarsDocs_en/rumen/an-zhuang/).
+2. First deploy, please read documentation [source](https://tarscloud.github.io/TarsDocs_en/rumen/an-zhuang/source.html).
+3. Install by docker, detail information: [docker](https://tarscloud.github.io/TarsDocs_en/rumen/an-zhuang/docker.html)。
 
 ## Submodule
 
@@ -47,11 +47,11 @@ web               |manage tars web source implementation
 
 ## Developer's documentation
 
-See [docs](https://github.com/TarsCloud/TarsDocs).
+See [docs](https://github.com/TarsCloud/TarsDocs_en).
 
 ## License
 
-The open-source protocol Tars used is BSD-3-Clause, see [LICENSE.md](https://tarscloud.github.io/TarsDocs/license.html).
+The open-source protocol Tars used is BSD-3-Clause, see [LICENSE.md](https://tarscloud.github.io/TarsDocs_en/license.html).
 
 ## Contacts
 
