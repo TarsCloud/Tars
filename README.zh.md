@@ -14,7 +14,7 @@ Tars详细介绍参见 [目录](https://tarscloud.github.io/TarsDocs/SUMMARY.htm
 
 ## 安装 
 
-1. 如果你是新手安装Tars, 请务必阅读部署的整体的说明 [anzhuang](https://tarscloud.github.io/TarsDocs/rumen/an-zhuang/).
+1. 如果你是新手安装Tars, 请务必阅读部署的整体的说明 [installation](https://tarscloud.github.io/TarsDocs/rumen/an-zhuang/).
 2. 如果你是第一次部署, 建议采用源码部署熟悉系统 [source](https://tarscloud.github.io/TarsDocs/rumen/an-zhuang/source.html).
 3. 如果你比较熟悉, 可以采用docker部署 [docker](https://tarscloud.github.io/TarsDocs/rumen/an-zhuang/docker.html)。
 
