@@ -28,9 +28,9 @@ For now it supports following languages:
  
 ## Installation 
 
-1. If you are new to Tars, please read documentation [anzhuang](https://tarscloud.github.io/TarsDocs_en/rumen/an-zhuang/).
-2. First deploy, please read documentation [source](https://tarscloud.github.io/TarsDocs_en/rumen/an-zhuang/source.html).
-3. Install by docker, detail information: [docker](https://tarscloud.github.io/TarsDocs_en/rumen/an-zhuang/docker.html)。
+1. If you are new to Tars, please read documentation [installation](https://tarscloud.github.io/TarsDocs_en/installation).
+2. First deploy, please read documentation [source](https://tarscloud.github.io/TarsDocs_en/installation/source.html).
+3. Install by docker, detail information: [docker](https://tarscloud.github.io/TarsDocs_en/installation/docker.html)。
 
 ## Submodule
 
