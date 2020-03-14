@@ -35,6 +35,13 @@ Tars详细介绍参见 [目录](https://tarscloud.github.io/TarsDocs/SUMMARY.htm
 * PHP
 * Go
 
+### 版本管理
+
+Tars由多种模块组成, 分散在多个仓库中, 并且基础框架版本和语言版本可以独立发展, 鉴于此, 从2.1.0版本开始, 框架的版本TAG打在TarsFramework仓库上, 不再体现在Tars这个仓库上.
+
+另外各个组件会有自己独立的版本, 当有版本依赖说明时, 各组件会独立说明.
+
+
 ### License
 
 Tars的开源协议为BSD-3-Clause，详情参见 [LICENSE](https://tarscloud.github.io/TarsDocs/license.html)。

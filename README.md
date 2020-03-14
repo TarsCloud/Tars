@@ -26,6 +26,12 @@ For now it supports following languages:
 - PHP
 - Go
  
+## Version Management
+ 
+Tars is composed of many modules, scattered in many warehouses, and the basic framework version and language version can develop independently. In view of this, from version 2.1.0, the Framework version tag is printed on the tarsframework warehouse, no longer reflected in the tars warehouse
+
+In addition, each component will have its own version. When there is a version dependency specification, each component will have its own version
+
 ## Installation 
 
 1. If you are new to Tars, please read documentation [installation](https://tarscloud.github.io/TarsDocs_en/installation).
