@@ -15,6 +15,7 @@ See the detailed introduction [SUMMARY.md](https://tarscloud.github.io/TarsDocs_
 For now it supports OS as below:
 
 - Linux
+- Mac(>=2.1.0 support)
 
 ## Supported languages
 

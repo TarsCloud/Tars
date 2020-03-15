@@ -24,6 +24,7 @@ Tars详细介绍参见 [目录](https://tarscloud.github.io/TarsDocs/SUMMARY.htm
 目前运行的操作系统平台如下：
 
 * Linux
+* Mac(>=2.1.0 support)
 
 ### 支持语言
 
