@@ -8,8 +8,7 @@
 - qq group code-1: 579079160 
 - qq group code-2: 669339903
 - WeChat: TarsCloud
-
-[For more information, please contact TarsCloud](https://tarscloud.org/about/contacts)
+- [For more information, please contact TarsCloud](https://tarscloud.org/about/contacts)
 
 ## What is Tars?
 
