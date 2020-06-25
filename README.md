@@ -2,6 +2,17 @@
 
 # Tars
 
+- Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
+- [Official Website](http://tarscloud.org/)
+- [News](https://tarscloud.org/feed/newsroom)
+- qq group code-1: 579079160 
+- qq group code-2: 669339903
+- WeChat: TarsCloud
+
+[For more information, please contact TarsCloud](https://tarscloud.org/about/contacts)
+
+## What is Tars?
+
 Tars comes from the robot in Interstellar movie. Tars is a high-performance RPC framework based on name service and Tars protocol, also integrated administration platform, and implemented hosting-service via flexible schedule.
 
 Tars, aka TAF(Total Application Framework), has been used in Tencent since 2008. It supports C++,Java,Nodejs and php for now. This framework offers a set of solution for development, maintenance and testing, which making develop, deploy and testing service efficiently.
@@ -60,12 +71,3 @@ See [docs](https://github.com/TarsCloud/TarsDocs_en).
 
 The open-source protocol Tars used is BSD-3-Clause, see [LICENSE.md](https://tarscloud.github.io/TarsDocs_en/license.html).
 
-## Contacts
-
-qq group code-1: 579079160 
-
-qq group code-2: 669339903
-
-WeChat: TARS01
-
-Twitter: https://twitter.com/TarsCloud
