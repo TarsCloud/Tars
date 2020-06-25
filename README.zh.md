@@ -4,6 +4,16 @@
 
 ## Tars
 
+- Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
+- [官网](http://tarscloud.org/)
+- [新闻](https://tarscloud.org/feed/newsroom)
+- qq技术交流群群：579079160、669339903
+- 微信公众号: TarsCloud
+
+[更多联系方式请点击](https://tarscloud.org/about/contacts)
+
+## 简介
+
 Tars这个名字取自于电影"星际穿越"中的机器人，它是基于名字服务使用Tars协议的高性能RPC开发框架，配套一体化的运营管理平台，并通过伸缩调度，实现运维半托管服务。
 
 Tars是腾讯从2008年到今天一直在使用的后台逻辑层的统一应用框架TAF（Total Application Framework），目前支持C++,Java,PHP,Nodejs,Go语言。该框架为用户提供了涉及到开发、运维、以及测试的一整套解决方案，帮助一个产品或者服务快速开发、部署、测试、上线。 它集可扩展协议编解码、高性能RPC通信框架、名字路由与发现、发布监控、日志统计、配置管理等于一体，通过它可以快速用微服务的方式构建自己的稳定可靠的分布式应用，并实现完整有效的服务治理。
@@ -52,11 +62,5 @@ Tars的开源协议为BSD-3-Clause，详情参见 [LICENSE](https://tarscloud.gi
 如果你有任何想法，别犹豫，立即提 Issues 或 Pull Requests，欢迎所有人参与到 TARS 的开源建设中。
 提PR前请先确认签署了 [CLA](https://tarscloud.github.io/TarsDocs/cla.html) 哦。
 
-### 联系方式
 
-qq技术交流群群：579079160、669339903。
-
-微信公众号：TARS星球
-
-推特地址：[@TarsCLoud](https://twitter.com/TarsCloud)
 
