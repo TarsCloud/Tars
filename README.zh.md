@@ -5,6 +5,7 @@
 # Tars
 
 - Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
+- [Mailing List](https://groups.google.com/g/tars-foundation-information)
 - [官网](http://tarscloud.org/)
 - [新闻](https://tarscloud.org/feed/newsroom)
 - qq技术交流群群：579079160、669339903
