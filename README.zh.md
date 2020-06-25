@@ -55,7 +55,7 @@ Tars由多种模块组成, 分散在多个仓库中, 并且基础框架版本和
 
 ### License
 
-Tars的开源协议为BSD-3-Clause，详情参见 [LICENSE](https://tarscloud.github.io/TarsDocs/license.html)。
+Tars的开源协议为BSD-3-Clause，详情参见 [LICENSE](https://github.com/TarsCloud/TarsDocs/blob/master/LICENSE)。
 
 ### 参与贡献
 
