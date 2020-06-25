@@ -69,5 +69,5 @@ See [docs](https://github.com/TarsCloud/TarsDocs_en).
 
 ## License
 
-The open-source protocol Tars used is BSD-3-Clause, see [LICENSE.md](https://tarscloud.github.io/TarsDocs_en/license.html).
+The open-source protocol Tars used is BSD-3-Clause, see [LICENSE.md](https://github.com/TarsCloud/TarsDocs_en/blob/master/LICENSE).
 
