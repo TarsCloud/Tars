@@ -1,0 +1,22 @@
+name: deploy-framework-docker
+
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: docker login
+        run: |
+          docker login -u ${{ secrets.name }} -p ${{ secrets.pass }} 
+      - uses: actions/checkout@v1
+      - name: deploy docker
+        run: |
+          echo $GITHUB_SHA
+          git submodule update --init framework web docker
+          tarsTag=$(git describe --tags $(git rev-list --tags --max-count=1) --abbrev=0 --always)
+          echo "starting tag:${tarsTag} framework docker deploy"
+          cp ./docker/framework/tars-deploy-framework.sh ./ 
+          ./tars-deploy-framework.sh
