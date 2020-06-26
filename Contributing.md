@@ -1,5 +1,7 @@
 # Contributing
 
+If you contributed our projects but cannot find your ID in the file, please submit PR and add your GitHub ID in your contributed repo(s).
+
 ## Tars
 - 9chu
 - Abioy
@@ -212,6 +214,4 @@
 
 - medmin
 
----
 
-If you contributed our projects but cannot find your ID in the file, please submit PR and add your GitHub ID in your contributed repo(s).
