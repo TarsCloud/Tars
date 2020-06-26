@@ -1,6 +1,6 @@
 # Contributing
 
-If you contributed but cannot find your ID in the file, please submit PR and add your GitHub ID to **both contributing file under your repo and here**.
+If you contributed but cannot find your ID in the file, please submit PR and add your GitHub ID to **both contributing file under your repo** and [here](https://github.com/TarsCloud/Tars/pulls).
 
 ## Tars
 - 9chu
