@@ -56,6 +56,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - youngdou
 - YoungZiyi
 - yuansx
+- yukkiball
 - zehuaiWANG
 - zerolocusta
 
@@ -101,6 +102,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - KatharineOzil
 - meijing0114
 - ruanshudong
+- yukkiball
 - zouchengzhuo
 
 ## TarsFramework
@@ -172,6 +174,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - walkertest
 - woodwind
 - XenoAmess
+- yukkiball
 
 ## TarsPHP
 
