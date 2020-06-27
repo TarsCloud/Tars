@@ -15,7 +15,7 @@ jobs:
       - name: deploy docker
         run: |
           echo $GITHUB_SHA
-          git submodule update --init framework web docker
+          git submodule update --init --recursive framework web docker
           tarsTag=$(git describe --tags $(git rev-list --tags --max-count=1) --abbrev=0 --always)
           echo "starting tag:${tarsTag} framework docker deploy"
           cp ./docker/framework/tars-deploy-framework.sh ./ 
