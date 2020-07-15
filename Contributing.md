@@ -47,6 +47,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - songvy
 - souldancer
 - Spacebody
+- sy-records
 - tarstest
 - TCZWJ
 - TimmyYu
@@ -120,7 +121,6 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - ypingcn
 - yuansx
 
-
 ## TarsGo
 
 - 0xflotus
@@ -186,13 +186,13 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - meijing0114
 - wodetian55
 - medmin
+- sy-records
 
 ## TarsProtocol
 
 - jerrylucky
 - ruanshudong
 - shevqko
-
 
 ## TarsWeb
 
@@ -216,5 +216,3 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 ## TarsNodeJS
 
 - medmin
-
-
