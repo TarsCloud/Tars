@@ -216,3 +216,14 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 ## TarsNodeJS
 
 - medmin
+
+## K8STARS
+
+- defool
+
+## ArtWork
+
+- cheney-ying
+- heisewuyu16
+- Quentin-by
+
