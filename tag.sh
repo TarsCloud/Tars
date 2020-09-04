@@ -6,6 +6,7 @@ function show()
 {
     branch=$1
 
+    echo "tars:"; git branch -a | grep "*";
     cd framework; echo "framework:"; git branch -a | grep "*"; 
     cd tarscpp; echo "tarscpp:"; git branch -a | grep "*"; 
     cd servant/protocol; echo "protocol:"; git branch -a | grep "*"; 
@@ -36,6 +37,15 @@ function merge()
     cd ../../../..
 }
 
+function branch()
+{
+    version1=$1
+    cd framework/tarscpp/servant/protocol; git checkout $version1;
+    cd ../..; git checkout $version1;
+    cd ..; git checkout $version1;
+    cd ..; git checkout $version1; 
+}
+
 function commit()
 {
     version1=$1
@@ -57,6 +67,10 @@ function push()
 version=$2
 case $1 in
     "show")
+        show
+        ;;
+    "branch")
+        branch $2
         show
         ;;
     "update")
@@ -87,6 +101,7 @@ case $1 in
         ;;
     *)
         echo "$0 show, show all branch"
+        echo "$0 branch [branch], checkout to branch"
         echo "$0 update [branch], update branch to new"
         echo "$0 commit [branch], commit branch"
         echo "$0 push [branch], push branch"
