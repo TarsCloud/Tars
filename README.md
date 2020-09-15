@@ -7,8 +7,7 @@
 - [TARS Project Official Website](http://tarscloud.org/)
 - [TARS Foundation Official Website](https://tarscloud.org/foundation/index)
 - [News](https://tarscloud.org/feed/newsroom)
-- QQ Group code-1: 579079160 
-- QQ Group code-2: 669339903
+- QQ Group: 579079160 and 669339903
 - WeChat: TarsCloud
 - [For more information, please contact TarsCloud](https://tarscloud.org/about/contacts)
 
