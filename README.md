@@ -1,4 +1,4 @@
-[点我查看中文版](README.zh.md)
+
 
 # TARS
 
@@ -72,4 +72,7 @@ See [docs](https://github.com/TarsCloud/TarsDocs_en).
 ## License
 
 The open-source protocol Tars used is BSD-3-Clause, see [LICENSE.md](https://github.com/TarsCloud/TarsDocs_en/blob/master/LICENSE).
+
+## Chinese Version
+[Read Chinese Version](README.zh.md)
 
