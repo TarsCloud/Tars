@@ -1,6 +1,6 @@
 
 
-# TARS
+# TARS - A Linux Foundation Project
 
 - [TARS Foundation Official Website](https://tarscloud.org/foundation/index)
 - [TARS Project Official Website](http://tarscloud.org/)
