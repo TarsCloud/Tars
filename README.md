@@ -6,8 +6,8 @@
 - [Mailing List](https://groups.google.com/g/tars-foundation-information)
 - [Official Website](http://tarscloud.org/)
 - [News](https://tarscloud.org/feed/newsroom)
-- qq group code-1: 579079160 
-- qq group code-2: 669339903
+- QQ Group code-1: 579079160 
+- QQ Group code-2: 669339903
 - WeChat: TarsCloud
 - [For more information, please contact TarsCloud](https://tarscloud.org/about/contacts)
 
