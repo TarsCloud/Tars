@@ -13,7 +13,7 @@
 
 ## What is TARS?
 
-TARS is a high-performance RPC framework based on name service and Tars protocol, also integrated administration platform, and implemented hosting-service via flexible schedule.
+TARS is a Linux Foundation project. It is a high-performance RPC framework based on name service and Tars protocol, also integrated administration platform, and implemented hosting-service via flexible schedule.
 
 Tars, aka TAF(Total Application Framework), has been used in Tencent since 2008. It supports C++, Java, Nodejs and PHP for now. This framework offers a set of solution for development, maintenance and testing, which making development, deployment and testing service efficiently.
 It integrated extensible protocol for encoding/decoding, high-performance RPC communication framework, name service, monitor, statistics and configuration. You can use it to develop your reliable distributed application based on microservice fast, and reach fully efficient service management.
