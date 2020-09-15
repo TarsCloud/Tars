@@ -2,13 +2,14 @@
 
 # Tars
 
-- [Mailing List](https://groups.google.com/g/tars-foundation-information)
-- [TARS Project Official Website](http://tarscloud.org/)
+
+
 - [TARS Foundation Official Website](https://tarscloud.org/foundation/index)
-- QQ Group: 579079160 and 669339903
+- [TARS Project Official Website](http://tarscloud.org/)
+- [Mailing List](https://groups.google.com/g/tars-foundation-information)
 - WeChat Group: TARS01
 - WeChat Offical Account: TarsCloud
-- Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
+- QQ Group: 579079160 and 669339903
 - Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
 - [For more information, please contact TarsCloud](https://tarscloud.org/about/contacts)
 
