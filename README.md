@@ -4,7 +4,8 @@
 
 - Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
 - [Mailing List](https://groups.google.com/g/tars-foundation-information)
-- [Official Website](http://tarscloud.org/)
+- [TARS Project Official Website](http://tarscloud.org/)
+- [TARS Foundation Official Website](https://tarscloud.org/foundation/index)
 - [News](https://tarscloud.org/feed/newsroom)
 - QQ Group code-1: 579079160 
 - QQ Group code-2: 669339903
