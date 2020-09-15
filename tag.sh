@@ -1,3 +1,10 @@
+# Copyright (c) 2020
+# Linux Foundation Projects
+#       Link: https://www.linuxfoundation.org/projects/
+# TARS Foundation Projects
+#       Link: https://github.com/TarsCloud
+# All rights reserved.
+
 #!/bin/bash
 
 #update & merge code tools
