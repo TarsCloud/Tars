@@ -11,7 +11,7 @@
 - WeChat Offical Account: TarsCloud
 - QQ Group: 579079160 and 669339903
 - Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
-- [For more information, please contact TarsCloud](https://tarscloud.org/about/contacts)
+- [Contacts](https://tarscloud.org/about/contacts)
 
 ## What is Tars?
 
