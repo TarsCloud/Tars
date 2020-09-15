@@ -5,9 +5,9 @@
 - [Mailing List](https://groups.google.com/g/tars-foundation-information)
 - [TARS Project Official Website](http://tarscloud.org/)
 - [TARS Foundation Official Website](https://tarscloud.org/foundation/index)
-- [News](https://tarscloud.org/feed/newsroom)
 - QQ Group: 579079160 and 669339903
 - WeChat: TarsCloud
+- Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
 - Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
 - [For more information, please contact TarsCloud](https://tarscloud.org/about/contacts)
 
