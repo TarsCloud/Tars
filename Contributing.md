@@ -32,6 +32,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - LawlietLi
 - loveyacper
 - maplebeats
+- marklightning
 - mdhender
 - medns
 - meijing0114
@@ -66,6 +67,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - Abioy
 - jerrylucky
 - langio
+- marklightning
 - ruanshudong
 - shevqko
 - Spacebody
@@ -141,6 +143,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - jyuan68
 - lanhy
 - louishlz
+- marklightning
 - maplebeats
 - mdhender
 - mjaow
