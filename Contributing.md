@@ -3,6 +3,29 @@
 If you contributed but cannot find your ID in the file, please submit PR and add your GitHub ID to **both contributing file under your contributed repo** and [Tars repo](https://github.com/TarsCloud/Tars/pulls).
 
 ## Tars
+
+### Committer
+
+- ruanshudong
+- loveyacper
+- LawlietLi
+- meijing0114
+- medns
+- dpp2009
+- TOKISAKIKURUMI
+- change93
+- helloopenworld
+- meiping
+- copyrenzhe
+- bobzhangyong
+- wjx82850707
+- Spacebody
+- souldancer
+- zerolocusta
+- markshan
+
+### Contributors List
+
 - 9chu
 - Abioy
 - bartdong
@@ -64,6 +87,13 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsCpp
 
+### Committer
+
+- ruanshudong
+- markshan
+
+### Contributors List
+
 - Abioy
 - jerrylucky
 - langio
@@ -78,7 +108,14 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsBenchmark
 
+### Committer
 - forrestlinfeng
+- markshan
+
+### Contributor List
+
+- forrestlinfeng
+- wincsb
 
 ## plugins
 
@@ -90,6 +127,13 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsDocker
 
+### Committer
+
+- ruanshudong
+- markshan
+
+### Contributor List
+
 - bartdong
 - Frankie
 - franklee0817
@@ -98,6 +142,15 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsDocs
 
+### Committer
+
+- ruanshudong
+- KatharineOzil
+- bartdong
+- Cnlouds
+- markshan
+
+### Contributor List
 - bartdong
 - Cnlouds
 - danielzheng-Tencent
@@ -110,6 +163,13 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsFramework
 
+### Committer
+
+- ruanshudong
+- wincsb
+- markshan
+
+### Contributor List
 - diracccc
 - ETZhangSX
 - jerrylucky
@@ -125,6 +185,17 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsGo
 
+### Committer
+
+- sandyskies
+- jchalex
+- chenhengqi
+- MonkeyLi
+- tensorchen
+- rikewang
+- markshan
+
+### Contributor List
 - 0xflotus
 - agchrys
 - Andrew-M-C
@@ -169,6 +240,15 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsJava
 
+### Committer
+
+- TimmyYu
+- XenoAmess
+- diracccc
+- LawlietLi
+- markshan
+
+### Contributor List
 - diracccc
 - kahn
 - LawlietLi
@@ -181,6 +261,15 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsPHP
 
+### Committer
+
+- meijing0114
+- bobzhangyong
+- copyrenzhe
+- dpp2009
+- markshan
+
+### Contributor List
 - bobzhangyong
 - copyrenzhe
 - cuixg
@@ -193,18 +282,27 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsProtocol
 
+### Committer
+- ruanshudong
+- shevqko
+- markshan
+
+### Contributor List
 - jerrylucky
 - ruanshudong
 - shevqko
-
-## TarsProtocol
-
 - hpeiy98
-- marklightning
-- shevqko
 
 ## TarsWeb
 
+### Committer
+- ruanshudong
+- zouchengzhuo
+- ziyang314
+- shevqko
+- markshan
+
+### Contributor List
 - airycanon
 - ETZhangSX
 - jerrylucky
@@ -220,15 +318,42 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 
 ## TarsJMeter
 
+### Committer
+
 - boycs007
+- jnlunsb
+- markshan
+
+
+### Contributor List
+- boycs007
+- jnlunsb
+- juliuslu-tencent
 
 ## TarsNodeJS
+
+### Committer
+
+- medmin
+- markshan
+
+### Contributor List
 
 - medmin
 
 ## K8STARS
-
+### Committer
+- bartdong
 - defool
+- markshan
+
+### Contributor List
+
+- bartdong
+- defool
+- hpeiy98
+- KatharineOzil
+- andyguo1023
 
 ## ArtWork
 
@@ -236,3 +361,57 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - heisewuyu16
 - Quentin-by
 
+## TarsTools
+
+### Committer
+- harveyxu-tme
+- markshan
+
+### Contributor List
+
+- harveyxu-tme
+- hpeiy98
+
+## TarsGateway
+
+### Committer
+
+- shevqko
+- markshan
+
+### Contributor List
+
+- shevqko
+- ruanshudong
+- hpeiy98
+- wincsb
+
+## TARS_Landscape
+
+### Committer
+
+- KatharineOzil
+- dankohn
+
+### Contributor List
+
+- KatharineOzil
+- dankohn
+- bartdong
+- jordinl83
+- heisewuyu16
+
+## TarsprotocolProxy
+
+### Committer
+
+- shevqko
+- eatonzhang
+- markshan
+
+### Contributor List
+
+- shevqko
+- eatonzhang
+- markshan
+- hpeiy98
