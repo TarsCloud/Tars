@@ -1,4 +1,4 @@
-name: deploy-framework-docker
+name: deploy-latest-framework-docker
 
 on:
   push:
