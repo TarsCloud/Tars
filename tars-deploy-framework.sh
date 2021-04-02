@@ -22,3 +22,8 @@ echo "starting tars:${tarsTag} framework:$frameworkTag web:$webTag deploy"
 
 cd docker/framework
 ./build-docker.sh $frameworkTag $webTag ${tarsTag} ${push}
+
+cd ../../
+
+cd docker/tars
+./build-docker.sh $frameworkTag $webTag ${tarsTag} ${push}

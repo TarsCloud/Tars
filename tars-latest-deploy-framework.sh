@@ -17,3 +17,8 @@ fi
 
 cd docker/framework
 ./build-docker.sh master master latest ${push}
+
+cd ../../
+
+cd docker/tars
+./build-docker.sh master master latest ${push}
