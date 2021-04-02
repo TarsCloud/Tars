@@ -3,7 +3,9 @@ name: deploy-framework-docker
 on:
   push:
     tags:
-      - v*
+      - master
+  schedule:
+    - cron: '0 1 * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
