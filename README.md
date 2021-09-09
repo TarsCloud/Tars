@@ -27,6 +27,7 @@ For now it supports OS as below:
 
 - Linux
 - Mac(>=2.1.0 support)
+- Windows (>= Windows 7)
 
 ## Supported languages
 
