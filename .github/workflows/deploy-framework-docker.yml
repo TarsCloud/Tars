@@ -11,10 +11,13 @@ jobs:
       - name: docker login
         run: |
           docker login -u ${{ secrets.name }} -p ${{ secrets.pass }} 
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//
       - uses: actions/checkout@v2
         with:
           submodules: true
       - name: deploy docker
         run: |
           echo $GITHUB_SHA
-          ./tars-latest-deploy-framework.sh true
+          ./tars-deploy-framework.sh ${{ steps.get_version.outputs.VERSION }} true

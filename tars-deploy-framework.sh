@@ -1,13 +1,14 @@
 #!/bin/bash
 
-if (( $# < 1 ))
+if (( $# < 2 ))
 then
     echo $#
-    echo "$0 push(false/true)"
+    echo "$0 tag push(false/true)"
     exit 1
 fi
 
-push=$1
+tag=$1
+push=$2
 
 if [ "$push" == "true" ]; then
 	push="true"
@@ -19,7 +20,7 @@ fi
 # cd framework && frameworkTag=$(git describe --tags $(git rev-list --tags --max-count=1) --abbrev=0 --always) && cd ..
 # cd web && webTag=$(git describe --tags $(git rev-list --tags --max-count=1) --abbrev=0 --always) && cd ..
 
-tarsTag=$(git reflog HEAD | grep 'checkout:' | head -1 | awk '{print $NF}')
+tarsTag=$tag
 cd framework && frameworkTag=$(git reflog HEAD | grep 'checkout:' | head -1 | awk '{print $NF}') && cd ..
 cd web && webTag=$(git reflog HEAD | grep 'checkout:' | head -1 | awk '{print $NF}') && cd ..
 
