@@ -13,9 +13,10 @@ jobs:
       - name: docker login
         run: |
           docker login -u ${{ secrets.name }} -p ${{ secrets.pass }} 
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
       - name: deploy docker
         run: |
           echo $GITHUB_SHA
-          git submodule update --init --recursive framework web docker
           ./tars-latest-deploy-framework.sh true
