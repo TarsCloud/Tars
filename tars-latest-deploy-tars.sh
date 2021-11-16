@@ -15,5 +15,5 @@ else
 	push="false"
 fi
 
-cd docker/framework
+cd docker/tars
 ./build-docker.sh master master latest ${push}

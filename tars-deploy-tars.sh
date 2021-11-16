@@ -26,5 +26,5 @@ cd web && webTag=$(git reflog HEAD | grep 'checkout:' | head -1 | awk '{print $N
 
 echo "starting tars:${tarsTag} framework:$frameworkTag web:$webTag deploy"
 
-cd docker/framework
+cd docker/tars
 ./build-docker.sh $frameworkTag $webTag ${tarsTag} ${push}
