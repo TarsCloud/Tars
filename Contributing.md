@@ -194,6 +194,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - tensorchen
 - rikewang
 - markshan
+- lbbniu
 
 ### Contributor List
 - 0xflotus
@@ -237,6 +238,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - xuri
 - YaffaBeauty
 - YouEclipse
+- lbbniu
 
 ## TarsJava
 
