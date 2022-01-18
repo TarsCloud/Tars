@@ -2,7 +2,7 @@ name: deploy-latest-framework-docker
 
 on:
   push:
-    tags:
+    branches:
       - master
   schedule:
     - cron: '0 2 * * *'
