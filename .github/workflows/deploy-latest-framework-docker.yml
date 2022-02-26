@@ -4,15 +4,14 @@ on:
   push:
     tags:
       - master
-  schedule:
-    - cron: '0 2 * * *'
+
 jobs:
   build:
-    runs-on: ubuntu-20.04 
+    runs-on: ubuntu-20.04
     steps:
       - name: docker login
         run: |
-          docker login -u ${{ secrets.name }} -p ${{ secrets.pass }} 
+          docker login -u ${{ secrets.name }} -p ${{ secrets.pass }}
       - uses: actions/checkout@v2
         with:
           submodules: true
