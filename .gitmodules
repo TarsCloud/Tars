@@ -1,33 +1,33 @@
 [submodule "framework"]
 	path = framework
-	url = https://github.com/TarsCloud/TarsFramework
+	url = git@github.com:TarsCloud/TarsFramework
 [submodule "cpp"]
 	path = cpp
-	url = https://github.com/TarsCloud/TarsCpp
+	url = git@github.com:TarsCloud/TarsCpp
 [submodule "java"]
 	path = java
-	url = https://github.com/TarsCloud/TarsJava
+	url = git@github.com:TarsCloud/TarsJava
 [submodule "nodejs"]
 	path = nodejs
-	url = https://github.com/tars-node/Tars.js
+	url = git@github.com:tars-node/Tars.js
 [submodule "php"]
 	path = php
-	url = https://github.com/TarsPHP/TarsPHP
+	url = git@github.com:TarsPHP/TarsPHP
 [submodule "tup"]
 	path = tup
-	url = https://github.com/TarsCloud/TarsTup
+	url = git@github.com:TarsCloud/TarsTup
 [submodule "web"]
 	path = web
-	url = https://github.com/TarsCloud/TarsWeb
+	url = git@github.com:TarsCloud/TarsWeb
 [submodule "go"]
 	path = go
-	url = https://github.com/TarsCloud/TarsGo
+	url = git@github.com:TarsCloud/TarsGo
 [submodule "docs"]
 	path = docs
-	url = https://github.com/TarsCloud/TarsDocs
+	url = git@github.com:TarsCloud/TarsDocs
 [submodule "docker"]
 	path = docker
-	url = https://github.com/TarsCloud/TarsDocker.git
+	url = git@github.com:TarsCloud/TarsDocker.git
 [submodule "docs_en"]
 	path = docs_en
-	url = https://github.com/TarsCloud/TarsDocs_en
+	url = git@github.com:TarsCloud/TarsDocs_en
