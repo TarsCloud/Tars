@@ -84,6 +84,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - yukkiball
 - zehuaiWANG
 - zerolocusta
+- BeyondWUXF
 
 ## TarsCpp
 
@@ -105,6 +106,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - viest
 - YMChenLiye
 - zhanleewo
+- BeyondWUXF
 
 ## TarsBenchmark
 
@@ -182,6 +184,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - wincsb
 - ypingcn
 - yuansx
+- BeyondWUXF
 
 ## TarsGo
 
@@ -239,6 +242,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - YaffaBeauty
 - YouEclipse
 - lbbniu
+- BeyondWUXF
 
 ## TarsJava
 
@@ -317,6 +321,7 @@ If you contributed but cannot find your ID in the file, please submit PR and add
 - ypingcn
 - ziyang314
 - zouchengzhuo
+- BeyondWUXF
 
 ## TarsJMeter
 
