@@ -16,7 +16,7 @@
 -  You can setup the framework via script or do it step-by-step.
 -  Refer to the following link:
 -  https://github.com/TarsCloud/Tars/tree/master/shellDeploy
--  https://github.com/TarsCloud/Tars/blob/master/Install.md
+-  https://github.com/TarsCloud/Tars#installation
 
 
 # 3. <a id="main-chapter-3"></a> Server Side Test Software 
