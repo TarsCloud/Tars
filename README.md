@@ -4,9 +4,8 @@
 
 - [TARS Foundation Official Website](https://tarscloud.org/foundation/index)
 - [TARS Project Official Website](http://tarscloud.org/)
-- WeChat Group: TARS01
 - WeChat Offical Account: TarsCloud
-- QQ Group: 579079160 and 669339903
+- QQ Group: 733605310, 579079160(Full), 669339903(Full)
 - Twitter: [@TarsCloud](https://twitter.com/TarsCloud)
 - [Mailing List](https://groups.google.com/g/tars-foundation-information)
 - [Contacts](https://tarscloud.org/about/contacts)

@@ -8,7 +8,7 @@
 - [Mailing List](https://groups.google.com/g/tars-foundation-information)
 - [官网](http://tarscloud.org/)
 - [新闻](https://tarscloud.org/feed/newsroom)
-- qq技术交流群群：579079160、669339903
+- qq技术交流群群：733605310, 579079160(满), 669339903(满)
 - 微信公众号: TarsCloud
 - [更多联系方式请点击](https://tarscloud.org/about/contacts)
 
